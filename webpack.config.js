@@ -38,11 +38,11 @@ const config = {
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?limit=10000&minetype=application/font-woff&name=css/[name].[ext]'
+        loader: 'url-loader?limit=10000&minetype=application/font-woff&name=fonts/[name].[ext]'
       },
       {
         test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader?name=css/[name].[ext]'
+        loader: 'file-loader?name=fonts/[name].[ext]'
       },
       {
         test: /\.scss$/,
