@@ -27443,10 +27443,12 @@
 	
 	var SET_NEW_POLL_TITLE = 'setNewPollTitle';
 	var SET_TITLE_EDITABLE = 'setTitleEditable';
+	var UPDATE_OPTION = 'updateOption';
 	
 	var initialState = {
 	  newPollTitle: '',
-	  titleEditable: true
+	  titleEditable: true,
+	  newPollOptions: ['option 1', 'option 2']
 	};
 	
 	var rootReducer = function rootReducer() {
@@ -27458,6 +27460,8 @@
 	      return reduceNewPollTitle(state, action);
 	    case SET_TITLE_EDITABLE:
 	      return reduceTitleEditableState(state, action);
+	    case UPDATE_OPTION:
+	      return reduceOptionUpdate(state, action);
 	    default:
 	      return state;
 	  }
@@ -27475,12 +27479,21 @@
 	  return newState;
 	};
 	
+	var reduceOptionUpdate = function reduceOptionUpdate(state, action) {
+	  var newState = {};
+	  console.log('redux optionUpdate: ' + action.value[1]);
+	  Object.assign(newState, state, { newPollOptions: action.value });
+	  return newState;
+	};
+	
 	var store = redux.createStore(rootReducer);
 	
 	var mapStateToProps = function mapStateToProps(state) {
+	  console.log('mappedStateToProps! : ' + state.newPollOptions);
 	  return {
 	    newPollTitle: state.newPollTitle,
-	    titleEditable: state.titleEditable
+	    titleEditable: state.titleEditable,
+	    newPollOptions: state.newPollOptions
 	  };
 	};
 	
@@ -27491,6 +27504,9 @@
 	    },
 	    setTitleEditable: function setTitleEditable(bool) {
 	      dispatch({ type: SET_TITLE_EDITABLE, value: bool });
+	    },
+	    updateOption: function updateOption(updatedOptions) {
+	      dispatch({ type: UPDATE_OPTION, value: updatedOptions });
 	    }
 	  };
 	};
@@ -29280,6 +29296,7 @@
 	var connector = _require.connector;
 	
 	var NewPollTitle = __webpack_require__(263);
+	var PollOptions = __webpack_require__(279);
 	
 	var CreateAPoll = React.createClass({
 	  displayName: 'CreateAPoll',
@@ -29292,7 +29309,8 @@
 	        { className: 'view-title text-center' },
 	        'Create a New Poll'
 	      ),
-	      React.createElement(NewPollTitle, null)
+	      React.createElement(NewPollTitle, null),
+	      React.createElement(PollOptions, null)
 	    );
 	  }
 	});
@@ -29393,6 +29411,72 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 265 */,
+/* 266 */,
+/* 267 */,
+/* 268 */,
+/* 269 */,
+/* 270 */,
+/* 271 */,
+/* 272 */,
+/* 273 */,
+/* 274 */,
+/* 275 */,
+/* 276 */,
+/* 277 */,
+/* 278 */,
+/* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	var _React$PropTypes = React.PropTypes;
+	var array = _React$PropTypes.array;
+	var func = _React$PropTypes.func;
+	
+	
+	var PollOptions = React.createClass({
+	  displayName: 'PollOptions',
+	
+	  propTypes: {
+	    newPollOptions: array,
+	    updateOption: func
+	  },
+	  editOption: function editOption(event) {
+	    var updatedOptions = this.props.newPollOptions;
+	    console.log('event: ' + event.target.value);
+	    updatedOptions[event.target.name] = event.target.value;
+	    console.log('updatedOptions: ' + updatedOptions);
+	    this.props.updateOption(updatedOptions);
+	  },
+	  render: function render() {
+	    var _this = this;
+	
+	    var options = this.props.newPollOptions.map(function (option, index) {
+	      return React.createElement('input', {
+	        key: option,
+	        type: 'text',
+	        value: option,
+	        name: index,
+	        onChange: _this.editOption
+	      });
+	    });
+	    return React.createElement(
+	      'div',
+	      null,
+	      options
+	    );
+	  }
+	});
+	
+	module.exports = connector(PollOptions);
 
 /***/ }
 /******/ ]);
