@@ -29299,6 +29299,7 @@
 	var _React$PropTypes = React.PropTypes;
 	var string = _React$PropTypes.string;
 	var func = _React$PropTypes.func;
+	var bool = _React$PropTypes.bool;
 	
 	
 	var NewPollTitle = React.createClass({
@@ -29306,22 +29307,30 @@
 	
 	  propTypes: {
 	    newPollTitle: string,
-	    setNewPollTitle: func
+	    setNewPollTitle: func,
+	    titleEditable: bool
 	  },
 	  handleNewPollTitleChange: function handleNewPollTitleChange(event) {
 	    this.props.setNewPollTitle(event.target.value);
 	  },
 	  render: function render() {
+	    var savedPollTitle = React.createElement(
+	      'h2',
+	      { className: 'text-center' },
+	      this.props.newPollTitle
+	    );
+	    var inputPollTitle = React.createElement('input', {
+	      value: this.props.newPollTitle,
+	      onChange: this.handleNewPollTitleChange,
+	      type: 'text',
+	      placeholder: 'New Poll Title',
+	      className: 'text-center form-control new-poll-title-input'
+	    });
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'new-poll-title-container' },
-	      React.createElement('input', {
-	        value: this.props.newPollTitle,
-	        onChange: this.handleNewPollTitleChange,
-	        type: 'text',
-	        placeholder: 'New Poll Title',
-	        className: 'text-center form-control new-poll-title-input'
-	      })
+	      inputPollTitle
 	    );
 	  }
 	});
