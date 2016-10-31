@@ -12,10 +12,24 @@ const NewPollTitle = React.createClass({
   handleNewPollTitleChange (event) {
     this.props.setNewPollTitle(event.target.value)
   },
+  handleSaveClick (event) {
+    console.log(event)
+    this.props.setTitleEditable(false)
+  },
+  handleEditClick (event) {
+    this.props.setTitleEditable(true)
+  },
   render () {
-    let savedPollTitle = () => (
+    let savedPollTitle = (
       <div className='new-poll-title-container'>
-        <h2 className='text-center'>{this.props.newPollTitle}</h2>
+        <h2 className='text-center saved-title'>{this.props.newPollTitle}</h2>
+        <a href='#'>
+          <i
+            className='fa fa-pencil-square-o save-icon'
+            aria-hidden='true'
+            onClick={this.handleEditClick}
+          />
+        </a>
       </div>
     )
     let inputPollTitle = (
@@ -27,13 +41,21 @@ const NewPollTitle = React.createClass({
           placeholder='New Poll Title'
           className='text-center form-control new-poll-title-input'
         />
-        <i className='fa fa-floppy-o save-icon' aria-hidden='true' />
+        <a href='#'>
+          <i
+            className='fa fa-floppy-o save-icon'
+            aria-hidden='true'
+            onClick={this.handleSaveClick}
+          />
+        </a>
       </div>
     )
 
     return (
       <div className='new-poll-title-container'>
-        {inputPollTitle}
+        {this.props.titleEditable
+          ? inputPollTitle
+          : savedPollTitle}
       </div>
     )
   }

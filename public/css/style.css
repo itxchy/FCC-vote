@@ -8436,6 +8436,10 @@ input[type="radio"] .styled:checked + label::after {
   font-size: 3em;
   vertical-align: middle; }
 
+.saved-title {
+  display: inline-block;
+  vertical-align: middle; }
+
 .save-icon {
   display: inline-block;
   margin-left: 1rem;

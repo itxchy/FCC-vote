@@ -29328,20 +29328,32 @@
 	  handleNewPollTitleChange: function handleNewPollTitleChange(event) {
 	    this.props.setNewPollTitle(event.target.value);
 	  },
+	  handleSaveClick: function handleSaveClick(event) {
+	    console.log(event);
+	    this.props.setTitleEditable(false);
+	  },
+	  handleEditClick: function handleEditClick(event) {
+	    this.props.setTitleEditable(true);
+	  },
 	  render: function render() {
-	    var _this = this;
-	
-	    var savedPollTitle = function savedPollTitle() {
-	      return React.createElement(
-	        'div',
-	        { className: 'new-poll-title-container' },
-	        React.createElement(
-	          'h2',
-	          { className: 'text-center' },
-	          _this.props.newPollTitle
-	        )
-	      );
-	    };
+	    var savedPollTitle = React.createElement(
+	      'div',
+	      { className: 'new-poll-title-container' },
+	      React.createElement(
+	        'h2',
+	        { className: 'text-center saved-title' },
+	        this.props.newPollTitle
+	      ),
+	      React.createElement(
+	        'a',
+	        { href: '#' },
+	        React.createElement('i', {
+	          className: 'fa fa-pencil-square-o save-icon',
+	          'aria-hidden': 'true',
+	          onClick: this.handleEditClick
+	        })
+	      )
+	    );
 	    var inputPollTitle = React.createElement(
 	      'div',
 	      { className: 'new-poll-title-container' },
@@ -29352,13 +29364,21 @@
 	        placeholder: 'New Poll Title',
 	        className: 'text-center form-control new-poll-title-input'
 	      }),
-	      React.createElement('i', { className: 'fa fa-floppy-o save-icon', 'aria-hidden': 'true' })
+	      React.createElement(
+	        'a',
+	        { href: '#' },
+	        React.createElement('i', {
+	          className: 'fa fa-floppy-o save-icon',
+	          'aria-hidden': 'true',
+	          onClick: this.handleSaveClick
+	        })
+	      )
 	    );
 	
 	    return React.createElement(
 	      'div',
 	      { className: 'new-poll-title-container' },
-	      inputPollTitle
+	      this.props.titleEditable ? inputPollTitle : savedPollTitle
 	    );
 	  }
 	});
