@@ -3,11 +3,11 @@
   text-align: center;
 }
 
-.new-poll-title-input {
+.new-poll-title-textarea {
   display: inline-block;
   margin: 0 auto;
   height: 6rem;
-  width: 45rem;
+  width: 60rem;
   font-size: 3em;
   vertical-align: middle;
 }
@@ -15,6 +15,7 @@
 .saved-title {
   display: inline-block;
   vertical-align: middle;
+  font-size: 3em;
 }
 
 .save-icon {

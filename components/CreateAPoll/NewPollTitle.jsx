@@ -14,6 +14,9 @@ const NewPollTitle = React.createClass({
   },
   handleSaveClick (event) {
     console.log(event)
+    if (this.props.newPollTitle === '') {
+      this.props.setNewPollTitle('New Poll Title')
+    }
     this.props.setTitleEditable(false)
   },
   handleEditClick (event) {
@@ -34,12 +37,12 @@ const NewPollTitle = React.createClass({
     )
     let inputPollTitle = (
       <div className='new-poll-title-container'>
-        <input
+        <textarea
           value={this.props.newPollTitle}
           onChange={this.handleNewPollTitleChange}
           type='text'
           placeholder='New Poll Title'
-          className='text-center form-control new-poll-title-input'
+          className='text-center form-control new-poll-title-textarea'
         />
         <a href='#'>
           <i

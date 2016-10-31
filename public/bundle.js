@@ -29330,6 +29330,9 @@
 	  },
 	  handleSaveClick: function handleSaveClick(event) {
 	    console.log(event);
+	    if (this.props.newPollTitle === '') {
+	      this.props.setNewPollTitle('New Poll Title');
+	    }
 	    this.props.setTitleEditable(false);
 	  },
 	  handleEditClick: function handleEditClick(event) {
@@ -29357,12 +29360,12 @@
 	    var inputPollTitle = React.createElement(
 	      'div',
 	      { className: 'new-poll-title-container' },
-	      React.createElement('input', {
+	      React.createElement('textarea', {
 	        value: this.props.newPollTitle,
 	        onChange: this.handleNewPollTitleChange,
 	        type: 'text',
 	        placeholder: 'New Poll Title',
-	        className: 'text-center form-control new-poll-title-input'
+	        className: 'text-center form-control new-poll-title-textarea'
 	      }),
 	      React.createElement(
 	        'a',
