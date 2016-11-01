@@ -29438,6 +29438,14 @@
 	    updatedNewOptions.push('');
 	    this.props.updateOption(updatedNewOptions);
 	  },
+	  deleteOption: function deleteOption(index) {
+	    if (this.props.newPollOptions.length === 2) {
+	      return console.log('Two or more options required!');
+	    }
+	    var updatedDeleteOptions = this.props.newPollOptions.slice();
+	    updatedDeleteOptions.splice(index, 1);
+	    this.props.updateOption(updatedDeleteOptions);
+	  },
 	  render: function render() {
 	    var _this = this;
 	
@@ -29458,6 +29466,9 @@
 	          {
 	            className: 'btn btn-danger delete-button',
 	            href: '#',
+	            onClick: function onClick() {
+	              return _this.deleteOption(index);
+	            },
 	            'aria-label': 'Delete'
 	          },
 	          React.createElement('i', { className: 'fa fa-trash-o', 'aria-hidden': 'true' })

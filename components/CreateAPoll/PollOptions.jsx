@@ -17,6 +17,14 @@ const PollOptions = React.createClass({
     updatedNewOptions.push('')
     this.props.updateOption(updatedNewOptions)
   },
+  deleteOption (index) {
+    if (this.props.newPollOptions.length === 2) {
+      return console.log('Two or more options required!')
+    }
+    let updatedDeleteOptions = this.props.newPollOptions.slice()
+    updatedDeleteOptions.splice(index, 1)
+    this.props.updateOption(updatedDeleteOptions)
+  },
   render () {
     let options = this.props.newPollOptions.map((option, index) => {
       return (
@@ -32,6 +40,7 @@ const PollOptions = React.createClass({
           <a
             className='btn btn-danger delete-button'
             href='#'
+            onClick={() => this.deleteOption(index)}
             aria-label='Delete'
           >
             <i className='fa fa-trash-o' aria-hidden='true' />
