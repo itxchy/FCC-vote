@@ -8447,4 +8447,11 @@ input[type="radio"] .styled:checked + label::after {
   font-size: 4em;
   vertical-align: middle; }
 
+.options-container {
+  margin: 0 auto;
+  text-align: center; }
+
+.option-input {
+  display: block; }
+
 /*# sourceMappingURL=style.css.map*/

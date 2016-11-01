@@ -41,15 +41,14 @@ const reduceTitleEditableState = (state, action) => {
 
 const reduceOptionUpdate = (state, action) => {
   const newState = {}
-  console.log(`redux optionUpdate: ${action.value[1]}`)
   Object.assign(newState, state, {newPollOptions: action.value})
   return newState
 }
 
-const store = redux.createStore(rootReducer/*, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()*/)
+const store = redux.createStore(rootReducer /*, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() */)
 
 const mapStateToProps = (state) => {
-  console.log(`mappedStateToProps! : ${state.newPollOptions}`)
+  console.log('mappedStateToProps! :', state.newPollOptions)
   return {
     newPollTitle: state.newPollTitle,
     titleEditable: state.titleEditable,

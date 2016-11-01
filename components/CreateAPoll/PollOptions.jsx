@@ -8,28 +8,25 @@ const PollOptions = React.createClass({
     updateOption: func.isRequired
   },
   editOption (event) {
-    let updatedOptions = this.props.newPollOptions
-    console.log(`event: ${event.target.value}`)
-
+    let updatedOptions = this.props.newPollOptions.slice()
     updatedOptions[event.target.name] = event.target.value
-    console.log(`updatedOptions: ${updatedOptions}`)
-
     this.props.updateOption(updatedOptions)
   },
   render () {
     let options = this.props.newPollOptions.map((option, index) => {
       return (
         <input
-          key={option}
+          key={index}
           type='text'
           value={option}
           name={index}
           onChange={this.editOption}
+          className=''
         />
       )
     })
     return (
-      <div>
+      <div className='form-group options-container'>
         {options}
       </div>
     )

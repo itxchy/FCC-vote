@@ -1,3 +1,6 @@
+
+// NewPollTitle.jsx =============================
+
 .new-poll-title-container {
   margin: 3rem auto;
   text-align: center;
@@ -23,4 +26,15 @@
   margin-left: 1rem;
   font-size: 4em;
   vertical-align: middle;
+}
+
+// PollOptions.jsx ==============================
+
+.options-container {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.option-input {
+  display: block;
 }

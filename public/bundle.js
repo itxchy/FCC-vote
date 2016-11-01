@@ -27481,15 +27481,14 @@
 	
 	var reduceOptionUpdate = function reduceOptionUpdate(state, action) {
 	  var newState = {};
-	  console.log('redux optionUpdate: ' + action.value[1]);
 	  Object.assign(newState, state, { newPollOptions: action.value });
 	  return newState;
 	};
 	
-	var store = redux.createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+	var store = redux.createStore(rootReducer /*, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() */);
 	
 	var mapStateToProps = function mapStateToProps(state) {
-	  console.log('mappedStateToProps! : ' + state.newPollOptions);
+	  console.log('mappedStateToProps! :', state.newPollOptions);
 	  return {
 	    newPollTitle: state.newPollTitle,
 	    titleEditable: state.titleEditable,
@@ -29430,12 +29429,8 @@
 	    updateOption: func.isRequired
 	  },
 	  editOption: function editOption(event) {
-	    var updatedOptions = this.props.newPollOptions;
-	    console.log('event: ' + event.target.value);
-	
+	    var updatedOptions = this.props.newPollOptions.slice();
 	    updatedOptions[event.target.name] = event.target.value;
-	    console.log('updatedOptions: ' + updatedOptions);
-	
 	    this.props.updateOption(updatedOptions);
 	  },
 	  render: function render() {
@@ -29443,16 +29438,17 @@
 	
 	    var options = this.props.newPollOptions.map(function (option, index) {
 	      return React.createElement('input', {
-	        key: option,
+	        key: index,
 	        type: 'text',
 	        value: option,
 	        name: index,
-	        onChange: _this.editOption
+	        onChange: _this.editOption,
+	        className: ''
 	      });
 	    });
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'form-group options-container' },
 	      options
 	    );
 	  }
