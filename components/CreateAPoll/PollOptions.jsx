@@ -12,25 +12,41 @@ const PollOptions = React.createClass({
     updatedOptions[event.target.name] = event.target.value
     this.props.updateOption(updatedOptions)
   },
+  addAnotherOption () {
+    let updatedNewOptions = this.props.newPollOptions.slice()
+    updatedNewOptions.push('')
+    this.props.updateOption(updatedNewOptions)
+  },
   render () {
     let options = this.props.newPollOptions.map((option, index) => {
       return (
-        <input
-          key={index}
-          type='text'
-          value={option}
-          name={index}
-          onChange={this.editOption}
-          className='form-control option-input'
-        />
+        <div key={index}>
+          <input
+            type='text'
+            value={option}
+            name={index}
+            placeholder={`Option ${index + 1}`}
+            onChange={this.editOption}
+            className='form-control option-input'
+          />
+          <a
+            className='btn btn-danger delete-button'
+            href='#'
+            aria-label='Delete'
+          >
+            <i className='fa fa-trash-o' aria-hidden='true' />
+          </a>
+        </div>
       )
     })
     return (
       <div className='form-group options-container'>
         {options}
-          <p className='add-another-option'>
-            <i className="fa fa-plus-circle" aria-hidden="true" /> Add another option
+        <a href='#'>
+          <p className='add-another-option' onClick={this.addAnotherOption}>
+            <i className='fa fa-plus-circle' aria-hidden='true' /> Add another option
           </p>
+        </a>
       </div>
     )
   }

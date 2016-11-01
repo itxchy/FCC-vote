@@ -9,8 +9,8 @@ const initialState = {
   newPollTitle: '',
   titleEditable: true,
   newPollOptions: [
-    'option 1',
-    'option 2'
+    '',
+    ''
   ]
 }
 

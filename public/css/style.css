@@ -8448,14 +8448,28 @@ input[type="radio"] .styled:checked + label::after {
   font-size: 4em;
   vertical-align: middle; }
 
+.edit-icon {
+  display: inline-block;
+  margin-left: 1rem;
+  font-size: 2.5em;
+  vertical-align: middle; }
+
 .options-container {
   margin: 2rem auto;
   text-align: center;
-  max-width: 40rem; }
+  max-width: 60rem;
+  vertical-align: middle; }
 
 .option-input {
-  display: block;
-  margin-top: 2rem; }
+  display: inline-block;
+  margin-top: 2rem;
+  max-width: 40rem; }
+
+.delete-button {
+  display: inline-block;
+  margin-left: .5rem;
+  margin-bottom: .2rem;
+  vertical-align: middle; }
 
 .add-another-option {
   margin-top: 1rem;

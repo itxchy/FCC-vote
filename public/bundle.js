@@ -27448,7 +27448,7 @@
 	var initialState = {
 	  newPollTitle: '',
 	  titleEditable: true,
-	  newPollOptions: ['option 1', 'option 2']
+	  newPollOptions: ['', '']
 	};
 	
 	var rootReducer = function rootReducer() {
@@ -29368,7 +29368,7 @@
 	        'a',
 	        { href: '#' },
 	        React.createElement('i', {
-	          className: 'fa fa-pencil-square-o save-icon',
+	          className: 'fa fa-pencil-square-o edit-icon',
 	          'aria-hidden': 'true',
 	          onClick: this.handleEditClick
 	        })
@@ -29433,28 +29433,50 @@
 	    updatedOptions[event.target.name] = event.target.value;
 	    this.props.updateOption(updatedOptions);
 	  },
+	  addAnotherOption: function addAnotherOption() {
+	    var updatedNewOptions = this.props.newPollOptions.slice();
+	    updatedNewOptions.push('');
+	    this.props.updateOption(updatedNewOptions);
+	  },
 	  render: function render() {
 	    var _this = this;
 	
 	    var options = this.props.newPollOptions.map(function (option, index) {
-	      return React.createElement('input', {
-	        key: index,
-	        type: 'text',
-	        value: option,
-	        name: index,
-	        onChange: _this.editOption,
-	        className: 'form-control option-input'
-	      });
+	      return React.createElement(
+	        'div',
+	        { key: index },
+	        React.createElement('input', {
+	          type: 'text',
+	          value: option,
+	          name: index,
+	          placeholder: 'Option ' + (index + 1),
+	          onChange: _this.editOption,
+	          className: 'form-control option-input'
+	        }),
+	        React.createElement(
+	          'a',
+	          {
+	            className: 'btn btn-danger delete-button',
+	            href: '#',
+	            'aria-label': 'Delete'
+	          },
+	          React.createElement('i', { className: 'fa fa-trash-o', 'aria-hidden': 'true' })
+	        )
+	      );
 	    });
 	    return React.createElement(
 	      'div',
 	      { className: 'form-group options-container' },
 	      options,
 	      React.createElement(
-	        'p',
-	        { className: 'add-another-option' },
-	        React.createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
-	        ' Add another option'
+	        'a',
+	        { href: '#' },
+	        React.createElement(
+	          'p',
+	          { className: 'add-another-option', onClick: this.addAnotherOption },
+	          React.createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
+	          ' Add another option'
+	        )
 	      )
 	    );
 	  }

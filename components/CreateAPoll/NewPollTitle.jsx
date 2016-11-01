@@ -28,7 +28,7 @@ const NewPollTitle = React.createClass({
         <h2 className='text-center saved-title'>{this.props.newPollTitle}</h2>
         <a href='#'>
           <i
-            className='fa fa-pencil-square-o save-icon'
+            className='fa fa-pencil-square-o edit-icon'
             aria-hidden='true'
             onClick={this.handleEditClick}
           />
