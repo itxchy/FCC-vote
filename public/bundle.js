@@ -29452,8 +29452,10 @@
 	  editOption: function editOption(event) {
 	    var updatedOptions = this.props.newPollOptions;
 	    console.log('event: ' + event.target.value);
+	
 	    updatedOptions[event.target.name] = event.target.value;
 	    console.log('updatedOptions: ' + updatedOptions);
+	
 	    this.props.updateOption(updatedOptions);
 	  },
 	  render: function render() {

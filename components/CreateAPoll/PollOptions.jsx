@@ -10,8 +10,10 @@ const PollOptions = React.createClass({
   editOption (event) {
     let updatedOptions = this.props.newPollOptions
     console.log(`event: ${event.target.value}`)
+
     updatedOptions[event.target.name] = event.target.value
     console.log(`updatedOptions: ${updatedOptions}`)
+    
     this.props.updateOption(updatedOptions)
   },
   render () {
