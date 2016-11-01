@@ -4,8 +4,8 @@ const { array, func } = React.PropTypes
 
 const PollOptions = React.createClass({
   propTypes: {
-    newPollOptions: array,
-    updateOption: func
+    newPollOptions: array.isRequired,
+    updateOption: func.isRequired
   },
   editOption (event) {
     let updatedOptions = this.props.newPollOptions
@@ -13,7 +13,7 @@ const PollOptions = React.createClass({
 
     updatedOptions[event.target.name] = event.target.value
     console.log(`updatedOptions: ${updatedOptions}`)
-    
+
     this.props.updateOption(updatedOptions)
   },
   render () {

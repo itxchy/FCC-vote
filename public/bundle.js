@@ -29446,8 +29446,8 @@
 	  displayName: 'PollOptions',
 	
 	  propTypes: {
-	    newPollOptions: array,
-	    updateOption: func
+	    newPollOptions: array.isRequired,
+	    updateOption: func.isRequired
 	  },
 	  editOption: function editOption(event) {
 	    var updatedOptions = this.props.newPollOptions;
