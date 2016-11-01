@@ -46,7 +46,7 @@ const reduceOptionUpdate = (state, action) => {
   return newState
 }
 
-const store = redux.createStore(rootReducer)
+const store = redux.createStore(rootReducer/*, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()*/)
 
 const mapStateToProps = (state) => {
   console.log(`mappedStateToProps! : ${state.newPollOptions}`)
