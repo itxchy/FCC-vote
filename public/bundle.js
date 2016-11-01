@@ -29443,13 +29443,19 @@
 	        value: option,
 	        name: index,
 	        onChange: _this.editOption,
-	        className: ''
+	        className: 'form-control option-input'
 	      });
 	    });
 	    return React.createElement(
 	      'div',
 	      { className: 'form-group options-container' },
-	      options
+	      options,
+	      React.createElement(
+	        'p',
+	        { className: 'add-another-option' },
+	        React.createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
+	        ' Add another option'
+	      )
 	    );
 	  }
 	});

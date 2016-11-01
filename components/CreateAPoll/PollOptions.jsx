@@ -21,13 +21,16 @@ const PollOptions = React.createClass({
           value={option}
           name={index}
           onChange={this.editOption}
-          className=''
+          className='form-control option-input'
         />
       )
     })
     return (
       <div className='form-group options-container'>
         {options}
+          <p className='add-another-option'>
+            <i className="fa fa-plus-circle" aria-hidden="true" /> Add another option
+          </p>
       </div>
     )
   }
