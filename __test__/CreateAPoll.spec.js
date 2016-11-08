@@ -4,7 +4,7 @@ const { Provider } = require('react-redux')
 const { store } = require('../redux/Store.jsx')
 const configureMockStore = require('redux-mock-store')
 const NewPollTitle = require('../components/CreateAPoll/NewPollTitle.jsx')
-const DisconnectedNewPollTitle = NewPollTitle.DisconnectedNewPollTitle.prototype
+const DisconnectedNewPollTitle = NewPollTitle.DisconnectedNewPollTitle
 
 describe('CreateAPoll', () => {
   describe('NewPollTitle', () => {
@@ -14,47 +14,34 @@ describe('CreateAPoll', () => {
         )
       expect(wrapper.find('.new-poll-title-textarea').length).toEqual(1)
     })
-    it('should call handleSaveClick to dispatch setNewPollTitle with a string', () => {
-      // Set up mock store
-      const mockStore = configureMockStore.default()
-      let initialState = {
-        newPollTitle: 'blah',
-        titleEditable: true,
-        newPollOptions: [
-          '',
-          ''
-        ]
-      }
-      let testStore = mockStore(initialState)      
-      console.log('NewPollTitle methods: ', NewPollTitle.DisconnectedNewPollTitle.prototype)
-      // Set up test
-/*      const wrapper = mount(
-          <DisconnectedNewPollTitle store={testStore} />
-      )
-      console.log('NewPollTitle methods: ', DisconnectedNewPollTitle.prototype)
-      wrapper.find('.save-icon').simulate('click')
-      expect(wrapper.find('.saved-title').length).toEqual(1)*/
-    })
-    // it('should show a text area again if the edit button is clicked', () => {
-    //   // Set up mock store
-    //   const mockStore = configureMockStore.default()
-    //   let initialState = {
-    //     newPollTitle: 'blah',
-    //     titleEditable: false,
-    //     newPollOptions: [
-    //       '',
-    //       ''
-    //     ]
-    //   }
-    //   let testStore = mockStore(initialState)
+    it('should handle save button click by calling setTitleEditable, passing false, if newPollTitle isn\'t empty', () => {
+      const setTitleEditable = jest.fn()
 
-    //   // Set up test 
-    //   const wrapper = mount(
-    //     <NewPollTitle store={testStore} />
-    //   )
-    //   wrapper.find('.edit-icon').simulate('click')
-    //   expect(wrapper.find('.save-icon').length).toEqual(1)
-    // })
+      const wrapper = mount(
+          <DisconnectedNewPollTitle
+            newPollTitle={'blah'} 
+            titleEditable={true}
+            setTitleEditable={setTitleEditable}
+          />
+      )
+      wrapper.find('.save-icon').simulate('click')
+      expect(setTitleEditable.mock.calls.length).toBe(1)
+      expect(setTitleEditable.mock.calls[0][0]).toBe(false)
+    })
+    it('should handle edit button click by calling setTitleEditable, passing true', () => {
+      const setTitleEditable = jest.fn()
+ 
+      const wrapper = mount(
+          <DisconnectedNewPollTitle
+            newPollTitle={'blah'} 
+            titleEditable={false}
+            setTitleEditable={setTitleEditable}
+          />
+      )
+      wrapper.find('.edit-icon').simulate('click')
+      expect(setTitleEditable.mock.calls.length).toBe(1)
+      expect(setTitleEditable.mock.calls[0][0]).toBe(true)
+    })
     // it('should call handleNewPollTitleChange when any character is typed in the textarea', () => {
     //   // Set up mock store
     //   const mockStore = configureMockStore.default()
