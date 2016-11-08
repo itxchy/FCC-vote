@@ -13,7 +13,6 @@ const NewPollTitle = React.createClass({
     this.props.setNewPollTitle(event.target.value)
   },
   handleSaveClick (event) {
-    console.log(event)
     if (this.props.newPollTitle === '') {
       this.props.setNewPollTitle('New Poll Title')
     }

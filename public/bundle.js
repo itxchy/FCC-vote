@@ -27497,6 +27497,7 @@
 	};
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  console.log('dispatch: ', dispatch);
 	  return {
 	    setNewPollTitle: function setNewPollTitle(pollTitle) {
 	      dispatch({ type: SET_NEW_POLL_TITLE, value: pollTitle });
