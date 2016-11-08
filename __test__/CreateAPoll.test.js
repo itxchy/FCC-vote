@@ -1,13 +1,18 @@
 const React = require('react')
-const NewPollTitle = require('../components/CreateAPoll/NewPollTitle.jsx')
-const renderer = require('react-test-renderer')
 const { mount } = require('enzyme')
+const { Provider } = require('react-redux')
+const { store } = require('../redux/Store.jsx')
+const NewPollTitle = require('../components/CreateAPoll/NewPollTitle.jsx')
 
 describe('CreateAPoll', () => {
   describe('NewPollTitle', () => {
-    it('', () {
-      const wrapper = mount(<NewPollTitle />)
-      expect(wrapper.contains())
+    it('should initially show a textarea', () => {
+      const wrapper = mount(
+        <Provider store={store}>
+          <NewPollTitle />
+        </Provider>
+        )
+      expect(wrapper.contains(<textarea />))
     })
   })
 })
