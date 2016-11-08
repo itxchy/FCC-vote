@@ -27488,7 +27488,6 @@
 	var store = redux.createStore(rootReducer /*, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() */);
 	
 	var mapStateToProps = function mapStateToProps(state) {
-	  console.log('mappedStateToProps! :', state.newPollOptions);
 	  return {
 	    newPollTitle: state.newPollTitle,
 	    titleEditable: state.titleEditable,
@@ -27497,7 +27496,6 @@
 	};
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  console.log('dispatch: ', dispatch);
 	  return {
 	    setNewPollTitle: function setNewPollTitle(pollTitle) {
 	      dispatch({ type: SET_NEW_POLL_TITLE, value: pollTitle });
@@ -29347,7 +29345,6 @@
 	    this.props.setNewPollTitle(event.target.value);
 	  },
 	  handleSaveClick: function handleSaveClick(event) {
-	    console.log(event);
 	    if (this.props.newPollTitle === '') {
 	      this.props.setNewPollTitle('New Poll Title');
 	    }
@@ -29404,7 +29401,12 @@
 	  }
 	});
 	
-	module.exports = connector(NewPollTitle);
+	var connected = connector(NewPollTitle);
+	
+	// This exports the component itself for testing
+	connected.DisconnectedNewPollTitle = NewPollTitle;
+	
+	module.exports = connected;
 
 /***/ },
 /* 264 */

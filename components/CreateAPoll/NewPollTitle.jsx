@@ -63,4 +63,9 @@ const NewPollTitle = React.createClass({
   }
 })
 
-module.exports = connector(NewPollTitle)
+let connected = connector(NewPollTitle)
+
+// This exports the component itself for testing
+connected.DisconnectedNewPollTitle = NewPollTitle
+
+module.exports = connected
