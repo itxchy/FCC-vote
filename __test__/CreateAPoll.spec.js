@@ -8,11 +8,16 @@ describe('CreateAPoll', () => {
   describe('NewPollTitle', () => {
     it('should initially show a textarea', () => {
       const wrapper = mount(
-        <Provider store={store}>
-          <NewPollTitle />
-        </Provider>
+          <NewPollTitle store={store} />
         )
-      expect(wrapper.contains(<textarea />))
+      expect(wrapper.find('.new-poll-title-textarea').length).toEqual(1)
+    })
+    it('should show a saved poll title upon receiving titleEditable prop', () => {
+      const wrapper = mount(
+          <NewPollTitle store={store} />
+        )
+      wrapper.find('.save-icon').simulate('click')
+      expect(wrapper.find('.edit-icon').length).toEqual(1)
     })
   })
 })
