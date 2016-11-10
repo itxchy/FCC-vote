@@ -8,13 +8,13 @@ const DisconnectedNewPollTitle = NewPollTitle.DisconnectedNewPollTitle
 
 describe('CreateAPoll', () => {
   describe('NewPollTitle', () => {
-    it('should initially show a textarea', () => {
+    it('bootstrapping: should initially show a textarea', () => {
       const wrapper = mount(
           <NewPollTitle store={store} />
         )
       expect(wrapper.find('.new-poll-title-textarea').length).toEqual(1)
     })
-    it('should handle save button click by calling setTitleEditable, passing false, if newPollTitle isn\'t empty', () => {
+    it('save button: should handle save button click by calling setTitleEditable, passing false, if newPollTitle isn\'t empty', () => {
       const setTitleEditable = jest.fn()
 
       const wrapper = mount(
@@ -44,7 +44,7 @@ describe('CreateAPoll', () => {
       expect(setNewPollTitle.mock.calls.length).toBe(1)
       expect(setNewPollTitle.mock.calls[0][0]).toEqual('New Poll Title')
     })
-    it('should handle edit button click by calling setTitleEditable, passing true', () => {
+    it('edit button: should handle edit button click by calling setTitleEditable, passing true', () => {
       const setTitleEditable = jest.fn()
  
       const wrapper = mount(
@@ -58,7 +58,7 @@ describe('CreateAPoll', () => {
       expect(setTitleEditable.mock.calls.length).toBe(1)
       expect(setTitleEditable.mock.calls[0][0]).toBe(true)
     })
-    it('should call handleNewPollTitleChange when any character is typed in the textarea', () => {
+    it('textarea: should call handleNewPollTitleChange when any character is typed in the textarea', () => {
       const setNewPollTitle = jest.fn()
 
       const wrapper = mount(
