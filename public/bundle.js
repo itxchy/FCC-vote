@@ -29295,6 +29295,7 @@
 	
 	var NewPollTitle = __webpack_require__(263);
 	var PendingPollOptions = __webpack_require__(280);
+	var SaveOrReset = __webpack_require__(281);
 	
 	var CreateAPoll = React.createClass({
 	  displayName: 'CreateAPoll',
@@ -29308,7 +29309,8 @@
 	        'Create a New Poll'
 	      ),
 	      React.createElement(NewPollTitle, null),
-	      React.createElement(PendingPollOptions, null)
+	      React.createElement(PendingPollOptions, null),
+	      React.createElement(SaveOrReset, null)
 	    );
 	  }
 	});
@@ -29518,6 +29520,46 @@
 	});
 	
 	module.exports = connector(PendingPollOptions);
+
+/***/ },
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	var string = React.PropTypes.string;
+	
+	
+	var SaveOrReset = React.createClass({
+	  displayName: 'SaveOrReset',
+	
+	  propTypes: {
+	    newPollTitle: string
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'text-center' },
+	      React.createElement(
+	        'button',
+	        { className: 'btn btn-primary' },
+	        'Save'
+	      ),
+	      React.createElement(
+	        'button',
+	        { className: 'btn' },
+	        'Reset'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = connector(SaveOrReset);
 
 /***/ }
 /******/ ]);
