@@ -8475,4 +8475,11 @@ input[type="radio"] .styled:checked + label::after {
   margin-top: 1rem;
   font-size: 1.3em; }
 
+.save-reset-buttons {
+  width: 12rem;
+  height: 4rem; }
+
+.reset-poll-button {
+  margin-left: 1rem; }
+
 /*# sourceMappingURL=style.css.map*/

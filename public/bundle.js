@@ -27444,6 +27444,7 @@
 	var SET_NEW_POLL_TITLE = 'setNewPollTitle';
 	var SET_TITLE_EDITABLE = 'setTitleEditable';
 	var UPDATE_OPTION = 'updateOption';
+	var RESET_NEW_POLL = 'resetNewPoll';
 	
 	var initialState = {
 	  newPollTitle: '',
@@ -27462,6 +27463,8 @@
 	      return reduceTitleEditableState(state, action);
 	    case UPDATE_OPTION:
 	      return reduceOptionUpdate(state, action);
+	    case RESET_NEW_POLL:
+	      return reduceResetNewPoll(state, action);
 	    default:
 	      return state;
 	  }
@@ -27485,6 +27488,17 @@
 	  return newState;
 	};
 	
+	var reduceResetNewPoll = function reduceResetNewPoll(state, action) {
+	  var newState = {};
+	  var blankPollState = {
+	    newPollTitle: '',
+	    titleEditable: true,
+	    newPollOptions: ['', '']
+	  };
+	  Object.assign(newState, state, blankPollState);
+	  return newState;
+	};
+	
 	var store = redux.createStore(rootReducer /*, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() */);
 	
 	var mapStateToProps = function mapStateToProps(state) {
@@ -27505,6 +27519,9 @@
 	    },
 	    updateOption: function updateOption(updatedOptions) {
 	      dispatch({ type: UPDATE_OPTION, value: updatedOptions });
+	    },
+	    resetNewPoll: function resetNewPoll(bool) {
+	      dispatch({ type: RESET_NEW_POLL, value: bool });
 	    }
 	  };
 	};
@@ -29547,12 +29564,12 @@
 	      { className: 'text-center' },
 	      React.createElement(
 	        'button',
-	        { className: 'btn btn-primary' },
+	        { className: 'btn btn-primary save-reset-buttons' },
 	        'Save'
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'btn' },
+	        { className: 'btn save-reset-buttons reset-poll-button' },
 	        'Reset'
 	      )
 	    );

@@ -4,6 +4,7 @@ const reactRedux = require('react-redux')
 const SET_NEW_POLL_TITLE = 'setNewPollTitle'
 const SET_TITLE_EDITABLE = 'setTitleEditable'
 const UPDATE_OPTION = 'updateOption'
+const RESET_NEW_POLL = 'resetNewPoll'
 
 const initialState = {
   newPollTitle: '',
@@ -22,6 +23,8 @@ const rootReducer = (state = initialState, action) => {
       return reduceTitleEditableState(state, action)
     case UPDATE_OPTION:
       return reduceOptionUpdate(state, action)
+    case RESET_NEW_POLL:
+      return reduceResetNewPoll(state, action)
     default:
       return state
   }
@@ -45,6 +48,20 @@ const reduceOptionUpdate = (state, action) => {
   return newState
 }
 
+const reduceResetNewPoll = (state, action) => {
+  const newState = {}
+  const blankPollState = {
+    newPollTitle: '',
+    titleEditable: true,
+    newPollOptions: [
+      '',
+      ''
+    ]
+  }
+  Object.assign(newState, state, blankPollState)
+  return newState
+}
+
 const store = redux.createStore(rootReducer /*, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() */)
 
 const mapStateToProps = (state) => {
@@ -65,6 +82,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     updateOption (updatedOptions) {
       dispatch({type: UPDATE_OPTION, value: updatedOptions})
+    },
+    resetNewPoll (bool) {
+      dispatch({type: RESET_NEW_POLL, value: bool})
     }
   }
 }

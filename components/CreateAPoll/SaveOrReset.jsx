@@ -9,8 +9,8 @@ const SaveOrReset = React.createClass({
   render () {
     return (
       <div className='text-center'>
-        <button className='btn btn-primary'>Save</button>
-        <button className='btn'>Reset</button>
+        <button className='btn btn-primary save-reset-buttons'>Save</button>
+        <button className='btn save-reset-buttons reset-poll-button'>Reset</button>
       </div>
     )
   }
