@@ -1,10 +1,11 @@
 const React = require('react')
 const { connector } = require('../../redux/Store')
-const { string } = React.PropTypes
+const { string, func } = React.PropTypes
 
 const SaveOrReset = React.createClass({
   propTypes: {
-    newPollTitle: string
+    newPollTitle: string,
+    resetNewPoll: func
   },
   render () {
     return (

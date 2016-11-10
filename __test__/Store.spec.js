@@ -31,4 +31,19 @@ describe('Store', () => {
     expect(state).toEqual({newPollOptions: ['one', 'two', 'three']})
   })
 
+  it('should handle resetNewPoll', () => {
+    const state = rootReducer({
+      newPollTitle: 'Unwanted Poll',
+      newPollOptions: ['pointless', 'so 2011...']
+    },
+    {type: 'resetNewPoll', value: true})
+    expect(state).toEqual({
+      newPollTitle: '',
+      titleEditable: true,
+      newPollOptions: [
+        '',
+        ''
+      ]      
+    })
+  })
 })

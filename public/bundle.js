@@ -29549,14 +29549,17 @@
 	var _require = __webpack_require__(236);
 	
 	var connector = _require.connector;
-	var string = React.PropTypes.string;
+	var _React$PropTypes = React.PropTypes;
+	var string = _React$PropTypes.string;
+	var func = _React$PropTypes.func;
 	
 	
 	var SaveOrReset = React.createClass({
 	  displayName: 'SaveOrReset',
 	
 	  propTypes: {
-	    newPollTitle: string
+	    newPollTitle: string,
+	    resetNewPoll: func
 	  },
 	  render: function render() {
 	    return React.createElement(
