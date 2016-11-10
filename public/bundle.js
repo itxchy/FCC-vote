@@ -29561,6 +29561,9 @@
 	    newPollTitle: string,
 	    resetNewPoll: func
 	  },
+	  handleResetButtonClick: function handleResetButtonClick() {
+	    this.props.resetNewPoll(true);
+	  },
 	  render: function render() {
 	    return React.createElement(
 	      'div',
@@ -29572,7 +29575,10 @@
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'btn save-reset-buttons reset-poll-button' },
+	        {
+	          className: 'btn save-reset-buttons reset-poll-button',
+	          onClick: this.handleResetButtonClick
+	        },
 	        'Reset'
 	      )
 	    );
