@@ -61,4 +61,9 @@ const PendingPollOptions = React.createClass({
   }
 })
 
-module.exports = connector(PendingPollOptions)
+let connected = connector(PendingPollOptions)
+
+// This exports the component itself for testing
+connected.DisconnectedPendingPollOptions = PendingPollOptions
+
+module.exports = connected

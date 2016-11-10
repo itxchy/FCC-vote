@@ -25,4 +25,8 @@ const SaveOrReset = React.createClass({
   }
 })
 
-module.exports = connector(SaveOrReset)
+let connected = connector(SaveOrReset)
+
+connected.DisconnectedSaveOrReset = SaveOrReset
+
+module.exports = connected

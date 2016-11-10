@@ -5,6 +5,7 @@ const { store } = require('../redux/Store.jsx')
 const configureMockStore = require('redux-mock-store')
 const NewPollTitle = require('../components/CreateAPoll/NewPollTitle.jsx')
 const DisconnectedNewPollTitle = NewPollTitle.DisconnectedNewPollTitle
+const DisconnectedSaveOrReset = require('../components/CreateAPoll/SaveOrReset.jsx').DisconnectedSaveOrReset
 
 describe('CreateAPoll', () => {
   describe('NewPollTitle', () => {
@@ -71,6 +72,20 @@ describe('CreateAPoll', () => {
       wrapper.find('.new-poll-title-textarea').simulate('change', {target: {value: 'Kiki says "dats cool..."'}})
       expect(setNewPollTitle.mock.calls.length).toBe(1)
       expect(setNewPollTitle.mock.calls[0][0]).toEqual('Kiki says "dats cool..."')
+    })
+  })
+  describe('SaveOrReset', () => {
+    it('reset button: on click, this.props.resetNewPoll should be called with "true"', () => {
+      const resetNewPoll = jest.fn()
+
+      const wrapper = mount(
+        <DisconnectedSaveOrReset
+          resetNewPoll={resetNewPoll}
+        />
+      )
+      wrapper.find('.reset-poll-button').simulate('click')
+      expect(resetNewPoll.mock.calls.length).toBe(1)
+      expect(resetNewPoll.mock.calls[0][0]).toBeTruthy()
     })
   })
 })

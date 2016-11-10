@@ -29536,7 +29536,12 @@
 	  }
 	});
 	
-	module.exports = connector(PendingPollOptions);
+	var connected = connector(PendingPollOptions);
+	
+	// This exports the component itself for testing
+	connected.DisconnectedPendingPollOptions = PendingPollOptions;
+	
+	module.exports = connected;
 
 /***/ },
 /* 281 */
@@ -29585,7 +29590,11 @@
 	  }
 	});
 	
-	module.exports = connector(SaveOrReset);
+	var connected = connector(SaveOrReset);
+	
+	connected.DisconnectedSaveOrReset = SaveOrReset;
+	
+	module.exports = connected;
 
 /***/ }
 /******/ ]);
