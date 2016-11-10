@@ -1,7 +1,7 @@
 const React = require('react')
 const { connector } = require('../../redux/Store')
 const NewPollTitle = require('./NewPollTitle')
-const PollOptions = require('./PollOptions')
+const PendingPollOptions = require('./PendingPollOptions')
 
 const CreateAPoll = React.createClass({
   render () {
@@ -9,7 +9,7 @@ const CreateAPoll = React.createClass({
       <div>
         <h1 className='view-title text-center'>Create a New Poll</h1>
         <NewPollTitle />
-        <PollOptions />
+        <PendingPollOptions />
         {/* Poll Submit Button */}
       </div>
     )

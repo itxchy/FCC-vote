@@ -29294,7 +29294,7 @@
 	var connector = _require.connector;
 	
 	var NewPollTitle = __webpack_require__(263);
-	var PollOptions = __webpack_require__(264);
+	var PendingPollOptions = __webpack_require__(280);
 	
 	var CreateAPoll = React.createClass({
 	  displayName: 'CreateAPoll',
@@ -29308,7 +29308,7 @@
 	        'Create a New Poll'
 	      ),
 	      React.createElement(NewPollTitle, null),
-	      React.createElement(PollOptions, null)
+	      React.createElement(PendingPollOptions, null)
 	    );
 	  }
 	});
@@ -29409,7 +29409,28 @@
 	module.exports = connected;
 
 /***/ },
-/* 264 */
+/* 264 */,
+/* 265 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 266 */,
+/* 267 */,
+/* 268 */,
+/* 269 */,
+/* 270 */,
+/* 271 */,
+/* 272 */,
+/* 273 */,
+/* 274 */,
+/* 275 */,
+/* 276 */,
+/* 277 */,
+/* 278 */,
+/* 279 */,
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29424,8 +29445,8 @@
 	var func = _React$PropTypes.func;
 	
 	
-	var PollOptions = React.createClass({
-	  displayName: 'PollOptions',
+	var PendingPollOptions = React.createClass({
+	  displayName: 'PendingPollOptions',
 	
 	  propTypes: {
 	    newPollOptions: array.isRequired,
@@ -29496,13 +29517,7 @@
 	  }
 	});
 	
-	module.exports = connector(PollOptions);
-
-/***/ },
-/* 265 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
+	module.exports = connector(PendingPollOptions);
 
 /***/ }
 /******/ ]);

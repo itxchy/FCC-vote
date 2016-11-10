@@ -2,7 +2,7 @@ const React = require('react')
 const { connector } = require('../../redux/Store')
 const { array, func } = React.PropTypes
 
-const PollOptions = React.createClass({
+const PendingPollOptions = React.createClass({
   propTypes: {
     newPollOptions: array.isRequired,
     updateOption: func.isRequired
@@ -61,4 +61,4 @@ const PollOptions = React.createClass({
   }
 })
 
-module.exports = connector(PollOptions)
+module.exports = connector(PendingPollOptions)
