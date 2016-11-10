@@ -42,24 +42,19 @@ describe('CreateAPoll', () => {
       expect(setTitleEditable.mock.calls.length).toBe(1)
       expect(setTitleEditable.mock.calls[0][0]).toBe(true)
     })
-    // it('should call handleNewPollTitleChange when any character is typed in the textarea', () => {
-    //   // Set up mock store
-    //   const mockStore = configureMockStore.default()
-    //   let initialState = {
-    //     newPollTitle: 'blah',
-    //     titleEditable: true,
-    //     newPollOptions: [
-    //       '',
-    //       ''
-    //     ]
-    //   }
-    //   let testStore = mockStore(initialState)
+    it('should call handleNewPollTitleChange when any character is typed in the textarea', () => {
+      const setNewPollTitle = jest.fn()
 
-    //   // Set up test
-    //   const wrapper = mount(
-    //     <NewPollTitle store = {testStore} />
-    //   )
-    //   wrapper.find('.new-poll-title-textarea').simulate('change', 'more blah')
-    // })
+      const wrapper = mount(
+        <DisconnectedNewPollTitle
+          titleEditable={true}
+          newPollTitle={'wat'}
+          setNewPollTitle={setNewPollTitle}
+        />
+      )
+      wrapper.find('.new-poll-title-textarea').simulate('change', {target: {value: 'Kiki says "dats cool..."'}})
+      expect(setNewPollTitle.mock.calls.length).toBe(1)
+      expect(setNewPollTitle.mock.calls[0][0]).toEqual('Kiki says "dats cool..."')
+    })
   })
 })
