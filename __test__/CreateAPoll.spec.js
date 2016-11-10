@@ -28,6 +28,22 @@ describe('CreateAPoll', () => {
       expect(setTitleEditable.mock.calls.length).toBe(1)
       expect(setTitleEditable.mock.calls[0][0]).toBe(false)
     })
+    it('save button: if newPollTitle is empty, setNewPollTitle should set the title as "New Poll Title" for placeholder text', () => {
+      const setTitleEditable = jest.fn()
+      const setNewPollTitle = jest.fn()
+
+      const wrapper = mount(
+          <DisconnectedNewPollTitle
+            newPollTitle={''}
+            titleEditable={true}
+            setTitleEditable={setTitleEditable}
+            setNewPollTitle={setNewPollTitle}
+          />
+      )
+      wrapper.find('.save-icon').simulate('click')
+      expect(setNewPollTitle.mock.calls.length).toBe(1)
+      expect(setNewPollTitle.mock.calls[0][0]).toEqual('New Poll Title')
+    })
     it('should handle edit button click by calling setTitleEditable, passing true', () => {
       const setTitleEditable = jest.fn()
  
