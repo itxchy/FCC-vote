@@ -49,7 +49,7 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(34);
 	var App = __webpack_require__(172);
-	__webpack_require__(265);
+	__webpack_require__(266);
 	
 	ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
 
@@ -21479,15 +21479,17 @@
 	var Provider = _require3.Provider;
 	
 	var Layout = __webpack_require__(259);
-	var Home = __webpack_require__(261);
-	var CreateAPoll = __webpack_require__(262);
+	var Home = __webpack_require__(260);
+	var CreateAPoll = __webpack_require__(261);
+	var Signup = __webpack_require__(265);
 	
 	var Routes = function Routes() {
 	  return React.createElement(
 	    Route,
 	    { path: '/', component: Layout },
 	    React.createElement(IndexRoute, { component: Home }),
-	    React.createElement(Route, { path: 'create', component: CreateAPoll })
+	    React.createElement(Route, { path: 'create', component: CreateAPoll }),
+	    React.createElement(Route, { path: 'signup', component: Signup })
 	  );
 	};
 	
@@ -29091,13 +29093,13 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var NavBar = __webpack_require__(260);
+	var NavBar = __webpack_require__(281);
 	
 	var Layout = function Layout(props) {
 	  return React.createElement(
 	    'div',
 	    { className: 'container' },
-	    React.createElement(NavBar, { isLoggedIn: true }),
+	    React.createElement(NavBar, { isLoggedIn: false }),
 	    props.children
 	  );
 	};
@@ -29113,131 +29115,6 @@
 
 /***/ },
 /* 260 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
-	var string = _React$PropTypes.string;
-	var bool = _React$PropTypes.bool;
-	
-	var _require2 = __webpack_require__(173);
-	
-	var Link = _require2.Link;
-	
-	
-	var NavBar = React.createClass({
-	  displayName: 'NavBar',
-	
-	  propTypes: {
-	    userName: string,
-	    isLoggedIn: bool
-	  },
-	  render: function render() {
-	    var showNav = void 0;
-	    if (this.props.isLoggedIn) {
-	      showNav = React.createElement(
-	        'div',
-	        { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
-	        React.createElement(
-	          'ul',
-	          { className: 'nav navbar-nav' },
-	          React.createElement(
-	            'li',
-	            { className: 'active' },
-	            React.createElement(
-	              'a',
-	              { href: '#' },
-	              'My Polls'
-	            )
-	          ),
-	          React.createElement(
-	            'li',
-	            null,
-	            React.createElement(
-	              Link,
-	              { to: '/create' },
-	              'Create a Poll'
-	            )
-	          )
-	        ),
-	        React.createElement(
-	          'ul',
-	          { className: 'nav navbar-nav navbar-right' },
-	          React.createElement(
-	            'li',
-	            null,
-	            React.createElement(
-	              'a',
-	              { href: '#' },
-	              'Welcome back, ',
-	              this.props.userName,
-	              '!'
-	            )
-	          )
-	        )
-	      );
-	    } else {
-	      showNav = React.createElement(
-	        'div',
-	        { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
-	        React.createElement(
-	          'ul',
-	          { className: 'nav navbar-nav navbar-right' },
-	          React.createElement(
-	            'li',
-	            null,
-	            React.createElement(
-	              'a',
-	              { href: '#' },
-	              'Login / Signup '
-	            )
-	          )
-	        )
-	      );
-	    }
-	    return React.createElement(
-	      'nav',
-	      { className: 'navbar navbar-default' },
-	      React.createElement(
-	        'div',
-	        { className: 'container-fluid' },
-	        React.createElement(
-	          'div',
-	          { className: 'navbar-header' },
-	          React.createElement(
-	            'button',
-	            { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
-	            React.createElement(
-	              'span',
-	              { className: 'sr-only' },
-	              'Toggle navigation'
-	            ),
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' })
-	          ),
-	          React.createElement(
-	            Link,
-	            { to: '/', className: 'navbar-brand' },
-	            'Vote.'
-	          )
-	        ),
-	        showNav
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = connector(NavBar);
-
-/***/ },
-/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29299,7 +29176,7 @@
 	module.exports = connector(Home);
 
 /***/ },
-/* 262 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29310,9 +29187,9 @@
 	
 	var connector = _require.connector;
 	
-	var NewPollTitle = __webpack_require__(263);
-	var PendingPollOptions = __webpack_require__(280);
-	var SaveOrReset = __webpack_require__(281);
+	var NewPollTitle = __webpack_require__(262);
+	var PendingPollOptions = __webpack_require__(263);
+	var SaveOrReset = __webpack_require__(264);
 	
 	var CreateAPoll = React.createClass({
 	  displayName: 'CreateAPoll',
@@ -29335,7 +29212,7 @@
 	module.exports = connector(CreateAPoll);
 
 /***/ },
-/* 263 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29428,28 +29305,7 @@
 	module.exports = connected;
 
 /***/ },
-/* 264 */,
-/* 265 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 266 */,
-/* 267 */,
-/* 268 */,
-/* 269 */,
-/* 270 */,
-/* 271 */,
-/* 272 */,
-/* 273 */,
-/* 274 */,
-/* 275 */,
-/* 276 */,
-/* 277 */,
-/* 278 */,
-/* 279 */,
-/* 280 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29544,7 +29400,7 @@
 	module.exports = connected;
 
 /***/ },
-/* 281 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29557,6 +29413,7 @@
 	var _React$PropTypes = React.PropTypes;
 	var string = _React$PropTypes.string;
 	var func = _React$PropTypes.func;
+	var array = _React$PropTypes.array;
 	
 	
 	var SaveOrReset = React.createClass({
@@ -29564,7 +29421,8 @@
 	
 	  propTypes: {
 	    newPollTitle: string,
-	    resetNewPoll: func
+	    resetNewPoll: func,
+	    newPollOptions: array
 	  },
 	  handleResetButtonClick: function handleResetButtonClick() {
 	    this.props.resetNewPoll(true);
@@ -29595,6 +29453,204 @@
 	connected.DisconnectedSaveOrReset = SaveOrReset;
 	
 	module.exports = connected;
+
+/***/ },
+/* 265 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	
+	
+	var Signup = React.createClass({
+	  displayName: 'Signup',
+	  render: function render() {
+	    return React.createElement(
+	      'form',
+	      null,
+	      React.createElement(
+	        'h1',
+	        null,
+	        'Sign up to make some polls!'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'form-group' },
+	        React.createElement(
+	          'label',
+	          { className: 'control-label' },
+	          'Username'
+	        ),
+	        React.createElement('input', {
+	          type: 'text',
+	          name: 'username',
+	          className: 'form-control'
+	        })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'form-group' },
+	        React.createElement(
+	          'button',
+	          { className: 'btn btn-primary btn-lg' },
+	          'Sign up'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = connector(Signup);
+
+/***/ },
+/* 266 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 267 */,
+/* 268 */,
+/* 269 */,
+/* 270 */,
+/* 271 */,
+/* 272 */,
+/* 273 */,
+/* 274 */,
+/* 275 */,
+/* 276 */,
+/* 277 */,
+/* 278 */,
+/* 279 */,
+/* 280 */,
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	var _React$PropTypes = React.PropTypes;
+	var string = _React$PropTypes.string;
+	var bool = _React$PropTypes.bool;
+	
+	var _require2 = __webpack_require__(173);
+	
+	var Link = _require2.Link;
+	
+	
+	var NavBar = React.createClass({
+	  displayName: 'NavBar',
+	
+	  propTypes: {
+	    userName: string,
+	    isLoggedIn: bool
+	  },
+	  render: function render() {
+	    var showNav = void 0;
+	    if (this.props.isLoggedIn) {
+	      showNav = React.createElement(
+	        'div',
+	        { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
+	        React.createElement(
+	          'ul',
+	          { className: 'nav navbar-nav' },
+	          React.createElement(
+	            'li',
+	            { className: 'active' },
+	            React.createElement(
+	              'a',
+	              { href: '#' },
+	              'My Polls'
+	            )
+	          ),
+	          React.createElement(
+	            'li',
+	            null,
+	            React.createElement(
+	              Link,
+	              { to: '/create' },
+	              'Create a Poll'
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          'ul',
+	          { className: 'nav navbar-nav navbar-right' },
+	          React.createElement(
+	            'li',
+	            null,
+	            React.createElement(
+	              'a',
+	              { href: '#' },
+	              'Welcome back, ',
+	              this.props.userName,
+	              '!'
+	            )
+	          )
+	        )
+	      );
+	    } else {
+	      showNav = React.createElement(
+	        'div',
+	        { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
+	        React.createElement(
+	          'ul',
+	          { className: 'nav navbar-nav navbar-right' },
+	          React.createElement(
+	            'li',
+	            null,
+	            React.createElement(
+	              Link,
+	              { to: '/signup' },
+	              'Sign up'
+	            )
+	          )
+	        )
+	      );
+	    }
+	    return React.createElement(
+	      'nav',
+	      { className: 'navbar navbar-default' },
+	      React.createElement(
+	        'div',
+	        { className: 'container-fluid' },
+	        React.createElement(
+	          'div',
+	          { className: 'navbar-header' },
+	          React.createElement(
+	            'button',
+	            { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
+	            React.createElement(
+	              'span',
+	              { className: 'sr-only' },
+	              'Toggle navigation'
+	            ),
+	            React.createElement('span', { className: 'icon-bar' }),
+	            React.createElement('span', { className: 'icon-bar' }),
+	            React.createElement('span', { className: 'icon-bar' })
+	          ),
+	          React.createElement(
+	            Link,
+	            { to: '/', className: 'navbar-brand' },
+	            'Vote.'
+	          )
+	        ),
+	        showNav
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = connector(NavBar);
 
 /***/ }
 /******/ ]);
