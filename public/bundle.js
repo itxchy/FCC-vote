@@ -29471,34 +29471,42 @@
 	  displayName: 'Signup',
 	  render: function render() {
 	    return React.createElement(
-	      'form',
-	      null,
+	      'div',
+	      { className: 'row' },
 	      React.createElement(
 	        'h1',
-	        null,
+	        { className: 'text-center' },
 	        'Sign up to make some polls!'
 	      ),
 	      React.createElement(
 	        'div',
-	        { className: 'form-group' },
+	        { className: 'col-md-4 col-md-offset-4' },
 	        React.createElement(
-	          'label',
-	          { className: 'control-label' },
-	          'Username'
-	        ),
-	        React.createElement('input', {
-	          type: 'text',
-	          name: 'username',
-	          className: 'form-control'
-	        })
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'form-group' },
-	        React.createElement(
-	          'button',
-	          { className: 'btn btn-primary btn-lg' },
-	          'Sign up'
+	          'form',
+	          null,
+	          React.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            React.createElement(
+	              'label',
+	              { className: 'control-label' },
+	              'Username'
+	            ),
+	            React.createElement('input', {
+	              type: 'text',
+	              name: 'username',
+	              className: 'form-control'
+	            })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            React.createElement(
+	              'button',
+	              { className: 'btn btn-primary btn-lg' },
+	              'Sign up'
+	            )
+	          )
 	        )
 	      )
 	    );
