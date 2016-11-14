@@ -3,7 +3,7 @@ const NavBar = require('./NavBar')
 
 const Layout = (props) => (
   <div className='container'>
-    <NavBar isLoggedIn />
+    <NavBar {/*isLoggedIn*/} />
     {props.children}
   </div>
 )

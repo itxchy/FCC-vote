@@ -26,7 +26,7 @@ const NavBar = React.createClass({
       showNav = (
         <div className='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>
           <ul className='nav navbar-nav navbar-right'>
-            <li><a href='#'>Login / Signup </a></li>
+            <li><Link to='/signup'>Sign up</Link></li>
           </ul>
         </div>
       )
