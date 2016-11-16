@@ -4,7 +4,10 @@ const { connector } = require('../../redux/Store')
 const Signup = React.createClass({
   getInitialState () {
     return {
-      username: ''
+      username: '',
+      email: '',
+      password: '',
+      passwordConfirmation: ''
     }
   },
 
@@ -20,7 +23,7 @@ const Signup = React.createClass({
 
   onSubmit (event) {
     event.preventDefault()
-    console.log(`form submitted! ${this.state}`)
+    console.log('form submitted!', this.state)
   },
 
   render () {
@@ -30,6 +33,7 @@ const Signup = React.createClass({
         <div className='col-md-4 col-md-offset-4'>
 
           <form onSubmit={this.onSubmit}>
+
             <div className='form-group'>
               <label className='control-label'>Username</label>
               <input
@@ -40,6 +44,39 @@ const Signup = React.createClass({
                 className='form-control'
               />
             </div>
+
+            <div className='form-group'>
+              <label className='control-label'>Email</label>
+              <input
+                value={this.state.email}
+                onChange={this.onChange}
+                type='text'
+                name='email'
+                className='form-control'
+              />
+            </div>
+
+            <div className='form-group'>
+              <label className='control-label'>Password</label>
+              <input
+                value={this.state.password}
+                onChange={this.onChange}
+                type='password'
+                name='password'
+                className='form-control'
+              />
+            </div>
+
+            <div className='form-group'>
+              <label className='control-label'>Confirm Password</label>
+              <input
+                value={this.state.passwordConfirmation}
+                onChange={this.onChange}
+                type='password'
+                name='passwordConfirmation'
+                className='form-control'
+              />
+            </div>            
 
             <div className='form-group'>
               <button className='btn btn-primary btn-lg'>

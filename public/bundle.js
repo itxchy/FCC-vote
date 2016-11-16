@@ -29598,7 +29598,10 @@
 	  displayName: 'Signup',
 	  getInitialState: function getInitialState() {
 	    return {
-	      username: ''
+	      username: '',
+	      email: '',
+	      password: '',
+	      passwordConfirmation: ''
 	    };
 	  },
 	  onChange: function onChange(event) {
@@ -29612,7 +29615,7 @@
 	  },
 	  onSubmit: function onSubmit(event) {
 	    event.preventDefault();
-	    console.log('form submitted! ' + this.state);
+	    console.log('form submitted!', this.state);
 	  },
 	  render: function render() {
 	    return React.createElement(
@@ -29642,6 +29645,54 @@
 	              onChange: this.onChange,
 	              type: 'text',
 	              name: 'username',
+	              className: 'form-control'
+	            })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            React.createElement(
+	              'label',
+	              { className: 'control-label' },
+	              'Email'
+	            ),
+	            React.createElement('input', {
+	              value: this.state.email,
+	              onChange: this.onChange,
+	              type: 'text',
+	              name: 'email',
+	              className: 'form-control'
+	            })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            React.createElement(
+	              'label',
+	              { className: 'control-label' },
+	              'Password'
+	            ),
+	            React.createElement('input', {
+	              value: this.state.password,
+	              onChange: this.onChange,
+	              type: 'password',
+	              name: 'password',
+	              className: 'form-control'
+	            })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            React.createElement(
+	              'label',
+	              { className: 'control-label' },
+	              'Confirm Password'
+	            ),
+	            React.createElement('input', {
+	              value: this.state.passwordConfirmation,
+	              onChange: this.onChange,
+	              type: 'password',
+	              name: 'passwordConfirmation',
 	              className: 'form-control'
 	            })
 	          ),
