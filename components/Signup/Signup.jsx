@@ -1,6 +1,7 @@
 const React = require('react')
 const { connector } = require('../../redux/Store')
 const classnames = require('classnames')
+const validateInput = require('../../routes/shared/signupValidation')
 const { func } = React.PropTypes
 
 const Signup = React.createClass({
@@ -29,23 +30,35 @@ const Signup = React.createClass({
     this.setState({[event.target.name]: event.target.value})
   },
 
+  isValid () {
+    const { errors, isValid } = validateInput(this.state)
+
+    if (!isValid) {
+      this.setState({ errors: errors })
+    }
+
+    return isValid
+  },
+
   onSubmit (event) {
-    this.setState({errors: {}, isLoading: true})
     event.preventDefault()
-    // axios.post('api/users', {user: this.state})
-    this.props.userSignupRequest(this.state)
-      .then(response => {
-        console.log('response: ', response)
-        this.setState({isLoading: false})
-      })
-      .catch(error => {
-        this.setState({errors: error.response.data, isLoading: false})
-      })
+
+    if (this.isValid()) {
+      this.setState({errors: {}, isLoading: true})
+      this.props.userSignupRequest(this.state)
+        .then(response => {
+          console.log('response: ', response)
+          this.setState({isLoading: false})
+        })
+        .catch(error => {
+          console.log('caught error: ', error)
+          this.setState({errors: error.response.data, isLoading: false})
+        })
+    }
   },
 
   render () {
     const { errors } = this.state
-    console.log('state errors: ', errors)
     return (
       <div className='row'>
         <h1 className='text-center'>Sign up to make some polls!</h1>
