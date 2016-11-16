@@ -19,6 +19,8 @@ const users = require('./routes/users.js')
 
 const app = express()
 
+app.use(bodyParser.json())
+
 app.use('/api/users', users)
 
 app.use('/public', express.static('./public'))
