@@ -25,7 +25,7 @@ function validateInput (data) {
   }
 
   if (Validator.isEmpty(data.passwordConfirmation)) {
-    errors.passwordConfirmation = 'A valid passwordConfirmation is required'
+    errors.passwordConfirmation = 'You must confirm your password'
   }
 
   if (!Validator.equals(data.password, data.passwordConfirmation)) {
@@ -49,8 +49,10 @@ router.post('/', (req, res) => {
   const { errors, isValid } = validateInput(req.body)
 
   if (!isValid) {
-    res.status(400).json(errors)
+    return res.status(400).json(errors)
   }
+
+  return res.status(200).json(req.body)
 })
 
 module.exports = router

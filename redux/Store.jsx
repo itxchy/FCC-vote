@@ -89,7 +89,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch({type: RESET_NEW_POLL, value: bool})
     },
     userSignupRequest (userData) {
-      axios.post('/api/users', userData)
+      return axios.post('/api/users', userData)
     }
   }
 }

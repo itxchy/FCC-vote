@@ -49,7 +49,7 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(34);
 	var App = __webpack_require__(172);
-	__webpack_require__(267);
+	__webpack_require__(300);
 	
 	ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
 
@@ -21474,14 +21474,14 @@
 	
 	var store = _require2.store;
 	
-	var _require3 = __webpack_require__(252);
+	var _require3 = __webpack_require__(258);
 	
 	var Provider = _require3.Provider;
 	
-	var Layout = __webpack_require__(259);
-	var Home = __webpack_require__(261);
-	var CreateAPoll = __webpack_require__(262);
-	var Signup = __webpack_require__(266);
+	var Layout = __webpack_require__(291);
+	var Home = __webpack_require__(293);
+	var CreateAPoll = __webpack_require__(294);
+	var Signup = __webpack_require__(298);
 	
 	var Routes = function Routes() {
 	  return React.createElement(
@@ -27445,9 +27445,9 @@
 	var applyMiddleware = _require.applyMiddleware;
 	var createStore = _require.createStore;
 	
-	var reactRedux = __webpack_require__(252);
-	var thunk = __webpack_require__(307).default;
-	var axios = __webpack_require__(282);
+	var reactRedux = __webpack_require__(258);
+	var thunk = __webpack_require__(265).default;
+	var axios = __webpack_require__(266);
 	
 	var SET_NEW_POLL_TITLE = 'setNewPollTitle';
 	var SET_TITLE_EDITABLE = 'setTitleEditable';
@@ -27532,7 +27532,7 @@
 	      dispatch({ type: RESET_NEW_POLL, value: bool });
 	    },
 	    userSignupRequest: function userSignupRequest(userData) {
-	      axios.post('/api/users', userData);
+	      return axios.post('/api/users', userData);
 	    }
 	  };
 	};
@@ -27554,23 +27554,23 @@
 	
 	var _createStore2 = _interopRequireDefault(_createStore);
 	
-	var _combineReducers = __webpack_require__(247);
+	var _combineReducers = __webpack_require__(253);
 	
 	var _combineReducers2 = _interopRequireDefault(_combineReducers);
 	
-	var _bindActionCreators = __webpack_require__(249);
+	var _bindActionCreators = __webpack_require__(255);
 	
 	var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 	
-	var _applyMiddleware = __webpack_require__(250);
+	var _applyMiddleware = __webpack_require__(256);
 	
 	var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 	
-	var _compose = __webpack_require__(251);
+	var _compose = __webpack_require__(257);
 	
 	var _compose2 = _interopRequireDefault(_compose);
 	
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
@@ -27611,7 +27611,7 @@
 	
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 	
-	var _symbolObservable = __webpack_require__(243);
+	var _symbolObservable = __webpack_require__(249);
 	
 	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 	
@@ -27871,9 +27871,9 @@
 
 	'use strict';
 	
-	var baseGetTag = __webpack_require__(308),
-	    getPrototype = __webpack_require__(240),
-	    isObjectLike = __webpack_require__(242);
+	var baseGetTag = __webpack_require__(240),
+	    getPrototype = __webpack_require__(246),
+	    isObjectLike = __webpack_require__(248);
 	
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -27939,7 +27939,168 @@
 
 	'use strict';
 	
-	var overArg = __webpack_require__(241);
+	var _Symbol = __webpack_require__(241),
+	    getRawTag = __webpack_require__(244),
+	    objectToString = __webpack_require__(245);
+	
+	/** `Object#toString` result references. */
+	var nullTag = '[object Null]',
+	    undefinedTag = '[object Undefined]';
+	
+	/** Built-in value references. */
+	var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
+	
+	/**
+	 * The base implementation of `getTag` without fallbacks for buggy environments.
+	 *
+	 * @private
+	 * @param {*} value The value to query.
+	 * @returns {string} Returns the `toStringTag`.
+	 */
+	function baseGetTag(value) {
+	    if (value == null) {
+	        return value === undefined ? undefinedTag : nullTag;
+	    }
+	    value = Object(value);
+	    return symToStringTag && symToStringTag in value ? getRawTag(value) : objectToString(value);
+	}
+	
+	module.exports = baseGetTag;
+
+/***/ },
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var root = __webpack_require__(242);
+	
+	/** Built-in value references. */
+	var _Symbol = root.Symbol;
+	
+	module.exports = _Symbol;
+
+/***/ },
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	var freeGlobal = __webpack_require__(243);
+	
+	/** Detect free variable `self`. */
+	var freeSelf = (typeof self === 'undefined' ? 'undefined' : _typeof(self)) == 'object' && self && self.Object === Object && self;
+	
+	/** Used as a reference to the global object. */
+	var root = freeGlobal || freeSelf || Function('return this')();
+	
+	module.exports = root;
+
+/***/ },
+/* 243 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	/** Detect free variable `global` from Node.js. */
+	var freeGlobal = (typeof global === 'undefined' ? 'undefined' : _typeof(global)) == 'object' && global && global.Object === Object && global;
+	
+	module.exports = freeGlobal;
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 244 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _Symbol = __webpack_require__(241);
+	
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+	
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+	
+	/**
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var nativeObjectToString = objectProto.toString;
+	
+	/** Built-in value references. */
+	var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
+	
+	/**
+	 * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+	 *
+	 * @private
+	 * @param {*} value The value to query.
+	 * @returns {string} Returns the raw `toStringTag`.
+	 */
+	function getRawTag(value) {
+	  var isOwn = hasOwnProperty.call(value, symToStringTag),
+	      tag = value[symToStringTag];
+	
+	  try {
+	    value[symToStringTag] = undefined;
+	    var unmasked = true;
+	  } catch (e) {}
+	
+	  var result = nativeObjectToString.call(value);
+	  if (unmasked) {
+	    if (isOwn) {
+	      value[symToStringTag] = tag;
+	    } else {
+	      delete value[symToStringTag];
+	    }
+	  }
+	  return result;
+	}
+	
+	module.exports = getRawTag;
+
+/***/ },
+/* 245 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+	
+	/**
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var nativeObjectToString = objectProto.toString;
+	
+	/**
+	 * Converts `value` to a string using `Object.prototype.toString`.
+	 *
+	 * @private
+	 * @param {*} value The value to convert.
+	 * @returns {string} Returns the converted string.
+	 */
+	function objectToString(value) {
+	  return nativeObjectToString.call(value);
+	}
+	
+	module.exports = objectToString;
+
+/***/ },
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var overArg = __webpack_require__(247);
 	
 	/** Built-in value references. */
 	var getPrototype = overArg(Object.getPrototypeOf, Object);
@@ -27947,7 +28108,7 @@
 	module.exports = getPrototype;
 
 /***/ },
-/* 241 */
+/* 247 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -27969,7 +28130,7 @@
 	module.exports = overArg;
 
 /***/ },
-/* 242 */
+/* 248 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28007,15 +28168,15 @@
 	module.exports = isObjectLike;
 
 /***/ },
-/* 243 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	module.exports = __webpack_require__(244);
+	module.exports = __webpack_require__(250);
 
 /***/ },
-/* 244 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
@@ -28024,7 +28185,7 @@
 	  value: true
 	});
 	
-	var _ponyfill = __webpack_require__(246);
+	var _ponyfill = __webpack_require__(252);
 	
 	var _ponyfill2 = _interopRequireDefault(_ponyfill);
 	
@@ -28048,10 +28209,10 @@
 	
 	var result = (0, _ponyfill2['default'])(root);
 	exports['default'] = result;
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(245)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(251)(module)))
 
 /***/ },
-/* 245 */
+/* 251 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -28068,7 +28229,7 @@
 	};
 
 /***/ },
-/* 246 */
+/* 252 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28096,7 +28257,7 @@
 	};
 
 /***/ },
-/* 247 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -28110,7 +28271,7 @@
 	
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 	
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
@@ -28246,7 +28407,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 248 */
+/* 254 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28276,7 +28437,7 @@
 	}
 
 /***/ },
-/* 249 */
+/* 255 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28334,7 +28495,7 @@
 	}
 
 /***/ },
-/* 250 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28353,7 +28514,7 @@
 	
 	exports['default'] = applyMiddleware;
 	
-	var _compose = __webpack_require__(251);
+	var _compose = __webpack_require__(257);
 	
 	var _compose2 = _interopRequireDefault(_compose);
 	
@@ -28407,7 +28568,7 @@
 	}
 
 /***/ },
-/* 251 */
+/* 257 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -28450,7 +28611,7 @@
 	}
 
 /***/ },
-/* 252 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28458,11 +28619,11 @@
 	exports.__esModule = true;
 	exports.connect = exports.Provider = undefined;
 	
-	var _Provider = __webpack_require__(253);
+	var _Provider = __webpack_require__(259);
 	
 	var _Provider2 = _interopRequireDefault(_Provider);
 	
-	var _connect = __webpack_require__(256);
+	var _connect = __webpack_require__(262);
 	
 	var _connect2 = _interopRequireDefault(_connect);
 	
@@ -28474,7 +28635,7 @@
 	exports.connect = _connect2["default"];
 
 /***/ },
-/* 253 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -28486,11 +28647,11 @@
 	
 	var _react = __webpack_require__(1);
 	
-	var _storeShape = __webpack_require__(254);
+	var _storeShape = __webpack_require__(260);
 	
 	var _storeShape2 = _interopRequireDefault(_storeShape);
 	
-	var _warning = __webpack_require__(255);
+	var _warning = __webpack_require__(261);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
@@ -28574,7 +28735,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 254 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28590,7 +28751,7 @@
 	});
 
 /***/ },
-/* 255 */
+/* 261 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28619,7 +28780,7 @@
 	}
 
 /***/ },
-/* 256 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -28641,19 +28802,19 @@
 	
 	var _react = __webpack_require__(1);
 	
-	var _storeShape = __webpack_require__(254);
+	var _storeShape = __webpack_require__(260);
 	
 	var _storeShape2 = _interopRequireDefault(_storeShape);
 	
-	var _shallowEqual = __webpack_require__(257);
+	var _shallowEqual = __webpack_require__(263);
 	
 	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 	
-	var _wrapActionCreators = __webpack_require__(258);
+	var _wrapActionCreators = __webpack_require__(264);
 	
 	var _wrapActionCreators2 = _interopRequireDefault(_wrapActionCreators);
 	
-	var _warning = __webpack_require__(255);
+	var _warning = __webpack_require__(261);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
@@ -29042,7 +29203,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 257 */
+/* 263 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29073,7 +29234,7 @@
 	}
 
 /***/ },
-/* 258 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29090,497 +29251,32 @@
 	}
 
 /***/ },
-/* 259 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var NavBar = __webpack_require__(260);
-	
-	var Layout = function Layout(props) {
-	  return React.createElement(
-	    'div',
-	    { className: 'container' },
-	    React.createElement(NavBar, { isLoggedIn: false }),
-	    props.children
-	  );
-	};
-	
-	var element = React.PropTypes.element;
-	
-	
-	Layout.propTypes = {
-	  children: element.isRequired
-	};
-	
-	module.exports = Layout;
-
-/***/ },
-/* 260 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
-	var string = _React$PropTypes.string;
-	var bool = _React$PropTypes.bool;
-	
-	var _require2 = __webpack_require__(173);
-	
-	var Link = _require2.Link;
-	
-	
-	var NavBar = React.createClass({
-	  displayName: 'NavBar',
-	
-	  propTypes: {
-	    userName: string,
-	    isLoggedIn: bool
-	  },
-	  render: function render() {
-	    var showNav = void 0;
-	    if (this.props.isLoggedIn) {
-	      showNav = React.createElement(
-	        'div',
-	        { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
-	        React.createElement(
-	          'ul',
-	          { className: 'nav navbar-nav' },
-	          React.createElement(
-	            'li',
-	            { className: 'active' },
-	            React.createElement(
-	              'a',
-	              { href: '#' },
-	              'My Polls'
-	            )
-	          ),
-	          React.createElement(
-	            'li',
-	            null,
-	            React.createElement(
-	              Link,
-	              { to: '/create' },
-	              'Create a Poll'
-	            )
-	          )
-	        ),
-	        React.createElement(
-	          'ul',
-	          { className: 'nav navbar-nav navbar-right' },
-	          React.createElement(
-	            'li',
-	            null,
-	            React.createElement(
-	              'a',
-	              { href: '#' },
-	              'Welcome back, ',
-	              this.props.userName,
-	              '!'
-	            )
-	          )
-	        )
-	      );
-	    } else {
-	      showNav = React.createElement(
-	        'div',
-	        { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
-	        React.createElement(
-	          'ul',
-	          { className: 'nav navbar-nav navbar-right' },
-	          React.createElement(
-	            'li',
-	            null,
-	            React.createElement(
-	              Link,
-	              { to: '/signup' },
-	              'Sign up'
-	            )
-	          )
-	        )
-	      );
-	    }
-	    return React.createElement(
-	      'nav',
-	      { className: 'navbar navbar-default' },
-	      React.createElement(
-	        'div',
-	        { className: 'container-fluid' },
-	        React.createElement(
-	          'div',
-	          { className: 'navbar-header' },
-	          React.createElement(
-	            'button',
-	            { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
-	            React.createElement(
-	              'span',
-	              { className: 'sr-only' },
-	              'Toggle navigation'
-	            ),
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' })
-	          ),
-	          React.createElement(
-	            Link,
-	            { to: '/', className: 'navbar-brand' },
-	            'Vote.'
-	          )
-	        ),
-	        showNav
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = connector(NavBar);
-
-/***/ },
-/* 261 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var object = React.PropTypes.object;
-	
-	
-	var Home = React.createClass({
-	  displayName: 'Home',
-	
-	  propTypes: {
-	    recentPolls: object
-	  },
-	  render: function render() {
-	    var showPolls = null;
-	    if (this.props.recentPolls) {
-	      showPolls = this.props.recentPolls.map(function (poll) {
-	        return React.createElement(
-	          'div',
-	          null,
-	          ' A poll'
-	        );
-	      });
-	    } else {
-	      showPolls = React.createElement(
-	        'div',
-	        { className: 'text-center' },
-	        React.createElement(
-	          'h3',
-	          null,
-	          'No polls have been submitted yet :('
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'Why not create one?'
-	        )
-	      );
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h1',
-	        { className: 'view-title text-center' },
-	        'Latest Polls'
-	      ),
-	      showPolls
-	    );
-	  }
-	});
-	
-	module.exports = connector(Home);
-
-/***/ },
-/* 262 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	
-	var NewPollTitle = __webpack_require__(263);
-	var PendingPollOptions = __webpack_require__(264);
-	var SaveOrReset = __webpack_require__(265);
-	
-	var CreateAPoll = React.createClass({
-	  displayName: 'CreateAPoll',
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h1',
-	        { className: 'view-title text-center' },
-	        'Create a New Poll'
-	      ),
-	      React.createElement(NewPollTitle, null),
-	      React.createElement(PendingPollOptions, null),
-	      React.createElement(SaveOrReset, null)
-	    );
-	  }
-	});
-	
-	module.exports = connector(CreateAPoll);
-
-/***/ },
-/* 263 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
-	var string = _React$PropTypes.string;
-	var func = _React$PropTypes.func;
-	var bool = _React$PropTypes.bool;
-	
-	
-	var NewPollTitle = React.createClass({
-	  displayName: 'NewPollTitle',
-	
-	  propTypes: {
-	    newPollTitle: string,
-	    setNewPollTitle: func,
-	    titleEditable: bool,
-	    setTitleEditable: func
-	  },
-	  handleNewPollTitleChange: function handleNewPollTitleChange(event) {
-	    this.props.setNewPollTitle(event.target.value);
-	  },
-	  handleSaveClick: function handleSaveClick(event) {
-	    if (this.props.newPollTitle === '') {
-	      this.props.setNewPollTitle('New Poll Title');
-	    }
-	    this.props.setTitleEditable(false);
-	  },
-	  handleEditClick: function handleEditClick(event) {
-	    this.props.setTitleEditable(true);
-	  },
-	  render: function render() {
-	    var savedPollTitle = React.createElement(
-	      'div',
-	      { className: 'new-poll-title-container' },
-	      React.createElement(
-	        'h2',
-	        { className: 'text-center saved-title' },
-	        this.props.newPollTitle
-	      ),
-	      React.createElement(
-	        'a',
-	        { href: '#' },
-	        React.createElement('i', {
-	          className: 'fa fa-pencil-square-o edit-icon',
-	          'aria-hidden': 'true',
-	          onClick: this.handleEditClick
-	        })
-	      )
-	    );
-	    var inputPollTitle = React.createElement(
-	      'div',
-	      { className: 'new-poll-title-container' },
-	      React.createElement('textarea', {
-	        value: this.props.newPollTitle,
-	        onChange: this.handleNewPollTitleChange,
-	        type: 'text',
-	        placeholder: 'New Poll Title',
-	        className: 'text-center form-control new-poll-title-textarea'
-	      }),
-	      React.createElement(
-	        'a',
-	        { href: '#' },
-	        React.createElement('i', {
-	          className: 'fa fa-floppy-o save-icon',
-	          'aria-hidden': 'true',
-	          onClick: this.handleSaveClick
-	        })
-	      )
-	    );
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'new-poll-title-container' },
-	      this.props.titleEditable ? inputPollTitle : savedPollTitle
-	    );
-	  }
-	});
-	
-	var connected = connector(NewPollTitle);
-	
-	// This exports the component itself for testing
-	connected.DisconnectedNewPollTitle = NewPollTitle;
-	
-	module.exports = connected;
-
-/***/ },
-/* 264 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
-	var array = _React$PropTypes.array;
-	var func = _React$PropTypes.func;
-	
-	
-	var PendingPollOptions = React.createClass({
-	  displayName: 'PendingPollOptions',
-	
-	  propTypes: {
-	    newPollOptions: array.isRequired,
-	    updateOption: func.isRequired
-	  },
-	  editOption: function editOption(event) {
-	    var updatedOptions = this.props.newPollOptions.slice();
-	    updatedOptions[event.target.name] = event.target.value;
-	    this.props.updateOption(updatedOptions);
-	  },
-	  addAnotherOption: function addAnotherOption() {
-	    var updatedNewOptions = this.props.newPollOptions.slice();
-	    updatedNewOptions.push('');
-	    this.props.updateOption(updatedNewOptions);
-	  },
-	  deleteOption: function deleteOption(index) {
-	    if (this.props.newPollOptions.length === 2) {
-	      return console.log('Two or more options required!');
-	    }
-	    var updatedDeleteOptions = this.props.newPollOptions.slice();
-	    updatedDeleteOptions.splice(index, 1);
-	    this.props.updateOption(updatedDeleteOptions);
-	  },
-	  render: function render() {
-	    var _this = this;
-	
-	    var options = this.props.newPollOptions.map(function (option, index) {
-	      return React.createElement(
-	        'div',
-	        { key: index },
-	        React.createElement('input', {
-	          type: 'text',
-	          value: option,
-	          name: index,
-	          placeholder: 'Option ' + (index + 1),
-	          onChange: _this.editOption,
-	          className: 'form-control option-input'
-	        }),
-	        React.createElement(
-	          'a',
-	          {
-	            className: 'btn btn-danger delete-button',
-	            href: '#',
-	            onClick: function onClick() {
-	              return _this.deleteOption(index);
-	            },
-	            'aria-label': 'Delete'
-	          },
-	          React.createElement('i', { className: 'fa fa-trash-o', 'aria-hidden': 'true' })
-	        )
-	      );
-	    });
-	    return React.createElement(
-	      'div',
-	      { className: 'form-group options-container' },
-	      options,
-	      React.createElement(
-	        'a',
-	        { href: '#' },
-	        React.createElement(
-	          'p',
-	          { className: 'add-another-option', onClick: this.addAnotherOption },
-	          React.createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
-	          ' Add another option'
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	var connected = connector(PendingPollOptions);
-	
-	// This exports the component itself for testing
-	connected.DisconnectedPendingPollOptions = PendingPollOptions;
-	
-	module.exports = connected;
-
-/***/ },
 /* 265 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	exports.__esModule = true;
+	function createThunkMiddleware(extraArgument) {
+	  return function (_ref) {
+	    var dispatch = _ref.dispatch;
+	    var getState = _ref.getState;
+	    return function (next) {
+	      return function (action) {
+	        if (typeof action === 'function') {
+	          return action(dispatch, getState, extraArgument);
+	        }
 	
-	var _require = __webpack_require__(236);
+	        return next(action);
+	      };
+	    };
+	  };
+	}
 	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
-	var string = _React$PropTypes.string;
-	var func = _React$PropTypes.func;
-	var array = _React$PropTypes.array;
+	var thunk = createThunkMiddleware();
+	thunk.withExtraArgument = createThunkMiddleware;
 	
-	
-	var SaveOrReset = React.createClass({
-	  displayName: 'SaveOrReset',
-	
-	  propTypes: {
-	    newPollTitle: string,
-	    resetNewPoll: func,
-	    newPollOptions: array
-	  },
-	  handleResetButtonClick: function handleResetButtonClick() {
-	    this.props.resetNewPoll(true);
-	  },
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'text-center' },
-	      React.createElement(
-	        'button',
-	        { className: 'btn btn-primary save-reset-buttons' },
-	        'Save'
-	      ),
-	      React.createElement(
-	        'button',
-	        {
-	          className: 'btn save-reset-buttons reset-poll-button',
-	          onClick: this.handleResetButtonClick
-	        },
-	        'Reset'
-	      )
-	    );
-	  }
-	});
-	
-	var connected = connector(SaveOrReset);
-	
-	connected.DisconnectedSaveOrReset = SaveOrReset;
-	
-	module.exports = connected;
+	exports['default'] = thunk;
 
 /***/ },
 /* 266 */
@@ -29588,178 +29284,17 @@
 
 	'use strict';
 	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var func = React.PropTypes.func;
-	
-	
-	var Signup = React.createClass({
-	  displayName: 'Signup',
-	
-	  propTypes: {
-	    userSignupRequest: func.isRequired
-	  },
-	
-	  getInitialState: function getInitialState() {
-	    return {
-	      username: '',
-	      email: '',
-	      password: '',
-	      passwordConfirmation: ''
-	    };
-	  },
-	  onChange: function onChange(event) {
-	    /**
-	     * instead of setting state with {username: event.target.value},
-	     * using [event.target.name] will allow this function to be reused
-	     * by other form fields with onChange events. Thank you Rem Zolotykh
-	     * for sharing this method.
-	     */
-	    this.setState(_defineProperty({}, event.target.name, event.target.value));
-	  },
-	  onSubmit: function onSubmit(event) {
-	    event.preventDefault();
-	    // axios.post('api/users', {user: this.state})
-	    this.props.userSignupRequest(this.state);
-	  },
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'row' },
-	      React.createElement(
-	        'h1',
-	        { className: 'text-center' },
-	        'Sign up to make some polls!'
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'col-md-4 col-md-offset-4' },
-	        React.createElement(
-	          'form',
-	          { onSubmit: this.onSubmit },
-	          React.createElement(
-	            'div',
-	            { className: 'form-group' },
-	            React.createElement(
-	              'label',
-	              { className: 'control-label' },
-	              'Username'
-	            ),
-	            React.createElement('input', {
-	              value: this.state.username,
-	              onChange: this.onChange,
-	              type: 'text',
-	              name: 'username',
-	              className: 'form-control'
-	            })
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'form-group' },
-	            React.createElement(
-	              'label',
-	              { className: 'control-label' },
-	              'Email'
-	            ),
-	            React.createElement('input', {
-	              value: this.state.email,
-	              onChange: this.onChange,
-	              type: 'text',
-	              name: 'email',
-	              className: 'form-control'
-	            })
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'form-group' },
-	            React.createElement(
-	              'label',
-	              { className: 'control-label' },
-	              'Password'
-	            ),
-	            React.createElement('input', {
-	              value: this.state.password,
-	              onChange: this.onChange,
-	              type: 'password',
-	              name: 'password',
-	              className: 'form-control'
-	            })
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'form-group' },
-	            React.createElement(
-	              'label',
-	              { className: 'control-label' },
-	              'Confirm Password'
-	            ),
-	            React.createElement('input', {
-	              value: this.state.passwordConfirmation,
-	              onChange: this.onChange,
-	              type: 'password',
-	              name: 'passwordConfirmation',
-	              className: 'form-control'
-	            })
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'form-group' },
-	            React.createElement(
-	              'button',
-	              { className: 'btn btn-primary btn-lg' },
-	              'Sign up'
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = connector(Signup);
+	module.exports = __webpack_require__(267);
 
 /***/ },
 /* 267 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 268 */,
-/* 269 */,
-/* 270 */,
-/* 271 */,
-/* 272 */,
-/* 273 */,
-/* 274 */,
-/* 275 */,
-/* 276 */,
-/* 277 */,
-/* 278 */,
-/* 279 */,
-/* 280 */,
-/* 281 */,
-/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	module.exports = __webpack_require__(283);
-
-/***/ },
-/* 283 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var utils = __webpack_require__(284);
-	var bind = __webpack_require__(285);
-	var Axios = __webpack_require__(286);
+	var utils = __webpack_require__(268);
+	var bind = __webpack_require__(269);
+	var Axios = __webpack_require__(270);
 	
 	/**
 	 * Create an instance of Axios
@@ -29792,15 +29327,15 @@
 	};
 	
 	// Expose Cancel & CancelToken
-	axios.Cancel = __webpack_require__(304);
-	axios.CancelToken = __webpack_require__(305);
-	axios.isCancel = __webpack_require__(301);
+	axios.Cancel = __webpack_require__(288);
+	axios.CancelToken = __webpack_require__(289);
+	axios.isCancel = __webpack_require__(285);
 	
 	// Expose all/spread
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(306);
+	axios.spread = __webpack_require__(290);
 	
 	module.exports = axios;
 	
@@ -29808,14 +29343,14 @@
 	module.exports.default = axios;
 
 /***/ },
-/* 284 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	var bind = __webpack_require__(285);
+	var bind = __webpack_require__(269);
 	
 	/*global toString:true*/
 	
@@ -30110,7 +29645,7 @@
 	};
 
 /***/ },
-/* 285 */
+/* 269 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30126,17 +29661,17 @@
 	};
 
 /***/ },
-/* 286 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var defaults = __webpack_require__(287);
-	var utils = __webpack_require__(284);
-	var InterceptorManager = __webpack_require__(298);
-	var dispatchRequest = __webpack_require__(299);
-	var isAbsoluteURL = __webpack_require__(302);
-	var combineURLs = __webpack_require__(303);
+	var defaults = __webpack_require__(271);
+	var utils = __webpack_require__(268);
+	var InterceptorManager = __webpack_require__(282);
+	var dispatchRequest = __webpack_require__(283);
+	var isAbsoluteURL = __webpack_require__(286);
+	var combineURLs = __webpack_require__(287);
 	
 	/**
 	 * Create a new instance of Axios
@@ -30216,13 +29751,13 @@
 	module.exports = Axios;
 
 /***/ },
-/* 287 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
-	var utils = __webpack_require__(284);
-	var normalizeHeaderName = __webpack_require__(288);
+	var utils = __webpack_require__(268);
+	var normalizeHeaderName = __webpack_require__(272);
 	
 	var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 	var DEFAULT_CONTENT_TYPE = {
@@ -30239,10 +29774,10 @@
 	  var adapter;
 	  if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(289);
+	    adapter = __webpack_require__(273);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(289);
+	    adapter = __webpack_require__(273);
 	  }
 	  return adapter;
 	}
@@ -30303,12 +29838,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 288 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(284);
+	var utils = __webpack_require__(268);
 	
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -30320,18 +29855,18 @@
 	};
 
 /***/ },
-/* 289 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
-	var utils = __webpack_require__(284);
-	var settle = __webpack_require__(290);
-	var buildURL = __webpack_require__(293);
-	var parseHeaders = __webpack_require__(294);
-	var isURLSameOrigin = __webpack_require__(295);
-	var createError = __webpack_require__(291);
-	var btoa = typeof window !== 'undefined' && window.btoa || __webpack_require__(296);
+	var utils = __webpack_require__(268);
+	var settle = __webpack_require__(274);
+	var buildURL = __webpack_require__(277);
+	var parseHeaders = __webpack_require__(278);
+	var isURLSameOrigin = __webpack_require__(279);
+	var createError = __webpack_require__(275);
+	var btoa = typeof window !== 'undefined' && window.btoa || __webpack_require__(280);
 	
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -30424,7 +29959,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(297);
+	      var cookies = __webpack_require__(281);
 	
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ? cookies.read(config.xsrfCookieName) : undefined;
@@ -30498,12 +30033,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 290 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var createError = __webpack_require__(291);
+	var createError = __webpack_require__(275);
 	
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -30523,12 +30058,12 @@
 	};
 
 /***/ },
-/* 291 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var enhanceError = __webpack_require__(292);
+	var enhanceError = __webpack_require__(276);
 	
 	/**
 	 * Create an Error with the specified message, config, error code, and response.
@@ -30545,7 +30080,7 @@
 	};
 
 /***/ },
-/* 292 */
+/* 276 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30570,12 +30105,12 @@
 	};
 
 /***/ },
-/* 293 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(284);
+	var utils = __webpack_require__(268);
 	
 	function encode(val) {
 	  return encodeURIComponent(val).replace(/%40/gi, '@').replace(/%3A/gi, ':').replace(/%24/g, '$').replace(/%2C/gi, ',').replace(/%20/g, '+').replace(/%5B/gi, '[').replace(/%5D/gi, ']');
@@ -30636,12 +30171,12 @@
 	};
 
 /***/ },
-/* 294 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(284);
+	var utils = __webpack_require__(268);
 	
 	/**
 	 * Parse headers into an object
@@ -30680,12 +30215,12 @@
 	};
 
 /***/ },
-/* 295 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(284);
+	var utils = __webpack_require__(268);
 	
 	module.exports = utils.isStandardBrowserEnv() ?
 	
@@ -30748,7 +30283,7 @@
 	}();
 
 /***/ },
-/* 296 */
+/* 280 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30788,12 +30323,12 @@
 	module.exports = btoa;
 
 /***/ },
-/* 297 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(284);
+	var utils = __webpack_require__(268);
 	
 	module.exports = utils.isStandardBrowserEnv() ?
 	
@@ -30846,12 +30381,12 @@
 	}();
 
 /***/ },
-/* 298 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(284);
+	var utils = __webpack_require__(268);
 	
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -30903,15 +30438,15 @@
 	module.exports = InterceptorManager;
 
 /***/ },
-/* 299 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(284);
-	var transformData = __webpack_require__(300);
-	var isCancel = __webpack_require__(301);
-	var defaults = __webpack_require__(287);
+	var utils = __webpack_require__(268);
+	var transformData = __webpack_require__(284);
+	var isCancel = __webpack_require__(285);
+	var defaults = __webpack_require__(271);
 	
 	/**
 	 * Throws a `Cancel` if cancellation has been requested.
@@ -30968,12 +30503,12 @@
 	};
 
 /***/ },
-/* 300 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(284);
+	var utils = __webpack_require__(268);
 	
 	/**
 	 * Transform the data for a request or a response
@@ -30993,7 +30528,7 @@
 	};
 
 /***/ },
-/* 301 */
+/* 285 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31003,7 +30538,7 @@
 	};
 
 /***/ },
-/* 302 */
+/* 286 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31024,7 +30559,7 @@
 	};
 
 /***/ },
-/* 303 */
+/* 287 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31042,7 +30577,7 @@
 	};
 
 /***/ },
-/* 304 */
+/* 288 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31067,12 +30602,12 @@
 	module.exports = Cancel;
 
 /***/ },
-/* 305 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Cancel = __webpack_require__(304);
+	var Cancel = __webpack_require__(288);
 	
 	/**
 	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -31129,7 +30664,7 @@
 	module.exports = CancelToken;
 
 /***/ },
-/* 306 */
+/* 290 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31162,193 +30697,807 @@
 	};
 
 /***/ },
-/* 307 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	exports.__esModule = true;
-	function createThunkMiddleware(extraArgument) {
-	  return function (_ref) {
-	    var dispatch = _ref.dispatch;
-	    var getState = _ref.getState;
-	    return function (next) {
-	      return function (action) {
-	        if (typeof action === 'function') {
-	          return action(dispatch, getState, extraArgument);
-	        }
-	
-	        return next(action);
-	      };
-	    };
-	  };
-	}
-	
-	var thunk = createThunkMiddleware();
-	thunk.withExtraArgument = createThunkMiddleware;
-	
-	exports['default'] = thunk;
-
-/***/ },
-/* 308 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _Symbol = __webpack_require__(309),
-	    getRawTag = __webpack_require__(312),
-	    objectToString = __webpack_require__(313);
+	var React = __webpack_require__(1);
+	var NavBar = __webpack_require__(292);
 	
-	/** `Object#toString` result references. */
-	var nullTag = '[object Null]',
-	    undefinedTag = '[object Undefined]';
+	var Layout = function Layout(props) {
+	  return React.createElement(
+	    'div',
+	    { className: 'container' },
+	    React.createElement(NavBar, { isLoggedIn: false }),
+	    props.children
+	  );
+	};
 	
-	/** Built-in value references. */
-	var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
+	var element = React.PropTypes.element;
 	
-	/**
-	 * The base implementation of `getTag` without fallbacks for buggy environments.
-	 *
-	 * @private
-	 * @param {*} value The value to query.
-	 * @returns {string} Returns the `toStringTag`.
-	 */
-	function baseGetTag(value) {
-	    if (value == null) {
-	        return value === undefined ? undefinedTag : nullTag;
-	    }
-	    value = Object(value);
-	    return symToStringTag && symToStringTag in value ? getRawTag(value) : objectToString(value);
-	}
 	
-	module.exports = baseGetTag;
+	Layout.propTypes = {
+	  children: element.isRequired
+	};
+	
+	module.exports = Layout;
 
 /***/ },
-/* 309 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var root = __webpack_require__(310);
+	var React = __webpack_require__(1);
 	
-	/** Built-in value references. */
-	var _Symbol = root.Symbol;
+	var _require = __webpack_require__(236);
 	
-	module.exports = _Symbol;
-
-/***/ },
-/* 310 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
+	var connector = _require.connector;
+	var _React$PropTypes = React.PropTypes;
+	var string = _React$PropTypes.string;
+	var bool = _React$PropTypes.bool;
 	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	var _require2 = __webpack_require__(173);
 	
-	var freeGlobal = __webpack_require__(311);
+	var Link = _require2.Link;
 	
-	/** Detect free variable `self`. */
-	var freeSelf = (typeof self === 'undefined' ? 'undefined' : _typeof(self)) == 'object' && self && self.Object === Object && self;
 	
-	/** Used as a reference to the global object. */
-	var root = freeGlobal || freeSelf || Function('return this')();
+	var NavBar = React.createClass({
+	  displayName: 'NavBar',
 	
-	module.exports = root;
-
-/***/ },
-/* 311 */
-/***/ function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
-	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-	
-	/** Detect free variable `global` from Node.js. */
-	var freeGlobal = (typeof global === 'undefined' ? 'undefined' : _typeof(global)) == 'object' && global && global.Object === Object && global;
-	
-	module.exports = freeGlobal;
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 312 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _Symbol = __webpack_require__(309);
-	
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-	
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-	
-	/**
-	 * Used to resolve the
-	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var nativeObjectToString = objectProto.toString;
-	
-	/** Built-in value references. */
-	var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
-	
-	/**
-	 * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
-	 *
-	 * @private
-	 * @param {*} value The value to query.
-	 * @returns {string} Returns the raw `toStringTag`.
-	 */
-	function getRawTag(value) {
-	  var isOwn = hasOwnProperty.call(value, symToStringTag),
-	      tag = value[symToStringTag];
-	
-	  try {
-	    value[symToStringTag] = undefined;
-	    var unmasked = true;
-	  } catch (e) {}
-	
-	  var result = nativeObjectToString.call(value);
-	  if (unmasked) {
-	    if (isOwn) {
-	      value[symToStringTag] = tag;
+	  propTypes: {
+	    userName: string,
+	    isLoggedIn: bool
+	  },
+	  render: function render() {
+	    var showNav = void 0;
+	    if (this.props.isLoggedIn) {
+	      showNav = React.createElement(
+	        'div',
+	        { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
+	        React.createElement(
+	          'ul',
+	          { className: 'nav navbar-nav' },
+	          React.createElement(
+	            'li',
+	            { className: 'active' },
+	            React.createElement(
+	              'a',
+	              { href: '#' },
+	              'My Polls'
+	            )
+	          ),
+	          React.createElement(
+	            'li',
+	            null,
+	            React.createElement(
+	              Link,
+	              { to: '/create' },
+	              'Create a Poll'
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          'ul',
+	          { className: 'nav navbar-nav navbar-right' },
+	          React.createElement(
+	            'li',
+	            null,
+	            React.createElement(
+	              'a',
+	              { href: '#' },
+	              'Welcome back, ',
+	              this.props.userName,
+	              '!'
+	            )
+	          )
+	        )
+	      );
 	    } else {
-	      delete value[symToStringTag];
+	      showNav = React.createElement(
+	        'div',
+	        { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
+	        React.createElement(
+	          'ul',
+	          { className: 'nav navbar-nav navbar-right' },
+	          React.createElement(
+	            'li',
+	            null,
+	            React.createElement(
+	              Link,
+	              { to: '/signup' },
+	              'Sign up'
+	            )
+	          )
+	        )
+	      );
 	    }
+	    return React.createElement(
+	      'nav',
+	      { className: 'navbar navbar-default' },
+	      React.createElement(
+	        'div',
+	        { className: 'container-fluid' },
+	        React.createElement(
+	          'div',
+	          { className: 'navbar-header' },
+	          React.createElement(
+	            'button',
+	            { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
+	            React.createElement(
+	              'span',
+	              { className: 'sr-only' },
+	              'Toggle navigation'
+	            ),
+	            React.createElement('span', { className: 'icon-bar' }),
+	            React.createElement('span', { className: 'icon-bar' }),
+	            React.createElement('span', { className: 'icon-bar' })
+	          ),
+	          React.createElement(
+	            Link,
+	            { to: '/', className: 'navbar-brand' },
+	            'Vote.'
+	          )
+	        ),
+	        showNav
+	      )
+	    );
 	  }
-	  return result;
-	}
+	});
 	
-	module.exports = getRawTag;
+	module.exports = connector(NavBar);
 
 /***/ },
-/* 313 */
+/* 293 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	var object = React.PropTypes.object;
+	
+	
+	var Home = React.createClass({
+	  displayName: 'Home',
+	
+	  propTypes: {
+	    recentPolls: object
+	  },
+	  render: function render() {
+	    var showPolls = null;
+	    if (this.props.recentPolls) {
+	      showPolls = this.props.recentPolls.map(function (poll) {
+	        return React.createElement(
+	          'div',
+	          null,
+	          ' A poll'
+	        );
+	      });
+	    } else {
+	      showPolls = React.createElement(
+	        'div',
+	        { className: 'text-center' },
+	        React.createElement(
+	          'h3',
+	          null,
+	          'No polls have been submitted yet :('
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'Why not create one?'
+	        )
+	      );
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        { className: 'view-title text-center' },
+	        'Latest Polls'
+	      ),
+	      showPolls
+	    );
+	  }
+	});
+	
+	module.exports = connector(Home);
+
+/***/ },
+/* 294 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	
+	var NewPollTitle = __webpack_require__(295);
+	var PendingPollOptions = __webpack_require__(296);
+	var SaveOrReset = __webpack_require__(297);
+	
+	var CreateAPoll = React.createClass({
+	  displayName: 'CreateAPoll',
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        { className: 'view-title text-center' },
+	        'Create a New Poll'
+	      ),
+	      React.createElement(NewPollTitle, null),
+	      React.createElement(PendingPollOptions, null),
+	      React.createElement(SaveOrReset, null)
+	    );
+	  }
+	});
+	
+	module.exports = connector(CreateAPoll);
+
+/***/ },
+/* 295 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	var _React$PropTypes = React.PropTypes;
+	var string = _React$PropTypes.string;
+	var func = _React$PropTypes.func;
+	var bool = _React$PropTypes.bool;
+	
+	
+	var NewPollTitle = React.createClass({
+	  displayName: 'NewPollTitle',
+	
+	  propTypes: {
+	    newPollTitle: string,
+	    setNewPollTitle: func,
+	    titleEditable: bool,
+	    setTitleEditable: func
+	  },
+	  handleNewPollTitleChange: function handleNewPollTitleChange(event) {
+	    this.props.setNewPollTitle(event.target.value);
+	  },
+	  handleSaveClick: function handleSaveClick(event) {
+	    if (this.props.newPollTitle === '') {
+	      this.props.setNewPollTitle('New Poll Title');
+	    }
+	    this.props.setTitleEditable(false);
+	  },
+	  handleEditClick: function handleEditClick(event) {
+	    this.props.setTitleEditable(true);
+	  },
+	  render: function render() {
+	    var savedPollTitle = React.createElement(
+	      'div',
+	      { className: 'new-poll-title-container' },
+	      React.createElement(
+	        'h2',
+	        { className: 'text-center saved-title' },
+	        this.props.newPollTitle
+	      ),
+	      React.createElement(
+	        'a',
+	        { href: '#' },
+	        React.createElement('i', {
+	          className: 'fa fa-pencil-square-o edit-icon',
+	          'aria-hidden': 'true',
+	          onClick: this.handleEditClick
+	        })
+	      )
+	    );
+	    var inputPollTitle = React.createElement(
+	      'div',
+	      { className: 'new-poll-title-container' },
+	      React.createElement('textarea', {
+	        value: this.props.newPollTitle,
+	        onChange: this.handleNewPollTitleChange,
+	        type: 'text',
+	        placeholder: 'New Poll Title',
+	        className: 'text-center form-control new-poll-title-textarea'
+	      }),
+	      React.createElement(
+	        'a',
+	        { href: '#' },
+	        React.createElement('i', {
+	          className: 'fa fa-floppy-o save-icon',
+	          'aria-hidden': 'true',
+	          onClick: this.handleSaveClick
+	        })
+	      )
+	    );
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'new-poll-title-container' },
+	      this.props.titleEditable ? inputPollTitle : savedPollTitle
+	    );
+	  }
+	});
+	
+	var connected = connector(NewPollTitle);
+	
+	// This exports the component itself for testing
+	connected.DisconnectedNewPollTitle = NewPollTitle;
+	
+	module.exports = connected;
+
+/***/ },
+/* 296 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	var _React$PropTypes = React.PropTypes;
+	var array = _React$PropTypes.array;
+	var func = _React$PropTypes.func;
+	
+	
+	var PendingPollOptions = React.createClass({
+	  displayName: 'PendingPollOptions',
+	
+	  propTypes: {
+	    newPollOptions: array.isRequired,
+	    updateOption: func.isRequired
+	  },
+	  editOption: function editOption(event) {
+	    var updatedOptions = this.props.newPollOptions.slice();
+	    updatedOptions[event.target.name] = event.target.value;
+	    this.props.updateOption(updatedOptions);
+	  },
+	  addAnotherOption: function addAnotherOption() {
+	    var updatedNewOptions = this.props.newPollOptions.slice();
+	    updatedNewOptions.push('');
+	    this.props.updateOption(updatedNewOptions);
+	  },
+	  deleteOption: function deleteOption(index) {
+	    if (this.props.newPollOptions.length === 2) {
+	      return console.log('Two or more options required!');
+	    }
+	    var updatedDeleteOptions = this.props.newPollOptions.slice();
+	    updatedDeleteOptions.splice(index, 1);
+	    this.props.updateOption(updatedDeleteOptions);
+	  },
+	  render: function render() {
+	    var _this = this;
+	
+	    var options = this.props.newPollOptions.map(function (option, index) {
+	      return React.createElement(
+	        'div',
+	        { key: index },
+	        React.createElement('input', {
+	          type: 'text',
+	          value: option,
+	          name: index,
+	          placeholder: 'Option ' + (index + 1),
+	          onChange: _this.editOption,
+	          className: 'form-control option-input'
+	        }),
+	        React.createElement(
+	          'a',
+	          {
+	            className: 'btn btn-danger delete-button',
+	            href: '#',
+	            onClick: function onClick() {
+	              return _this.deleteOption(index);
+	            },
+	            'aria-label': 'Delete'
+	          },
+	          React.createElement('i', { className: 'fa fa-trash-o', 'aria-hidden': 'true' })
+	        )
+	      );
+	    });
+	    return React.createElement(
+	      'div',
+	      { className: 'form-group options-container' },
+	      options,
+	      React.createElement(
+	        'a',
+	        { href: '#' },
+	        React.createElement(
+	          'p',
+	          { className: 'add-another-option', onClick: this.addAnotherOption },
+	          React.createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
+	          ' Add another option'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	var connected = connector(PendingPollOptions);
+	
+	// This exports the component itself for testing
+	connected.DisconnectedPendingPollOptions = PendingPollOptions;
+	
+	module.exports = connected;
+
+/***/ },
+/* 297 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	var _React$PropTypes = React.PropTypes;
+	var string = _React$PropTypes.string;
+	var func = _React$PropTypes.func;
+	var array = _React$PropTypes.array;
+	
+	
+	var SaveOrReset = React.createClass({
+	  displayName: 'SaveOrReset',
+	
+	  propTypes: {
+	    newPollTitle: string,
+	    resetNewPoll: func,
+	    newPollOptions: array
+	  },
+	  handleResetButtonClick: function handleResetButtonClick() {
+	    this.props.resetNewPoll(true);
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'text-center' },
+	      React.createElement(
+	        'button',
+	        { className: 'btn btn-primary save-reset-buttons' },
+	        'Save'
+	      ),
+	      React.createElement(
+	        'button',
+	        {
+	          className: 'btn save-reset-buttons reset-poll-button',
+	          onClick: this.handleResetButtonClick
+	        },
+	        'Reset'
+	      )
+	    );
+	  }
+	});
+	
+	var connected = connector(SaveOrReset);
+	
+	connected.DisconnectedSaveOrReset = SaveOrReset;
+	
+	module.exports = connected;
+
+/***/ },
+/* 298 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	
+	var classname = __webpack_require__(299);
+	var func = React.PropTypes.func;
+	
+	
+	var Signup = React.createClass({
+	  displayName: 'Signup',
+	
+	  propTypes: {
+	    userSignupRequest: func.isRequired
+	  },
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      username: '',
+	      email: '',
+	      password: '',
+	      passwordConfirmation: '',
+	      errors: {}
+	    };
+	  },
+	  onChange: function onChange(event) {
+	    /**
+	     * instead of setting state with {username: event.target.value},
+	     * using [event.target.name] will allow this function to be reused
+	     * by other form fields with onChange events. Thank you Rem Zolotykh
+	     * for sharing this method.
+	     */
+	    this.setState(_defineProperty({}, event.target.name, event.target.value));
+	  },
+	  onSubmit: function onSubmit(event) {
+	    var _this = this;
+	
+	    this.setState({ errors: {} });
+	    event.preventDefault();
+	    // axios.post('api/users', {user: this.state})
+	    this.props.userSignupRequest(this.state).then(function (response) {
+	      console.log('response: ', response);
+	    }).catch(function (error) {
+	      _this.setState({ errors: error.response.data });
+	    });
+	  },
+	  render: function render() {
+	    var errors = this.state.errors;
+	
+	    console.log('state errors: ', errors);
+	    return React.createElement(
+	      'div',
+	      { className: 'row' },
+	      React.createElement(
+	        'h1',
+	        { className: 'text-center' },
+	        'Sign up to make some polls!'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'col-md-4 col-md-offset-4' },
+	        React.createElement(
+	          'form',
+	          { onSubmit: this.onSubmit },
+	          React.createElement(
+	            'div',
+	            { className: classname('form-group', { 'has-error': errors.username }) },
+	            React.createElement(
+	              'label',
+	              { className: 'control-label' },
+	              'Username'
+	            ),
+	            React.createElement('input', {
+	              value: this.state.username,
+	              onChange: this.onChange,
+	              type: 'text',
+	              name: 'username',
+	              className: 'form-control'
+	            }),
+	            errors.username && React.createElement(
+	              'span',
+	              { className: 'help-block' },
+	              errors.username
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: classname('form-group', { 'has-error': errors.email }) },
+	            React.createElement(
+	              'label',
+	              { className: 'control-label' },
+	              'Email'
+	            ),
+	            React.createElement('input', {
+	              value: this.state.email,
+	              onChange: this.onChange,
+	              type: 'text',
+	              name: 'email',
+	              className: 'form-control'
+	            }),
+	            errors.email && React.createElement(
+	              'span',
+	              { className: 'help-block' },
+	              errors.email
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: classname('form-group', { 'has-error': errors.password }) },
+	            React.createElement(
+	              'label',
+	              { className: 'control-label' },
+	              'Password'
+	            ),
+	            React.createElement('input', {
+	              value: this.state.password,
+	              onChange: this.onChange,
+	              type: 'password',
+	              name: 'password',
+	              className: 'form-control'
+	            }),
+	            errors.password && React.createElement(
+	              'span',
+	              { className: 'help-block' },
+	              errors.password
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: classname('form-group', { 'has-error': errors.passwordConfirmation }) },
+	            React.createElement(
+	              'label',
+	              { className: 'control-label' },
+	              'Confirm Password'
+	            ),
+	            React.createElement('input', {
+	              value: this.state.passwordConfirmation,
+	              onChange: this.onChange,
+	              type: 'password',
+	              name: 'passwordConfirmation',
+	              className: 'form-control'
+	            }),
+	            errors.passwordConfirmation && React.createElement(
+	              'span',
+	              { className: 'help-block' },
+	              errors.passwordConfirmation
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            React.createElement(
+	              'button',
+	              { className: 'btn btn-primary btn-lg' },
+	              'Sign up'
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = connector(Signup);
+
+/***/ },
+/* 299 */
 /***/ function(module, exports) {
 
 	"use strict";
 	
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
+	function classname() {
+	    var result = {},
+	        objects = {},
+	        resultString = "";
 	
-	/**
-	 * Used to resolve the
-	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var nativeObjectToString = objectProto.toString;
+	    function add(strings) {
+	        classname.each(strings.split(" "), function (string) {
+	            result[string] = !!string;
+	        });
+	    }
 	
-	/**
-	 * Converts `value` to a string using `Object.prototype.toString`.
-	 *
-	 * @private
-	 * @param {*} value The value to convert.
-	 * @returns {string} Returns the converted string.
-	 */
-	function objectToString(value) {
-	  return nativeObjectToString.call(value);
+	    classname.each([].slice.call(arguments), function (x) {
+	        switch (classname.getType(x)) {
+	            case "string":
+	            case "number":
+	                add(x);
+	                break;
+	
+	            case "array":
+	                add(classname.apply(null, x));
+	                break;
+	
+	            case "element":
+	                add(classname(x.className || ""));
+	                break;
+	
+	            case "nodelist":
+	                add(classname.apply(null, [].slice.call(x)));
+	                break;
+	
+	            case "jquery":
+	                add(classname.apply(null, x.get()));
+	                break;
+	
+	            case "object":
+	                objects = classname.extend(objects, x);
+	                break;
+	        }
+	    });
+	
+	    result = classname.extend(result, objects);
+	
+	    classname.each(result, function (val, key) {
+	        if (val) {
+	            resultString += " " + key;
+	        }
+	    });
+	
+	    return resultString.substr(1);
 	}
 	
-	module.exports = objectToString;
+	classname.setTo = function (elements) {
+	    var type = classname.getType(elements);
+	
+	    if (type === "element") {
+	        elements = [elements];
+	    }
+	
+	    if (type === "jquery") {
+	        elements = elements.get();
+	    }
+	
+	    if (type === "nodelist") {
+	        elements = [].slice.call(elements);
+	    }
+	
+	    return function () {
+	        var classNames = classname.apply(null, arguments);
+	
+	        classname.each(elements, function (element) {
+	            element.className = classNames;
+	        });
+	    };
+	};
+	
+	classname.each = function (arr, fn) {
+	    var type = classname.getType(arr);
+	
+	    if (type === "array") {
+	        for (var i = 0; i < arr.length; i++) {
+	            fn(arr[i], i);
+	        }
+	    }
+	
+	    if (type === "object") {
+	        for (var key in arr) {
+	            fn(arr[key], key);
+	        }
+	    }
+	};
+	
+	classname.getType = function (x) {
+	    var type = Object.prototype.toString.call(x).slice(8, -1).toLowerCase();
+	
+	    if (type === "object" && x.jquery) {
+	        return "jquery";
+	    }
+	
+	    if (type.indexOf("element") > 1) {
+	        return "element";
+	    }
+	
+	    return type;
+	};
+	
+	classname.extend = function (obj1, obj2) {
+	    var result = {},
+	        objs = [obj1, obj2];
+	
+	    classname.each(objs, function (obj) {
+	        classname.each(obj, function (val, key) {
+	            if (obj.hasOwnProperty(key)) {
+	                result[key] = val;
+	            }
+	        });
+	    });
+	
+	    return result;
+	};
+	
+	if (typeof module !== "undefined" && module.exports) {
+	    module.exports = classname;
+	}
+
+/***/ },
+/* 300 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
 
 /***/ }
 /******/ ]);

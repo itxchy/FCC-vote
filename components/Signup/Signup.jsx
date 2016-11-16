@@ -1,5 +1,6 @@
 const React = require('react')
 const { connector } = require('../../redux/Store')
+const classname = require('classname')
 const { func } = React.PropTypes
 
 const Signup = React.createClass({
@@ -12,7 +13,8 @@ const Signup = React.createClass({
       username: '',
       email: '',
       password: '',
-      passwordConfirmation: ''
+      passwordConfirmation: '',
+      errors: {}
     }
   },
 
@@ -27,12 +29,21 @@ const Signup = React.createClass({
   },
 
   onSubmit (event) {
+    this.setState({errors: {}})
     event.preventDefault()
     // axios.post('api/users', {user: this.state})
     this.props.userSignupRequest(this.state)
+      .then(response => {
+        console.log('response: ', response)
+      })
+      .catch(error => {
+        this.setState({errors: error.response.data})
+      })
   },
 
   render () {
+    const { errors } = this.state
+    console.log('state errors: ', errors)
     return (
       <div className='row'>
         <h1 className='text-center'>Sign up to make some polls!</h1>
@@ -40,7 +51,7 @@ const Signup = React.createClass({
 
           <form onSubmit={this.onSubmit}>
 
-            <div className='form-group'>
+            <div className={classname('form-group', {'has-error': errors.username})}>
               <label className='control-label'>Username</label>
               <input
                 value={this.state.username}
@@ -49,9 +60,14 @@ const Signup = React.createClass({
                 name='username'
                 className='form-control'
               />
+              {errors.username &&
+                <span className='help-block'>
+                  {errors.username}
+                </span>
+              }
             </div>
 
-            <div className='form-group'>
+            <div className={classname('form-group', {'has-error': errors.email})}>
               <label className='control-label'>Email</label>
               <input
                 value={this.state.email}
@@ -60,9 +76,14 @@ const Signup = React.createClass({
                 name='email'
                 className='form-control'
               />
+              {errors.email &&
+                <span className='help-block'>
+                  {errors.email}
+                </span>
+              }
             </div>
 
-            <div className='form-group'>
+            <div className={classname('form-group', {'has-error': errors.password})}>
               <label className='control-label'>Password</label>
               <input
                 value={this.state.password}
@@ -71,9 +92,14 @@ const Signup = React.createClass({
                 name='password'
                 className='form-control'
               />
+              {errors.password &&
+                <span className='help-block'>
+                  {errors.password}
+                </span>
+              }
             </div>
 
-            <div className='form-group'>
+            <div className={classname('form-group', {'has-error': errors.passwordConfirmation})}>
               <label className='control-label'>Confirm Password</label>
               <input
                 value={this.state.passwordConfirmation}
@@ -82,6 +108,11 @@ const Signup = React.createClass({
                 name='passwordConfirmation'
                 className='form-control'
               />
+              {errors.passwordConfirmation &&
+                <span className='help-block'>
+                  {errors.passwordConfirmation}
+                </span>
+              }
             </div>
 
             <div className='form-group'>
