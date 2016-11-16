@@ -1,7 +1,12 @@
 const React = require('react')
 const { connector } = require('../../redux/Store')
+const { func } = React.PropTypes
 
 const Signup = React.createClass({
+  propTypes: {
+    userSignupRequest: func.isRequired
+  },
+
   getInitialState () {
     return {
       username: '',
@@ -23,7 +28,8 @@ const Signup = React.createClass({
 
   onSubmit (event) {
     event.preventDefault()
-    console.log('form submitted!', this.state)
+    // axios.post('api/users', {user: this.state})
+    this.props.userSignupRequest(this.state)
   },
 
   render () {
@@ -76,7 +82,7 @@ const Signup = React.createClass({
                 name='passwordConfirmation'
                 className='form-control'
               />
-            </div>            
+            </div>
 
             <div className='form-group'>
               <button className='btn btn-primary btn-lg'>

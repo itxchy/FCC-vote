@@ -1,5 +1,7 @@
-const redux = require('redux')
+const { applyMiddleware, createStore } = require('redux')
 const reactRedux = require('react-redux')
+const thunk = require('redux-thunk').default
+const axios = require('axios')
 
 const SET_NEW_POLL_TITLE = 'setNewPollTitle'
 const SET_TITLE_EDITABLE = 'setTitleEditable'
@@ -62,7 +64,7 @@ const reduceResetNewPoll = (state, action) => {
   return newState
 }
 
-const store = redux.createStore(rootReducer /*, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() */)
+const store = createStore(rootReducer, applyMiddleware(thunk))
 
 const mapStateToProps = (state) => {
   return {
@@ -85,6 +87,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     resetNewPoll (bool) {
       dispatch({type: RESET_NEW_POLL, value: bool})
+    },
+    userSignupRequest (userData) {
+      axios.post('/api/users', userData)
     }
   }
 }
