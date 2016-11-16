@@ -49,7 +49,7 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(34);
 	var App = __webpack_require__(172);
-	__webpack_require__(266);
+	__webpack_require__(267);
 	
 	ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
 
@@ -21479,9 +21479,9 @@
 	var Provider = _require3.Provider;
 	
 	var Layout = __webpack_require__(259);
-	var Home = __webpack_require__(260);
-	var CreateAPoll = __webpack_require__(261);
-	var Signup = __webpack_require__(265);
+	var Home = __webpack_require__(261);
+	var CreateAPoll = __webpack_require__(262);
+	var Signup = __webpack_require__(266);
 	
 	var Routes = function Routes() {
 	  return React.createElement(
@@ -29093,7 +29093,7 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var NavBar = __webpack_require__(281);
+	var NavBar = __webpack_require__(260);
 	
 	var Layout = function Layout(props) {
 	  return React.createElement(
@@ -29115,428 +29115,6 @@
 
 /***/ },
 /* 260 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var object = React.PropTypes.object;
-	
-	
-	var Home = React.createClass({
-	  displayName: 'Home',
-	
-	  propTypes: {
-	    recentPolls: object
-	  },
-	  render: function render() {
-	    var showPolls = null;
-	    if (this.props.recentPolls) {
-	      showPolls = this.props.recentPolls.map(function (poll) {
-	        return React.createElement(
-	          'div',
-	          null,
-	          ' A poll'
-	        );
-	      });
-	    } else {
-	      showPolls = React.createElement(
-	        'div',
-	        { className: 'text-center' },
-	        React.createElement(
-	          'h3',
-	          null,
-	          'No polls have been submitted yet :('
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'Why not create one?'
-	        )
-	      );
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h1',
-	        { className: 'view-title text-center' },
-	        'Latest Polls'
-	      ),
-	      showPolls
-	    );
-	  }
-	});
-	
-	module.exports = connector(Home);
-
-/***/ },
-/* 261 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	
-	var NewPollTitle = __webpack_require__(262);
-	var PendingPollOptions = __webpack_require__(263);
-	var SaveOrReset = __webpack_require__(264);
-	
-	var CreateAPoll = React.createClass({
-	  displayName: 'CreateAPoll',
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h1',
-	        { className: 'view-title text-center' },
-	        'Create a New Poll'
-	      ),
-	      React.createElement(NewPollTitle, null),
-	      React.createElement(PendingPollOptions, null),
-	      React.createElement(SaveOrReset, null)
-	    );
-	  }
-	});
-	
-	module.exports = connector(CreateAPoll);
-
-/***/ },
-/* 262 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
-	var string = _React$PropTypes.string;
-	var func = _React$PropTypes.func;
-	var bool = _React$PropTypes.bool;
-	
-	
-	var NewPollTitle = React.createClass({
-	  displayName: 'NewPollTitle',
-	
-	  propTypes: {
-	    newPollTitle: string,
-	    setNewPollTitle: func,
-	    titleEditable: bool,
-	    setTitleEditable: func
-	  },
-	  handleNewPollTitleChange: function handleNewPollTitleChange(event) {
-	    this.props.setNewPollTitle(event.target.value);
-	  },
-	  handleSaveClick: function handleSaveClick(event) {
-	    if (this.props.newPollTitle === '') {
-	      this.props.setNewPollTitle('New Poll Title');
-	    }
-	    this.props.setTitleEditable(false);
-	  },
-	  handleEditClick: function handleEditClick(event) {
-	    this.props.setTitleEditable(true);
-	  },
-	  render: function render() {
-	    var savedPollTitle = React.createElement(
-	      'div',
-	      { className: 'new-poll-title-container' },
-	      React.createElement(
-	        'h2',
-	        { className: 'text-center saved-title' },
-	        this.props.newPollTitle
-	      ),
-	      React.createElement(
-	        'a',
-	        { href: '#' },
-	        React.createElement('i', {
-	          className: 'fa fa-pencil-square-o edit-icon',
-	          'aria-hidden': 'true',
-	          onClick: this.handleEditClick
-	        })
-	      )
-	    );
-	    var inputPollTitle = React.createElement(
-	      'div',
-	      { className: 'new-poll-title-container' },
-	      React.createElement('textarea', {
-	        value: this.props.newPollTitle,
-	        onChange: this.handleNewPollTitleChange,
-	        type: 'text',
-	        placeholder: 'New Poll Title',
-	        className: 'text-center form-control new-poll-title-textarea'
-	      }),
-	      React.createElement(
-	        'a',
-	        { href: '#' },
-	        React.createElement('i', {
-	          className: 'fa fa-floppy-o save-icon',
-	          'aria-hidden': 'true',
-	          onClick: this.handleSaveClick
-	        })
-	      )
-	    );
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'new-poll-title-container' },
-	      this.props.titleEditable ? inputPollTitle : savedPollTitle
-	    );
-	  }
-	});
-	
-	var connected = connector(NewPollTitle);
-	
-	// This exports the component itself for testing
-	connected.DisconnectedNewPollTitle = NewPollTitle;
-	
-	module.exports = connected;
-
-/***/ },
-/* 263 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
-	var array = _React$PropTypes.array;
-	var func = _React$PropTypes.func;
-	
-	
-	var PendingPollOptions = React.createClass({
-	  displayName: 'PendingPollOptions',
-	
-	  propTypes: {
-	    newPollOptions: array.isRequired,
-	    updateOption: func.isRequired
-	  },
-	  editOption: function editOption(event) {
-	    var updatedOptions = this.props.newPollOptions.slice();
-	    updatedOptions[event.target.name] = event.target.value;
-	    this.props.updateOption(updatedOptions);
-	  },
-	  addAnotherOption: function addAnotherOption() {
-	    var updatedNewOptions = this.props.newPollOptions.slice();
-	    updatedNewOptions.push('');
-	    this.props.updateOption(updatedNewOptions);
-	  },
-	  deleteOption: function deleteOption(index) {
-	    if (this.props.newPollOptions.length === 2) {
-	      return console.log('Two or more options required!');
-	    }
-	    var updatedDeleteOptions = this.props.newPollOptions.slice();
-	    updatedDeleteOptions.splice(index, 1);
-	    this.props.updateOption(updatedDeleteOptions);
-	  },
-	  render: function render() {
-	    var _this = this;
-	
-	    var options = this.props.newPollOptions.map(function (option, index) {
-	      return React.createElement(
-	        'div',
-	        { key: index },
-	        React.createElement('input', {
-	          type: 'text',
-	          value: option,
-	          name: index,
-	          placeholder: 'Option ' + (index + 1),
-	          onChange: _this.editOption,
-	          className: 'form-control option-input'
-	        }),
-	        React.createElement(
-	          'a',
-	          {
-	            className: 'btn btn-danger delete-button',
-	            href: '#',
-	            onClick: function onClick() {
-	              return _this.deleteOption(index);
-	            },
-	            'aria-label': 'Delete'
-	          },
-	          React.createElement('i', { className: 'fa fa-trash-o', 'aria-hidden': 'true' })
-	        )
-	      );
-	    });
-	    return React.createElement(
-	      'div',
-	      { className: 'form-group options-container' },
-	      options,
-	      React.createElement(
-	        'a',
-	        { href: '#' },
-	        React.createElement(
-	          'p',
-	          { className: 'add-another-option', onClick: this.addAnotherOption },
-	          React.createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
-	          ' Add another option'
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	var connected = connector(PendingPollOptions);
-	
-	// This exports the component itself for testing
-	connected.DisconnectedPendingPollOptions = PendingPollOptions;
-	
-	module.exports = connected;
-
-/***/ },
-/* 264 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
-	var string = _React$PropTypes.string;
-	var func = _React$PropTypes.func;
-	var array = _React$PropTypes.array;
-	
-	
-	var SaveOrReset = React.createClass({
-	  displayName: 'SaveOrReset',
-	
-	  propTypes: {
-	    newPollTitle: string,
-	    resetNewPoll: func,
-	    newPollOptions: array
-	  },
-	  handleResetButtonClick: function handleResetButtonClick() {
-	    this.props.resetNewPoll(true);
-	  },
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'text-center' },
-	      React.createElement(
-	        'button',
-	        { className: 'btn btn-primary save-reset-buttons' },
-	        'Save'
-	      ),
-	      React.createElement(
-	        'button',
-	        {
-	          className: 'btn save-reset-buttons reset-poll-button',
-	          onClick: this.handleResetButtonClick
-	        },
-	        'Reset'
-	      )
-	    );
-	  }
-	});
-	
-	var connected = connector(SaveOrReset);
-	
-	connected.DisconnectedSaveOrReset = SaveOrReset;
-	
-	module.exports = connected;
-
-/***/ },
-/* 265 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	
-	
-	var Signup = React.createClass({
-	  displayName: 'Signup',
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'row' },
-	      React.createElement(
-	        'h1',
-	        { className: 'text-center' },
-	        'Sign up to make some polls!'
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'col-md-4 col-md-offset-4' },
-	        React.createElement(
-	          'form',
-	          null,
-	          React.createElement(
-	            'div',
-	            { className: 'form-group' },
-	            React.createElement(
-	              'label',
-	              { className: 'control-label' },
-	              'Username'
-	            ),
-	            React.createElement('input', {
-	              type: 'text',
-	              name: 'username',
-	              className: 'form-control'
-	            })
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'form-group' },
-	            React.createElement(
-	              'button',
-	              { className: 'btn btn-primary btn-lg' },
-	              'Sign up'
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = connector(Signup);
-
-/***/ },
-/* 266 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 267 */,
-/* 268 */,
-/* 269 */,
-/* 270 */,
-/* 271 */,
-/* 272 */,
-/* 273 */,
-/* 274 */,
-/* 275 */,
-/* 276 */,
-/* 277 */,
-/* 278 */,
-/* 279 */,
-/* 280 */,
-/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29659,6 +29237,436 @@
 	});
 	
 	module.exports = connector(NavBar);
+
+/***/ },
+/* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	var object = React.PropTypes.object;
+	
+	
+	var Home = React.createClass({
+	  displayName: 'Home',
+	
+	  propTypes: {
+	    recentPolls: object
+	  },
+	  render: function render() {
+	    var showPolls = null;
+	    if (this.props.recentPolls) {
+	      showPolls = this.props.recentPolls.map(function (poll) {
+	        return React.createElement(
+	          'div',
+	          null,
+	          ' A poll'
+	        );
+	      });
+	    } else {
+	      showPolls = React.createElement(
+	        'div',
+	        { className: 'text-center' },
+	        React.createElement(
+	          'h3',
+	          null,
+	          'No polls have been submitted yet :('
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'Why not create one?'
+	        )
+	      );
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        { className: 'view-title text-center' },
+	        'Latest Polls'
+	      ),
+	      showPolls
+	    );
+	  }
+	});
+	
+	module.exports = connector(Home);
+
+/***/ },
+/* 262 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	
+	var NewPollTitle = __webpack_require__(263);
+	var PendingPollOptions = __webpack_require__(264);
+	var SaveOrReset = __webpack_require__(265);
+	
+	var CreateAPoll = React.createClass({
+	  displayName: 'CreateAPoll',
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        { className: 'view-title text-center' },
+	        'Create a New Poll'
+	      ),
+	      React.createElement(NewPollTitle, null),
+	      React.createElement(PendingPollOptions, null),
+	      React.createElement(SaveOrReset, null)
+	    );
+	  }
+	});
+	
+	module.exports = connector(CreateAPoll);
+
+/***/ },
+/* 263 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	var _React$PropTypes = React.PropTypes;
+	var string = _React$PropTypes.string;
+	var func = _React$PropTypes.func;
+	var bool = _React$PropTypes.bool;
+	
+	
+	var NewPollTitle = React.createClass({
+	  displayName: 'NewPollTitle',
+	
+	  propTypes: {
+	    newPollTitle: string,
+	    setNewPollTitle: func,
+	    titleEditable: bool,
+	    setTitleEditable: func
+	  },
+	  handleNewPollTitleChange: function handleNewPollTitleChange(event) {
+	    this.props.setNewPollTitle(event.target.value);
+	  },
+	  handleSaveClick: function handleSaveClick(event) {
+	    if (this.props.newPollTitle === '') {
+	      this.props.setNewPollTitle('New Poll Title');
+	    }
+	    this.props.setTitleEditable(false);
+	  },
+	  handleEditClick: function handleEditClick(event) {
+	    this.props.setTitleEditable(true);
+	  },
+	  render: function render() {
+	    var savedPollTitle = React.createElement(
+	      'div',
+	      { className: 'new-poll-title-container' },
+	      React.createElement(
+	        'h2',
+	        { className: 'text-center saved-title' },
+	        this.props.newPollTitle
+	      ),
+	      React.createElement(
+	        'a',
+	        { href: '#' },
+	        React.createElement('i', {
+	          className: 'fa fa-pencil-square-o edit-icon',
+	          'aria-hidden': 'true',
+	          onClick: this.handleEditClick
+	        })
+	      )
+	    );
+	    var inputPollTitle = React.createElement(
+	      'div',
+	      { className: 'new-poll-title-container' },
+	      React.createElement('textarea', {
+	        value: this.props.newPollTitle,
+	        onChange: this.handleNewPollTitleChange,
+	        type: 'text',
+	        placeholder: 'New Poll Title',
+	        className: 'text-center form-control new-poll-title-textarea'
+	      }),
+	      React.createElement(
+	        'a',
+	        { href: '#' },
+	        React.createElement('i', {
+	          className: 'fa fa-floppy-o save-icon',
+	          'aria-hidden': 'true',
+	          onClick: this.handleSaveClick
+	        })
+	      )
+	    );
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'new-poll-title-container' },
+	      this.props.titleEditable ? inputPollTitle : savedPollTitle
+	    );
+	  }
+	});
+	
+	var connected = connector(NewPollTitle);
+	
+	// This exports the component itself for testing
+	connected.DisconnectedNewPollTitle = NewPollTitle;
+	
+	module.exports = connected;
+
+/***/ },
+/* 264 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	var _React$PropTypes = React.PropTypes;
+	var array = _React$PropTypes.array;
+	var func = _React$PropTypes.func;
+	
+	
+	var PendingPollOptions = React.createClass({
+	  displayName: 'PendingPollOptions',
+	
+	  propTypes: {
+	    newPollOptions: array.isRequired,
+	    updateOption: func.isRequired
+	  },
+	  editOption: function editOption(event) {
+	    var updatedOptions = this.props.newPollOptions.slice();
+	    updatedOptions[event.target.name] = event.target.value;
+	    this.props.updateOption(updatedOptions);
+	  },
+	  addAnotherOption: function addAnotherOption() {
+	    var updatedNewOptions = this.props.newPollOptions.slice();
+	    updatedNewOptions.push('');
+	    this.props.updateOption(updatedNewOptions);
+	  },
+	  deleteOption: function deleteOption(index) {
+	    if (this.props.newPollOptions.length === 2) {
+	      return console.log('Two or more options required!');
+	    }
+	    var updatedDeleteOptions = this.props.newPollOptions.slice();
+	    updatedDeleteOptions.splice(index, 1);
+	    this.props.updateOption(updatedDeleteOptions);
+	  },
+	  render: function render() {
+	    var _this = this;
+	
+	    var options = this.props.newPollOptions.map(function (option, index) {
+	      return React.createElement(
+	        'div',
+	        { key: index },
+	        React.createElement('input', {
+	          type: 'text',
+	          value: option,
+	          name: index,
+	          placeholder: 'Option ' + (index + 1),
+	          onChange: _this.editOption,
+	          className: 'form-control option-input'
+	        }),
+	        React.createElement(
+	          'a',
+	          {
+	            className: 'btn btn-danger delete-button',
+	            href: '#',
+	            onClick: function onClick() {
+	              return _this.deleteOption(index);
+	            },
+	            'aria-label': 'Delete'
+	          },
+	          React.createElement('i', { className: 'fa fa-trash-o', 'aria-hidden': 'true' })
+	        )
+	      );
+	    });
+	    return React.createElement(
+	      'div',
+	      { className: 'form-group options-container' },
+	      options,
+	      React.createElement(
+	        'a',
+	        { href: '#' },
+	        React.createElement(
+	          'p',
+	          { className: 'add-another-option', onClick: this.addAnotherOption },
+	          React.createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
+	          ' Add another option'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	var connected = connector(PendingPollOptions);
+	
+	// This exports the component itself for testing
+	connected.DisconnectedPendingPollOptions = PendingPollOptions;
+	
+	module.exports = connected;
+
+/***/ },
+/* 265 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	var _React$PropTypes = React.PropTypes;
+	var string = _React$PropTypes.string;
+	var func = _React$PropTypes.func;
+	var array = _React$PropTypes.array;
+	
+	
+	var SaveOrReset = React.createClass({
+	  displayName: 'SaveOrReset',
+	
+	  propTypes: {
+	    newPollTitle: string,
+	    resetNewPoll: func,
+	    newPollOptions: array
+	  },
+	  handleResetButtonClick: function handleResetButtonClick() {
+	    this.props.resetNewPoll(true);
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'text-center' },
+	      React.createElement(
+	        'button',
+	        { className: 'btn btn-primary save-reset-buttons' },
+	        'Save'
+	      ),
+	      React.createElement(
+	        'button',
+	        {
+	          className: 'btn save-reset-buttons reset-poll-button',
+	          onClick: this.handleResetButtonClick
+	        },
+	        'Reset'
+	      )
+	    );
+	  }
+	});
+	
+	var connected = connector(SaveOrReset);
+	
+	connected.DisconnectedSaveOrReset = SaveOrReset;
+	
+	module.exports = connected;
+
+/***/ },
+/* 266 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	
+	
+	var Signup = React.createClass({
+	  displayName: 'Signup',
+	  getInitialState: function getInitialState() {
+	    return {
+	      username: ''
+	    };
+	  },
+	  onChange: function onChange(event) {
+	    /**
+	     * instead of setting state with {username: event.target.value},
+	     * using [event.target.name] will allow this function to be reused
+	     * by other form fields with onChange events. Thank you Rem Zolotykh
+	     * for sharing this method.
+	     */
+	    this.setState(_defineProperty({}, event.target.name, event.target.value));
+	  },
+	  onSubmit: function onSubmit(event) {
+	    event.preventDefault();
+	    console.log('form submitted! ' + this.state);
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'row' },
+	      React.createElement(
+	        'h1',
+	        { className: 'text-center' },
+	        'Sign up to make some polls!'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'col-md-4 col-md-offset-4' },
+	        React.createElement(
+	          'form',
+	          { onSubmit: this.onSubmit },
+	          React.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            React.createElement(
+	              'label',
+	              { className: 'control-label' },
+	              'Username'
+	            ),
+	            React.createElement('input', {
+	              value: this.state.username,
+	              onChange: this.onChange,
+	              type: 'text',
+	              name: 'username',
+	              className: 'form-control'
+	            })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            React.createElement(
+	              'button',
+	              { className: 'btn btn-primary btn-lg' },
+	              'Sign up'
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = connector(Signup);
+
+/***/ },
+/* 267 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
 
 /***/ }
 /******/ ]);
