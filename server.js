@@ -1,6 +1,7 @@
 require('babel-register')
 
 const express = require('express')
+const bodyParser = require('body-parser')
 const React = require('react')
 const ReactDOMServer = require('react-dom/server')
 const { match, RouterContext } = require('react-router')
@@ -14,7 +15,11 @@ const template = _.template(baseTemplate)
 const ClientApp = require('./components/ClientApp.jsx')
 const Routes = ClientApp.Routes
 
+const users = require('./routes/users.js')
+
 const app = express()
+
+app.use('/api/users', users)
 
 app.use('/public', express.static('./public'))
 
@@ -37,7 +42,6 @@ app.use((req, res) => {
     } else {
       res.status(404).send('Not Found')
     }
-
   })
 })
 
