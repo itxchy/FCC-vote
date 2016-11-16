@@ -31220,7 +31220,8 @@
 	      email: '',
 	      password: '',
 	      passwordConfirmation: '',
-	      errors: {}
+	      errors: {},
+	      isLoading: false
 	    };
 	  },
 	  onChange: function onChange(event) {
@@ -31235,13 +31236,14 @@
 	  onSubmit: function onSubmit(event) {
 	    var _this = this;
 	
-	    this.setState({ errors: {} });
+	    this.setState({ errors: {}, isLoading: true });
 	    event.preventDefault();
 	    // axios.post('api/users', {user: this.state})
 	    this.props.userSignupRequest(this.state).then(function (response) {
 	      console.log('response: ', response);
+	      _this.setState({ isLoading: false });
 	    }).catch(function (error) {
-	      _this.setState({ errors: error.response.data });
+	      _this.setState({ errors: error.response.data, isLoading: false });
 	    });
 	  },
 	  render: function render() {
@@ -31351,7 +31353,7 @@
 	            { className: 'form-group' },
 	            React.createElement(
 	              'button',
-	              { className: 'btn btn-primary btn-lg' },
+	              { disabled: this.state.isLoading, className: 'btn btn-primary btn-lg' },
 	              'Sign up'
 	            )
 	          )

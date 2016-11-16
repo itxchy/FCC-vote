@@ -14,7 +14,8 @@ const Signup = React.createClass({
       email: '',
       password: '',
       passwordConfirmation: '',
-      errors: {}
+      errors: {},
+      isLoading: false
     }
   },
 
@@ -29,15 +30,16 @@ const Signup = React.createClass({
   },
 
   onSubmit (event) {
-    this.setState({errors: {}})
+    this.setState({errors: {}, isLoading: true})
     event.preventDefault()
     // axios.post('api/users', {user: this.state})
     this.props.userSignupRequest(this.state)
       .then(response => {
         console.log('response: ', response)
+        this.setState({isLoading: false})
       })
       .catch(error => {
-        this.setState({errors: error.response.data})
+        this.setState({errors: error.response.data, isLoading: false})
       })
   },
 
@@ -116,7 +118,7 @@ const Signup = React.createClass({
             </div>
 
             <div className='form-group'>
-              <button className='btn btn-primary btn-lg'>
+              <button disabled={this.state.isLoading} className='btn btn-primary btn-lg'>
                 Sign up
               </button>
             </div>
