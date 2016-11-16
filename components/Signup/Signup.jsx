@@ -1,6 +1,6 @@
 const React = require('react')
 const { connector } = require('../../redux/Store')
-const classname = require('classname')
+const classnames = require('classnames')
 const { func } = React.PropTypes
 
 const Signup = React.createClass({
@@ -51,7 +51,7 @@ const Signup = React.createClass({
 
           <form onSubmit={this.onSubmit}>
 
-            <div className={classname('form-group', {'has-error': errors.username})}>
+            <div className={classnames('form-group', {'has-error': errors.username})}>
               <label className='control-label'>Username</label>
               <input
                 value={this.state.username}
@@ -67,7 +67,7 @@ const Signup = React.createClass({
               }
             </div>
 
-            <div className={classname('form-group', {'has-error': errors.email})}>
+            <div className={classnames('form-group', {'has-error': errors.email})}>
               <label className='control-label'>Email</label>
               <input
                 value={this.state.email}
@@ -83,7 +83,7 @@ const Signup = React.createClass({
               }
             </div>
 
-            <div className={classname('form-group', {'has-error': errors.password})}>
+            <div className={classnames('form-group', {'has-error': errors.password})}>
               <label className='control-label'>Password</label>
               <input
                 value={this.state.password}
@@ -99,7 +99,7 @@ const Signup = React.createClass({
               }
             </div>
 
-            <div className={classname('form-group', {'has-error': errors.passwordConfirmation})}>
+            <div className={classnames('form-group', {'has-error': errors.passwordConfirmation})}>
               <label className='control-label'>Confirm Password</label>
               <input
                 value={this.state.passwordConfirmation}
