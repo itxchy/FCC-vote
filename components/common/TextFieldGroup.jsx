@@ -1,17 +1,16 @@
 const React = require('react')
-const { connector } = require('../../redux/Store')
 const classnames = require('classnames')
-const { string } = React.PropTypes
+const { string, func } = React.PropTypes
 
 const TextFieldGroup = ({field, value, label, error, type, onChange}) => {
   return (
-    <div className={classnames('form-group', {'has-error': errors.username})}>
+    <div className={classnames('form-group', {'has-error': error})}>
       <label className='control-label'>{label}</label>
       <input
         value={value}
         onChange={onChange}
-        type='type'
-        name='field'
+        type={type}
+        name={field}
         className='form-control'
       />
       {error &&
@@ -19,7 +18,7 @@ const TextFieldGroup = ({field, value, label, error, type, onChange}) => {
           {error}
         </span>
       }
-    </div>    
+    </div>
   )
 }
 

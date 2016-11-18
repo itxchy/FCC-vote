@@ -31203,8 +31203,8 @@
 	
 	var connector = _require.connector;
 	
-	var classnames = __webpack_require__(299);
 	var validateInput = __webpack_require__(301);
+	var TextFieldGroup = __webpack_require__(411);
 	var func = React.PropTypes.func;
 	
 	
@@ -31278,90 +31278,38 @@
 	        React.createElement(
 	          'form',
 	          { onSubmit: this.onSubmit },
-	          React.createElement(
-	            'div',
-	            { className: classnames('form-group', { 'has-error': errors.username }) },
-	            React.createElement(
-	              'label',
-	              { className: 'control-label' },
-	              'Username'
-	            ),
-	            React.createElement('input', {
-	              value: this.state.username,
-	              onChange: this.onChange,
-	              type: 'text',
-	              name: 'username',
-	              className: 'form-control'
-	            }),
-	            errors.username && React.createElement(
-	              'span',
-	              { className: 'help-block' },
-	              errors.username
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: classnames('form-group', { 'has-error': errors.email }) },
-	            React.createElement(
-	              'label',
-	              { className: 'control-label' },
-	              'Email'
-	            ),
-	            React.createElement('input', {
-	              value: this.state.email,
-	              onChange: this.onChange,
-	              type: 'text',
-	              name: 'email',
-	              className: 'form-control'
-	            }),
-	            errors.email && React.createElement(
-	              'span',
-	              { className: 'help-block' },
-	              errors.email
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: classnames('form-group', { 'has-error': errors.password }) },
-	            React.createElement(
-	              'label',
-	              { className: 'control-label' },
-	              'Password'
-	            ),
-	            React.createElement('input', {
-	              value: this.state.password,
-	              onChange: this.onChange,
-	              type: 'password',
-	              name: 'password',
-	              className: 'form-control'
-	            }),
-	            errors.password && React.createElement(
-	              'span',
-	              { className: 'help-block' },
-	              errors.password
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: classnames('form-group', { 'has-error': errors.passwordConfirmation }) },
-	            React.createElement(
-	              'label',
-	              { className: 'control-label' },
-	              'Confirm Password'
-	            ),
-	            React.createElement('input', {
-	              value: this.state.passwordConfirmation,
-	              onChange: this.onChange,
-	              type: 'password',
-	              name: 'passwordConfirmation',
-	              className: 'form-control'
-	            }),
-	            errors.passwordConfirmation && React.createElement(
-	              'span',
-	              { className: 'help-block' },
-	              errors.passwordConfirmation
-	            )
-	          ),
+	          React.createElement(TextFieldGroup, {
+	            value: this.state.username,
+	            onChange: this.onChange,
+	            type: 'text',
+	            name: 'username',
+	            label: 'Username',
+	            error: errors.username
+	          }),
+	          React.createElement(TextFieldGroup, {
+	            value: this.state.email,
+	            onChange: this.onChange,
+	            type: 'text',
+	            name: 'email',
+	            label: 'Email',
+	            error: errors.email
+	          }),
+	          React.createElement(TextFieldGroup, {
+	            value: this.state.password,
+	            onChange: this.onChange,
+	            type: 'password',
+	            name: 'password',
+	            label: 'Password',
+	            error: errors.password
+	          }),
+	          React.createElement(TextFieldGroup, {
+	            value: this.state.passwordConfirmation,
+	            onChange: this.onChange,
+	            type: 'password',
+	            name: 'passwordConfirmation',
+	            label: 'Confirm Password',
+	            error: errors.passwordConfirmation
+	          }),
 	          React.createElement(
 	            'div',
 	            { className: 'form-group' },
@@ -35350,6 +35298,79 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 397 */,
+/* 398 */,
+/* 399 */,
+/* 400 */,
+/* 401 */,
+/* 402 */,
+/* 403 */,
+/* 404 */,
+/* 405 */,
+/* 406 */,
+/* 407 */,
+/* 408 */,
+/* 409 */,
+/* 410 */,
+/* 411 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var classnames = __webpack_require__(299);
+	var _React$PropTypes = React.PropTypes;
+	var string = _React$PropTypes.string;
+	var func = _React$PropTypes.func;
+	
+	
+	var TextFieldGroup = function TextFieldGroup(_ref) {
+	  var field = _ref.field;
+	  var value = _ref.value;
+	  var label = _ref.label;
+	  var error = _ref.error;
+	  var type = _ref.type;
+	  var onChange = _ref.onChange;
+	
+	  return React.createElement(
+	    'div',
+	    { className: classnames('form-group', { 'has-error': error }) },
+	    React.createElement(
+	      'label',
+	      { className: 'control-label' },
+	      label
+	    ),
+	    React.createElement('input', {
+	      value: value,
+	      onChange: onChange,
+	      type: type,
+	      name: field,
+	      className: 'form-control'
+	    }),
+	    error && React.createElement(
+	      'span',
+	      { className: 'help-block' },
+	      error
+	    )
+	  );
+	};
+	
+	TextFieldGroup.propTypes = {
+	  field: string.isRequired,
+	  value: string.isRequired,
+	  label: string.isRequired,
+	  error: string,
+	  type: string.isRequired,
+	  onChange: func.isRequired
+	};
+	
+	TextFieldGroup.defaultProps = {
+	  type: 'text'
+	};
+	
+	module.exports = TextFieldGroup;
 
 /***/ }
 /******/ ]);
