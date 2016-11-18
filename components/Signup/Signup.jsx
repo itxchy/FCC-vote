@@ -47,11 +47,9 @@ const Signup = React.createClass({
       this.setState({errors: {}, isLoading: true})
       this.props.userSignupRequest(this.state)
         .then(response => {
-          console.log('response: ', response)
           this.setState({isLoading: false})
         })
         .catch(error => {
-          console.log('caught error: ', error)
           this.setState({errors: error.response.data, isLoading: false})
         })
     }
