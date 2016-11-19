@@ -68,7 +68,7 @@ const Signup = React.createClass({
               value={this.state.username}
               onChange={this.onChange}
               type='text'
-              name='username'
+              field='username'
               label='Username'
               error={errors.username}
             />
@@ -77,7 +77,7 @@ const Signup = React.createClass({
               value={this.state.email}
               onChange={this.onChange}
               type='text'
-              name='email'
+              field='email'
               label='Email'
               error={errors.email}
             />
@@ -86,7 +86,7 @@ const Signup = React.createClass({
               value={this.state.password}
               onChange={this.onChange}
               type='password'
-              name='password'
+              field='password'
               label='Password'
               error={errors.password}
             />
@@ -95,7 +95,7 @@ const Signup = React.createClass({
               value={this.state.passwordConfirmation}
               onChange={this.onChange}
               type='password'
-              name='passwordConfirmation'
+              field='passwordConfirmation'
               label='Confirm Password'
               error={errors.passwordConfirmation}
             />
