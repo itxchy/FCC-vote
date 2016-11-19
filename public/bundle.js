@@ -31203,6 +31203,10 @@
 	
 	var connector = _require.connector;
 	
+	var _require2 = __webpack_require__(173);
+	
+	var browserHistory = _require2.browserHistory;
+	
 	var validateInput = __webpack_require__(299);
 	var TextFieldGroup = __webpack_require__(394);
 	var func = React.PropTypes.func;
@@ -31255,7 +31259,7 @@
 	    if (this.isValid()) {
 	      this.setState({ errors: {}, isLoading: true });
 	      this.props.userSignupRequest(this.state).then(function (response) {
-	        _this.setState({ isLoading: false });
+	        browserHistory.push('/');
 	      }).catch(function (error) {
 	        _this.setState({ errors: error.response.data, isLoading: false });
 	      });

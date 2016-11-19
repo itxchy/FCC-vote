@@ -1,5 +1,6 @@
 const React = require('react')
 const { connector } = require('../../redux/Store')
+const { browserHistory } = require('react-router')
 const validateInput = require('../../routes/shared/signupValidation')
 const TextFieldGroup = require('../common/TextFieldGroup')
 const { func } = React.PropTypes
@@ -47,7 +48,7 @@ const Signup = React.createClass({
       this.setState({errors: {}, isLoading: true})
       this.props.userSignupRequest(this.state)
         .then(response => {
-          this.setState({isLoading: false})
+          browserHistory.push('/')
         })
         .catch(error => {
           this.setState({errors: error.response.data, isLoading: false})
