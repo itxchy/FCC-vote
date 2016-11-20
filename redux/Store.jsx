@@ -2,11 +2,13 @@ const { applyMiddleware, createStore } = require('redux')
 const reactRedux = require('react-redux')
 const thunk = require('redux-thunk').default
 const axios = require('axios')
+const { composeWithDevTools } = require('remote-redux-devtools')
 
 const SET_NEW_POLL_TITLE = 'setNewPollTitle'
 const SET_TITLE_EDITABLE = 'setTitleEditable'
 const UPDATE_OPTION = 'updateOption'
 const RESET_NEW_POLL = 'resetNewPoll'
+const ADD_FLASH_MESSAGE = 'addFlashMessage'
 
 const initialState = {
   newPollTitle: '',
@@ -27,6 +29,8 @@ const rootReducer = (state = initialState, action) => {
       return reduceOptionUpdate(state, action)
     case RESET_NEW_POLL:
       return reduceResetNewPoll(state, action)
+    case ADD_FLASH_MESSAGE:
+      return reduceAddFlashMessage(state, action)
     default:
       return state
   }
@@ -50,6 +54,16 @@ const reduceOptionUpdate = (state, action) => {
   return newState
 }
 
+const reduceAddFlashMessage = (state, action) => {
+  const newState = {}
+
+  Object.assign(newState, state, {
+    messageType: action.value.message.type,
+    messageText: action.value.message.messageText
+  })
+  return newState
+}
+
 const reduceResetNewPoll = (state, action) => {
   const newState = {}
   const blankPollState = {
@@ -64,7 +78,11 @@ const reduceResetNewPoll = (state, action) => {
   return newState
 }
 
-const store = createStore(rootReducer, applyMiddleware(thunk))
+const composeEnhancers = composeWithDevTools({ realtime: true, port: 8000 })
+const store = createStore(rootReducer, composeEnhancers(
+    applyMiddleware(thunk)
+  )
+)
 
 const mapStateToProps = (state) => {
   return {
@@ -90,6 +108,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     userSignupRequest (userData) {
       return axios.post('/api/users', userData)
+    },
+    addFlashMessage (message) {
+      dispatch({type: ADD_FLASH_MESSAGE, value: message})
     }
   }
 }

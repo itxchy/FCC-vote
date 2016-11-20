@@ -6,7 +6,8 @@ const { func, object } = React.PropTypes
 
 const Signup = React.createClass({
   propTypes: {
-    userSignupRequest: func.isRequired
+    userSignupRequest: func.isRequired,
+    addFlashMessage: func.isRequired
   },
 
   getInitialState () {
@@ -47,6 +48,10 @@ const Signup = React.createClass({
       this.setState({errors: {}, isLoading: true})
       this.props.userSignupRequest(this.state)
         .then(response => {
+          this.props.addFlashMessage({ 
+            type: 'success',
+            text: 'Signup successful!'
+          })
           this.context.router.push('/')
         })
         .catch(error => {
