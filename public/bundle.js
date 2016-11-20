@@ -31203,13 +31203,11 @@
 	
 	var connector = _require.connector;
 	
-	var _require2 = __webpack_require__(173);
-	
-	var browserHistory = _require2.browserHistory;
-	
 	var validateInput = __webpack_require__(299);
 	var TextFieldGroup = __webpack_require__(394);
-	var func = React.PropTypes.func;
+	var _React$PropTypes = React.PropTypes;
+	var func = _React$PropTypes.func;
+	var object = _React$PropTypes.object;
 	
 	
 	var Signup = React.createClass({
@@ -31259,7 +31257,7 @@
 	    if (this.isValid()) {
 	      this.setState({ errors: {}, isLoading: true });
 	      this.props.userSignupRequest(this.state).then(function (response) {
-	        browserHistory.push('/');
+	        _this.context.router.push('/');
 	      }).catch(function (error) {
 	        _this.setState({ errors: error.response.data, isLoading: false });
 	      });
@@ -31328,6 +31326,10 @@
 	    );
 	  }
 	});
+	
+	Signup.contextTypes = {
+	  router: object.isRequired
+	};
 	
 	module.exports = connector(Signup);
 
