@@ -16,7 +16,8 @@ const initialState = {
   newPollOptions: [
     '',
     ''
-  ]
+  ],
+  messages: []
 }
 
 const rootReducer = (state = initialState, action) => {
@@ -58,8 +59,13 @@ const reduceAddFlashMessage = (state, action) => {
   const newState = {}
 
   Object.assign(newState, state, {
-    messageType: action.value.message.type,
-    messageText: action.value.message.messageText
+    messages: [
+      ...state.messages,
+      {
+        messageType: action.value.message.type,
+        messageText: action.value.message.messageText
+      }
+    ]
   })
   return newState
 }

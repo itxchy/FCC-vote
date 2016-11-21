@@ -27440,6 +27440,8 @@
 
 	'use strict';
 	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
 	var _require = __webpack_require__(237);
 	
 	var applyMiddleware = _require.applyMiddleware;
@@ -27463,7 +27465,8 @@
 	var initialState = {
 	  newPollTitle: '',
 	  titleEditable: true,
-	  newPollOptions: ['', '']
+	  newPollOptions: ['', ''],
+	  messages: []
 	};
 	
 	var rootReducer = function rootReducer() {
@@ -27508,8 +27511,10 @@
 	  var newState = {};
 	
 	  Object.assign(newState, state, {
-	    messageType: action.value.message.type,
-	    messageText: action.value.message.messageText
+	    messages: [].concat(_toConsumableArray(state.messages), [{
+	      messageType: action.value.message.type,
+	      messageText: action.value.message.messageText
+	    }])
 	  });
 	  return newState;
 	};
