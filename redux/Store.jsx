@@ -2,6 +2,7 @@ const { applyMiddleware, createStore } = require('redux')
 const reactRedux = require('react-redux')
 const thunk = require('redux-thunk').default
 const axios = require('axios')
+const shortid = require('shortid')
 const { composeWithDevTools } = require('remote-redux-devtools')
 
 const SET_NEW_POLL_TITLE = 'setNewPollTitle'
@@ -17,7 +18,7 @@ const initialState = {
     '',
     ''
   ],
-  messages: []
+  flashMessages: []
 }
 
 const rootReducer = (state = initialState, action) => {
@@ -59,11 +60,12 @@ const reduceAddFlashMessage = (state, action) => {
   const newState = {}
 
   Object.assign(newState, state, {
-    messages: [
+    flashMessages: [
       ...state.messages,
       {
-        messageType: action.value.message.type,
-        messageText: action.value.message.messageText
+        id: shortid.generate(),
+        messageType: action.value.type,
+        messageText: action.value.text
       }
     ]
   })

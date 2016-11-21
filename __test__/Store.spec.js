@@ -3,7 +3,7 @@ describe('Store', () => {
 
   it('should bootstrap with initial state', () => {
     const initialState = rootReducer(undefined, { type: '@@redux/INIT'})
-    
+
     expect(initialState).toEqual({
       newPollTitle: '',
       titleEditable: true,
@@ -11,7 +11,7 @@ describe('Store', () => {
         '',
         ''
       ],
-      messages: []
+      flashMessages: []
     })
   })
 
