@@ -55,6 +55,7 @@ const Signup = React.createClass({
           this.context.router.push('/')
         })
         .catch(error => {
+          console.log('caught error: ', error)
           this.setState({errors: error.response.data, isLoading: false})
         })
     }

@@ -3,13 +3,19 @@ const reactRedux = require('react-redux')
 const thunk = require('redux-thunk').default
 const axios = require('axios')
 const shortid = require('shortid')
+const findIndex = require('lodash/findIndex')
+const loMap = require('lodash/map')
+const clone = require('lodash/clone')
 const { composeWithDevTools } = require('remote-redux-devtools')
 
 const SET_NEW_POLL_TITLE = 'setNewPollTitle'
 const SET_TITLE_EDITABLE = 'setTitleEditable'
+
 const UPDATE_OPTION = 'updateOption'
 const RESET_NEW_POLL = 'resetNewPoll'
+
 const ADD_FLASH_MESSAGE = 'addFlashMessage'
+const DELETE_FLASH_MESSAGE = 'DELETE_FLASH_MESSAGE'
 
 const initialState = {
   newPollTitle: '',
@@ -33,6 +39,8 @@ const rootReducer = (state = initialState, action) => {
       return reduceResetNewPoll(state, action)
     case ADD_FLASH_MESSAGE:
       return reduceAddFlashMessage(state, action)
+    case DELETE_FLASH_MESSAGE:
+      return reduceDeleteFlashMessage(state, action)
     default:
       return state
   }
@@ -61,7 +69,7 @@ const reduceAddFlashMessage = (state, action) => {
 
   Object.assign(newState, state, {
     flashMessages: [
-      ...state.messages,
+      ...state.flashMessages,
       {
         id: shortid.generate(),
         messageType: action.value.type,
@@ -70,6 +78,25 @@ const reduceAddFlashMessage = (state, action) => {
     ]
   })
   return newState
+}
+
+const reduceDeleteFlashMessage = (state, action) => {
+  const newState = {}
+
+  const index = findIndex(state.flashMessages, {id: action.value})
+
+  if (index >= 0) {
+    // makes a clone of state.flashMessages to be mutated
+    let newFlashMessages = loMap(state.flashMessages, clone)
+
+    newFlashMessages.splice(index, 1)
+    Object.assign(newState, state, {
+      flashMessages: newFlashMessages
+    })
+    return newState
+  }
+
+  return state
 }
 
 const reduceResetNewPoll = (state, action) => {
@@ -96,7 +123,8 @@ const mapStateToProps = (state) => {
   return {
     newPollTitle: state.newPollTitle,
     titleEditable: state.titleEditable,
-    newPollOptions: state.newPollOptions
+    newPollOptions: state.newPollOptions,
+    flashMessages: state.flashMessages
   }
 }
 
@@ -119,6 +147,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     addFlashMessage (message) {
       dispatch({type: ADD_FLASH_MESSAGE, value: message})
+    },
+    deleteFlashMessage (id) {
+      dispatch({type: DELETE_FLASH_MESSAGE, value: id})
     }
   }
 }
