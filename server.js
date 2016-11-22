@@ -14,15 +14,21 @@ const baseTemplate = fs.readFileSync('./index.html')
 const template = _.template(baseTemplate)
 const ClientApp = require('./components/ClientApp.jsx')
 const Routes = ClientApp.Routes
-
 const users = require('./routes/users.js')
+const r = require('rethinkdb')
+let connection = null
+
+r.connect({host: 'localhost', port: 28015}).then(conn => {
+  console.log('rethinkDB connected:', conn.open, '\nrethinkDB dashboard: http://localhost:8080/')
+  connection = conn
+}).catch(error => {
+  console.log('rethinkDB error:', error)
+})
 
 const app = express()
 
 app.use(bodyParser.json())
-
 app.use('/api/users', users)
-
 app.use('/public', express.static('./public'))
 
 app.use((req, res) => {
