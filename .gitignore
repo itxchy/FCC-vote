@@ -3,3 +3,4 @@ NOTES.md
 npm-debug.log
 rethinkdb_data
 remotedev-db.sqlite3
+knexfile.js

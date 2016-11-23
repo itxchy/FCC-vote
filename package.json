@@ -12,7 +12,7 @@
     "watch": "webpack --watch",
     "server": "nodemon server.js",
     "remotedev": "remotedev --hostname=localhost --port=8000",
-    "all": "xfce4-terminal -H -e \"rethinkdb\" & \"npm run remotedev\" & xfce4-terminal -H -e \"npm run tdd\" & xfce4-terminal -H -e \"npm run server\" & xfce4-terminal -H -e \"npm run watch\""
+    "all": "xfce4-terminal -H -e \"npm run remotedev\" & xfce4-terminal -H -e \"npm run tdd\" & xfce4-terminal -H -e \"npm run server\" & xfce4-terminal -H -e \"npm run watch\""
   },
   "author": "Matt Trifilo",
   "license": "ISC",
@@ -55,20 +55,23 @@
   },
   "dependencies": {
     "axios": "^0.15.2",
+    "bcrypt": "^0.8.7",
     "body-parser": "^1.15.2",
+    "bookshelf": "^0.10.2",
     "bootstrap": "^3.3.7",
     "classnames": "^2.2.5",
     "express": "^4.14.0",
     "graphql-subscriptions": "^0.2.1",
     "jquery": "^3.1.1",
+    "knex": "^0.12.6",
     "lodash": "^4.17.2",
+    "pg": "^6.1.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.8.1",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
-    "rethinkdb": "^2.3.3",
     "shortid": "^2.2.6",
     "validator": "^6.1.0"
   }
