@@ -13,7 +13,7 @@ const FlashMessage = React.createClass({
     this.props.deleteFlashMessage(this.props.message.id)
   },
   render () {
-    const { id, messageType, messageText } = this.props.message
+    const { messageType, messageText } = this.props.message
     return (
       <div className={classnames('alert', {
         'alert-success': messageType === 'success',

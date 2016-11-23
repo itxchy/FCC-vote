@@ -8,7 +8,7 @@ const FlashMessagesList = React.createClass({
     flashMessages: array.isRequired
   },
   render () {
-    const messages = this.props.flashMessages.map(message => 
+    const messages = this.props.flashMessages.map(message =>
       <FlashMessage key={message.id} message={message} />
     )
     return (

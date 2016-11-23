@@ -44069,7 +44069,6 @@
 	  },
 	  render: function render() {
 	    var _props$message = this.props.message;
-	    var id = _props$message.id;
 	    var messageType = _props$message.messageType;
 	    var messageText = _props$message.messageText;
 	
