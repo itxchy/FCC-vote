@@ -7,7 +7,8 @@ const { func, object } = React.PropTypes
 const Signup = React.createClass({
   propTypes: {
     userSignupRequest: func.isRequired,
-    addFlashMessage: func.isRequired
+    addFlashMessage: func.isRequired,
+    isUserExists: func.isRequired
   },
 
   getInitialState () {
@@ -17,7 +18,8 @@ const Signup = React.createClass({
       password: '',
       passwordConfirmation: '',
       errors: {},
-      isLoading: false
+      isLoading: false,
+      invalid: false
     }
   },
 
@@ -39,6 +41,23 @@ const Signup = React.createClass({
     }
 
     return isValid
+  },
+
+  checkUserExists(event) {
+    const field = event.target.name
+    const val = event.target.value
+    if (val !== '') {
+      this.props.isUserExists(val).then(res => {
+        // if a user is found, pass an error message
+        let errors = this.state.errors
+        if (res.data.user) {
+          errors[field] = 'A user exists with this ' + field
+        } else {
+          errors[field] = ''
+        }
+        this.setState({errors})
+      })
+    }
   },
 
   onSubmit (event) {
@@ -73,6 +92,7 @@ const Signup = React.createClass({
             <TextFieldGroup
               value={this.state.username}
               onChange={this.onChange}
+              checkUserExists={this.checkUserExists}
               type='text'
               field='username'
               label='Username'
@@ -82,6 +102,7 @@ const Signup = React.createClass({
             <TextFieldGroup
               value={this.state.email}
               onChange={this.onChange}
+              checkUserExists={this.checkUserExists}
               type='text'
               field='email'
               label='Email'

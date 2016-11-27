@@ -1,7 +1,6 @@
 const express = require('express')
 const commonValidations = require('./shared/signupValidation.js')
 const bcrypt = require('bcrypt')
-const Promise = require('bluebird')
 const isEmpty = require('lodash/isEmpty')
 
 const User = require('../models/User')
@@ -29,8 +28,19 @@ function validateInput(data, otherValidations) {
       isValid: isEmpty(errors)
     }
   })
-
 }
+
+router.get('/:identifier', (req, res) => {
+  User.query({
+    select: ['username', 'email'],
+    where: {email: req.params.identifier},
+    orWhere: {username: req.params.identifier}
+  }).fetch().then(user => {
+    // if a user exists, it will be returned, 
+    // otherwise, user will be null
+    res.json({user})
+  })
+})
 
 router.post('/', (req, res) => {
 
