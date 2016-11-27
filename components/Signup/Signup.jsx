@@ -50,12 +50,15 @@ const Signup = React.createClass({
       this.props.isUserExists(val).then(res => {
         // if a user is found, pass an error message
         let errors = this.state.errors
+        let invalid
         if (res.data.user) {
           errors[field] = 'A user exists with this ' + field
+          invalid = true
         } else {
           errors[field] = ''
+          invalid = false
         }
-        this.setState({errors})
+        this.setState({errors, invalid})
       })
     }
   },
@@ -128,7 +131,7 @@ const Signup = React.createClass({
             />
 
             <div className='form-group'>
-              <button disabled={this.state.isLoading} className='btn btn-primary btn-lg'>
+              <button disabled={this.state.isLoading || this.state.invalid} className='btn btn-primary btn-lg'>
                 Sign up
               </button>
             </div>

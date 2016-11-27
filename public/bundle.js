@@ -44567,12 +44567,15 @@
 	      this.props.isUserExists(val).then(function (res) {
 	        // if a user is found, pass an error message
 	        var errors = _this.state.errors;
+	        var invalid = void 0;
 	        if (res.data.user) {
 	          errors[field] = 'A user exists with this ' + field;
+	          invalid = true;
 	        } else {
 	          errors[field] = '';
+	          invalid = false;
 	        }
-	        _this.setState({ errors: errors });
+	        _this.setState({ errors: errors, invalid: invalid });
 	      });
 	    }
 	  },
@@ -44651,7 +44654,7 @@
 	            { className: 'form-group' },
 	            React.createElement(
 	              'button',
-	              { disabled: this.state.isLoading, className: 'btn btn-primary btn-lg' },
+	              { disabled: this.state.isLoading || this.state.invalid, className: 'btn btn-primary btn-lg' },
 	              'Sign up'
 	            )
 	          )
