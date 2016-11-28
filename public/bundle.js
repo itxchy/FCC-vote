@@ -27593,6 +27593,9 @@
 	    isUserExists: function isUserExists(identifier) {
 	      return axios.get('/api/users/' + identifier);
 	    },
+	    login: function login(data) {
+	      return axios.post('/api/auth', data);
+	    },
 	    addFlashMessage: function addFlashMessage(message) {
 	      dispatch({ type: ADD_FLASH_MESSAGE, value: message });
 	    },
@@ -43968,6 +43971,15 @@
 	              { to: '/signup' },
 	              'Sign up'
 	            )
+	          ),
+	          React.createElement(
+	            'li',
+	            null,
+	            React.createElement(
+	              Link,
+	              { to: '/login' },
+	              'Login'
+	            )
 	          )
 	        )
 	      );
@@ -47816,9 +47828,17 @@
 	
 	var TextFieldGroup = __webpack_require__(591);
 	var validateInput = __webpack_require__(594);
+	var _React$PropTypes = React.PropTypes;
+	var func = _React$PropTypes.func;
+	var object = _React$PropTypes.object;
+	
 	
 	var LoginForm = React.createClass({
 	  displayName: 'LoginForm',
+	
+	  propTypes: {
+	    login: func.isRequired
+	  },
 	  getInitialState: function getInitialState() {
 	    return {
 	      identifier: '',
@@ -47841,9 +47861,21 @@
 	    return isValid;
 	  },
 	  onSubmit: function onSubmit(event) {
+	    var _this = this;
+	
 	    event.preventDefault();
 	
-	    if (this.isValid()) {}
+	    if (this.isValid()) {
+	      this.setState({ errors: {}, isLoading: true });
+	      this.props.login(this.state).then(function (response) {
+	        return _this.context.router.push('/');
+	      }).catch(function (error) {
+	        return _this.setState({
+	          errors: error.data.errors,
+	          isLoading: false
+	        });
+	      });
+	    }
 	  },
 	  onChange: function onChange(event) {
 	    this.setState(_defineProperty({}, event.target.name, event.target.value));
@@ -47890,6 +47922,10 @@
 	    );
 	  }
 	});
+	
+	LoginForm.conextTypes = {
+	  router: object.isRequired
+	};
 	
 	module.exports = connector(LoginForm);
 

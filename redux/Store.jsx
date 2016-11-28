@@ -148,6 +148,9 @@ const mapDispatchToProps = (dispatch) => {
     isUserExists (identifier) {
       return axios.get(`/api/users/${identifier}`)
     },
+    login (data) {
+      return axios.post('/api/auth', data)
+    },
     addFlashMessage (message) {
       dispatch({type: ADD_FLASH_MESSAGE, value: message})
     },

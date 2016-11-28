@@ -2,8 +2,12 @@ const React = require('react')
 const { connector } = require('../../redux/Store')
 const TextFieldGroup = require('../common/TextFieldGroup')
 const validateInput = require('../../routes/shared/loginValidation')
+const { func, object } = React.PropTypes
 
 const LoginForm = React.createClass({
+  propTypes: {
+    login: func.isRequired
+  },
   getInitialState () {
     return {
       identifier: '',
@@ -27,7 +31,13 @@ const LoginForm = React.createClass({
     event.preventDefault()
 
     if (this.isValid()) {
-
+      this.setState({ errors: {}, isLoading: true })
+      this.props.login(this.state)
+        .then(response => this.context.router.push('/'))
+        .catch(error => this.setState({
+          errors: error.data.errors,
+          isLoading: false
+        }))
     }
   },
 
@@ -66,5 +76,9 @@ const LoginForm = React.createClass({
     )
   }
 })
+
+LoginForm.conextTypes = {
+  router: object.isRequired
+}
 
 module.exports = connector(LoginForm)
