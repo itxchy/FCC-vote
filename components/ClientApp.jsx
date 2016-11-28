@@ -6,12 +6,14 @@ const Layout = require('./Layout')
 const Home = require('./Home')
 const CreateAPoll = require('./CreateAPoll/CreateAPoll')
 const Signup = require('./Signup/Signup')
+const LoginPage = require('./Login/LoginPage')
 
 const Routes = () => (
   <Route path='/' component={Layout}>
     <IndexRoute component={Home} />
     <Route path='create' component={CreateAPoll} />
     <Route path='signup' component={Signup} />
+    <Route path='login' component={LoginPage} />
   </Route>
 )
 
