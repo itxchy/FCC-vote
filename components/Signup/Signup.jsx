@@ -68,6 +68,7 @@ const Signup = React.createClass({
 
     if (this.isValid()) {
       this.setState({errors: {}, isLoading: true})
+
       this.props.userSignupRequest(this.state)
         .then(response => {
           this.props.addFlashMessage({
@@ -77,7 +78,6 @@ const Signup = React.createClass({
           this.context.router.push('/')
         })
         .catch(error => {
-          console.log('caught error: ', error)
           this.setState({errors: error.response.data, isLoading: false})
         })
     }

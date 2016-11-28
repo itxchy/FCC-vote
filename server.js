@@ -15,11 +15,15 @@ const template = _.template(baseTemplate)
 const ClientApp = require('./components/ClientApp.jsx')
 const Routes = ClientApp.Routes
 const users = require('./routes/users.js')
+const auth = require('./routes/auth.js')
 
 const app = express()
 
 app.use(bodyParser.json())
+
 app.use('/api/users', users)
+app.use('/api/auth', auth)
+
 app.use('/public', express.static('./public'))
 
 app.use((req, res) => {

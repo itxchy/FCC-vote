@@ -33,11 +33,18 @@ const LoginForm = React.createClass({
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true })
       this.props.login(this.state)
-        .then(response => this.context.router.push('/'))
-        .catch(error => this.setState({
-          errors: error.data.errors,
-          isLoading: false
-        }))
+        .then(response => {
+          this.setState({isLoading: false})
+          console.log('logged in!', response)
+          this.context.router.push('/')
+        })
+        .catch(error => {
+          console.log('error logging in: ', error.response.data.errors)
+          this.setState({
+            errors: error.response.data.errors,
+            isLoading: false
+          })
+        })
     }
   },
 
@@ -50,6 +57,8 @@ const LoginForm = React.createClass({
     return (
       <form onSubmit={this.onSubmit}>
         <h1>Login</h1>
+
+        { errors.form && <div className='alert alert-danger'>{errors.form}</div> }
 
         <TextFieldGroup
           field='identifier'
@@ -77,7 +86,7 @@ const LoginForm = React.createClass({
   }
 })
 
-LoginForm.conextTypes = {
+LoginForm.contextTypes = {
   router: object.isRequired
 }
 

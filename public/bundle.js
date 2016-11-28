@@ -44600,6 +44600,7 @@
 	
 	    if (this.isValid()) {
 	      this.setState({ errors: {}, isLoading: true });
+	
 	      this.props.userSignupRequest(this.state).then(function (response) {
 	        _this2.props.addFlashMessage({
 	          type: 'success',
@@ -44607,7 +44608,6 @@
 	        });
 	        _this2.context.router.push('/');
 	      }).catch(function (error) {
-	        console.log('caught error: ', error);
 	        _this2.setState({ errors: error.response.data, isLoading: false });
 	      });
 	    }
@@ -47868,10 +47868,13 @@
 	    if (this.isValid()) {
 	      this.setState({ errors: {}, isLoading: true });
 	      this.props.login(this.state).then(function (response) {
-	        return _this.context.router.push('/');
+	        _this.setState({ isLoading: false });
+	        console.log('logged in!', response);
+	        _this.context.router.push('/');
 	      }).catch(function (error) {
-	        return _this.setState({
-	          errors: error.data.errors,
+	        console.log('error logging in: ', error.response.data.errors);
+	        _this.setState({
+	          errors: error.response.data.errors,
 	          isLoading: false
 	        });
 	      });
@@ -47894,6 +47897,11 @@
 	        'h1',
 	        null,
 	        'Login'
+	      ),
+	      errors.form && React.createElement(
+	        'div',
+	        { className: 'alert alert-danger' },
+	        errors.form
 	      ),
 	      React.createElement(TextFieldGroup, {
 	        field: 'identifier',
@@ -47923,7 +47931,7 @@
 	  }
 	});
 	
-	LoginForm.conextTypes = {
+	LoginForm.contextTypes = {
 	  router: object.isRequired
 	};
 	
