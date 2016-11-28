@@ -1,6 +1,7 @@
 const React = require('react')
 const { connector } = require('../../redux/Store')
 const TextFieldGroup = require('../common/TextFieldGroup')
+const validateInput = require('../../routes/shared/loginValidation')
 
 const LoginForm = React.createClass({
   getInitialState () {
@@ -12,8 +13,22 @@ const LoginForm = React.createClass({
     }
   },
 
+  isValid () {
+    const { errors, isValid } = validateInput(this.state)
+
+    if (!isValid) {
+      this.setState({ errors })
+    }
+
+    return isValid
+  },
+
   onSubmit (event) {
     event.preventDefault()
+
+    if (this.isValid()) {
+
+    }
   },
 
   onChange (event) {
@@ -28,9 +43,9 @@ const LoginForm = React.createClass({
 
         <TextFieldGroup
           field='identifier'
-          label='Username or Email'
+          label='Username / Email'
           value={identifier}
-          errors={errors.identifier}
+          error={errors.identifier}
           onChange={this.onChange}
         />
 
@@ -42,6 +57,10 @@ const LoginForm = React.createClass({
           onChange={this.onChange}
           type='password'
         />
+
+        <div className='form-group'>
+          <button className='button btn btn-primary btn-lg' disabled={isLoading}>Login</button>
+        </div>
 
       </form>
     )

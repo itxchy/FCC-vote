@@ -43,7 +43,7 @@ const Signup = React.createClass({
     return isValid
   },
 
-  checkUserExists(event) {
+  checkUserExists (event) {
     const field = event.target.name
     const val = event.target.value
     if (val !== '') {

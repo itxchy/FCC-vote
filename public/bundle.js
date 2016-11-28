@@ -49,7 +49,7 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(34);
 	var App = __webpack_require__(172);
-	__webpack_require__(592);
+	__webpack_require__(595);
 	
 	ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
 
@@ -21482,7 +21482,7 @@
 	var Home = __webpack_require__(518);
 	var CreateAPoll = __webpack_require__(519);
 	var Signup = __webpack_require__(523);
-	var LoginPage = __webpack_require__(607);
+	var LoginPage = __webpack_require__(592);
 	
 	var Routes = function Routes() {
 	  return React.createElement(
@@ -47776,32 +47776,12 @@
 
 /***/ },
 /* 592 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 593 */,
-/* 594 */,
-/* 595 */,
-/* 596 */,
-/* 597 */,
-/* 598 */,
-/* 599 */,
-/* 600 */,
-/* 601 */,
-/* 602 */,
-/* 603 */,
-/* 604 */,
-/* 605 */,
-/* 606 */,
-/* 607 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var LoginForm = __webpack_require__(608);
+	var LoginForm = __webpack_require__(593);
 	
 	var LoginPage = React.createClass({
 	  displayName: 'LoginPage',
@@ -47821,7 +47801,7 @@
 	module.exports = LoginPage;
 
 /***/ },
-/* 608 */
+/* 593 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47835,6 +47815,7 @@
 	var connector = _require.connector;
 	
 	var TextFieldGroup = __webpack_require__(591);
+	var validateInput = __webpack_require__(594);
 	
 	var LoginForm = React.createClass({
 	  displayName: 'LoginForm',
@@ -47846,8 +47827,23 @@
 	      isLoading: false
 	    };
 	  },
+	  isValid: function isValid() {
+	    var _validateInput = validateInput(this.state);
+	
+	    var errors = _validateInput.errors;
+	    var isValid = _validateInput.isValid;
+	
+	
+	    if (!isValid) {
+	      this.setState({ errors: errors });
+	    }
+	
+	    return isValid;
+	  },
 	  onSubmit: function onSubmit(event) {
 	    event.preventDefault();
+	
+	    if (this.isValid()) {}
 	  },
 	  onChange: function onChange(event) {
 	    this.setState(_defineProperty({}, event.target.name, event.target.value));
@@ -47869,9 +47865,9 @@
 	      ),
 	      React.createElement(TextFieldGroup, {
 	        field: 'identifier',
-	        label: 'Username or Email',
+	        label: 'Username / Email',
 	        value: identifier,
-	        errors: errors.identifier,
+	        error: errors.identifier,
 	        onChange: this.onChange
 	      }),
 	      React.createElement(TextFieldGroup, {
@@ -47881,12 +47877,55 @@
 	        error: errors.password,
 	        onChange: this.onChange,
 	        type: 'password'
-	      })
+	      }),
+	      React.createElement(
+	        'div',
+	        { className: 'form-group' },
+	        React.createElement(
+	          'button',
+	          { className: 'button btn btn-primary btn-lg', disabled: isLoading },
+	          'Login'
+	        )
+	      )
 	    );
 	  }
 	});
 	
 	module.exports = connector(LoginForm);
+
+/***/ },
+/* 594 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Validator = __webpack_require__(525);
+	var isEmpty = __webpack_require__(590);
+	
+	function validateInput(data) {
+	  var errors = {};
+	
+	  if (Validator.isEmpty(data.identifier)) {
+	    errors.identifier = 'This field is required';
+	  }
+	
+	  if (Validator.isEmpty(data.password)) {
+	    errors.password = 'This field is required';
+	  }
+	
+	  return {
+	    errors: errors,
+	    isValid: isEmpty(errors)
+	  };
+	}
+	
+	module.exports = validateInput;
+
+/***/ },
+/* 595 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
 
 /***/ }
 /******/ ]);
