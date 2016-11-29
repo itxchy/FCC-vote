@@ -7,6 +7,7 @@ const findIndex = require('lodash/findIndex')
 const loMap = require('lodash/map')
 const clone = require('lodash/clone')
 const { composeWithDevTools } = require('remote-redux-devtools')
+const setAuthorizationToken = require('../auth/setAuthorizationToken')
 
 const SET_NEW_POLL_TITLE = 'setNewPollTitle'
 const SET_TITLE_EDITABLE = 'setTitleEditable'
@@ -149,7 +150,12 @@ const mapDispatchToProps = (dispatch) => {
       return axios.get(`/api/users/${identifier}`)
     },
     login (data) {
-      return axios.post('/api/auth', data)
+      return axios.post('/api/auth', data).then(res => {
+        console.log('auth res:', res)
+        const token = res.data.token
+        localStorage.setItem('jwtToken', token)
+        setAuthorizationToken(token)
+      })
     },
     addFlashMessage (message) {
       dispatch({type: ADD_FLASH_MESSAGE, value: message})

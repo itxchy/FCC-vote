@@ -7,6 +7,7 @@ const Home = require('./Home')
 const CreateAPoll = require('./CreateAPoll/CreateAPoll')
 const Signup = require('./Signup/Signup')
 const LoginPage = require('./Login/LoginPage')
+const setAuthorizationToken = require('../auth/setAuthorizationToken')
 
 const Routes = () => (
   <Route path='/' component={Layout}>
@@ -19,6 +20,7 @@ const Routes = () => (
 
 const App = React.createClass({
   render () {
+    setAuthorizationToken(localStorage.jwtToken)
     return (
       <Provider store={store}>
         <Router history={browserHistory}>

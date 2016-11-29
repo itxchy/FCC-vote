@@ -21483,6 +21483,7 @@
 	var CreateAPoll = __webpack_require__(519);
 	var Signup = __webpack_require__(523);
 	var LoginPage = __webpack_require__(592);
+	var setAuthorizationToken = __webpack_require__(610);
 	
 	var Routes = function Routes() {
 	  return React.createElement(
@@ -21498,6 +21499,7 @@
 	var App = React.createClass({
 	  displayName: 'App',
 	  render: function render() {
+	    setAuthorizationToken(localStorage.jwtToken);
 	    return React.createElement(
 	      Provider,
 	      { store: store },
@@ -27461,6 +27463,7 @@
 	
 	var composeWithDevTools = _require2.composeWithDevTools;
 	
+	var setAuthorizationToken = __webpack_require__(610);
 	
 	var SET_NEW_POLL_TITLE = 'setNewPollTitle';
 	var SET_TITLE_EDITABLE = 'setTitleEditable';
@@ -27594,7 +27597,12 @@
 	      return axios.get('/api/users/' + identifier);
 	    },
 	    login: function login(data) {
-	      return axios.post('/api/auth', data);
+	      return axios.post('/api/auth', data).then(function (res) {
+	        console.log('auth res:', res);
+	        var token = res.data.token;
+	        localStorage.setItem('jwtToken', token);
+	        setAuthorizationToken(token);
+	      });
 	    },
 	    addFlashMessage: function addFlashMessage(message) {
 	      dispatch({ type: ADD_FLASH_MESSAGE, value: message });
@@ -47970,6 +47978,39 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 596 */,
+/* 597 */,
+/* 598 */,
+/* 599 */,
+/* 600 */,
+/* 601 */,
+/* 602 */,
+/* 603 */,
+/* 604 */,
+/* 605 */,
+/* 606 */,
+/* 607 */,
+/* 608 */,
+/* 609 */,
+/* 610 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var axios = __webpack_require__(266);
+	
+	function setAuthorizationToken(token) {
+	  if (token) {
+	    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+	    console.log('auth header set!', token);
+	  } else {
+	    console.log('deleted!!!!');
+	    delete axios.defaults.headers.common['Authorization'];
+	  }
+	}
+	module.exports = setAuthorizationToken;
 
 /***/ }
 /******/ ]);
