@@ -6,6 +6,8 @@ const shortid = require('shortid')
 const findIndex = require('lodash/findIndex')
 const loMap = require('lodash/map')
 const clone = require('lodash/clone')
+const isEmpty = require('lodash/isEmpty')
+const jwt = require('jsonwebtoken')
 const { composeWithDevTools } = require('remote-redux-devtools')
 const setAuthorizationToken = require('../auth/setAuthorizationToken')
 
@@ -18,6 +20,8 @@ const RESET_NEW_POLL = 'resetNewPoll'
 const ADD_FLASH_MESSAGE = 'addFlashMessage'
 const DELETE_FLASH_MESSAGE = 'DELETE_FLASH_MESSAGE'
 
+const SET_CURRENT_USER = 'setCurrentUser'
+
 const initialState = {
   newPollTitle: '',
   titleEditable: true,
@@ -25,7 +29,9 @@ const initialState = {
     '',
     ''
   ],
-  flashMessages: []
+  flashMessages: [],
+  isAuthenticated: false,
+  user: {}
 }
 
 const rootReducer = (state = initialState, action) => {
@@ -42,9 +48,21 @@ const rootReducer = (state = initialState, action) => {
       return reduceAddFlashMessage(state, action)
     case DELETE_FLASH_MESSAGE:
       return reduceDeleteFlashMessage(state, action)
+    case SET_CURRENT_USER:
+      return reduceSetCurrentUser(state, action)
     default:
       return state
   }
+}
+
+const reduceSetCurrentUser = (state, action) => {
+  const newState = {}
+  console.log('action.user', action.user)
+  Object.assign(newState, state, {
+    isAuthenticated: !isEmpty(action.user),
+    user: action.user
+  })
+  return newState
 }
 
 const reduceNewPollTitle = (state, action) => {
@@ -151,10 +169,11 @@ const mapDispatchToProps = (dispatch) => {
     },
     login (data) {
       return axios.post('/api/auth', data).then(res => {
-        console.log('auth res:', res)
         const token = res.data.token
         localStorage.setItem('jwtToken', token)
         setAuthorizationToken(token)
+        const user = jwt.decode(token)
+        dispatch({type: SET_CURRENT_USER, user})
       })
     },
     addFlashMessage (message) {
@@ -168,4 +187,4 @@ const mapDispatchToProps = (dispatch) => {
 
 const connector = reactRedux.connect(mapStateToProps, mapDispatchToProps)
 
-module.exports = { connector, store, rootReducer }
+module.exports = { connector, store, rootReducer, SET_CURRENT_USER }

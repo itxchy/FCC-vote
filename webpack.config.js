@@ -14,6 +14,10 @@ const config = {
   resolve: {
     extensions: ['', '.js', '.jsx', '.json']
   },
+  node: {
+    net: 'empty',
+    dns: 'empty'
+  },
   stats: {
     colors: true,
     reasons: true,
@@ -30,7 +34,8 @@ const config = {
     loaders: [
       {
         test: /\.jsx?$/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
+        exclude: /node_modules/
       },
       {
         test: /\.json$/,

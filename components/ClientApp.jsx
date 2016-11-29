@@ -1,7 +1,8 @@
 const React = require('react')
 const { Router, Route, browserHistory, IndexRoute } = require('react-router')
-const { store } = require('../redux/Store')
+const { store, SET_CURRENT_USER } = require('../redux/Store')
 const { Provider } = require('react-redux')
+const jwt = require('jsonwebtoken')
 const Layout = require('./Layout')
 const Home = require('./Home')
 const CreateAPoll = require('./CreateAPoll/CreateAPoll')
@@ -20,7 +21,10 @@ const Routes = () => (
 
 const App = React.createClass({
   render () {
-    setAuthorizationToken(localStorage.jwtToken)
+    if (localStorage.jwtToken) {
+      setAuthorizationToken(localStorage.jwtToken)
+      store.dispatch({type: SET_CURRENT_USER, user: jwt.decode(localStorage.jwtToken)})
+    }
     return (
       <Provider store={store}>
         <Router history={browserHistory}>
