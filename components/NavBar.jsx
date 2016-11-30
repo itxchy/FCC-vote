@@ -1,37 +1,43 @@
 const React = require('react')
 const { connector } = require('../redux/Store')
-const { string, bool } = React.PropTypes
+const { object, bool, func } = React.PropTypes
 const { Link } = require('react-router')
 
 const NavBar = React.createClass({
   propTypes: {
-    userName: string,
-    isLoggedIn: bool
+    user: object,
+    isAuthenticated: bool,
+    logout: func
+  },
+  logout (event) {
+    event.preventDefault()
+    this.props.logout()
   },
   render () {
-    let showNav
-    if (this.props.isLoggedIn) {
-      showNav = (
-        <div className='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>
-          <ul className='nav navbar-nav'>
-            <li className='active'><a href='#'>My Polls</a></li>
-            <li><Link to='/create'>Create a Poll</Link></li>
-          </ul>
-          <ul className='nav navbar-nav navbar-right'>
-            <li><a href='#'>Welcome back, {this.props.userName}!</a></li>
-          </ul>
-        </div>
-      )
-    } else {
-      showNav = (
-        <div className='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>
-          <ul className='nav navbar-nav navbar-right'>
-            <li><Link to='/signup'>Sign up</Link></li>
-            <li><Link to='/login'>Login</Link></li>
-          </ul>
-        </div>
-      )
-    }
+    console.log('nav user object', this.props.user)
+
+    let showAuthenticatedNav = (
+      <div className='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>
+        <ul className='nav navbar-nav'>
+          <li className='active'><a href='#'>My Polls</a></li>
+          <li><Link to='/create'>Create a Poll</Link></li>
+        </ul>
+        <ul className='nav navbar-nav navbar-right'>
+          <li><p className='navbar-text'>Welcome back, {this.props.user.username}!</p></li>
+          <li><a href='#' onClick={this.logout}>Logout</a></li>
+        </ul>
+      </div>
+    )
+
+    let showGuestNav = (
+      <div className='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>
+        <ul className='nav navbar-nav navbar-right'>
+          <li><Link to='/signup'>Sign up</Link></li>
+          <li><Link to='/login'>Login</Link></li>
+        </ul>
+      </div>
+    )
+
     return (
       <nav className='navbar navbar-default'>
         <div className='container-fluid'>
@@ -45,7 +51,7 @@ const NavBar = React.createClass({
             <Link to='/' className='navbar-brand'>Vote.</Link>
           </div>
 
-          {showNav}
+          {this.props.isAuthenticated ? showAuthenticatedNav : showGuestNav}
 
         </div>
       </nav>

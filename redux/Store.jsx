@@ -143,7 +143,9 @@ const mapStateToProps = (state) => {
     newPollTitle: state.newPollTitle,
     titleEditable: state.titleEditable,
     newPollOptions: state.newPollOptions,
-    flashMessages: state.flashMessages
+    flashMessages: state.flashMessages,
+    isAuthenticated: state.isAuthenticated,
+    user: state.user
   }
 }
 
@@ -175,6 +177,11 @@ const mapDispatchToProps = (dispatch) => {
         const user = jwt.decode(token)
         dispatch({type: SET_CURRENT_USER, user})
       })
+    },
+    logout () {
+      localStorage.removeItem('jwtToken')
+      setAuthorizationToken(false)
+      dispatch({type: SET_CURRENT_USER, user: {}})
     },
     addFlashMessage (message) {
       dispatch({type: ADD_FLASH_MESSAGE, value: message})
