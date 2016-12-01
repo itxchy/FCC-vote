@@ -39,4 +39,5 @@ function validateInput (data) {
     isValid: isEmpty(errors)
   }
 }
+
 module.exports = validateInput

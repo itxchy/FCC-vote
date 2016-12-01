@@ -72357,6 +72357,7 @@
 	var func = _React$PropTypes.func;
 	var array = _React$PropTypes.array;
 	
+	var validateCreateAPollInput = __webpack_require__(800);
 	
 	var SaveOrReset = React.createClass({
 	  displayName: 'SaveOrReset',
@@ -72366,7 +72367,37 @@
 	    resetNewPoll: func,
 	    newPollOptions: array
 	  },
-	  handleResetButtonClick: function handleResetButtonClick() {
+	  getInitialState: function getInitialState() {
+	    return {
+	      errors: {}
+	    };
+	  },
+	  isValid: function isValid() {
+	    var inputData = {
+	      newPollTitle: this.props.newPollTitle,
+	      newPollOptions: this.props.newPollOptions
+	    };
+	
+	    var _validateCreateAPollI = validateCreateAPollInput(inputData);
+	
+	    var errors = _validateCreateAPollI.errors;
+	    var isValid = _validateCreateAPollI.isValid;
+	
+	
+	    if (!isValid) {
+	      this.setState({ errors: errors });
+	    }
+	
+	    return isValid;
+	  },
+	  saveButtonHandler: function saveButtonHandler() {
+	    var newPoll = {
+	      title: this.props.newPollTitle,
+	      options: this.props.newPollOptions
+	    };
+	    console.log('newPoll', newPoll);
+	  },
+	  resetButtonHandler: function resetButtonHandler() {
 	    this.props.resetNewPoll(true);
 	  },
 	  render: function render() {
@@ -72375,14 +72406,17 @@
 	      { className: 'text-center' },
 	      React.createElement(
 	        'button',
-	        { className: 'btn btn-primary save-reset-buttons' },
+	        {
+	          className: 'btn btn-primary save-reset-buttons',
+	          onClick: this.saveButtonHandler
+	        },
 	        'Save'
 	      ),
 	      React.createElement(
 	        'button',
 	        {
 	          className: 'btn save-reset-buttons reset-poll-button',
-	          onClick: this.handleResetButtonClick
+	          onClick: this.resetButtonHandler
 	        },
 	        'Reset'
 	      )
@@ -72618,6 +72652,7 @@
 	    isValid: isEmpty(errors)
 	  };
 	}
+	
 	module.exports = validateInput;
 
 /***/ },
@@ -75623,6 +75658,44 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 786 */,
+/* 787 */,
+/* 788 */,
+/* 789 */,
+/* 790 */,
+/* 791 */,
+/* 792 */,
+/* 793 */,
+/* 794 */,
+/* 795 */,
+/* 796 */,
+/* 797 */,
+/* 798 */,
+/* 799 */,
+/* 800 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Validator = __webpack_require__(716);
+	
+	function validateCreateAPollInput(data) {
+	  var errors = {};
+	
+	  if (Validator.isEmpty(data.newPollTitle)) {
+	    errors.newPollTitle = 'A title is required';
+	  }
+	
+	  data.newPollOptions.map(function (option) {
+	    if (Validator.isEmpty(option)) {
+	      errors.newPollOptions = 'Blank options are not allowed';
+	    }
+	  });
+	}
+	
+	module.exports = validateCreateAPollInput;
 
 /***/ }
 /******/ ]);
