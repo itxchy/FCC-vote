@@ -75753,20 +75753,24 @@
 	      myPolls: {}
 	    };
 	  },
-	  componentWillUnmount: function componentWillUnmount() {
-	    this.setState({ myPolls: {} });
-	  },
-	  render: function render() {
+	  getMyPolls: function getMyPolls() {
 	    var _this = this;
 	
 	    var username = this.props.user.username;
-	
-	    if (isEmpty(this.state.myPolls)) {
+	    if (username && isEmpty(this.state.myPolls)) {
 	      this.props.getUserPolls(username).then(function (res) {
 	        console.log('getUserPolls res:', res);
-	        _this.setState({ myPolls: res });
+	        if (res.data.length > 0) {
+	          _this.setState({ myPolls: res.data });
+	        } else {
+	          _this.setState({ myPolls: { polls: null } });
+	        }
 	      });
 	    }
+	  },
+	  render: function render() {
+	
+	    this.getMyPolls();
 	
 	    return React.createElement(
 	      'div',

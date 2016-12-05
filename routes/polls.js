@@ -78,8 +78,9 @@ router.get('/:user', (req, res) => {
   Polls.query({
     select: ['id', 'title', 'options', 'total_votes', 'owner'],
     where: { owner: req.params.user }
-  }).fetch().then(polls => {
-    res.json({polls})
+  }).fetchAll().then(polls => {
+    const pollObj = polls
+    res.json(pollObj)
   })
 })
 
