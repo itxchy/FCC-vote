@@ -75730,6 +75730,12 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	
+	var isEmpty = __webpack_require__(449);
 	var _React$PropTypes = React.PropTypes;
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
@@ -75742,9 +75748,26 @@
 	    getUserPolls: func,
 	    user: object
 	  },
+	  getInitialState: function getInitialState() {
+	    return {
+	      myPolls: {}
+	    };
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.setState({ myPolls: {} });
+	  },
 	  render: function render() {
-	    var userPolls = this.props.getUserPolls(this.props.user.username);
-	    console.log('userPolls', userPolls);
+	    var _this = this;
+	
+	    var username = this.props.user.username;
+	
+	    if (isEmpty(this.state.myPolls)) {
+	      this.props.getUserPolls(username).then(function (res) {
+	        console.log('getUserPolls res:', res);
+	        _this.setState({ myPolls: res });
+	      });
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      null,
@@ -75754,14 +75777,14 @@
 	        React.createElement(
 	          'code',
 	          null,
-	          JSON.stringify(userPolls)
+	          JSON.stringify(this.state.myPolls, null, 4)
 	        )
 	      )
 	    );
 	  }
 	});
 	
-	module.exports = MyPollsPage;
+	module.exports = connector(MyPollsPage);
 
 /***/ }
 /******/ ]);
