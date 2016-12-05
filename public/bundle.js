@@ -75744,6 +75744,7 @@
 	  },
 	  render: function render() {
 	    var userPolls = this.props.getUserPolls(this.props.user.username);
+	    console.log('userPolls', userPolls);
 	    return React.createElement(
 	      'div',
 	      null,
@@ -75759,6 +75760,8 @@
 	    );
 	  }
 	});
+	
+	module.exports = MyPollsPage;
 
 /***/ }
 /******/ ]);
