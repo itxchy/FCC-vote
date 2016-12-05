@@ -1,3 +1,5 @@
+/* global localStorage */
+
 const React = require('react')
 const { Router, Route, browserHistory, IndexRoute } = require('react-router')
 const { store, SET_CURRENT_USER } = require('../redux/Store')

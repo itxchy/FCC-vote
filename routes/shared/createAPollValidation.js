@@ -1,4 +1,5 @@
 const Validator = require('validator')
+const isEmpty = require('lodash/isEmpty')
 
 function validateCreateAPollInput (data) {
   let errors = {}
@@ -12,6 +13,11 @@ function validateCreateAPollInput (data) {
       errors.newPollOptions = 'Blank options are not allowed'
     }
   })
+
+  return {
+    errors,
+    isValid: isEmpty(errors)
+  }
 }
 
 module.exports = validateCreateAPollInput

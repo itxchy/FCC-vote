@@ -1,3 +1,5 @@
+/* global localStorage */
+
 const { applyMiddleware, createStore } = require('redux')
 const reactRedux = require('react-redux')
 const thunk = require('redux-thunk').default
@@ -162,6 +164,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     resetNewPoll (bool) {
       dispatch({type: RESET_NEW_POLL, value: bool})
+    },
+    submitNewPoll (newPoll) {
+      return axios.post('/api/polls', newPoll)
     },
     userSignupRequest (userData) {
       return axios.post('/api/users', userData)

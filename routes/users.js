@@ -10,6 +10,7 @@ let router = express.Router()
 function validateInput(data, otherValidations) {
   let { errors } = otherValidations(data)
 
+  // checks if the submitted email or username is already taken
   return User.query({
     where: { email: data.email },
     orWhere: { username: data.username}
@@ -45,7 +46,7 @@ router.get('/:identifier', (req, res) => {
 router.post('/', (req, res) => {
 
   validateInput(req.body, commonValidations)
-    .then(({errors, isValid}) => {
+    .then((errors, isValid) => {
 
       if (isValid) {
         const { username, password, email } = req.body

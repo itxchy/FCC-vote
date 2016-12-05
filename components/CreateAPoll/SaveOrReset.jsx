@@ -20,19 +20,22 @@ const SaveOrReset = React.createClass({
       newPollOptions: this.props.newPollOptions
     }
     const { errors, isValid } = validateCreateAPollInput(inputData)
-
     if (!isValid) {
       this.setState({ errors: errors })
     }
-
     return isValid
   },
   saveButtonHandler () {
-    const newPoll = {
-      title: this.props.newPollTitle,
-      options: this.props.newPollOptions
+    if (this.isValid()) {
+      const newPoll = {
+        title: this.props.newPollTitle,
+        options: this.props.newPollOptions
+      }
+      this.props.submitNewPoll(newPoll)
+        .then(response => {
+          console.log('Success!!:', response)
+        })
     }
-    console.log('newPoll', newPoll)
   },
   resetButtonHandler () {
     this.props.resetNewPoll(true)
