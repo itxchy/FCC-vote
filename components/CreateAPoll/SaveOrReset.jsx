@@ -1,13 +1,15 @@
 const React = require('react')
 const { connector } = require('../../redux/Store')
-const { string, func, array } = React.PropTypes
+const { string, func, array, object } = React.PropTypes
 const validateCreateAPollInput = require('../../routes/shared/createAPollValidation')
 
 const SaveOrReset = React.createClass({
   propTypes: {
     newPollTitle: string,
     resetNewPoll: func,
-    newPollOptions: array
+    newPollOptions: array,
+    submitNewPoll: func.isRequired,
+    user: object.isRequired
   },
   getInitialState () {
     return {
@@ -29,11 +31,15 @@ const SaveOrReset = React.createClass({
     if (this.isValid()) {
       const newPoll = {
         title: this.props.newPollTitle,
-        options: this.props.newPollOptions
+        options: this.props.newPollOptions,
+        owner: this.props.user.username
       }
       this.props.submitNewPoll(newPoll)
         .then(response => {
           console.log('Success!!:', response)
+        })
+        .catch(err => {
+          console.error('Poll could not be saved', err)
         })
     }
   },

@@ -28,24 +28,52 @@ function validateNewPoll(data, otherValidations) {
 router.post('/', (req, res) => {
 
   validateNewPoll(req.body, commonValidations)
-    .then((errors, isValid) => {
-
-      if (isValid) {
-        let { title, options } = req.body
+    .then((result) => {
+      if (result.isValid) {
+        console.log('req.body', req.body)
+        let { title, options, owner } = req.body
         const total_votes = 0
-        options = JSON.stringify(options)
-        console.log(options)
+
+        /**
+         * Poll options will be stored in the database as a JSON string.
+         * [  
+         *   { 
+         *     "option": "Popular choice indeed",
+         *     "votes": 0
+         *   },
+         *   { 
+         *     "option": "More controversial, but fun choice."
+         *     "votes": 0
+         *   }
+         * ]
+         */
+        const formattedOptions = options.map(option => {
+          return {
+            option,
+            votes: 0
+          }
+        })
+
+        options = JSON.stringify(formattedOptions)
 
         Polls.forge({
-          title, options, total_votes
+          title, options, total_votes, owner
         }, { hasTimestamps: true }).save()
           .then(poll => res.json({success: true}))
-          .catch(err => res.status(500).json({error: err}))
+          .catch(err => {
+            console.log(err)
+            return res.status(500).json({error: err})
+          })
 
       } else {
-        res.status(400).json(errors)
+        console.log('ERROR!!', result.errors)
+        res.status(400).json(result.errors)
       }
     })
+})
+
+router.get('/:owner', (req, res) => {
+  console.log('req.body')
 })
 
 module.exports = router
