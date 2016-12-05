@@ -19,7 +19,7 @@ const NavBar = React.createClass({
     let showAuthenticatedNav = (
       <div className='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>
         <ul className='nav navbar-nav'>
-          <li className='active'><a href='#'>My Polls</a></li>
+          <li><Link to='/mypolls'>My Polls</Link></li>
           <li><Link to='/create'>Create a Poll</Link></li>
         </ul>
         <ul className='nav navbar-nav navbar-right'>

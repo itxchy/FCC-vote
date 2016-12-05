@@ -34,8 +34,8 @@ function validateInput(data, otherValidations) {
 router.get('/:identifier', (req, res) => {
   User.query({
     select: ['username', 'email'],
-    where: {email: req.params.identifier},
-    orWhere: {username: req.params.identifier}
+    where: { email: req.params.identifier },
+    orWhere: { username: req.params.identifier }
   }).fetch().then(user => {
     // if a user exists, it will be returned, 
     // otherwise, user will be null

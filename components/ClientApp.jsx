@@ -10,12 +10,14 @@ const Home = require('./Home')
 const CreateAPoll = require('./CreateAPoll/CreateAPoll')
 const Signup = require('./Signup/Signup')
 const LoginPage = require('./Login/LoginPage')
+const MyPollsPage = require('./MyPolls/MyPollsPage')
 const setAuthorizationToken = require('../auth/setAuthorizationToken')
 
 const Routes = () => (
   <Route path='/' component={Layout}>
     <IndexRoute component={Home} />
     <Route path='create' component={CreateAPoll} />
+    <Route path='mypolls' component={MyPollsPage} />
     <Route path='signup' component={Signup} />
     <Route path='login' component={LoginPage} />
   </Route>

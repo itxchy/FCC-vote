@@ -72,8 +72,15 @@ router.post('/', (req, res) => {
     })
 })
 
-router.get('/:owner', (req, res) => {
+router.get('/:user', (req, res) => {
   console.log('req.body')
+
+  Polls.query({
+    select: ['id', 'title', 'options', 'total_votes', 'owner'],
+    where: { owner: req.params.user }
+  }).fetch().then(polls => {
+    res.json({polls})
+  })
 })
 
 module.exports = router

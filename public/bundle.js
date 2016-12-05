@@ -21452,6 +21452,7 @@
 	var CreateAPoll = __webpack_require__(710);
 	var Signup = __webpack_require__(780);
 	var LoginPage = __webpack_require__(783);
+	var MyPollsPage = __webpack_require__(801);
 	var setAuthorizationToken = __webpack_require__(703);
 	
 	var Routes = function Routes() {
@@ -21460,6 +21461,7 @@
 	    { path: '/', component: Layout },
 	    React.createElement(IndexRoute, { component: Home }),
 	    React.createElement(Route, { path: 'create', component: CreateAPoll }),
+	    React.createElement(Route, { path: 'mypolls', component: MyPollsPage }),
 	    React.createElement(Route, { path: 'signup', component: Signup }),
 	    React.createElement(Route, { path: 'login', component: LoginPage })
 	  );
@@ -27316,6 +27318,9 @@
 	    },
 	    submitNewPoll: function submitNewPoll(newPoll) {
 	      return axios.post('/api/polls', newPoll);
+	    },
+	    getUserPolls: function getUserPolls(user) {
+	      return axios.get('/api/polls/' + user);
 	    },
 	    userSignupRequest: function userSignupRequest(userData) {
 	      return axios.post('/api/users', userData);
@@ -71811,10 +71816,10 @@
 	        { className: 'nav navbar-nav' },
 	        React.createElement(
 	          'li',
-	          { className: 'active' },
+	          null,
 	          React.createElement(
-	            'a',
-	            { href: '#' },
+	            Link,
+	            { to: '/mypolls' },
 	            'My Polls'
 	          )
 	        ),
@@ -75703,6 +75708,57 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 787 */,
+/* 788 */,
+/* 789 */,
+/* 790 */,
+/* 791 */,
+/* 792 */,
+/* 793 */,
+/* 794 */,
+/* 795 */,
+/* 796 */,
+/* 797 */,
+/* 798 */,
+/* 799 */,
+/* 800 */,
+/* 801 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var _React$PropTypes = React.PropTypes;
+	var func = _React$PropTypes.func;
+	var object = _React$PropTypes.object;
+	
+	
+	var MyPollsPage = React.createClass({
+	  displayName: 'MyPollsPage',
+	
+	  propTypes: {
+	    getUserPolls: func,
+	    user: object
+	  },
+	  render: function render() {
+	    var userPolls = this.props.getUserPolls(this.props.user.username);
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'pre',
+	        null,
+	        React.createElement(
+	          'code',
+	          null,
+	          JSON.stringify(userPolls)
+	        )
+	      )
+	    );
+	  }
+	});
 
 /***/ }
 /******/ ]);
