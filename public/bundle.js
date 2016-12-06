@@ -71802,9 +71802,17 @@
 	    isAuthenticated: bool,
 	    logout: func
 	  },
+	  getInitialState: function getInitialState() {
+	    return {
+	      isMounted: false
+	    };
+	  },
 	  logout: function logout(event) {
 	    event.preventDefault();
 	    this.props.logout();
+	  },
+	  componentDidMount: function componentDidMount() {
+	    this.setState({ isMounted: true });
 	  },
 	  render: function render() {
 	    var showAuthenticatedNav = React.createElement(
@@ -71912,7 +71920,7 @@
 	            'Vote.'
 	          )
 	        ),
-	        this.props.isAuthenticated ? showAuthenticatedNav : showGuestNav
+	        this.state.isMounted && this.props.isAuthenticated ? showAuthenticatedNav : showGuestNav
 	      )
 	    );
 	  }
@@ -72098,7 +72106,6 @@
 	
 	    if (this.state.allPolls === null) {
 	      this.props.getAllPolls().then(function (res) {
-	        console.log('getAllPolls response:', res);
 	        if (res.data.length > 0) {
 	          _this.setState({ allPolls: res.data });
 	        } else {
@@ -72115,10 +72122,16 @@
 	      showPolls = this.state.allPolls.map(function (poll) {
 	        var title = poll.title;
 	        var options = poll.options;
-	        var total_votes = poll.total_votes;
+	        var totalVotes = poll.total_votes;
 	        var id = poll.id;
 	
-	        return React.createElement(PollCard, { key: id, title: title, options: options, totalVotes: total_votes, id: id });
+	        return React.createElement(PollCard, {
+	          key: id,
+	          title: title,
+	          options: options,
+	          totalVotes: totalVotes,
+	          id: id
+	        });
 	      });
 	    } else if (this.state.allPolls === null) {
 	      showPolls = React.createElement(
@@ -75777,7 +75790,6 @@
 	
 	    if (username && isEmpty(this.state.myPolls)) {
 	      this.props.getUserPolls(username).then(function (res) {
-	
 	        if (res.data.length > 0) {
 	          _this.setState({ myPolls: res.data });
 	        } else {
@@ -75833,10 +75845,15 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
 	var _React$PropTypes = React.PropTypes;
 	var string = _React$PropTypes.string;
 	var array = _React$PropTypes.array;
 	var number = _React$PropTypes.number;
+	var object = _React$PropTypes.object;
 	
 	
 	var PollCard = React.createClass({
@@ -75846,7 +75863,8 @@
 	    title: string,
 	    options: array,
 	    totalVotes: string,
-	    id: number
+	    id: number,
+	    user: object
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
@@ -75861,9 +75879,10 @@
 	    event.preventDefault();
 	    var selectedOption = +this.state.selectedOption;
 	    var pollID = this.props.id;
+	    var voter = this.props.user.username || null;
 	
 	    if (selectedOption !== '') {
-	      console.log('selectedOption', selectedOption, 'pollID', pollID);
+	      console.log('selectedOption:', selectedOption, 'pollID:', pollID, 'voter:', voter);
 	    }
 	  },
 	  render: function render() {
@@ -75934,7 +75953,7 @@
 	  }
 	});
 	
-	module.exports = PollCard;
+	module.exports = connector(PollCard);
 
 /***/ }
 /******/ ]);

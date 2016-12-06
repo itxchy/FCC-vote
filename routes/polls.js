@@ -78,6 +78,11 @@ router.post('/', (req, res) => {
     })
 })
 
+router.put('/:id', (req, res) => {
+  
+})
+
+
 /**
  * Retrieves all polls
  */

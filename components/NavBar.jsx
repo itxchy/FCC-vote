@@ -9,9 +9,17 @@ const NavBar = React.createClass({
     isAuthenticated: bool,
     logout: func
   },
+  getInitialState () {
+    return {
+      isMounted: false
+    }
+  },
   logout (event) {
     event.preventDefault()
     this.props.logout()
+  },
+  componentDidMount () {
+    this.setState({ isMounted: true })
   },
   render () {
     let showAuthenticatedNav = (
@@ -49,7 +57,7 @@ const NavBar = React.createClass({
             <Link to='/' className='navbar-brand'>Vote.</Link>
           </div>
 
-          {this.props.isAuthenticated ? showAuthenticatedNav : showGuestNav}
+          {this.state.isMounted && this.props.isAuthenticated ? showAuthenticatedNav : showGuestNav}
 
         </div>
       </nav>

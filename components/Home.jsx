@@ -16,7 +16,6 @@ const Home = React.createClass({
     if (this.state.allPolls === null) {
       this.props.getAllPolls()
       .then(res => {
-        console.log('getAllPolls response:', res)
         if (res.data.length > 0) {
           this.setState({ allPolls: res.data })
         } else {
@@ -31,9 +30,15 @@ const Home = React.createClass({
 
     if (this.state.allPolls) {
       showPolls = this.state.allPolls.map(poll => {
-        const { title, options, total_votes, id } = poll
+        const { title, options, total_votes: totalVotes, id } = poll
         return (
-          <PollCard key={id} title={title} options={options} totalVotes={total_votes} id={id} />
+          <PollCard
+            key={id}
+            title={title}
+            options={options}
+            totalVotes={totalVotes}
+            id={id}
+          />
         )
       })
     } else if (this.state.allPolls === null) {

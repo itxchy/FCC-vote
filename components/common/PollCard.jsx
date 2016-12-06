@@ -1,12 +1,14 @@
 const React = require('react')
-const { string, array, number } = React.PropTypes
+const { connector } = require('../../redux/Store')
+const { string, array, number, object } = React.PropTypes
 
 const PollCard = React.createClass({
   propTypes: {
     title: string,
     options: array,
     totalVotes: string,
-    id: number
+    id: number,
+    user: object
   },
   getInitialState () {
     return {
@@ -21,9 +23,10 @@ const PollCard = React.createClass({
     event.preventDefault()
     const selectedOption = +this.state.selectedOption
     const pollID = this.props.id
+    const voter = this.props.user.username || null
 
     if (selectedOption !== '') {
-      console.log('selectedOption', selectedOption, 'pollID', pollID)
+      console.log('selectedOption:', selectedOption, 'pollID:', pollID, 'voter:', voter)
     }
   },
   render () {
@@ -67,4 +70,4 @@ const PollCard = React.createClass({
   }
 })
 
-module.exports = PollCard
+module.exports = connector(PollCard)
