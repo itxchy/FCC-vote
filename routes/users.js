@@ -31,18 +31,24 @@ function validateInput(data, otherValidations) {
   })
 }
 
+/**
+ * Looks up a user based on username or email
+ * If no user is found, the response will be null
+ */
 router.get('/:identifier', (req, res) => {
   User.query({
     select: ['username', 'email'],
     where: { email: req.params.identifier },
     orWhere: { username: req.params.identifier }
   }).fetch().then(user => {
-    // if a user exists, it will be returned, 
-    // otherwise, user will be null
     res.json({user})
   })
 })
 
+/**
+ * Creates a new user and saves the credentials
+ * to the User table, if they pass validation
+ */
 router.post('/', (req, res) => {
 
   validateInput(req.body, commonValidations)

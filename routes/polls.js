@@ -12,6 +12,9 @@ function validateNewPoll(data, otherValidations) {
     newPollOptions: data.options
   }
   let { errors } = otherValidations(validatorData)
+
+  // Checks if a poll of the same title exists already
+  // Each poll title must be unique
   return Polls.query({
     where:{ title: data.title }
   }).fetch().then(poll => {
@@ -25,15 +28,17 @@ function validateNewPoll(data, otherValidations) {
   })
 }
 
+/**
+ * Saves a new poll to the database if it passes 
+ * validation
+ */
 router.post('/', (req, res) => {
 
   validateNewPoll(req.body, commonValidations)
     .then((result) => {
       if (result.isValid) {
-        console.log('req.body', req.body)
         let { title, options, owner } = req.body
         const total_votes = 0
-
         /**
          * Poll options will be stored in the database as a JSON string.
          * [  
@@ -72,15 +77,15 @@ router.post('/', (req, res) => {
     })
 })
 
+/**
+ * Retrieves all of a user's polls from the polls table
+ */
 router.get('/:user', (req, res) => {
-  console.log('req.body')
-
   Polls.query({
     select: ['id', 'title', 'options', 'total_votes', 'owner'],
     where: { owner: req.params.user }
   }).fetchAll().then(polls => {
-    const pollObj = polls
-    res.json(pollObj)
+    res.json(polls)
   })
 })
 

@@ -6,6 +6,13 @@ const config = require('../config')
 
 let router = express.Router()
 
+/**
+ * Authenicates a login request.
+ * If a username or email matches a user, the password
+ * offered is compared with the user's salted password.
+ * If the passwords match, a JSON web token is created 
+ * and returned.
+ */
 router.post('/', (req, res) => {
   const { identifier, password } = req.body
 

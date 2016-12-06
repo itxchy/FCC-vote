@@ -15,7 +15,7 @@ const MyPollsPage = React.createClass({
   },
   getMyPolls () {
     const username = this.props.user.username
-    if(username && isEmpty(this.state.myPolls)) {
+    if (username && isEmpty(this.state.myPolls)) {
       this.props.getUserPolls(username).then(res => {
         console.log('getUserPolls res:', res)
         if (res.data.length > 0) {
@@ -24,17 +24,13 @@ const MyPollsPage = React.createClass({
           this.setState({myPolls: {polls: null}})
         }
       })
-    }    
+    }
   },
   render () {
-
     this.getMyPolls()
-
     return (
       <div>
-
         <pre><code>{JSON.stringify(this.state.myPolls, null, 4)}</code></pre>
-        
       </div>
     )
   }
