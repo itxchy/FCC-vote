@@ -14,7 +14,10 @@ function validateInput(data, otherValidations) {
   return User.query({
     where: { email: data.email },
     orWhere: { username: data.username}
-  }).fetch().then(user => {
+  })
+  .fetch()
+  .then(user => {
+
     if (user) {
       if (user.get('username') === data.username) {
         errors.username = 'This username isn\'t available.'

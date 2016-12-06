@@ -72087,6 +72087,7 @@
 	  },
 	  render: function render() {
 	    var showPolls = null;
+	
 	    if (this.props.recentPolls) {
 	      showPolls = this.props.recentPolls.map(function (poll) {
 	        return React.createElement(
@@ -75755,9 +75756,11 @@
 	    var _this = this;
 	
 	    var username = this.props.user.username;
+	
 	    if (username && isEmpty(this.state.myPolls)) {
 	      this.props.getUserPolls(username).then(function (res) {
 	        console.log('getUserPolls res:', res);
+	
 	        if (res.data.length > 0) {
 	          _this.setState({ myPolls: res.data });
 	        } else {

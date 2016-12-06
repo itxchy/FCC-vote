@@ -8,6 +8,7 @@ const Home = React.createClass({
   },
   render () {
     let showPolls = null
+    
     if (this.props.recentPolls) {
       showPolls = this.props.recentPolls.map(poll => {
         return <div> A poll</div>
