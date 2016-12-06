@@ -63,12 +63,13 @@ router.post('/', (req, res) => {
 
         Polls.forge({
           title, options, total_votes, owner
-        }, { hasTimestamps: true }).save()
-          .then(poll => res.json({success: true}))
-          .catch(err => {
-            console.log(err)
-            return res.status(500).json({error: err})
-          })
+        }, { hasTimestamps: true })
+        .save()
+        .then(poll => res.json({success: true}))
+        .catch(err => {
+          console.log(err)
+          return res.status(500).json({error: err})
+        })
 
       } else {
         console.log('ERROR!!', result.errors)
@@ -78,13 +79,28 @@ router.post('/', (req, res) => {
 })
 
 /**
- * Retrieves all of a user's polls from the polls table
+ * Retrieves all polls
+ */
+router.get('/', (req, res) => {
+  Polls.query({
+    select: ['id', 'title', 'options', 'total_votes', 'owner']
+  })
+  .fetchAll()
+  .then(polls => {
+    res.json(polls)
+  })
+})
+
+/**
+ * Retrieves all of a user's polls
  */
 router.get('/:user', (req, res) => {
   Polls.query({
     select: ['id', 'title', 'options', 'total_votes', 'owner'],
     where: { owner: req.params.user }
-  }).fetchAll().then(polls => {
+  })
+  .fetchAll()
+  .then(polls => {
     res.json(polls)
   })
 })

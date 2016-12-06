@@ -49,7 +49,7 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(34);
 	var App = __webpack_require__(172);
-	__webpack_require__(786);
+	__webpack_require__(787);
 	
 	ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
 
@@ -21452,7 +21452,7 @@
 	var CreateAPoll = __webpack_require__(710);
 	var Signup = __webpack_require__(780);
 	var LoginPage = __webpack_require__(783);
-	var MyPollsPage = __webpack_require__(801);
+	var MyPollsPage = __webpack_require__(786);
 	var setAuthorizationToken = __webpack_require__(703);
 	
 	var Routes = function Routes() {
@@ -27321,6 +27321,9 @@
 	    },
 	    getUserPolls: function getUserPolls(user) {
 	      return axios.get('/api/polls/' + user);
+	    },
+	    getAllPolls: function getAllPolls() {
+	      return axios.get('/api/polls');
 	    },
 	    userSignupRequest: function userSignupRequest(userData) {
 	      return axios.post('/api/users', userData);
@@ -71804,8 +71807,6 @@
 	    this.props.logout();
 	  },
 	  render: function render() {
-	    console.log('nav user object', this.props.user);
-	
 	    var showAuthenticatedNav = React.createElement(
 	      'div',
 	      { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
@@ -72076,26 +72077,59 @@
 	var _require = __webpack_require__(236);
 	
 	var connector = _require.connector;
-	var object = React.PropTypes.object;
+	
+	var PollCard = __webpack_require__(802);
+	var func = React.PropTypes.func;
 	
 	
 	var Home = React.createClass({
 	  displayName: 'Home',
 	
 	  propTypes: {
-	    recentPolls: object
+	    getAllPolls: func
+	  },
+	  getInitialState: function getInitialState() {
+	    return {
+	      allPolls: null
+	    };
+	  },
+	  getRecentPolls: function getRecentPolls() {
+	    var _this = this;
+	
+	    if (this.state.allPolls === null) {
+	      this.props.getAllPolls().then(function (res) {
+	        console.log('getAllPolls response:', res);
+	        if (res.data.length > 0) {
+	          _this.setState({ allPolls: res.data });
+	        } else {
+	          _this.setState({ allPolls: false });
+	        }
+	      });
+	    }
 	  },
 	  render: function render() {
 	    var showPolls = null;
+	    this.getRecentPolls();
 	
-	    if (this.props.recentPolls) {
-	      showPolls = this.props.recentPolls.map(function (poll) {
-	        return React.createElement(
-	          'div',
-	          null,
-	          ' A poll'
-	        );
+	    if (this.state.allPolls) {
+	      showPolls = this.state.allPolls.map(function (poll) {
+	        var title = poll.title;
+	        var options = poll.options;
+	        var total_votes = poll.total_votes;
+	        var id = poll.id;
+	
+	        return React.createElement(PollCard, { key: id, title: title, options: options, totalVotes: total_votes, id: id });
 	      });
+	    } else if (this.state.allPolls === null) {
+	      showPolls = React.createElement(
+	        'div',
+	        { className: 'text-center' },
+	        React.createElement(
+	          'h3',
+	          null,
+	          'loading...'
+	        )
+	      );
 	    } else {
 	      showPolls = React.createElement(
 	        'div',
@@ -72121,7 +72155,11 @@
 	        { className: 'view-title text-center' },
 	        'Latest Polls'
 	      ),
-	      showPolls
+	      React.createElement(
+	        'div',
+	        { className: 'row' },
+	        showPolls
+	      )
 	    );
 	  }
 	});
@@ -75704,26 +75742,6 @@
 
 /***/ },
 /* 786 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 787 */,
-/* 788 */,
-/* 789 */,
-/* 790 */,
-/* 791 */,
-/* 792 */,
-/* 793 */,
-/* 794 */,
-/* 795 */,
-/* 796 */,
-/* 797 */,
-/* 798 */,
-/* 799 */,
-/* 800 */,
-/* 801 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -75759,7 +75777,6 @@
 	
 	    if (username && isEmpty(this.state.myPolls)) {
 	      this.props.getUserPolls(username).then(function (res) {
-	        console.log('getUserPolls res:', res);
 	
 	        if (res.data.length > 0) {
 	          _this.setState({ myPolls: res.data });
@@ -75788,6 +75805,136 @@
 	});
 	
 	module.exports = connector(MyPollsPage);
+
+/***/ },
+/* 787 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 788 */,
+/* 789 */,
+/* 790 */,
+/* 791 */,
+/* 792 */,
+/* 793 */,
+/* 794 */,
+/* 795 */,
+/* 796 */,
+/* 797 */,
+/* 798 */,
+/* 799 */,
+/* 800 */,
+/* 801 */,
+/* 802 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var _React$PropTypes = React.PropTypes;
+	var string = _React$PropTypes.string;
+	var array = _React$PropTypes.array;
+	var number = _React$PropTypes.number;
+	
+	
+	var PollCard = React.createClass({
+	  displayName: 'PollCard',
+	
+	  propTypes: {
+	    title: string,
+	    options: array,
+	    totalVotes: string,
+	    id: number
+	  },
+	  getInitialState: function getInitialState() {
+	    return {
+	      selectedOption: ''
+	    };
+	  },
+	  onOptionChange: function onOptionChange(event) {
+	    console.log('poll option selected!', event.target.value);
+	    this.setState({ selectedOption: event.target.value });
+	  },
+	  onPollSubmit: function onPollSubmit(event) {
+	    event.preventDefault();
+	    var selectedOption = +this.state.selectedOption;
+	    var pollID = this.props.id;
+	
+	    if (selectedOption !== '') {
+	      console.log('selectedOption', selectedOption, 'pollID', pollID);
+	    }
+	  },
+	  render: function render() {
+	    var _this = this;
+	
+	    var options = this.props.options.map(function (option, index) {
+	      var id = 'gridRadios' + index;
+	      var value = '' + index;
+	      return React.createElement(
+	        'div',
+	        { key: option.option, className: 'form-check' },
+	        React.createElement(
+	          'label',
+	          { className: 'form-check-label poll-card-label' },
+	          React.createElement('input', {
+	            className: 'form-check-input radio-option',
+	            type: 'radio',
+	            onChange: _this.onOptionChange,
+	            name: 'gridRadios',
+	            id: id,
+	            value: value
+	          }),
+	          option.option
+	        )
+	      );
+	    });
+	    return React.createElement(
+	      'div',
+	      { className: 'col-md-4' },
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.onPollSubmit },
+	        React.createElement(
+	          'h2',
+	          null,
+	          this.props.title
+	        ),
+	        React.createElement(
+	          'fieldset',
+	          { className: 'form-group row' },
+	          React.createElement(
+	            'div',
+	            { className: 'col-sm-10' },
+	            options
+	          )
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'Total votes cast: ',
+	          this.props.totalVotes
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'form-group row' },
+	          React.createElement(
+	            'div',
+	            { className: 'offset-sm-2 col-sm-10' },
+	            React.createElement(
+	              'button',
+	              { type: 'submit', className: 'btn btn-primary' },
+	              'Vote'
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = PollCard;
 
 /***/ }
 /******/ ]);

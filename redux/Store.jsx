@@ -171,6 +171,9 @@ const mapDispatchToProps = (dispatch) => {
     getUserPolls (user) {
       return axios.get(`/api/polls/${user}`)
     },
+    getAllPolls () {
+      return axios.get(`/api/polls`)
+    },
     userSignupRequest (userData) {
       return axios.post('/api/users', userData)
     },
