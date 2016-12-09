@@ -4,7 +4,7 @@ const FlashMessagesList = require('./common/FlashMessagesList')
 
 const Layout = (props) => (
   <div className='container'>
-    <NavBar isLoggedIn={false} />
+    <NavBar />
     <FlashMessagesList />
     {props.children}
   </div>

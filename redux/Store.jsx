@@ -60,8 +60,12 @@ const rootReducer = (state = initialState, action) => {
 const reduceSetCurrentUser = (state, action) => {
   const newState = {}
   console.log('action.user', action.user)
+  let authenticationStatus = false
+  if (action.user && !isEmpty(action.user)) {
+    authenticationStatus = true
+  }
   Object.assign(newState, state, {
-    isAuthenticated: !isEmpty(action.user),
+    isAuthenticated: authenticationStatus,
     user: action.user
   })
   return newState
@@ -173,6 +177,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     getAllPolls () {
       return axios.get(`/api/polls`)
+    },
+    submitVote (id, vote) {
+      return axios.put(`/api/polls/${id}`, vote)
     },
     userSignupRequest (userData) {
       return axios.post('/api/users', userData)

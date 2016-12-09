@@ -1,9 +1,9 @@
 const express = require('express')
 const isEmpty = require('lodash/isEmpty')
 const Polls = require('../models/Polls')
+const authenticate = require('../server/middleware/authenticate')
 const commonValidations = require('./shared/createAPollValidation')
 let router = express.Router()
-
 
 function validateNewPoll(data, otherValidations) {
   // Ugly hack to rename keys so they can be validated by createAPollValidation
@@ -17,7 +17,9 @@ function validateNewPoll(data, otherValidations) {
   // Each poll title must be unique
   return Polls.query({
     where:{ title: data.title }
-  }).fetch().then(poll => {
+  })
+  .fetch()
+  .then(poll => {
     if (poll) {
       errors.title = 'Another poll has the same title'
     }
@@ -26,13 +28,14 @@ function validateNewPoll(data, otherValidations) {
       isValid: isEmpty(errors)
     }
   })
+  .catch(err => console.error('duplicate poll check error', error))
 }
 
 /**
  * Saves a new poll to the database if it passes 
  * validation
  */
-router.post('/', (req, res) => {
+router.post('/', authenticate, (req, res) => {
 
   validateNewPoll(req.body, commonValidations)
     .then((result) => {
@@ -76,10 +79,30 @@ router.post('/', (req, res) => {
         res.status(400).json(result.errors)
       }
     })
+    .catch(err => console.error('save new poll error', error))
 })
 
+/**
+ * Updates a poll with a new vote
+ */
 router.put('/:id', (req, res) => {
-  
+  console.log('vote request body', req.body)
+  const pollID = req.params.id
+  const selectedOption = req.body.selectedOption
+  // if voter is null, use the user's IP address instead
+  const voter = req.body.voter
+  Polls.query({
+    select: ['id', 'options', 'total_votes'],
+    where: { id: pollID }
+  })
+  .fetch()
+  .then(poll => {
+
+
+    console.log('poll to update with vote: ', poll)
+    res.json(poll)
+  })
+  .catch(err => console.error('update poll error', error))
 })
 
 
@@ -94,6 +117,7 @@ router.get('/', (req, res) => {
   .then(polls => {
     res.json(polls)
   })
+  .catch(err => handleError(err))
 })
 
 /**
@@ -108,6 +132,7 @@ router.get('/:user', (req, res) => {
   .then(polls => {
     res.json(polls)
   })
+  .catch(err => handleError(err))
 })
 
 module.exports = router

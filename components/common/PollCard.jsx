@@ -1,6 +1,6 @@
 const React = require('react')
 const { connector } = require('../../redux/Store')
-const { string, array, number, object } = React.PropTypes
+const { string, array, number, object, func } = React.PropTypes
 
 const PollCard = React.createClass({
   propTypes: {
@@ -8,25 +8,32 @@ const PollCard = React.createClass({
     options: array,
     totalVotes: string,
     id: number,
-    user: object
+    user: object,
+    submitVote: func
   },
   getInitialState () {
     return {
-      selectedOption: ''
+      selectedOption: null
     }
   },
   onOptionChange (event) {
-    console.log('poll option selected!', event.target.value)
     this.setState({selectedOption: event.target.value})
   },
   onPollSubmit (event) {
     event.preventDefault()
-    const selectedOption = +this.state.selectedOption
     const pollID = this.props.id
+    let selectedOption = this.state.selectedOption
     const voter = this.props.user.username || null
-
-    if (selectedOption !== '') {
-      console.log('selectedOption:', selectedOption, 'pollID:', pollID, 'voter:', voter)
+    if (selectedOption !== null) {
+      selectedOption = +selectedOption
+      const vote = { selectedOption, voter }
+      console.log('pollID:', pollID, 'vote:', vote)
+      this.props.submitVote(pollID, vote)
+      .then(res => {
+        console.log('submitVote server response:', res)
+      })
+    } else {
+      console.log('no poll option selected!')
     }
   },
   render () {
@@ -50,7 +57,7 @@ const PollCard = React.createClass({
       )
     })
     return (
-      <div className='col-md-4'>
+      <div className='col-sm-4'>
         <form onSubmit={this.onPollSubmit}>
           <h2>{this.props.title}</h2>
           <fieldset className='form-group row'>

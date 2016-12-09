@@ -43,6 +43,7 @@ router.post('/', (req, res) => {
       })
     }
   })
+  .catch(err => console.error('authentication error', err))
 })
 
 module.exports = router

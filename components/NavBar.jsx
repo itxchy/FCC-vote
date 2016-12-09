@@ -22,6 +22,7 @@ const NavBar = React.createClass({
     this.setState({ isMounted: true })
   },
   render () {
+    console.log(this.props)
     let showAuthenticatedNav = (
       <div className='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>
         <ul className='nav navbar-nav'>

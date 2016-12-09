@@ -32,6 +32,7 @@ function validateInput(data, otherValidations) {
       isValid: isEmpty(errors)
     }
   })
+  .catch(err => console.error('duplicate user check error', err))
 }
 
 /**
@@ -43,9 +44,12 @@ router.get('/:identifier', (req, res) => {
     select: ['username', 'email'],
     where: { email: req.params.identifier },
     orWhere: { username: req.params.identifier }
-  }).fetch().then(user => {
+  })
+  .fetch()
+  .then(user => {
     res.json({user})
   })
+  .catch(err => console.error('user lookup error', err))
 })
 
 /**
@@ -72,6 +76,7 @@ router.post('/', (req, res) => {
       }
 
     })
+    .catch(err => console.error('create user error', err))
 })
 
 module.exports = router

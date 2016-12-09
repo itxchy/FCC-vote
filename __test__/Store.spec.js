@@ -11,7 +11,9 @@ describe('Store', () => {
         '',
         ''
       ],
-      flashMessages: []
+      flashMessages: [],
+      isAuthenticated: false,
+      user: {}
     })
   })
 
