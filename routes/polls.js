@@ -1,3 +1,5 @@
+/* eslint camelcase: 0 */
+
 const express = require('express')
 const isEmpty = require('lodash/isEmpty')
 const Polls = require('../models/Polls')
@@ -5,7 +7,7 @@ const authenticate = require('../server/middleware/authenticate')
 const commonValidations = require('./shared/createAPollValidation')
 let router = express.Router()
 
-function validateNewPoll(data, otherValidations) {
+function validateNewPoll (data, otherValidations) {
   // Ugly hack to rename keys so they can be validated by createAPollValidation
   const validatorData = {
     newPollTitle: data.title,
@@ -16,7 +18,7 @@ function validateNewPoll(data, otherValidations) {
   // Checks if a poll of the same title exists already
   // Each poll title must be unique
   return Polls.query({
-    where:{ title: data.title }
+    where: { title: data.title }
   })
   .fetch()
   .then(poll => {
@@ -28,15 +30,14 @@ function validateNewPoll(data, otherValidations) {
       isValid: isEmpty(errors)
     }
   })
-  .catch(err => console.error('duplicate poll check error', error))
+  .catch(err => console.error('duplicate poll check error', err))
 }
 
 /**
- * Saves a new poll to the database if it passes 
+ * Saves a new poll to the database if it passes
  * validation
  */
 router.post('/', authenticate, (req, res) => {
-
   validateNewPoll(req.body, commonValidations)
     .then((result) => {
       if (result.isValid) {
@@ -44,12 +45,12 @@ router.post('/', authenticate, (req, res) => {
         const total_votes = 0
         /**
          * Poll options will be stored in the database as a JSON string.
-         * [  
-         *   { 
+         * [
+         *   {
          *     "option": "Popular choice indeed",
          *     "votes": 0
          *   },
-         *   { 
+         *   {
          *     "option": "More controversial, but fun choice."
          *     "votes": 0
          *   }
@@ -73,7 +74,6 @@ router.post('/', authenticate, (req, res) => {
           console.log(err)
           return res.status(500).json({error: err})
         })
-
       } else {
         console.log('ERROR!!', result.errors)
         res.status(400).json(result.errors)
@@ -105,7 +105,6 @@ router.put('/:id', (req, res) => {
   .catch(err => console.error('update poll error', error))
 })
 
-
 /**
  * Retrieves all polls
  */
@@ -117,7 +116,7 @@ router.get('/', (req, res) => {
   .then(polls => {
     res.json(polls)
   })
-  .catch(err => handleError(err))
+  .catch(err => console.error('Retrieve all polls error', error))
 })
 
 /**
@@ -132,7 +131,7 @@ router.get('/:user', (req, res) => {
   .then(polls => {
     res.json(polls)
   })
-  .catch(err => handleError(err))
+  .catch(err => console.error('update user polls error', error))
 })
 
 module.exports = router

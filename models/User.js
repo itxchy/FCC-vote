@@ -1,5 +1,9 @@
-const bookshelf = require('../bookshelf')
+const mongoose = require('mongoose')
 
-module.exports = bookshelf.Model.extend({
-  tableName: 'users'
+const Schema = new mongoose.Schema({
+  username: String,
+  email: String,
+  password_digest: String,
+  createdAt: Date,
+  updatedAt: Date
 })

@@ -23,10 +23,9 @@ const polls = require('./routes/polls.js')
 const port = process.env.PORT || 4000
 const app = express()
 
-
 /**
  * connect to MongoDB
- */ 
+ */
 if (process.env.NODE_ENV === 'production') {
   console.log('production environment. No remote mongodb server specified.')
   // connect to remote database
@@ -63,13 +62,10 @@ app.use('/public', express.static('./public'))
  */
 app.use((req, res) => {
   match({ routes: Routes(), location: req.url }, (error, redirectLocation, renderProps) => {
-    
     if (error) {
       res.status(500).send(error.message)
-
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search)
-
     } else if (renderProps) {
       const body = ReactDOMServer.renderToString(
         React.createElement(
@@ -77,13 +73,11 @@ app.use((req, res) => {
         )
       )
       res.status(200).send(template({ body }))
-      
     } else {
       res.status(404).send('Not Found')
     }
   })
 })
-
 
 console.log(`Listening on port ${port}...`)
 app.listen(port)

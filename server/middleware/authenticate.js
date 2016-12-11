@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const config = require('../../config')
 const User = require('../../models/User')
 
-function authenticate(req, res, next) {
+function authenticate (req, res, next) {
   const authorizationHeader = req.headers['authorization']
   let token
 
@@ -22,7 +22,7 @@ function authenticate(req, res, next) {
         .fetch()
         .then(user => {
           if (!user) {
-            res.status(404).json({ error: 'No such user '})
+            res.status(404).json({ error: 'No such user' })
           }
           req.currentUser = user
           next()

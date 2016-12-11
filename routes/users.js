@@ -1,3 +1,4 @@
+/* eslint camelcase: 0 */
 const express = require('express')
 const commonValidations = require('./shared/signupValidation.js')
 const bcrypt = require('bcrypt')
@@ -7,17 +8,16 @@ const User = require('../models/User')
 
 let router = express.Router()
 
-function validateInput(data, otherValidations) {
+function validateInput (data, otherValidations) {
   let { errors } = otherValidations(data)
 
   // checks if the submitted email or username is already taken
   return User.query({
     where: { email: data.email },
-    orWhere: { username: data.username}
+    orWhere: { username: data.username }
   })
   .fetch()
   .then(user => {
-
     if (user) {
       if (user.get('username') === data.username) {
         errors.username = 'This username isn\'t available.'
@@ -57,10 +57,8 @@ router.get('/:identifier', (req, res) => {
  * to the User table, if they pass validation
  */
 router.post('/', (req, res) => {
-
   validateInput(req.body, commonValidations)
     .then((errors, isValid) => {
-
       if (isValid) {
         const { username, password, email } = req.body
         const password_digest = bcrypt.hashSync(password, 10)
@@ -70,11 +68,9 @@ router.post('/', (req, res) => {
         }, { hasTimestamps: true }).save()
           .then(user => res.json({success: true}))
           .catch(err => res.status(500).json({error: err}))
-
       } else {
         res.status(400).json(errors)
       }
-
     })
     .catch(err => console.error('create user error', err))
 })
