@@ -4,6 +4,8 @@ const Schema = new mongoose.Schema({
   username: String,
   email: String,
   password_digest: String,
-  createdAt: Date,
-  updatedAt: Date
-})
+}, { timestamps: true })
+
+const User = mongoose.model('User', Schema)
+
+module.exports = User

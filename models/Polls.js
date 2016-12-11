@@ -8,8 +8,8 @@ const schema = new mongoose.Schema({
       voter: String
     }]
   }],
-  total_votes: Number 
-})
+  totalVotes: Number,
+}, { timestamps: true })
 
 const Polls = mongoose.model('Polls', schema)
 
