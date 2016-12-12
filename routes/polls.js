@@ -17,7 +17,16 @@ function validateNewPoll (data, otherValidations) {
 
   // Checks if a poll of the same title exists already
   // Each poll title must be unique
-  return Polls.query({
+  return Polls.find({ title: data.title })
+    .exec()
+    .then(poll => {
+      console.log('poll title validation:', poll)
+      if (poll) {
+        errors.title = 'Another poll has the same title'
+      }
+    })
+
+  /*Polls.query({
     where: { title: data.title }
   })
   .fetch()
@@ -30,7 +39,7 @@ function validateNewPoll (data, otherValidations) {
       isValid: isEmpty(errors)
     }
   })
-  .catch(err => console.error('duplicate poll check error', err))
+  .catch(err => console.error('duplicate poll check error', err))*/
 }
 
 /**
@@ -109,14 +118,21 @@ router.put('/:id', (req, res) => {
  * Retrieves all polls
  */
 router.get('/', (req, res) => {
-  Polls.query({
+  Polls.select('_id title options tota_votes owner')
+    .fetch()
+    .then(polls => {
+      res.json(polls)
+    })
+    .catch(err => res.status(500).json({ 'error retrieving polls': err }))
+
+/*  Polls.query({
     select: ['id', 'title', 'options', 'total_votes', 'owner']
   })
   .fetchAll()
   .then(polls => {
     res.json(polls)
   })
-  .catch(err => console.error('Retrieve all polls error', error))
+  .catch(err => console.error('Retrieve all polls error', error))*/
 })
 
 /**

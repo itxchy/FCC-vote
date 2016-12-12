@@ -9,6 +9,7 @@ const schema = new mongoose.Schema({
     }]
   }],
   totalVotes: Number,
+  owner: String
 }, { timestamps: true })
 
 const Polls = mongoose.model('Polls', schema)
