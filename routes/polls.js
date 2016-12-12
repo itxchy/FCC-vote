@@ -20,7 +20,8 @@ function validateNewPoll (data, otherValidations) {
   return Poll.find({ title: data.title })
     .exec()
     .then(poll => {
-      if (poll) {
+      console.log('vadidating... poll found:', poll)
+      if (!isEmpty(poll)) {
         errors.title = 'Another poll has the same title'
       }
       return {
@@ -67,8 +68,10 @@ router.post('/', authenticate, (req, res) => {
         poll.totalVotes = 0
         poll.owner = owner
 
+        console.log('poll to be saved:', poll)
+
         poll.save()
-        .then(() => {
+        .then(poll => {
           res.json({ success: 'new poll created!', poll: poll })
         })
         .catch(err => res.status(500).json({ 'new poll DB save error': err }))
@@ -107,13 +110,17 @@ router.put('/:id', (req, res) => {
   } else {
     voter = false
     console.error('ERROR: no voter or IP found while updating poll!')
+    return res.status(400).json({error: ''})
   }
 
   const pollUpdateObj = {
     selectedOption,
     ip,
-    voter
+    voter,
+    pollID
   }
+
+  // TODO query the exact poll.options[selectedOption].votes.push({voter: newVoter})
 
   console.log('Poll update object:', pollUpdateObj)
 
@@ -142,7 +149,7 @@ router.put('/:id', (req, res) => {
  */
 router.get('/', (req, res) => {
   Poll.find()
-    .select('_id title options total_votes owner')
+    .select('_id title options totalVotes owner')
     .exec()
     .then(polls => {
       return res.json(polls)

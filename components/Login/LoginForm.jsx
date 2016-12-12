@@ -39,7 +39,7 @@ const LoginForm = React.createClass({
           this.context.router.push('/')
         })
         .catch(error => {
-          console.log('error logging in: ', error.response.data.errors)
+          console.log('error logging in: ', error)
           this.setState({
             errors: error.response.data.errors,
             isLoading: false

@@ -6,8 +6,8 @@ const PollCard = React.createClass({
   propTypes: {
     title: string,
     options: array,
-    totalVotes: string,
-    id: number,
+    totalVotes: number,
+    id: string,
     user: object,
     submitVote: func
   },

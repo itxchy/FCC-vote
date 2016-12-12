@@ -72130,15 +72130,16 @@
 	      showPolls = this.state.allPolls.map(function (poll) {
 	        var title = poll.title;
 	        var options = poll.options;
-	        var totalVotes = poll.total_votes;
-	        var id = poll.id;
+	        var totalVotes = poll.totalVotes;
+	        var _id = poll._id;
 	
+	        console.log('poll info passed to PollCard:', { _id: _id, title: title, options: options, totalVotes: totalVotes });
 	        return React.createElement(PollCard, {
-	          key: id,
+	          key: _id,
 	          title: title,
 	          options: options,
 	          totalVotes: totalVotes,
-	          id: id
+	          id: _id
 	        });
 	      });
 	    } else if (this.state.allPolls === null) {
@@ -72212,8 +72213,8 @@
 	  propTypes: {
 	    title: string,
 	    options: array,
-	    totalVotes: string,
-	    id: number,
+	    totalVotes: number,
+	    id: string,
 	    user: object,
 	    submitVote: func
 	  },
@@ -75793,7 +75794,7 @@
 	        console.log('logged in!', response);
 	        _this.context.router.push('/');
 	      }).catch(function (error) {
-	        console.log('error logging in: ', error.response.data.errors);
+	        console.log('error logging in: ', error);
 	        _this.setState({
 	          errors: error.response.data.errors,
 	          isLoading: false
