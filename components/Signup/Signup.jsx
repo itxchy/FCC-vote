@@ -58,6 +58,7 @@ const Signup = React.createClass({
           errors[field] = ''
           invalid = false
         }
+
         this.setState({errors, invalid})
       })
     }
