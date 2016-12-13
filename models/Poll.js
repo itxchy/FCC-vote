@@ -1,17 +1,21 @@
 const mongoose = require('mongoose')
 
-const schema = new mongoose.Schema({
+const votesSchema = new mongoose.Schema({
+  voter: String
+})
+
+const optionsSchema = new mongoose.Schema({
+  option: String,
+  votes: [votesSchema]
+})
+
+const voteSchema = new mongoose.Schema({
   title: String,
-  options: [{
-    option: String,
-    votes: [{
-      voter: String
-    }]
-  }],
+  options: [optionsSchema],
   totalVotes: Number,
   owner: String
 }, { timestamps: true })
 
-const Poll = mongoose.model('Polls', schema)
+const Poll = mongoose.model('Polls', voteSchema)
 
 module.exports = Poll

@@ -120,11 +120,59 @@ router.put('/:id', (req, res) => {
     pollID
   }
 
+// ******** TODO selectedOption is now the option text. This can be queried. **********
+// check http://stackoverflow.com/questions/39522455/updating-nested-array-mongoose
+  Poll.findOneAndUpdate(
+    { _id: pollID, 'options.option'}
+  )
+
+
+// ******* NOT WORKING *******
+/*  Poll.findOne({ _id: pollID })
+  .exec()
+  .then(poll => {
+    let currentVotes = poll.options[selectedOption].votes
+    console.log('currentVotes', currentVotes)
+    // check if the current vote is a duplicate
+    let dupeVote = currentVotes.filter(vote => {
+      console.log('vote.voter:', vote.voter, 'voter:', voter)
+      return vote.voter === voter
+    })
+    console.log('dupeVote', dupeVote)
+    if (!isEmpty(dupeVote)) {
+      return res.status(400).json({ denied: 'only one vote per user or IP address'})
+    }
+
+    // push new vote to the votes array in selected option
+    poll.options[selectedOption].votes.push({ voter })
+
+    // update total votes count by counting the length of each votes array
+    poll.totalVotes = poll.options.map(option => {
+      return option.votes.length
+    })
+    .reduce((prev, next) => {
+      return prev + next
+    }, 0)
+
+    console.log('new vote:', poll.options[selectedOption])
+
+    poll.save()
+    .then(poll => {
+      console.log('saved poll:', poll)
+      return res.json({ success: 'vote counted' })
+    })
+    .catch(err => console.error('poll save error:', err))
+
+    console.log('currentVotes:', currentVotes)
+
+    currentVotes.push(voter)
+  })
+  .catch(err => console.error('poll query error', err))*/
   // TODO query the exact poll.options[selectedOption].votes.push({voter: newVoter})
 
-  console.log('Poll update object:', pollUpdateObj)
+  // console.log('Poll update object:', pollUpdateObj)
 
-  res.json({'update poll request success': pollUpdateObj })
+  //return res.json({'update poll request success': pollUpdateObj })
 /*  if (voter) {
     Poll.findOne({ _id: pollID })
     .update({})

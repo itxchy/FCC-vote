@@ -72223,8 +72223,9 @@
 	      selectedOption: null
 	    };
 	  },
-	  onOptionChange: function onOptionChange(event) {
-	    this.setState({ selectedOption: event.target.value });
+	  onOptionChange: function onOptionChange(option) {
+	    console.log(event.target);
+	    this.setState({ selectedOption: option });
 	  },
 	  onPollSubmit: function onPollSubmit(event) {
 	    event.preventDefault();
@@ -72232,7 +72233,6 @@
 	    var selectedOption = this.state.selectedOption;
 	    var voter = this.props.user.username || null;
 	    if (selectedOption !== null) {
-	      selectedOption = +selectedOption;
 	      var vote = { selectedOption: selectedOption, voter: voter };
 	      console.log('pollID:', pollID, 'vote:', vote);
 	      this.props.submitVote(pollID, vote).then(function (res) {
@@ -72257,7 +72257,9 @@
 	          React.createElement('input', {
 	            className: 'form-check-input radio-option',
 	            type: 'radio',
-	            onChange: _this.onOptionChange,
+	            onChange: function onChange() {
+	              return _this.onOptionChange(option.option);
+	            },
 	            name: 'gridRadios',
 	            id: id,
 	            value: value

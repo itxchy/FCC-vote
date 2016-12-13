@@ -16,8 +16,9 @@ const PollCard = React.createClass({
       selectedOption: null
     }
   },
-  onOptionChange (event) {
-    this.setState({selectedOption: event.target.value})
+  onOptionChange (option) {
+    console.log(event.target)
+    this.setState({selectedOption: option})
   },
   onPollSubmit (event) {
     event.preventDefault()
@@ -25,7 +26,6 @@ const PollCard = React.createClass({
     let selectedOption = this.state.selectedOption
     const voter = this.props.user.username || null
     if (selectedOption !== null) {
-      selectedOption = +selectedOption
       const vote = { selectedOption, voter }
       console.log('pollID:', pollID, 'vote:', vote)
       this.props.submitVote(pollID, vote)
@@ -46,7 +46,7 @@ const PollCard = React.createClass({
             <input
               className='form-check-input radio-option'
               type='radio'
-              onChange={this.onOptionChange}
+              onChange={() => this.onOptionChange(option.option)}
               name='gridRadios'
               id={id}
               value={value}
