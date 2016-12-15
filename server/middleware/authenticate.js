@@ -29,18 +29,6 @@ function authenticate (req, res, next) {
           req.currentUser = user
           next()
         })
-/*        User().query({
-          where: { id: decoded.id },
-          select: [ 'email', 'id', 'username' ]
-        })
-        .fetch()
-        .then(user => {
-          if (!user) {
-            res.status(404).json({ error: 'No such user' })
-          }
-          req.currentUser = user
-          next()
-        })*/
       }
     })
   } else {

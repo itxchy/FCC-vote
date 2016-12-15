@@ -1,9 +1,11 @@
 const express = require('express')
 const isEmpty = require('lodash/isEmpty')
 const flatten = require('lodash/flatten')
+const Promise = require('bluebird')
 const Poll = require('../models/Poll')
 const authenticate = require('../server/middleware/authenticate')
 const commonValidations = require('./shared/createAPollValidation')
+const { dupePollCheck } = require('./lib/pollsLib')
 let router = express.Router()
 
 function validateNewPoll (data, otherValidations) {
@@ -90,34 +92,33 @@ router.put('/:id', (req, res) => {
   Poll.findOne({ _id: pollID })
   .exec()
   .then(poll => {
-    let dupeCheck = poll.options.map(option => {
-      let currentCheck = option.votes.map(vote => {
-        if (vote.voter === voter) {
-          return true
-        } else {
-          return
-        }
-      })
-      return currentCheck
+    return new Promise((resolve, reject) => {
+      const dupeCheck = dupePollCheck(poll, voter)
+      if (dupeCheck) {
+        reject({ error: 'voter already voted' })
+      } else {
+        resolve(dupeCheck)
+      }
     })
-    dupeCheck = flatten(dupeCheck)
-
-    if (dupeCheck.includes(true)) {
-      return res.status(400).json({'bad request': 'user or IP can only vote once per poll'})
-    } else {
-      const votesPath = `options.${selectedOption}.votes`
-      Poll.findOneAndUpdate(
-        { _id: pollID },
-        { $addToSet: {[votesPath]: { 'voter': voter } } },
-        { new: true, upsert: true }
-      )
-      .then(updatedDoc => {
-        console.log('found and updated with vote!', updatedDoc)
-        return res.json({ 'vote cast': updatedDoc })
-      })
-      .catch(err => res.status(500).json({'vote failed': err}))      
-    }
   })
+  // TODO move .catch here, then CONDITIONALLY findOneAndUpdate 
+  // if dupeCheck is false
+  .then(() => {
+    const votesPath = `options.${selectedOption}.votes`
+    Poll.findOneAndUpdate(
+      { _id: pollID },
+      { $addToSet: {[votesPath]: { 'voter': voter } } },
+      { new: true, upsert: true }
+    )
+    .then(updatedDoc => {
+      console.log('found and updated with vote!', updatedDoc)
+      return res.json({ 'vote cast': updatedDoc })
+    })
+    .catch(err => res.status(500).json({ 'error': 'vote update failed', 'details': err }))
+  })
+  .catch(err => res.status(400).json({ 'bad request': 'user or IP can only vote once per poll' }))
+
+  // TODO get total votes
 
 // ******* NOT WORKING *******
 /*  Poll.findOne({ _id: pollID })
