@@ -5,7 +5,7 @@ const Promise = require('bluebird')
 const Poll = require('../models/Poll')
 const authenticate = require('../server/middleware/authenticate')
 const commonValidations = require('./shared/createAPollValidation')
-const { dupePollCheck } = require('./lib/pollsLib')
+const { dupePollCheck, getVoterIdentity } = require('./lib/pollsLib')
 let router = express.Router()
 
 function validateNewPoll (data, otherValidations) {
@@ -39,34 +39,34 @@ function validateNewPoll (data, otherValidations) {
  */
 router.post('/', authenticate, (req, res) => {
   validateNewPoll(req.body, commonValidations)
-    .then((result) => {
-      if (result.isValid) {
-        const poll = new Poll()
-        let { title, options, owner } = req.body
-        const formattedOptions = options.map(option => {
-          return {
-            option,
-            votes: []
-          }
-        })
-        poll.title = title
-        poll.options = formattedOptions
-        poll.totalVotes = 0
-        poll.owner = owner
+  .then((result) => {
+    if (result.isValid) {
+      const poll = new Poll()
+      let { title, options, owner } = req.body
+      const formattedOptions = options.map(option => {
+        return {
+          option,
+          votes: []
+        }
+      })
+      poll.title = title
+      poll.options = formattedOptions
+      poll.totalVotes = 0
+      poll.owner = owner
 
-        console.log('poll to be saved:', poll)
+      console.log('poll to be saved:', poll)
 
-        poll.save()
-        .then(poll => {
-          res.json({ success: 'new poll created!', poll: poll })
-        })
-        .catch(err => res.status(500).json({ 'new poll DB save error': err }))
-      } else {
-        console.log('ERROR!!', result.errors)
-        res.status(400).json({ 'poll validation error': result.errors })
-      }
-    })
-    .catch(err => res.status(500).json({ 'Poll validation promise rejected': error }))
+      poll.save()
+      .then(poll => {
+        res.json({ success: 'new poll created!', poll: poll })
+      })
+      .catch(err => res.status(500).json({ 'new poll DB save error': err }))
+    } else {
+      console.log('ERROR!!', result.errors)
+      res.status(400).json({ 'poll validation error': result.errors })
+    }
+  })
+  .catch(err => res.status(500).json({ 'Poll validation promise rejected': error }))
 })
 
 /**
@@ -77,14 +77,9 @@ router.put('/:id', (req, res) => {
   const pollID = req.params.id
   const selectedOption = req.body.selectedOption
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
-  let voter = null
-  // if voter is null, use the user's IP address instead
-  if (req.body.voter) {
-    voter = req.body.voter
-  } else if (ip) {
-    voter = ip
-  } else {
-    voter = false
+  let voter = getVoterIdentity(req, ip)
+
+  if (!voter) {
     console.error('ERROR: no voter or IP found while updating poll!')
     return res.status(400).json({error: ''})
   }

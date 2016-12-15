@@ -16,14 +16,15 @@ const dupePollCheck = function (poll, voter) {
 }
 
 const getVoterIdentity = function (req, ip) {
+  let voter
   if (req.body.voter) {
     voter = req.body.voter
   } else if (ip) {
     voter = ip
   } else {
     voter = false
-    console.error('ERROR: no voter or IP found while updating poll!')
   }
+  return voter
 }
 
 module.exports = { getVoterIdentity, dupePollCheck }
