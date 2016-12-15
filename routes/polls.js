@@ -115,7 +115,6 @@ router.put('/:id', (req, res) => {
   Poll.findOne({ _id: pollID })
   .exec()
   .then(poll => {
-
     let dupeCheck = poll.options.map(option => {
       let currentCheck = option.votes.map(vote => {
         if (vote.voter === voter) {
@@ -143,13 +142,7 @@ router.put('/:id', (req, res) => {
       })
       .catch(err => res.status(500).json({'vote failed': err}))      
     }
-
   })
-
-// ******** TODO selectedOption is now the option text. This can be queried. **********
-// check http://stackoverflow.com/questions/39522455/updating-nested-array-mongoose
-
-
 
 // ******* NOT WORKING *******
 /*  Poll.findOne({ _id: pollID })
