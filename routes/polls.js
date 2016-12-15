@@ -29,21 +29,6 @@ function validateNewPoll (data, otherValidations) {
       }
     })
     .catch(err => res.status(500).json({ 'duplicate poll check error': err }))
-
-  /*Polls.query({
-    where: { title: data.title }
-  })
-  .fetch()
-  .then(poll => {
-    if (poll) {
-      errors.title = 'Another poll has the same title'
-    }
-    return {
-      errors,
-      isValid: isEmpty(errors)
-    }
-  })
-  .catch(err => console.error('duplicate poll check error', err))*/
 }
 
 /**
@@ -74,16 +59,6 @@ router.post('/', authenticate, (req, res) => {
           res.json({ success: 'new poll created!', poll: poll })
         })
         .catch(err => res.status(500).json({ 'new poll DB save error': err }))
-
-        /*Polls.forge({
-          title, options, total_votes, owner
-        }, { hasTimestamps: true })
-        .save()
-        .then(poll => res.json({success: true}))
-        .catch(err => {
-          console.log(err)
-          return res.status(500).json({error: err})
-        })*/
       } else {
         console.log('ERROR!!', result.errors)
         res.status(400).json({ 'poll validation error': result.errors })
@@ -220,15 +195,6 @@ router.get('/', (req, res) => {
       return res.json(polls)
     })
     .catch(err => res.status(500).json({ 'error retrieving all polls': err }))
-/*  Polls.query({
-    select: ['id', 'title', 'options', 'total_votes', 'owner']
-  })
-  .fetchAll()
-  .then(polls => {
-    res.json(polls)
-  })
-  .catch(err => console.error('Retrieve all polls error', error))
-*/
 }) 
 
 /**
@@ -242,15 +208,6 @@ router.get('/:user', (req, res) => {
       return res.json(polls)
     })
     .catch(err => res.status(500).json({ 'error retrieving current user\'s polls': err }))
-/*  Polls.query({
-    select: ['id', 'title', 'options', 'total_votes', 'owner'],
-    where: { owner: req.params.user }
-  })
-  .fetchAll()
-  .then(polls => {
-    res.json(polls)
-  })
-  .catch(err => console.error('update user polls error', error))*/
 })
 
 module.exports = router
