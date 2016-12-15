@@ -72223,9 +72223,9 @@
 	      selectedOption: null
 	    };
 	  },
-	  onOptionChange: function onOptionChange(option) {
-	    console.log(event.target);
-	    this.setState({ selectedOption: option });
+	  onOptionChange: function onOptionChange(event) {
+	    console.log('option changed to : ', event.target.value);
+	    this.setState({ selectedOption: event.target.value });
 	  },
 	  onPollSubmit: function onPollSubmit(event) {
 	    event.preventDefault();
@@ -72257,9 +72257,7 @@
 	          React.createElement('input', {
 	            className: 'form-check-input radio-option',
 	            type: 'radio',
-	            onChange: function onChange() {
-	              return _this.onOptionChange(option.option);
-	            },
+	            onChange: _this.onOptionChange,
 	            name: 'gridRadios',
 	            id: id,
 	            value: value

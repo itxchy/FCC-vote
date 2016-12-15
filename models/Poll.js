@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const votesSchema = new mongoose.Schema({
   voter: String
 })
-
+// TODO combine votesSchema in options schema
 const optionsSchema = new mongoose.Schema({
   option: String,
   votes: [votesSchema]
