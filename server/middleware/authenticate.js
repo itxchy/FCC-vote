@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken')
 const config = require('../../config')
 const User = require('../../models/User')
+const isEmpty = require('lodash/isEmpty')
 
-function authenticate(req, res, next) {
+function authenticate (req, res, next) {
   const authorizationHeader = req.headers['authorization']
   let token
 
@@ -15,14 +16,15 @@ function authenticate(req, res, next) {
       if (err) {
         res.status(401).json({ error: 'Failed to authenticate' })
       } else {
-        User().query({
-          where: { id: decoded.id },
-          select: [ 'email', 'id', 'username' ]
-        })
-        .fetch()
+        console.log('decoded', decoded)
+        console.log('decoded.id', decoded.id)
+        User.find({ _id: decoded.id })
+        .select('email _id username')
+        .exec()
         .then(user => {
-          if (!user) {
-            res.status(404).json({ error: 'No such user '})
+          console.log('user found:', user)
+          if(isEmpty(user)) {
+            return res.status(404).json({ error: 'No such user' })
           }
           req.currentUser = user
           next()

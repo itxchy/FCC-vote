@@ -5,3 +5,5 @@ remotedev-db.sqlite3
 knexfile.js
 config.js
 data/*
+public/bundle.js.map
+public/bundle.js

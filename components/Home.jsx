@@ -30,14 +30,15 @@ const Home = React.createClass({
 
     if (this.state.allPolls) {
       showPolls = this.state.allPolls.map(poll => {
-        const { title, options, total_votes: totalVotes, id } = poll
+        const { title, options, totalVotes, _id } = poll
+        console.log('poll info passed to PollCard:', {_id, title, options, totalVotes})
         return (
           <PollCard
-            key={id}
+            key={_id}
             title={title}
             options={options}
             totalVotes={totalVotes}
-            id={id}
+            id={_id}
           />
         )
       })

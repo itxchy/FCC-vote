@@ -6,8 +6,8 @@ const PollCard = React.createClass({
   propTypes: {
     title: string,
     options: array,
-    totalVotes: string,
-    id: number,
+    totalVotes: number,
+    id: string,
     user: object,
     submitVote: func
   },
@@ -17,6 +17,7 @@ const PollCard = React.createClass({
     }
   },
   onOptionChange (event) {
+    console.log('option changed to : ', event.target.value)
     this.setState({selectedOption: event.target.value})
   },
   onPollSubmit (event) {
@@ -25,7 +26,6 @@ const PollCard = React.createClass({
     let selectedOption = this.state.selectedOption
     const voter = this.props.user.username || null
     if (selectedOption !== null) {
-      selectedOption = +selectedOption
       const vote = { selectedOption, voter }
       console.log('pollID:', pollID, 'vote:', vote)
       this.props.submitVote(pollID, vote)
