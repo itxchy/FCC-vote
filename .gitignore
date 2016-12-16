@@ -4,3 +4,4 @@ npm-debug.log
 remotedev-db.sqlite3
 knexfile.js
 config.js
+data/*
