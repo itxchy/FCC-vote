@@ -5,7 +5,7 @@ const Promise = require('bluebird')
 const Poll = require('../models/Poll')
 const authenticate = require('../server/middleware/authenticate')
 const commonValidations = require('./shared/createAPollValidation')
-const { dupePollCheck, getVoterIdentity } = require('./lib/pollsLib')
+const { dupeVoterCheck, getVoterIdentity } = require('./lib/pollsLib')
 let router = express.Router()
 
 function validateNewPoll (data, otherValidations) {
@@ -88,7 +88,7 @@ router.put('/:id', (req, res) => {
   .exec()
   .then(poll => {
     return new Promise((resolve, reject) => {
-      const dupeCheck = dupePollCheck(poll, voter)
+      const dupeCheck = dupeVoterCheck(poll, voter)
       if (dupeCheck) {
         reject({ error: 'voter already voted' })
       } else {

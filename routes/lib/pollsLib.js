@@ -1,4 +1,12 @@
-const dupePollCheck = function (poll, voter) {
+/**
+ * Params: 
+ *
+ * Checks if the current voter has already voted on the 
+ * 
+ *
+ * returns: BOOL
+ */
+const dupeVoterCheck = function (poll, voter) {
   let dupeCheck = poll.options.map(option => {
     let individualVoteCheck = option.votes.map(vote => {
       if (vote.voter === voter) {
@@ -15,6 +23,15 @@ const dupePollCheck = function (poll, voter) {
   return dupeCheck
 }
 
+
+/**
+ * Params: client's request object, client's ip address
+ *
+ * Assigns voter as the signed-in user, or IP address
+ * of a user who is not signed in
+ *
+ * returns: username, IP address, or false
+ */
 const getVoterIdentity = function (req, ip) {
   let voter
   if (req.body.voter) {
@@ -27,4 +44,4 @@ const getVoterIdentity = function (req, ip) {
   return voter
 }
 
-module.exports = { getVoterIdentity, dupePollCheck }
+module.exports = { getVoterIdentity, dupeVoterCheck }

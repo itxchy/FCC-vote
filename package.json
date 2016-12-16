@@ -63,6 +63,7 @@
     "bootstrap": "^3.3.7",
     "classnames": "^2.2.5",
     "express": "^4.14.0",
+    "fast-async": "^6.1.2",
     "graphql-subscriptions": "^0.2.1",
     "jquery": "^3.1.1",
     "jsonwebtoken": "^7.1.9",
