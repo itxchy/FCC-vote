@@ -1,8 +1,10 @@
+const has = require('lodash/has')
+
 /**
- * Params: 
+ * Params: poll object, voter string
  *
  * Checks if the current voter has already voted on the 
- * 
+ * current poll
  *
  * returns: BOOL
  */
@@ -34,7 +36,7 @@ const dupeVoterCheck = function (poll, voter) {
  */
 const getVoterIdentity = function (req, ip) {
   let voter
-  if (req.body.voter) {
+  if (has(req, 'body.voter')) {
     voter = req.body.voter
   } else if (ip) {
     voter = ip
