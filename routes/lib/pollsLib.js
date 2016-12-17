@@ -10,6 +10,9 @@ const flatten = require('lodash/flatten')
  * returns: BOOL
  */
 const dupeVoterCheck = function (poll, voter) {
+  if (!voter) {
+    return null
+  }
   let dupeCheck = poll.options.map(option => {
     if (!isEmpty(option.votes)) {
       let individualVoteCheck = option.votes.map(vote => {
@@ -27,7 +30,6 @@ const dupeVoterCheck = function (poll, voter) {
   // if the bool 'true' is included in the dupCheck array,
   // dupePollCheck will return true, otherwise false
   dupeCheck = flatten(dupeCheck).includes(true)
-  console.log('result from INSIDE dupeVoterCheck:', dupeCheck)
   return dupeCheck
 }
 
@@ -41,7 +43,7 @@ const dupeVoterCheck = function (poll, voter) {
  */
 const getVoterIdentity = function (req, ip) {
   let voter
-  if (has(req, 'body.voter')) {
+  if (has(req, 'body.voter') && req.body.voter) {
     voter = req.body.voter
   } else if (ip) {
     voter = ip

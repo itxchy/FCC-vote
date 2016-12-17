@@ -71822,7 +71822,6 @@
 	    this.setState({ isMounted: true });
 	  },
 	  render: function render() {
-	    console.log(this.props);
 	    var showAuthenticatedNav = React.createElement(
 	      'div',
 	      { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },

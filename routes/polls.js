@@ -77,15 +77,15 @@ router.put('/:id', (req, res) => {
   const selectedOption = req.body.selectedOption
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
   let voter = getVoterIdentity(req, ip)
-
   if (!voter) {
-    console.error('ERROR: no voter or IP found while updating poll!')
+    // console.error('ERROR: no voter or IP found while updating poll!')
     return res.status(400).json({error: ''})
   }
-
   Poll.findOne({ _id: pollID })
   .exec()
   .then(poll => {
+    console.log('POLL:', poll.options[0].votes)
+    console.log('VOTER:', voter)
     const dupeCheck = dupeVoterCheck(poll, voter)
     return dupeCheck
   })
