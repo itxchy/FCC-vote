@@ -52,16 +52,12 @@ router.post('/', authenticate, (req, res) => {
       poll.options = formattedOptions
       poll.totalVotes = 0
       poll.owner = owner
-
-      console.log('poll to be saved:', poll)
-
       poll.save()
       .then(poll => {
         res.json({ success: 'new poll created!', poll: poll })
       })
       .catch(err => res.status(500).json({ 'new poll DB save error': err }))
     } else {
-      console.log('ERROR!!', result.errors)
       res.status(400).json({ 'poll validation error': result.errors })
     }
   })
@@ -79,12 +75,14 @@ router.put('/:id', (req, res) => {
   if (!voter) {
     return res.status(400).json({error: 'no voter or IP found while updating poll'})
   }
+  // check if the current vote is a duplicate
   Poll.findOne({ _id: pollID })
   .exec()
   .then(poll => {
     const dupeCheck = dupeVoterCheck(poll, voter)
     return dupeCheck
   })
+  // if current vote is unique, add the vote to the selectedOption
   .then((dupeCheck) => {
     if (!dupeCheck) {
       const votesPath = `options.${selectedOption}.votes`
