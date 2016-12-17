@@ -72,20 +72,16 @@ router.post('/', authenticate, (req, res) => {
  * Updates a poll with a new vote
  */
 router.put('/:id', (req, res) => {
-  // console.log('vote request body', req.body)
   const pollID = req.params.id
   const selectedOption = req.body.selectedOption
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
   let voter = getVoterIdentity(req, ip)
   if (!voter) {
-    // console.error('ERROR: no voter or IP found while updating poll!')
-    return res.status(400).json({error: ''})
+    return res.status(400).json({error: 'no voter or IP found while updating poll'})
   }
   Poll.findOne({ _id: pollID })
   .exec()
   .then(poll => {
-    console.log('POLL:', poll.options[0].votes)
-    console.log('VOTER:', voter)
     const dupeCheck = dupeVoterCheck(poll, voter)
     return dupeCheck
   })
