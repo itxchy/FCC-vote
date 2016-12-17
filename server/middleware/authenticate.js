@@ -23,7 +23,7 @@ function authenticate (req, res, next) {
         .exec()
         .then(user => {
           console.log('user found:', user)
-          if(isEmpty(user)) {
+          if (isEmpty(user)) {
             return res.status(404).json({ error: 'No such user' })
           }
           req.currentUser = user

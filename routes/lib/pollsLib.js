@@ -1,30 +1,35 @@
 const has = require('lodash/has')
-
+const isEmpty = require('lodash/isEmpty')
+const flatten = require('lodash/flatten')
 /**
  * Params: poll object, voter string
  *
- * Checks if the current voter has already voted on the 
+ * Checks if the current voter has already voted on the
  * current poll
  *
  * returns: BOOL
  */
 const dupeVoterCheck = function (poll, voter) {
   let dupeCheck = poll.options.map(option => {
-    let individualVoteCheck = option.votes.map(vote => {
-      if (vote.voter === voter) {
-        return true
-      } else {
-        return
-      }
-    })
-    return individualVoteCheck
+    if (!isEmpty(option.votes)) {
+      let individualVoteCheck = option.votes.map(vote => {
+        if (vote.voter === voter) {
+          return true
+        } else {
+          return
+        }
+      })
+      return individualVoteCheck
+    } else {
+      return false
+    }
   })
-  // if the bool 'true' is included in the dupCheck array, 
+  // if the bool 'true' is included in the dupCheck array,
   // dupePollCheck will return true, otherwise false
   dupeCheck = flatten(dupeCheck).includes(true)
+  console.log('result from INSIDE dupeVoterCheck:', dupeCheck)
   return dupeCheck
 }
-
 
 /**
  * Params: client's request object, client's ip address

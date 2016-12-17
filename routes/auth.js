@@ -50,7 +50,7 @@ router.post('/', (req, res) => {
     return res.status(500).json({ 'error querying database for user login': err })
   })
 
-  /*User.query({
+  /* User.query({
     where: { username: identifier },
     orWhere: { email: identifier }
   })
@@ -74,7 +74,7 @@ router.post('/', (req, res) => {
       })
     }
   })
-  .catch(err => console.error('authentication error', err))*/
+  .catch(err => console.error('authentication error', err)) */
 })
 
 module.exports = router

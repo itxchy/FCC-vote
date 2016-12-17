@@ -1,6 +1,5 @@
 const express = require('express')
 const isEmpty = require('lodash/isEmpty')
-const flatten = require('lodash/flatten')
 const Promise = require('bluebird')
 const Poll = require('../models/Poll')
 const authenticate = require('../server/middleware/authenticate')
@@ -8,7 +7,7 @@ const commonValidations = require('./shared/createAPollValidation')
 const { dupeVoterCheck, getVoterIdentity } = require('./lib/pollsLib')
 let router = express.Router()
 
-function validateNewPoll (data, otherValidations) {
+function validateNewPoll (res, data, otherValidations) {
   // Ugly hack to rename keys so they can be validated by createAPollValidation
   const validatorData = {
     newPollTitle: data.title,
@@ -38,7 +37,7 @@ function validateNewPoll (data, otherValidations) {
  * validation
  */
 router.post('/', authenticate, (req, res) => {
-  validateNewPoll(req.body, commonValidations)
+  validateNewPoll(res, req.body, commonValidations)
   .then((result) => {
     if (result.isValid) {
       const poll = new Poll()
@@ -66,14 +65,14 @@ router.post('/', authenticate, (req, res) => {
       res.status(400).json({ 'poll validation error': result.errors })
     }
   })
-  .catch(err => res.status(500).json({ 'Poll validation promise rejected': error }))
+  .catch(err => res.status(500).json({ 'Poll validation promise rejected': err }))
 })
 
 /**
  * Updates a poll with a new vote
  */
 router.put('/:id', (req, res) => {
-  console.log('vote request body', req.body)
+  // console.log('vote request body', req.body)
   const pollID = req.params.id
   const selectedOption = req.body.selectedOption
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
@@ -88,35 +87,44 @@ router.put('/:id', (req, res) => {
   .exec()
   .then(poll => {
     return new Promise((resolve, reject) => {
+      console.log('!!!!!!!!!found poll:', poll)
+      console.log('voter:', voter)
       const dupeCheck = dupeVoterCheck(poll, voter)
+
       if (dupeCheck) {
-        reject({ error: 'voter already voted' })
+        console.log('dupeCheck Result!')
+        reject({ 'bad request': 'voter already voted' })
       } else {
+        console.log('dupeCheck Result! FALSEEEE')
         resolve(dupeCheck)
       }
     })
   })
-  // TODO move .catch here, then CONDITIONALLY findOneAndUpdate 
+  .catch(err => res.status(400).json(err))
+  // TODO move .catch here, then CONDITIONALLY findOneAndUpdate
   // if dupeCheck is false
-  .then(() => {
-    const votesPath = `options.${selectedOption}.votes`
-    Poll.findOneAndUpdate(
-      { _id: pollID },
-      { $addToSet: {[votesPath]: { 'voter': voter } } },
-      { new: true, upsert: true }
-    )
-    .then(updatedDoc => {
-      console.log('found and updated with vote!', updatedDoc)
-      return res.json({ 'vote cast': updatedDoc })
-    })
-    .catch(err => res.status(500).json({ 'error': 'vote update failed', 'details': err }))
+  .then((dupeCheck) => {
+    // console.log('DUPE CHECK: ', dupeCheck)
+    if (!dupeCheck) {
+      const votesPath = `options.${selectedOption}.votes`
+      Poll.findOneAndUpdate(
+        { _id: pollID },
+        { $addToSet: { [votesPath]: { 'voter': voter } } },
+        { new: true, upsert: true }
+      )
+      .then(updatedDoc => {
+        console.log('found and updated with vote!', updatedDoc)
+        return res.json({ 'vote cast': updatedDoc })
+      })
+      .catch(err => res.status(500).json({ 'error': 'vote update failed', 'details': err }))
+    }
   })
-  .catch(err => res.status(400).json({ 'bad request': 'user or IP can only vote once per poll' }))
+  .catch(err => res.status(400).json({ 'bad request': 'user or IP can only vote once per poll', 'error': err }))
 
   // TODO get total votes
 
 // ******* NOT WORKING *******
-/*  Poll.findOne({ _id: pollID })
+  /*  Poll.findOne({ _id: pollID })
   .exec()
   .then(poll => {
     let currentVotes = poll.options[selectedOption].votes
@@ -155,29 +163,28 @@ router.put('/:id', (req, res) => {
 
     currentVotes.push(voter)
   })
-  .catch(err => console.error('poll query error', err))*/
+  .catch(err => console.error('poll query error', err)) */
   // TODO query the exact poll.options[selectedOption].votes.push({voter: newVoter})
 
   // console.log('Poll update object:', pollUpdateObj)
 
-  //return res.json({'update poll request success': pollUpdateObj })
-/*  if (voter) {
+  // return res.json({'update poll request success': pollUpdateObj })
+  /*  if (voter) {
     Poll.findOne({ _id: pollID })
     .update({})
   }
-*/
-/*  Polls.query({
+  */
+  /*  Polls.query({
     select: ['id', 'options', 'total_votes'],
     where: { id: pollID }
   })
   .fetch()
   .then(poll => {
 
-
     console.log('poll to update with vote: ', poll)
     res.json(poll)
   })
-  .catch(err => console.error('update poll error', error))*/
+  .catch(err => console.error('update poll error', error)) */
 })
 
 /**
@@ -191,7 +198,7 @@ router.get('/', (req, res) => {
       return res.json(polls)
     })
     .catch(err => res.status(500).json({ 'error retrieving all polls': err }))
-}) 
+})
 
 /**
  * Retrieves all of a user's polls
