@@ -86,13 +86,10 @@ router.put('/:id', (req, res) => {
   Poll.findOne({ _id: pollID })
   .exec()
   .then(poll => {
-    console.log('!!!!!!!!!found poll:', poll)
-    console.log('voter:', voter)
     const dupeCheck = dupeVoterCheck(poll, voter)
     return dupeCheck
   })
   .then((dupeCheck) => {
-    console.log('passed catch!', dupeCheck)
     if (!dupeCheck) {
       const votesPath = `options.${selectedOption}.votes`
       Poll.findOneAndUpdate(
@@ -101,7 +98,6 @@ router.put('/:id', (req, res) => {
         { new: true, upsert: true }
       )
       .then(updatedDoc => {
-        console.log('found and updated with vote!', updatedDoc)
         return res.json({ 'vote cast': updatedDoc })
       })
       .catch(err => res.status(500).json({ 'error': 'vote update failed', 'details': err }))
