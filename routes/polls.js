@@ -86,25 +86,13 @@ router.put('/:id', (req, res) => {
   Poll.findOne({ _id: pollID })
   .exec()
   .then(poll => {
-    return new Promise((resolve, reject) => {
-      console.log('!!!!!!!!!found poll:', poll)
-      console.log('voter:', voter)
-      const dupeCheck = dupeVoterCheck(poll, voter)
-
-      if (dupeCheck) {
-        console.log('dupeCheck Result!')
-        reject({ 'bad request': 'voter already voted' })
-      } else {
-        console.log('dupeCheck Result! FALSEEEE')
-        resolve(dupeCheck)
-      }
-    })
+    console.log('!!!!!!!!!found poll:', poll)
+    console.log('voter:', voter)
+    const dupeCheck = dupeVoterCheck(poll, voter)
+    return dupeCheck
   })
-  .catch(err => res.status(400).json(err))
-  // TODO move .catch here, then CONDITIONALLY findOneAndUpdate
-  // if dupeCheck is false
   .then((dupeCheck) => {
-    // console.log('DUPE CHECK: ', dupeCheck)
+    console.log('passed catch!', dupeCheck)
     if (!dupeCheck) {
       const votesPath = `options.${selectedOption}.votes`
       Poll.findOneAndUpdate(
