@@ -53,7 +53,7 @@ const getVoterIdentity = function (req, ip) {
   return voter
 }
 
-const tallyVotesTotal = function (updatedDoc) {
+const tallyVoteTotal = function (updatedDoc) {
   return updatedDoc.options
     .map(option => {
       return option.votes.length
@@ -63,4 +63,4 @@ const tallyVotesTotal = function (updatedDoc) {
     }, 0)
 }
 
-module.exports = { getVoterIdentity, dupeVoterCheck, tallyVotesTotal }
+module.exports = { getVoterIdentity, dupeVoterCheck, tallyVoteTotal }

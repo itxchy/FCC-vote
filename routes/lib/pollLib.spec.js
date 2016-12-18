@@ -1,6 +1,6 @@
 /* global describe xdescribe it expect */
 
-const { getVoterIdentity, dupeVoterCheck, tallyVotesTotal } = require('./pollsLib')
+const { getVoterIdentity, dupeVoterCheck, tallyVoteTotal } = require('./pollsLib')
 
 const poll = { 
   id: '5851f8e4dd751518580d57ca',
@@ -75,7 +75,10 @@ describe('pollLib', () => {
       expect(dupeCheck).toBe(null)
     })
   })
-  describe('tallyVotesTotal()', () => {
-    it('should update the ')
+  describe('tallyVoteTotal()', () => {
+    it('should count all votes', () => {
+      const voteTotal = tallyVoteTotal(poll)
+      expect(voteTotal).toBe(3)
+    })
   })
 })
