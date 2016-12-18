@@ -84,18 +84,38 @@ router.put('/:id', (req, res) => {
   })
   // if current vote is unique, add the vote to the selectedOption
   .then((dupeCheck) => {
-    if (!dupeCheck) {
-      const votesPath = `options.${selectedOption}.votes`
-      Poll.findOneAndUpdate(
-        { _id: pollID },
-        { $addToSet: { [votesPath]: { 'voter': voter } } },
-        { new: true, upsert: true }
-      )
-      .then(updatedDoc => {
-        return res.json({ 'vote cast': updatedDoc })
-      })
-      .catch(err => res.status(500).json({ 'error': 'vote update failed', 'details': err }))
+    let updated = { updated: false, totalVotes: null }
+    if (dupeCheck) {
+      return updated
     }
+    const votesPath = `options.${selectedOption}.votes`
+    return Poll.findOneAndUpdate(
+      { _id: pollID },
+      { $addToSet: { [votesPath]: { 'voter': voter } } },
+      { new: true, upsert: true }
+    )
+    .then(updatedDoc => {
+      res.json({ 'vote cast': updatedDoc })
+      let votesTotal = updatedDoc.options
+      .map(option => {
+        return option.votes.length
+      })
+      .reduce((prev, next) => {
+        return prev + next
+      }, 0)
+      return updated = { updated: true, totalVotes: votesTotal }
+    })
+    .catch(err => res.status(500).json({ 'error': 'vote update failed', 'details': err }))
+  })
+  // if the vote was added, update the totalVotes count
+  .then(updated => {
+    console.log('updatedObject:', updated)
+    if (!updated.updated) {
+      return
+    }
+
+    // findOneAndUpdate totalvotes
+
   })
   .catch(err => res.status(400).json({ 'bad request': 'user or IP can only vote once per poll', 'error': err }))
 
