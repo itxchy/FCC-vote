@@ -27,11 +27,10 @@ const updateDocumentWithNewVote = function (pollID, votesPath, voter) {
     .then(updatedDoc => {
       res.json({ 'vote cast': updatedDoc })
       let voteTotal = tallyVoteTotal(updatedDoc)
-      return updated = { updated: true, totalVotes: voteTotal, doc: updated }
+      return updated = { updated: true, totalVotes: voteTotal, doc: updatedDoc }
     })
     .catch(err => {
-      res.status(500).json({ 'error': 'vote update failed', 'details': err })
-
+      return { updated: false, error: err }
     })
 }
 

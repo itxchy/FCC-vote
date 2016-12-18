@@ -76,22 +76,29 @@ router.put('/:id', (req, res) => {
   if (!voter) {
     return res.status(400).json({error: 'no voter or IP found while updating poll'})
   }
-  // check if the current vote is a duplicate
+
+  async function addNewVoteToPoll(req, res) {
+    try {
+      let dupeCheck = await checkVoterUniqeness(pollID, voter)
+      if (dupeCheck) {
+        return updated
+      }
+      let updated = { updated: false, totalVotes: null, doc: null }
+      const votesPath = `options.${selectedOption}.votes`  
+      let updated = await updateDocumentWithNewVote(pollID, votesPath, voter)
+      if (!updated.updated) {
+        return res.status(500).json({ 'error': 'vote update failed', 'details': updated.error })
+      }
+    }
+  }
   checkVoterUniqueness(pollID, voter)
-  // Poll.findOne({ _id: pollID })
-  // .exec()
-  // .then(poll => {
-  //   const dupeCheck = dupeVoterCheck(poll, voter)
-  //   return dupeCheck
-  // })
-  // if current vote is unique, add the vote to the selectedOption
   .then((dupeCheck) => {
     let updated = { updated: false, totalVotes: null }
-    console.log('dupeCheckResult:', dupeCheck)
     if (dupeCheck) {
       return updated
     }
     const votesPath = `options.${selectedOption}.votes`
+
     return Poll.findOneAndUpdate(
       { _id: pollID },
       { $addToSet: { [votesPath]: { 'voter': voter } } },
