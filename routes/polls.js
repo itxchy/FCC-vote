@@ -5,6 +5,7 @@ const Poll = require('../models/Poll')
 const authenticate = require('../server/middleware/authenticate')
 const commonValidations = require('./shared/createAPollValidation')
 const { dupeVoterCheck, getVoterIdentity, tallyVoteTotal } = require('./lib/pollsLib')
+const { checkVoterUniqueness } = require('./lib/pollsDb')
 let router = express.Router()
 
 function validateNewPoll (res, data, otherValidations) {
@@ -76,15 +77,17 @@ router.put('/:id', (req, res) => {
     return res.status(400).json({error: 'no voter or IP found while updating poll'})
   }
   // check if the current vote is a duplicate
-  Poll.findOne({ _id: pollID })
-  .exec()
-  .then(poll => {
-    const dupeCheck = dupeVoterCheck(poll, voter)
-    return dupeCheck
-  })
+  checkVoterUniqueness(pollID, voter)
+  // Poll.findOne({ _id: pollID })
+  // .exec()
+  // .then(poll => {
+  //   const dupeCheck = dupeVoterCheck(poll, voter)
+  //   return dupeCheck
+  // })
   // if current vote is unique, add the vote to the selectedOption
   .then((dupeCheck) => {
     let updated = { updated: false, totalVotes: null }
+    console.log('dupeCheckResult:', dupeCheck)
     if (dupeCheck) {
       return updated
     }
