@@ -81,14 +81,15 @@ router.put('/:id', (req, res) => {
     try {
       let dupeCheck = await checkVoterUniqeness(pollID, voter)
       if (dupeCheck) {
-        return updated
+        return res.status(400).json({ 'bad request': 'user or IP can only vote once per poll' })
       }
       let updated = { updated: false, totalVotes: null, doc: null }
       const votesPath = `options.${selectedOption}.votes`  
-      let updated = await updateDocumentWithNewVote(pollID, votesPath, voter)
+      updated = await updateDocumentWithNewVote(pollID, votesPath, voter)
       if (!updated.updated) {
         return res.status(500).json({ 'error': 'vote update failed', 'details': updated.error })
       }
+      // updateDocument with new vote total
     }
   }
   checkVoterUniqueness(pollID, voter)
@@ -123,70 +124,6 @@ router.put('/:id', (req, res) => {
   })
   .catch(err => res.status(400).json({ 'bad request': 'user or IP can only vote once per poll', 'error': err }))
 
-  // TODO get total votes
-
-// ******* NOT WORKING *******
-  /*  Poll.findOne({ _id: pollID })
-  .exec()
-  .then(poll => {
-    let currentVotes = poll.options[selectedOption].votes
-    console.log('currentVotes', currentVotes)
-    // check if the current vote is a duplicate
-    let dupeVote = currentVotes.filter(vote => {
-      console.log('vote.voter:', vote.voter, 'voter:', voter)
-      return vote.voter === voter
-    })
-    console.log('dupeVote', dupeVote)
-    if (!isEmpty(dupeVote)) {
-      return res.status(400).json({ denied: 'only one vote per user or IP address'})
-    }
-
-    // push new vote to the votes array in selected option
-    poll.options[selectedOption].votes.push({ voter })
-
-    // update total votes count by counting the length of each votes array
-    poll.totalVotes = poll.options.map(option => {
-      return option.votes.length
-    })
-    .reduce((prev, next) => {
-      return prev + next
-    }, 0)
-
-    console.log('new vote:', poll.options[selectedOption])
-
-    poll.save()
-    .then(poll => {
-      console.log('saved poll:', poll)
-      return res.json({ success: 'vote counted' })
-    })
-    .catch(err => console.error('poll save error:', err))
-
-    console.log('currentVotes:', currentVotes)
-
-    currentVotes.push(voter)
-  })
-  .catch(err => console.error('poll query error', err)) */
-  // TODO query the exact poll.options[selectedOption].votes.push({voter: newVoter})
-
-  // console.log('Poll update object:', pollUpdateObj)
-
-  // return res.json({'update poll request success': pollUpdateObj })
-  /*  if (voter) {
-    Poll.findOne({ _id: pollID })
-    .update({})
-  }
-  */
-  /*  Polls.query({
-    select: ['id', 'options', 'total_votes'],
-    where: { id: pollID }
-  })
-  .fetch()
-  .then(poll => {
-
-    console.log('poll to update with vote: ', poll)
-    res.json(poll)
-  })
-  .catch(err => console.error('update poll error', error)) */
 })
 
 /**
