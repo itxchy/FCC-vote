@@ -4,7 +4,7 @@ const Promise = require('bluebird')
 const Poll = require('../models/Poll')
 const authenticate = require('../server/middleware/authenticate')
 const commonValidations = require('./shared/createAPollValidation')
-const { dupeVoterCheck, getVoterIdentity } = require('./lib/pollsLib')
+const { dupeVoterCheck, getVoterIdentity, tallyVotesTotal } = require('./lib/pollsLib')
 let router = express.Router()
 
 function validateNewPoll (res, data, otherValidations) {
@@ -96,13 +96,7 @@ router.put('/:id', (req, res) => {
     )
     .then(updatedDoc => {
       res.json({ 'vote cast': updatedDoc })
-      let votesTotal = updatedDoc.options
-      .map(option => {
-        return option.votes.length
-      })
-      .reduce((prev, next) => {
-        return prev + next
-      }, 0)
+      let votesTotal = tallyVotesTotal(updatedDoc)
       return updated = { updated: true, totalVotes: votesTotal }
     })
     .catch(err => res.status(500).json({ 'error': 'vote update failed', 'details': err }))

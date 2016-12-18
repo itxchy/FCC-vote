@@ -1,6 +1,35 @@
 /* global describe xdescribe it expect */
 
-const { getVoterIdentity, dupeVoterCheck } = require('./pollsLib')
+const { getVoterIdentity, dupeVoterCheck, tallyVotesTotal } = require('./pollsLib')
+
+const poll = { 
+  id: '5851f8e4dd751518580d57ca',
+  updatedAt: '2016-12-15T03:04:23.213Z',
+  createdAt: '2016-12-15T01:59:00.487Z',
+  owner: 'IllestToTheGillest',
+  totalVotes: 0,
+  title: 'Why oh why?',
+  __v: 0,
+  options: [ 
+    { 
+      option: 'Don\'t know',
+      _id: '5851f8e4dd751518580d57cd',
+      votes: [
+        { _id: '585203e894610424affd0042', voter: 'Matt' }, 
+        { _id: '585208373b22b529bdde32ba', voter: 'damon' }
+      ] 
+    },
+    { option: 'Because',
+      _id: '5851f8e4dd751518580d57cc',
+      votes: [
+        { _id: '585205883b22b529bdde3855', voter: 'rey' }
+      ] 
+    },
+    { option: 'Why Not?',
+      _id: '5851f8e4dd751518580d57cb',
+      votes: [] } 
+  ] 
+}    
 
 describe('pollLib', () => {
   describe('getVoterIdentity()', () => {
@@ -30,34 +59,6 @@ describe('pollLib', () => {
     })
   })
   describe('dupeVoterCheck()', () => {
-    const poll = { 
-      id: '5851f8e4dd751518580d57ca',
-      updatedAt: '2016-12-15T03:04:23.213Z',
-      createdAt: '2016-12-15T01:59:00.487Z',
-      owner: 'IllestToTheGillest',
-      totalVotes: 0,
-      title: 'Why oh why?',
-      __v: 0,
-      options: [ 
-        { 
-          option: 'Don\'t know',
-          _id: '5851f8e4dd751518580d57cd',
-          votes: [
-            { _id: '585203e894610424affd0042', voter: 'Matt' }, 
-            { _id: '585208373b22b529bdde32ba', voter: 'damon' }
-          ] 
-        },
-        { option: 'Because',
-          _id: '5851f8e4dd751518580d57cc',
-          votes: [
-            { _id: '585205883b22b529bdde3855', voter: 'rey' }
-          ] 
-        },
-        { option: 'Why Not?',
-          _id: '5851f8e4dd751518580d57cb',
-          votes: [] } 
-      ] 
-    }    
     it('should return true if vote is a duplicate', () => {
       const voter = 'damon'
       const dupeCheck = dupeVoterCheck(poll, voter)
@@ -73,5 +74,8 @@ describe('pollLib', () => {
       const dupeCheck = dupeVoterCheck(poll, voter)
       expect(dupeCheck).toBe(null)
     })
+  })
+  describe('tallyVotesTotal()', () => {
+    it('should update the ')
   })
 })
