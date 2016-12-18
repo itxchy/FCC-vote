@@ -19,7 +19,7 @@ const checkVoterUniqueness = function (pollID, voter) {
 }
 
 /**
- * params: pollID string, voter string
+ * params: selectedOption number, pollID string, voter string
  * 
  * Adds a new vote to a poll document. Returns an object
  * with the updated document and updated votes tally, or 
@@ -27,7 +27,7 @@ const checkVoterUniqueness = function (pollID, voter) {
  *
  * returns: Object
  */
-const updateDocumentWithNewVote = function (pollID, voter) {
+const updateDocumentWithNewVote = function (selectedOption, pollID, voter) {
   const votesPath = `options.${selectedOption}.votes`
   return Poll.findOneAndUpdate(
       { _id: pollID },
@@ -35,7 +35,7 @@ const updateDocumentWithNewVote = function (pollID, voter) {
       { new: true, upsert: true }
     )
     .then(updatedDoc => {
-      res.json({ 'vote cast': updatedDoc })
+      // res.json({ 'vote cast': updatedDoc })
       let voteTotal = tallyVoteTotal(updatedDoc)
       return { updated: true, totalVotes: voteTotal, doc: updatedDoc }
     })
@@ -44,9 +44,17 @@ const updateDocumentWithNewVote = function (pollID, voter) {
     })
 }
 
-const updateDocumentVotesTotal = function (totalVotes) {
-  return Poll.findOneAndUpdate({
-
+const updateDocumentVotesTotal = function (pollID, totalVotes) {
+  return Poll.findOneAndUpdate(
+    { _id: pollID },
+    { $set: { totalVotes } },
+    { new: true }
+  )
+  .then(updatedDoc => {
+    return { updated: true, doc: updatedDoc }
+  })
+  .catch(err => {
+    return { updated: false, error: err}
   })
 }
 

@@ -79,53 +79,57 @@ router.put('/:id', (req, res) => {
 
   async function addNewVoteToPoll(req, res) {
     try {
+      // check if voter has already voted
       let dupeCheck = await checkVoterUniqeness(pollID, voter)
       if (dupeCheck) {
         return res.status(400).json({ 'bad request': 'user or IP can only vote once per poll' })
       }
-      let updated = { updated: false, totalVotes: null, doc: null }
-      const votesPath = `options.${selectedOption}.votes`  
-      updated = await updateDocumentWithNewVote(pollID, votesPath, voter)
-      if (!updated.updated) {
-        return res.status(500).json({ 'error': 'vote update failed', 'details': updated.error })
+      // add new vote to poll
+      let updatedPoll = { updated: false, totalVotes: null, doc: null }
+      updatedPoll = await updateDocumentWithNewVote(selectedOption, pollID, votesPath, voter)
+      if (!updatedPoll.updated) {
+        return res.status(500).json({ error: 'vote update failed', 'details': updatedPoll.error })
       }
-      // updateDocument with new vote total
+      // add new vote total to poll
+      let updatedTotalVotes = await updateDocumentVotesTotal(pollID, updatedPoll.totalVotes)
+      if (!updatedTotalVotes.updated) {
+        return res.status(500).json({ error: 'total vote count update failed', details: updatedTotalVotes.error })
+      }
+      return res.json({ success: 'new vote and new total votes count saved', poll: updatedTotalVotes.doc})
     }
     catch (error) {
       return res.status(500).json({ error })
     }
   }
-  checkVoterUniqueness(pollID, voter)
-  .then((dupeCheck) => {
-    let updated = { updated: false, totalVotes: null }
-    if (dupeCheck) {
-      return updated
-    }
-    const votesPath = `options.${selectedOption}.votes`
+  // checkVoterUniqueness(pollID, voter)
+  // .then((dupeCheck) => {
+  //   let updated = { updated: false, totalVotes: null }
+  //   if (dupeCheck) {
+  //     return updated
+  //   }
+  //   const votesPath = `options.${selectedOption}.votes`
 
-    return Poll.findOneAndUpdate(
-      { _id: pollID },
-      { $addToSet: { [votesPath]: { 'voter': voter } } },
-      { new: true, upsert: true }
-    )
-    .then(updatedDoc => {
-      res.json({ 'vote cast': updatedDoc })
-      let voteTotal = tallyVoteTotal(updatedDoc)
-      return updated = { updated: true, totalVotes: voteTotal }
-    })
-    .catch(err => res.status(500).json({ 'error': 'vote update failed', 'details': err }))
-  })
-  // if the vote was added, update the totalVotes count
-  .then(updated => {
-    console.log('updatedObject:', updated)
-    if (!updated.updated) {
-      return
-    }
+  //   return Poll.findOneAndUpdate(
+  //     { _id: pollID },
+  //     { $addToSet: { [votesPath]: { 'voter': voter } } },
+  //     { new: true, upsert: true }
+  //   )
+  //   .then(updatedDoc => {
+  //     res.json({ 'vote cast': updatedDoc })
+  //     let voteTotal = tallyVoteTotal(updatedDoc)
+  //     return updated = { updated: true, totalVotes: voteTotal }
+  //   })
+  //   .catch(err => res.status(500).json({ 'error': 'vote update failed', 'details': err }))
+  // })
+  // // if the vote was added, update the totalVotes count
+  // .then(updated => {
+  //   console.log('updatedObject:', updated)
+  //   if (!updated.updated) {
+  //     return
+  //   }
 
-    // findOneAndUpdate totalvotes
-
-  })
-  .catch(err => res.status(400).json({ 'bad request': 'user or IP can only vote once per poll', 'error': err }))
+  // })
+  // .catch(err => res.status(400).json({ 'bad request': 'user or IP can only vote once per poll', 'error': err }))
 
 })
 
