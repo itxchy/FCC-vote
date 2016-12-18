@@ -91,6 +91,9 @@ router.put('/:id', (req, res) => {
       }
       // updateDocument with new vote total
     }
+    catch (error) {
+      return res.status(500).json({ error })
+    }
   }
   checkVoterUniqueness(pollID, voter)
   .then((dupeCheck) => {
