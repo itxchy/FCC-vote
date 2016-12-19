@@ -2,6 +2,7 @@ const React = require('react')
 const { connector } = require('../redux/Store')
 const PollCard = require('./common/PollCard')
 const { func } = React.PropTypes
+const { dupeVoterCheck } = require('../routes/lib/pollsLib')
 
 const Home = React.createClass({
   propTypes: {
@@ -30,8 +31,20 @@ const Home = React.createClass({
 
     if (this.state.allPolls) {
       showPolls = this.state.allPolls.map(poll => {
+        console.log('poll mapped:', poll)
+        const dupeVoter = dupeVoterCheck(poll, this.props.user.username)
         const { title, options, totalVotes, _id } = poll
-        console.log('poll info passed to PollCard:', {_id, title, options, totalVotes})
+        // if (dupeVoter) {
+        //   return (
+        //     <ResultsCard
+        //       key={_id}
+        //       title={title}
+        //       options={options}
+        //       totalVotes={totalVotes}
+        //       id={_id}
+        //     />  
+        //   )  
+        // }
         return (
           <PollCard
             key={_id}

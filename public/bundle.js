@@ -72096,6 +72096,10 @@
 	var PollCard = __webpack_require__(710);
 	var func = React.PropTypes.func;
 	
+	var _require2 = __webpack_require__(803);
+	
+	var dupeVoterCheck = _require2.dupeVoterCheck;
+	
 	
 	var Home = React.createClass({
 	  displayName: 'Home',
@@ -72122,17 +72126,31 @@
 	    }
 	  },
 	  render: function render() {
+	    var _this2 = this;
+	
 	    var showPolls = null;
 	    this.getRecentPolls();
 	
 	    if (this.state.allPolls) {
 	      showPolls = this.state.allPolls.map(function (poll) {
+	        console.log('poll mapped:', poll);
+	        var dupeVoter = dupeVoterCheck(poll, _this2.props.user.username);
 	        var title = poll.title;
 	        var options = poll.options;
 	        var totalVotes = poll.totalVotes;
 	        var _id = poll._id;
+	        // if (dupeVoter) {
+	        //   return (
+	        //     <ResultsCard
+	        //       key={_id}
+	        //       title={title}
+	        //       options={options}
+	        //       totalVotes={totalVotes}
+	        //       id={_id}
+	        //     />  
+	        //   )  
+	        // }
 	
-	        console.log('poll info passed to PollCard:', { _id: _id, title: title, options: options, totalVotes: totalVotes });
 	        return React.createElement(PollCard, {
 	          key: _id,
 	          title: title,
@@ -75957,6 +75975,185 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 789 */,
+/* 790 */,
+/* 791 */,
+/* 792 */,
+/* 793 */,
+/* 794 */,
+/* 795 */,
+/* 796 */,
+/* 797 */,
+/* 798 */,
+/* 799 */,
+/* 800 */,
+/* 801 */,
+/* 802 */,
+/* 803 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var has = __webpack_require__(804);
+	var isEmpty = __webpack_require__(449);
+	var flatten = __webpack_require__(806);
+	/**
+	 * Params: poll object, voter string
+	 *
+	 * Checks if the current voter has already voted on the
+	 * current poll
+	 *
+	 * returns: BOOL
+	 */
+	var dupeVoterCheck = function dupeVoterCheck(poll, voter) {
+	  if (!voter) {
+	    return null;
+	  }
+	  var dupeCheck = poll.options.map(function (option) {
+	    if (!isEmpty(option.votes)) {
+	      var individualVoteCheck = option.votes.map(function (vote) {
+	        if (vote.voter === voter) {
+	          return true;
+	        } else {
+	          return;
+	        }
+	      });
+	      return individualVoteCheck;
+	    } else {
+	      return false;
+	    }
+	  });
+	  // if the bool 'true' is included in the dupCheck array,
+	  // dupePollCheck will return true, otherwise false
+	  dupeCheck = flatten(dupeCheck).includes(true);
+	  return dupeCheck;
+	};
+	
+	/**
+	 * Params: client's request object, client's ip address
+	 *
+	 * Assigns voter as the signed-in user, or IP address
+	 * of a user who is not signed in
+	 *
+	 * returns: username, IP address, or false
+	 */
+	var getVoterIdentity = function getVoterIdentity(req, ip) {
+	  var voter = void 0;
+	  if (has(req, 'body.voter') && req.body.voter) {
+	    voter = req.body.voter;
+	  } else if (ip) {
+	    voter = ip;
+	  } else {
+	    voter = false;
+	  }
+	  return voter;
+	};
+	
+	var tallyVoteTotal = function tallyVoteTotal(updatedDoc) {
+	  return updatedDoc.options.map(function (option) {
+	    return option.votes.length;
+	  }).reduce(function (prev, next) {
+	    return prev + next;
+	  }, 0);
+	};
+	
+	module.exports = { getVoterIdentity: getVoterIdentity, dupeVoterCheck: dupeVoterCheck, tallyVoteTotal: tallyVoteTotal };
+
+/***/ },
+/* 804 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var baseHas = __webpack_require__(805),
+	    hasPath = __webpack_require__(397);
+	
+	/**
+	 * Checks if `path` is a direct property of `object`.
+	 *
+	 * @static
+	 * @since 0.1.0
+	 * @memberOf _
+	 * @category Object
+	 * @param {Object} object The object to query.
+	 * @param {Array|string} path The path to check.
+	 * @returns {boolean} Returns `true` if `path` exists, else `false`.
+	 * @example
+	 *
+	 * var object = { 'a': { 'b': 2 } };
+	 * var other = _.create({ 'a': _.create({ 'b': 2 }) });
+	 *
+	 * _.has(object, 'a');
+	 * // => true
+	 *
+	 * _.has(object, 'a.b');
+	 * // => true
+	 *
+	 * _.has(object, ['a', 'b']);
+	 * // => true
+	 *
+	 * _.has(other, 'a');
+	 * // => false
+	 */
+	function has(object, path) {
+	  return object != null && hasPath(object, path, baseHas);
+	}
+	
+	module.exports = has;
+
+
+/***/ },
+/* 805 */
+/***/ function(module, exports) {
+
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+	
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+	
+	/**
+	 * The base implementation of `_.has` without support for deep paths.
+	 *
+	 * @private
+	 * @param {Object} [object] The object to query.
+	 * @param {Array|string} key The key to check.
+	 * @returns {boolean} Returns `true` if `key` exists, else `false`.
+	 */
+	function baseHas(object, key) {
+	  return object != null && hasOwnProperty.call(object, key);
+	}
+	
+	module.exports = baseHas;
+
+
+/***/ },
+/* 806 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var baseFlatten = __webpack_require__(680);
+	
+	/**
+	 * Flattens `array` a single level deep.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Array
+	 * @param {Array} array The array to flatten.
+	 * @returns {Array} Returns the new flattened array.
+	 * @example
+	 *
+	 * _.flatten([1, [2, [3, [4]], 5]]);
+	 * // => [1, 2, [3, [4]], 5]
+	 */
+	function flatten(array) {
+	  var length = array == null ? 0 : array.length;
+	  return length ? baseFlatten(array, 1) : [];
+	}
+	
+	module.exports = flatten;
+
 
 /***/ }
 /******/ ]);
