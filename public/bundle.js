@@ -72219,30 +72219,31 @@
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
-	      selectedOption: null
+	      selectedOption: null,
+	      updatedTotalVotes: null
 	    };
 	  },
 	  onOptionChange: function onOptionChange(event) {
-	    console.log('option changed to : ', event.target.value);
 	    this.setState({ selectedOption: event.target.value });
 	  },
 	  onPollSubmit: function onPollSubmit(event) {
+	    var _this = this;
+	
 	    event.preventDefault();
 	    var pollID = this.props.id;
 	    var selectedOption = this.state.selectedOption;
 	    var voter = this.props.user.username || null;
 	    if (selectedOption !== null) {
 	      var vote = { selectedOption: selectedOption, voter: voter };
-	      console.log('pollID:', pollID, 'vote:', vote);
 	      this.props.submitVote(pollID, vote).then(function (res) {
-	        console.log('submitVote server response:', res);
+	        _this.setState({ updatedTotalVotes: res.data.poll.totalVotes });
 	      });
 	    } else {
 	      console.log('no poll option selected!');
 	    }
 	  },
 	  render: function render() {
-	    var _this = this;
+	    var _this2 = this;
 	
 	    var options = this.props.options.map(function (option, index) {
 	      var id = 'gridRadios' + index;
@@ -72256,7 +72257,7 @@
 	          React.createElement('input', {
 	            className: 'form-check-input radio-option',
 	            type: 'radio',
-	            onChange: _this.onOptionChange,
+	            onChange: _this2.onOptionChange,
 	            name: 'gridRadios',
 	            id: id,
 	            value: value
@@ -72289,7 +72290,7 @@
 	          'p',
 	          null,
 	          'Total votes cast: ',
-	          this.props.totalVotes
+	          this.state.updatedTotalVotes || this.props.totalVotes
 	        ),
 	        React.createElement(
 	          'div',

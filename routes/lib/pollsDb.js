@@ -10,12 +10,10 @@ const { dupeVoterCheck, tallyVoteTotal } = require('./pollsLib')
  * returns: BOOL
  */
 const checkVoterUniqueness = async function (pollID, voter) {
-  console.log('inside checkVoterUniqueness')
   return Poll.findOne({ _id: pollID })
   .exec()
   .then(poll => {
     const dupeCheck = dupeVoterCheck(poll, voter)
-    console.log('dupeCheck', dupeCheck)
     return dupeCheck
   })
   .catch(err => {
