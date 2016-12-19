@@ -72494,7 +72494,8 @@
 	  },
 	  deleteOption: function deleteOption(index) {
 	    if (this.props.newPollOptions.length === 2) {
-	      return console.log('Two or more options required!');
+	      console.log('Two or more options required!');
+	      return;
 	    }
 	    var updatedDeleteOptions = this.props.newPollOptions.slice();
 	    updatedDeleteOptions.splice(index, 1);
