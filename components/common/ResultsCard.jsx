@@ -15,7 +15,7 @@ const ResultsCard = React.createClass({
       <div className='col-sm-4'>
         <h2>{this.props.title}</h2>
         <div className='col-sm-10'>
-          {/* options */}
+          <D3Chart results={this.props.options} />
         </div>
         <p>Total votes: {this.props.totalVotes}</p>
       </div>

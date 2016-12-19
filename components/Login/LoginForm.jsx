@@ -34,7 +34,7 @@ const LoginForm = React.createClass({
       this.setState({ errors: {}, isLoading: true })
       this.props.login(this.state)
         .then(response => {
-          this.setState({isLoading: false})
+          this.setState({ isLoading: false })
           console.log('logged in!', response)
           this.context.router.push('/')
         })
