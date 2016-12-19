@@ -41,7 +41,7 @@ const LoginForm = React.createClass({
         .catch(error => {
           console.log('error logging in: ', error)
           this.setState({
-            errors: error.response.data.errors,
+
             isLoading: false
           })
         })

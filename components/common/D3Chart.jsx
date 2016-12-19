@@ -7,7 +7,7 @@ const D3Chart = React.createClass({
   },
   render () {
     return (
-      <div ref='d3Mount' />    
+      <div className='results-chart' ref='d3Mount' />    
     )
   }
 })
