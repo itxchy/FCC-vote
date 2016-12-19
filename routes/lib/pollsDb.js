@@ -9,12 +9,17 @@ const { dupeVoterCheck, tallyVoteTotal } = require('./pollsLib')
  *
  * returns: BOOL
  */
-const checkVoterUniqueness = function (pollID, voter) {
+const checkVoterUniqueness = async function (pollID, voter) {
+  console.log('inside checkVoterUniqueness')
   return Poll.findOne({ _id: pollID })
   .exec()
   .then(poll => {
     const dupeCheck = dupeVoterCheck(poll, voter)
+    console.log('dupeCheck', dupeCheck)
     return dupeCheck
+  })
+  .catch(err => {
+    console.error('ERROR checkVoterUniqueness', err)
   })
 }
 
@@ -40,6 +45,7 @@ const updateDocumentWithNewVote = function (selectedOption, pollID, voter) {
       return { updated: true, totalVotes: voteTotal, doc: updatedDoc }
     })
     .catch(err => {
+      console.error('ERROR updateDocumentWithNewVote', err)
       return { updated: false, error: err }
     })
 }
@@ -54,8 +60,9 @@ const updateDocumentVotesTotal = function (pollID, totalVotes) {
     return { updated: true, doc: updatedDoc }
   })
   .catch(err => {
+    console.error('ERROR updateDocumentVotesTotal', err)
     return { updated: false, error: err}
   })
 }
 
-module.exports = { checkVoterUniqueness, updateDocumentWithNewVote }
+module.exports = { checkVoterUniqueness, updateDocumentWithNewVote, updateDocumentVotesTotal }

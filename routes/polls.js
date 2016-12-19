@@ -5,7 +5,7 @@ const Poll = require('../models/Poll')
 const authenticate = require('../server/middleware/authenticate')
 const commonValidations = require('./shared/createAPollValidation')
 const { dupeVoterCheck, getVoterIdentity, tallyVoteTotal } = require('./lib/pollsLib')
-const { checkVoterUniqueness } = require('./lib/pollsDb')
+const { checkVoterUniqueness, updateDocumentWithNewVote, updateDocumentVotesTotal } = require('./lib/pollsDb')
 let router = express.Router()
 
 function validateNewPoll (res, data, otherValidations) {
@@ -21,7 +21,6 @@ function validateNewPoll (res, data, otherValidations) {
   return Poll.find({ title: data.title })
     .exec()
     .then(poll => {
-      console.log('vadidating... poll found:', poll)
       if (!isEmpty(poll)) {
         errors.title = 'Another poll has the same title'
       }
@@ -76,17 +75,16 @@ router.put('/:id', (req, res) => {
   if (!voter) {
     return res.status(400).json({error: 'no voter or IP found while updating poll'})
   }
-
   async function addNewVoteToPoll(req, res) {
     try {
       // check if voter has already voted
-      let dupeCheck = await checkVoterUniqeness(pollID, voter)
+      let dupeCheck = await checkVoterUniqueness(pollID, voter)
       if (dupeCheck) {
         return res.status(400).json({ 'bad request': 'user or IP can only vote once per poll' })
       }
-      // add new vote to poll
+      // add new vote to current poll
       let updatedPoll = { updated: false, totalVotes: null, doc: null }
-      updatedPoll = await updateDocumentWithNewVote(selectedOption, pollID, votesPath, voter)
+      updatedPoll = await updateDocumentWithNewVote(selectedOption, pollID, voter)
       if (!updatedPoll.updated) {
         return res.status(500).json({ error: 'vote update failed', 'details': updatedPoll.error })
       }
@@ -95,12 +93,15 @@ router.put('/:id', (req, res) => {
       if (!updatedTotalVotes.updated) {
         return res.status(500).json({ error: 'total vote count update failed', details: updatedTotalVotes.error })
       }
+      console.log('updatedTotalVotes.doc', updatedTotalVotes.doc)
       return res.json({ success: 'new vote and new total votes count saved', poll: updatedTotalVotes.doc})
     }
     catch (error) {
-      return res.status(500).json({ error })
+      console.log('caught ERROR', error)
+      return res.status(500).json({error: 'failed to add vote to poll'})
     }
   }
+  addNewVoteToPoll(req, res)
   // checkVoterUniqueness(pollID, voter)
   // .then((dupeCheck) => {
   //   let updated = { updated: false, totalVotes: null }
