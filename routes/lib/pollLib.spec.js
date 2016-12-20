@@ -1,8 +1,8 @@
-/* global describe xdescribe it expect */
+/* global describe it expect */
 
 const { getVoterIdentity, dupeVoterCheck, tallyVoteTotal } = require('./pollsLib')
 
-const poll = { 
+const poll = {
   id: '5851f8e4dd751518580d57ca',
   updatedAt: '2016-12-15T03:04:23.213Z',
   createdAt: '2016-12-15T01:59:00.487Z',
@@ -10,26 +10,26 @@ const poll = {
   totalVotes: 0,
   title: 'Why oh why?',
   __v: 0,
-  options: [ 
-    { 
+  options: [
+    {
       option: 'Don\'t know',
       _id: '5851f8e4dd751518580d57cd',
       votes: [
-        { _id: '585203e894610424affd0042', voter: 'Matt' }, 
+        { _id: '585203e894610424affd0042', voter: 'Matt' },
         { _id: '585208373b22b529bdde32ba', voter: 'damon' }
-      ] 
+      ]
     },
     { option: 'Because',
       _id: '5851f8e4dd751518580d57cc',
       votes: [
         { _id: '585205883b22b529bdde3855', voter: 'rey' }
-      ] 
+      ]
     },
     { option: 'Why Not?',
       _id: '5851f8e4dd751518580d57cb',
-      votes: [] } 
-  ] 
-}    
+      votes: [] }
+  ]
+}
 
 describe('pollLib', () => {
   describe('getVoterIdentity()', () => {

@@ -3,7 +3,7 @@ const { dupeVoterCheck, tallyVoteTotal } = require('./pollsLib')
 
 /**
  * params: pollID string, voter string
- * 
+ *
  * Queries the database to check if the current voter
  * has voted already.
  *
@@ -23,9 +23,9 @@ const checkVoterUniqueness = async function (pollID, voter) {
 
 /**
  * params: selectedOption number, pollID string, voter string
- * 
+ *
  * Adds a new vote to a poll document. Returns an object
- * with the updated document and updated votes tally, or 
+ * with the updated document and updated votes tally, or
  * error if unsuccessful.
  *
  * returns: Object
@@ -59,7 +59,7 @@ const updateDocumentVotesTotal = function (pollID, totalVotes) {
   })
   .catch(err => {
     console.error('ERROR updateDocumentVotesTotal', err)
-    return { updated: false, error: err}
+    return { updated: false, error: err }
   })
 }
 

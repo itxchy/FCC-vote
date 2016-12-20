@@ -1,10 +1,9 @@
 const express = require('express')
 const isEmpty = require('lodash/isEmpty')
-const Promise = require('bluebird')
 const Poll = require('../models/Poll')
 const authenticate = require('../server/middleware/authenticate')
 const commonValidations = require('./shared/createAPollValidation')
-const { dupeVoterCheck, getVoterIdentity, tallyVoteTotal } = require('./lib/pollsLib')
+const { getVoterIdentity } = require('./lib/pollsLib')
 const { checkVoterUniqueness, updateDocumentWithNewVote, updateDocumentVotesTotal } = require('./lib/pollsDb')
 let router = express.Router()
 
@@ -54,12 +53,12 @@ router.post('/', authenticate, (req, res) => {
       poll.options = formattedOptions
       poll.totalVotes = 0
       poll.owner = owner
+
       poll.save()
       .then(poll => {
         res.json({ success: 'new poll created!', poll: poll })
       })
       .catch(err => res.status(500).json({ 'new poll DB save error': err }))
-
     } else {
       res.status(400).json({ 'poll validation error': result.errors })
     }
@@ -82,7 +81,7 @@ router.put('/:id', (req, res) => {
 
   addNewVoteToPoll(req, res)
 
-  async function addNewVoteToPoll(req, res) {
+  async function addNewVoteToPoll (req, res) {
     try {
       // check if voter has already voted
       let dupeCheck = await checkVoterUniqueness(pollID, voter)
@@ -101,44 +100,12 @@ router.put('/:id', (req, res) => {
         return res.status(500).json({ error: 'Failed to update total votes tally', details: updatedTotalVotes.error })
       }
       console.log('updatedTotalVotes.doc', updatedTotalVotes.doc)
-      return res.json({ success: 'new vote and new total votes tally saved', poll: updatedTotalVotes.doc})
-    }
-    catch (error) {
+      return res.json({ success: 'new vote and new total votes tally saved', poll: updatedTotalVotes.doc })
+    } catch (error) {
       console.error('caught ERROR', error)
       return res.status(500).json({ error: 'Failed to add new vote to the current poll\'s document' })
     }
   }
-
-  // checkVoterUniqueness(pollID, voter)
-  // .then((dupeCheck) => {
-  //   let updated = { updated: false, totalVotes: null }
-  //   if (dupeCheck) {
-  //     return updated
-  //   }
-  //   const votesPath = `options.${selectedOption}.votes`
-
-  //   return Poll.findOneAndUpdate(
-  //     { _id: pollID },
-  //     { $addToSet: { [votesPath]: { 'voter': voter } } },
-  //     { new: true, upsert: true }
-  //   )
-  //   .then(updatedDoc => {
-  //     res.json({ 'vote cast': updatedDoc })
-  //     let voteTotal = tallyVoteTotal(updatedDoc)
-  //     return updated = { updated: true, totalVotes: voteTotal }
-  //   })
-  //   .catch(err => res.status(500).json({ 'error': 'vote update failed', 'details': err }))
-  // })
-  // // if the vote was added, update the totalVotes count
-  // .then(updated => {
-  //   console.log('updatedObject:', updated)
-  //   if (!updated.updated) {
-  //     return
-  //   }
-
-  // })
-  // .catch(err => res.status(400).json({ 'bad request': 'user or IP can only vote once per poll', 'error': err }))
-
 })
 
 /**
