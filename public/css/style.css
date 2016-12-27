@@ -8485,4 +8485,9 @@ input[type="radio"] .styled:checked + label::after {
 .poll-card-label > input[type="radio"] {
   margin-right: 1rem; }
 
+.results-chart {
+  width: 2rem;
+  height: 2rem;
+  background: 'burlywood'; }
+
 /*# sourceMappingURL=style.css.map*/
