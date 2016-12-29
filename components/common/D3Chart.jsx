@@ -12,13 +12,13 @@ const D3Chart = React.createClass({
     let chart = ReactFauxDom.createElement('div')
     console.log('data:', this.props.results)
     let data = this.props.results
-    var width = 300
-    var height = 300
+    const width = 300
+    const height = 300
     let xScale = d3.scaleLinear()
       .domain([0, d3.max(data, d => d.votes.length)])
       .range([1, width])
 
-    var svg = d3.select(chart)
+    let svg = d3.select(chart)
       .append('svg')
       .attr('width', width)
       .attr('height', height)
