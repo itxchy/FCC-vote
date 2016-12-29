@@ -49,7 +49,7 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(34);
 	var App = __webpack_require__(172);
-	__webpack_require__(792);
+	__webpack_require__(811);
 	
 	ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
 
@@ -21449,10 +21449,10 @@
 	var jwt = __webpack_require__(450);
 	var Layout = __webpack_require__(704);
 	var Home = __webpack_require__(709);
-	var CreateAPoll = __webpack_require__(715);
-	var Signup = __webpack_require__(785);
-	var LoginPage = __webpack_require__(788);
-	var MyPollsPage = __webpack_require__(791);
+	var CreateAPoll = __webpack_require__(734);
+	var Signup = __webpack_require__(804);
+	var LoginPage = __webpack_require__(807);
+	var MyPollsPage = __webpack_require__(810);
 	var setAuthorizationToken = __webpack_require__(703);
 	
 	var Routes = function Routes() {
@@ -72094,10 +72094,12 @@
 	var connector = _require.connector;
 	
 	var PollCard = __webpack_require__(710);
-	var ResultsCard = __webpack_require__(807);
-	var func = React.PropTypes.func;
+	var ResultsCard = __webpack_require__(711);
+	var _React$PropTypes = React.PropTypes;
+	var func = _React$PropTypes.func;
+	var object = _React$PropTypes.object;
 	
-	var _require2 = __webpack_require__(711);
+	var _require2 = __webpack_require__(730);
 	
 	var dupeVoterCheck = _require2.dupeVoterCheck;
 	
@@ -72107,7 +72109,8 @@
 	  displayName: 'Home',
 	
 	  propTypes: {
-	    getAllPolls: func
+	    getAllPolls: func,
+	    user: object
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
@@ -72344,3832 +72347,6 @@
 
 	'use strict';
 	
-	var has = __webpack_require__(712);
-	var isEmpty = __webpack_require__(449);
-	var flatten = __webpack_require__(714);
-	/**
-	 * Params: poll object, voter string
-	 *
-	 * Checks if the current voter has already voted on the
-	 * current poll
-	 *
-	 * returns: BOOL
-	 */
-	var dupeVoterCheck = function dupeVoterCheck(poll, voter) {
-	  if (!voter) {
-	    return null;
-	  }
-	  var dupeCheck = poll.options.map(function (option) {
-	    if (!isEmpty(option.votes)) {
-	      var individualVoteCheck = option.votes.map(function (vote) {
-	        if (vote.voter === voter) {
-	          return true;
-	        } else {
-	          return;
-	        }
-	      });
-	      return individualVoteCheck;
-	    } else {
-	      return false;
-	    }
-	  });
-	  // if the bool 'true' is included in the dupCheck array,
-	  // dupePollCheck will return true, otherwise false
-	  dupeCheck = flatten(dupeCheck).includes(true);
-	  return dupeCheck;
-	};
-	
-	/**
-	 * Params: client's request object, client's ip address
-	 *
-	 * Assigns voter as the signed-in user, or IP address
-	 * of a user who is not signed in
-	 *
-	 * returns: username, IP address, or false
-	 */
-	var getVoterIdentity = function getVoterIdentity(req, ip) {
-	  var voter = void 0;
-	  if (has(req, 'body.voter') && req.body.voter) {
-	    voter = req.body.voter;
-	  } else if (ip) {
-	    voter = ip;
-	  } else {
-	    voter = false;
-	  }
-	  return voter;
-	};
-	
-	var tallyVoteTotal = function tallyVoteTotal(updatedDoc) {
-	  return updatedDoc.options.map(function (option) {
-	    return option.votes.length;
-	  }).reduce(function (prev, next) {
-	    return prev + next;
-	  }, 0);
-	};
-	
-	module.exports = { getVoterIdentity: getVoterIdentity, dupeVoterCheck: dupeVoterCheck, tallyVoteTotal: tallyVoteTotal };
-
-/***/ },
-/* 712 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var baseHas = __webpack_require__(713),
-	    hasPath = __webpack_require__(397);
-	
-	/**
-	 * Checks if `path` is a direct property of `object`.
-	 *
-	 * @static
-	 * @since 0.1.0
-	 * @memberOf _
-	 * @category Object
-	 * @param {Object} object The object to query.
-	 * @param {Array|string} path The path to check.
-	 * @returns {boolean} Returns `true` if `path` exists, else `false`.
-	 * @example
-	 *
-	 * var object = { 'a': { 'b': 2 } };
-	 * var other = _.create({ 'a': _.create({ 'b': 2 }) });
-	 *
-	 * _.has(object, 'a');
-	 * // => true
-	 *
-	 * _.has(object, 'a.b');
-	 * // => true
-	 *
-	 * _.has(object, ['a', 'b']);
-	 * // => true
-	 *
-	 * _.has(other, 'a');
-	 * // => false
-	 */
-	function has(object, path) {
-	  return object != null && hasPath(object, path, baseHas);
-	}
-	
-	module.exports = has;
-
-
-/***/ },
-/* 713 */
-/***/ function(module, exports) {
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-	
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-	
-	/**
-	 * The base implementation of `_.has` without support for deep paths.
-	 *
-	 * @private
-	 * @param {Object} [object] The object to query.
-	 * @param {Array|string} key The key to check.
-	 * @returns {boolean} Returns `true` if `key` exists, else `false`.
-	 */
-	function baseHas(object, key) {
-	  return object != null && hasOwnProperty.call(object, key);
-	}
-	
-	module.exports = baseHas;
-
-
-/***/ },
-/* 714 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var baseFlatten = __webpack_require__(680);
-	
-	/**
-	 * Flattens `array` a single level deep.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Array
-	 * @param {Array} array The array to flatten.
-	 * @returns {Array} Returns the new flattened array.
-	 * @example
-	 *
-	 * _.flatten([1, [2, [3, [4]], 5]]);
-	 * // => [1, 2, [3, [4]], 5]
-	 */
-	function flatten(array) {
-	  var length = array == null ? 0 : array.length;
-	  return length ? baseFlatten(array, 1) : [];
-	}
-	
-	module.exports = flatten;
-
-
-/***/ },
-/* 715 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	
-	var NewPollTitle = __webpack_require__(716);
-	var PendingPollOptions = __webpack_require__(717);
-	var SaveOrReset = __webpack_require__(718);
-	
-	var CreateAPoll = React.createClass({
-	  displayName: 'CreateAPoll',
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h1',
-	        { className: 'view-title text-center' },
-	        'Create a New Poll'
-	      ),
-	      React.createElement(NewPollTitle, null),
-	      React.createElement(PendingPollOptions, null),
-	      React.createElement(SaveOrReset, null)
-	    );
-	  }
-	});
-	
-	module.exports = connector(CreateAPoll);
-
-/***/ },
-/* 716 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
-	var string = _React$PropTypes.string;
-	var func = _React$PropTypes.func;
-	var bool = _React$PropTypes.bool;
-	
-	
-	var NewPollTitle = React.createClass({
-	  displayName: 'NewPollTitle',
-	
-	  propTypes: {
-	    newPollTitle: string,
-	    setNewPollTitle: func,
-	    titleEditable: bool,
-	    setTitleEditable: func
-	  },
-	  handleNewPollTitleChange: function handleNewPollTitleChange(event) {
-	    this.props.setNewPollTitle(event.target.value);
-	  },
-	  handleSaveClick: function handleSaveClick(event) {
-	    if (this.props.newPollTitle === '') {
-	      this.props.setNewPollTitle('New Poll Title');
-	    }
-	    this.props.setTitleEditable(false);
-	  },
-	  handleEditClick: function handleEditClick(event) {
-	    this.props.setTitleEditable(true);
-	  },
-	  render: function render() {
-	    var savedPollTitle = React.createElement(
-	      'div',
-	      { className: 'new-poll-title-container' },
-	      React.createElement(
-	        'h2',
-	        { className: 'text-center saved-title' },
-	        this.props.newPollTitle
-	      ),
-	      React.createElement(
-	        'a',
-	        { href: '#' },
-	        React.createElement('i', {
-	          className: 'fa fa-pencil-square-o edit-icon',
-	          'aria-hidden': 'true',
-	          onClick: this.handleEditClick
-	        })
-	      )
-	    );
-	    var inputPollTitle = React.createElement(
-	      'div',
-	      { className: 'new-poll-title-container' },
-	      React.createElement('textarea', {
-	        value: this.props.newPollTitle,
-	        onChange: this.handleNewPollTitleChange,
-	        type: 'text',
-	        placeholder: 'New Poll Title',
-	        className: 'text-center form-control new-poll-title-textarea'
-	      }),
-	      React.createElement(
-	        'a',
-	        { href: '#' },
-	        React.createElement('i', {
-	          className: 'fa fa-floppy-o save-icon',
-	          'aria-hidden': 'true',
-	          onClick: this.handleSaveClick
-	        })
-	      )
-	    );
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'new-poll-title-container' },
-	      this.props.titleEditable ? inputPollTitle : savedPollTitle
-	    );
-	  }
-	});
-	
-	var connected = connector(NewPollTitle);
-	
-	// This exports the component itself for testing
-	connected.DisconnectedNewPollTitle = NewPollTitle;
-	
-	module.exports = connected;
-
-/***/ },
-/* 717 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
-	var array = _React$PropTypes.array;
-	var func = _React$PropTypes.func;
-	
-	
-	var PendingPollOptions = React.createClass({
-	  displayName: 'PendingPollOptions',
-	
-	  propTypes: {
-	    newPollOptions: array.isRequired,
-	    updateOption: func.isRequired
-	  },
-	  editOption: function editOption(event) {
-	    var updatedOptions = this.props.newPollOptions.slice();
-	    updatedOptions[event.target.name] = event.target.value;
-	    this.props.updateOption(updatedOptions);
-	  },
-	  addAnotherOption: function addAnotherOption() {
-	    var updatedNewOptions = this.props.newPollOptions.slice();
-	    updatedNewOptions.push('');
-	    this.props.updateOption(updatedNewOptions);
-	  },
-	  deleteOption: function deleteOption(index) {
-	    if (this.props.newPollOptions.length === 2) {
-	      console.log('Two or more options required!');
-	      return;
-	    }
-	    var updatedDeleteOptions = this.props.newPollOptions.slice();
-	    updatedDeleteOptions.splice(index, 1);
-	    this.props.updateOption(updatedDeleteOptions);
-	  },
-	  render: function render() {
-	    var _this = this;
-	
-	    var options = this.props.newPollOptions.map(function (option, index) {
-	      return React.createElement(
-	        'div',
-	        { key: index },
-	        React.createElement('input', {
-	          type: 'text',
-	          value: option,
-	          name: index,
-	          placeholder: 'Option ' + (index + 1),
-	          onChange: _this.editOption,
-	          className: 'form-control option-input'
-	        }),
-	        React.createElement(
-	          'a',
-	          {
-	            className: 'btn btn-danger delete-button',
-	            href: '#',
-	            onClick: function onClick() {
-	              return _this.deleteOption(index);
-	            },
-	            'aria-label': 'Delete'
-	          },
-	          React.createElement('i', { className: 'fa fa-trash-o', 'aria-hidden': 'true' })
-	        )
-	      );
-	    });
-	    return React.createElement(
-	      'div',
-	      { className: 'form-group options-container' },
-	      options,
-	      React.createElement(
-	        'a',
-	        { href: '#' },
-	        React.createElement(
-	          'p',
-	          { className: 'add-another-option', onClick: this.addAnotherOption },
-	          React.createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
-	          ' Add another option'
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	var connected = connector(PendingPollOptions);
-	
-	// This exports the component itself for testing
-	connected.DisconnectedPendingPollOptions = PendingPollOptions;
-	
-	module.exports = connected;
-
-/***/ },
-/* 718 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
-	var string = _React$PropTypes.string;
-	var func = _React$PropTypes.func;
-	var array = _React$PropTypes.array;
-	var object = _React$PropTypes.object;
-	
-	var validateCreateAPollInput = __webpack_require__(719);
-	
-	var SaveOrReset = React.createClass({
-	  displayName: 'SaveOrReset',
-	
-	  propTypes: {
-	    newPollTitle: string,
-	    resetNewPoll: func,
-	    newPollOptions: array,
-	    submitNewPoll: func.isRequired,
-	    user: object.isRequired
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      errors: {}
-	    };
-	  },
-	  isValid: function isValid() {
-	    var inputData = {
-	      newPollTitle: this.props.newPollTitle,
-	      newPollOptions: this.props.newPollOptions
-	    };
-	
-	    var _validateCreateAPollI = validateCreateAPollInput(inputData);
-	
-	    var errors = _validateCreateAPollI.errors;
-	    var isValid = _validateCreateAPollI.isValid;
-	
-	    if (!isValid) {
-	      this.setState({ errors: errors });
-	    }
-	    return isValid;
-	  },
-	  saveButtonHandler: function saveButtonHandler() {
-	    if (this.isValid()) {
-	      var newPoll = {
-	        title: this.props.newPollTitle,
-	        options: this.props.newPollOptions,
-	        owner: this.props.user.username
-	      };
-	      this.props.submitNewPoll(newPoll).then(function (response) {
-	        console.log('Success!!:', response);
-	      }).catch(function (err) {
-	        console.error('Poll could not be saved', err);
-	      });
-	    }
-	  },
-	  resetButtonHandler: function resetButtonHandler() {
-	    this.props.resetNewPoll(true);
-	  },
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'text-center' },
-	      React.createElement(
-	        'button',
-	        {
-	          className: 'btn btn-primary save-reset-buttons',
-	          onClick: this.saveButtonHandler
-	        },
-	        'Save'
-	      ),
-	      React.createElement(
-	        'button',
-	        {
-	          className: 'btn save-reset-buttons reset-poll-button',
-	          onClick: this.resetButtonHandler
-	        },
-	        'Reset'
-	      )
-	    );
-	  }
-	});
-	
-	var connected = connector(SaveOrReset);
-	
-	connected.DisconnectedSaveOrReset = SaveOrReset;
-	
-	module.exports = connected;
-
-/***/ },
-/* 719 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var Validator = __webpack_require__(720);
-	var isEmpty = __webpack_require__(449);
-	
-	function validateCreateAPollInput(data) {
-	  var errors = {};
-	
-	  if (Validator.isEmpty(data.newPollTitle)) {
-	    errors.newPollTitle = 'A title is required';
-	  }
-	
-	  data.newPollOptions.map(function (option) {
-	    if (Validator.isEmpty(option)) {
-	      errors.newPollOptions = 'Blank options are not allowed';
-	    }
-	  });
-	
-	  return {
-	    errors: errors,
-	    isValid: isEmpty(errors)
-	  };
-	}
-	
-	module.exports = validateCreateAPollInput;
-
-/***/ },
-/* 720 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _toDate = __webpack_require__(721);
-	
-	var _toDate2 = _interopRequireDefault(_toDate);
-	
-	var _toFloat = __webpack_require__(723);
-	
-	var _toFloat2 = _interopRequireDefault(_toFloat);
-	
-	var _toInt = __webpack_require__(724);
-	
-	var _toInt2 = _interopRequireDefault(_toInt);
-	
-	var _toBoolean = __webpack_require__(725);
-	
-	var _toBoolean2 = _interopRequireDefault(_toBoolean);
-	
-	var _equals = __webpack_require__(726);
-	
-	var _equals2 = _interopRequireDefault(_equals);
-	
-	var _contains = __webpack_require__(727);
-	
-	var _contains2 = _interopRequireDefault(_contains);
-	
-	var _matches = __webpack_require__(729);
-	
-	var _matches2 = _interopRequireDefault(_matches);
-	
-	var _isEmail = __webpack_require__(730);
-	
-	var _isEmail2 = _interopRequireDefault(_isEmail);
-	
-	var _isURL = __webpack_require__(734);
-	
-	var _isURL2 = _interopRequireDefault(_isURL);
-	
-	var _isMACAddress = __webpack_require__(736);
-	
-	var _isMACAddress2 = _interopRequireDefault(_isMACAddress);
-	
-	var _isIP = __webpack_require__(735);
-	
-	var _isIP2 = _interopRequireDefault(_isIP);
-	
-	var _isFQDN = __webpack_require__(733);
-	
-	var _isFQDN2 = _interopRequireDefault(_isFQDN);
-	
-	var _isBoolean = __webpack_require__(737);
-	
-	var _isBoolean2 = _interopRequireDefault(_isBoolean);
-	
-	var _isAlpha = __webpack_require__(738);
-	
-	var _isAlpha2 = _interopRequireDefault(_isAlpha);
-	
-	var _isAlphanumeric = __webpack_require__(740);
-	
-	var _isAlphanumeric2 = _interopRequireDefault(_isAlphanumeric);
-	
-	var _isNumeric = __webpack_require__(741);
-	
-	var _isNumeric2 = _interopRequireDefault(_isNumeric);
-	
-	var _isLowercase = __webpack_require__(742);
-	
-	var _isLowercase2 = _interopRequireDefault(_isLowercase);
-	
-	var _isUppercase = __webpack_require__(743);
-	
-	var _isUppercase2 = _interopRequireDefault(_isUppercase);
-	
-	var _isAscii = __webpack_require__(744);
-	
-	var _isAscii2 = _interopRequireDefault(_isAscii);
-	
-	var _isFullWidth = __webpack_require__(745);
-	
-	var _isFullWidth2 = _interopRequireDefault(_isFullWidth);
-	
-	var _isHalfWidth = __webpack_require__(746);
-	
-	var _isHalfWidth2 = _interopRequireDefault(_isHalfWidth);
-	
-	var _isVariableWidth = __webpack_require__(747);
-	
-	var _isVariableWidth2 = _interopRequireDefault(_isVariableWidth);
-	
-	var _isMultibyte = __webpack_require__(748);
-	
-	var _isMultibyte2 = _interopRequireDefault(_isMultibyte);
-	
-	var _isSurrogatePair = __webpack_require__(749);
-	
-	var _isSurrogatePair2 = _interopRequireDefault(_isSurrogatePair);
-	
-	var _isInt = __webpack_require__(750);
-	
-	var _isInt2 = _interopRequireDefault(_isInt);
-	
-	var _isFloat = __webpack_require__(751);
-	
-	var _isFloat2 = _interopRequireDefault(_isFloat);
-	
-	var _isDecimal = __webpack_require__(752);
-	
-	var _isDecimal2 = _interopRequireDefault(_isDecimal);
-	
-	var _isHexadecimal = __webpack_require__(753);
-	
-	var _isHexadecimal2 = _interopRequireDefault(_isHexadecimal);
-	
-	var _isDivisibleBy = __webpack_require__(754);
-	
-	var _isDivisibleBy2 = _interopRequireDefault(_isDivisibleBy);
-	
-	var _isHexColor = __webpack_require__(755);
-	
-	var _isHexColor2 = _interopRequireDefault(_isHexColor);
-	
-	var _isMD = __webpack_require__(756);
-	
-	var _isMD2 = _interopRequireDefault(_isMD);
-	
-	var _isJSON = __webpack_require__(757);
-	
-	var _isJSON2 = _interopRequireDefault(_isJSON);
-	
-	var _isEmpty = __webpack_require__(758);
-	
-	var _isEmpty2 = _interopRequireDefault(_isEmpty);
-	
-	var _isLength = __webpack_require__(759);
-	
-	var _isLength2 = _interopRequireDefault(_isLength);
-	
-	var _isByteLength = __webpack_require__(732);
-	
-	var _isByteLength2 = _interopRequireDefault(_isByteLength);
-	
-	var _isUUID = __webpack_require__(760);
-	
-	var _isUUID2 = _interopRequireDefault(_isUUID);
-	
-	var _isMongoId = __webpack_require__(761);
-	
-	var _isMongoId2 = _interopRequireDefault(_isMongoId);
-	
-	var _isDate = __webpack_require__(762);
-	
-	var _isDate2 = _interopRequireDefault(_isDate);
-	
-	var _isAfter = __webpack_require__(764);
-	
-	var _isAfter2 = _interopRequireDefault(_isAfter);
-	
-	var _isBefore = __webpack_require__(765);
-	
-	var _isBefore2 = _interopRequireDefault(_isBefore);
-	
-	var _isIn = __webpack_require__(766);
-	
-	var _isIn2 = _interopRequireDefault(_isIn);
-	
-	var _isCreditCard = __webpack_require__(767);
-	
-	var _isCreditCard2 = _interopRequireDefault(_isCreditCard);
-	
-	var _isISIN = __webpack_require__(768);
-	
-	var _isISIN2 = _interopRequireDefault(_isISIN);
-	
-	var _isISBN = __webpack_require__(769);
-	
-	var _isISBN2 = _interopRequireDefault(_isISBN);
-	
-	var _isISSN = __webpack_require__(770);
-	
-	var _isISSN2 = _interopRequireDefault(_isISSN);
-	
-	var _isMobilePhone = __webpack_require__(771);
-	
-	var _isMobilePhone2 = _interopRequireDefault(_isMobilePhone);
-	
-	var _isCurrency = __webpack_require__(772);
-	
-	var _isCurrency2 = _interopRequireDefault(_isCurrency);
-	
-	var _isISO = __webpack_require__(763);
-	
-	var _isISO2 = _interopRequireDefault(_isISO);
-	
-	var _isBase = __webpack_require__(773);
-	
-	var _isBase2 = _interopRequireDefault(_isBase);
-	
-	var _isDataURI = __webpack_require__(774);
-	
-	var _isDataURI2 = _interopRequireDefault(_isDataURI);
-	
-	var _ltrim = __webpack_require__(775);
-	
-	var _ltrim2 = _interopRequireDefault(_ltrim);
-	
-	var _rtrim = __webpack_require__(776);
-	
-	var _rtrim2 = _interopRequireDefault(_rtrim);
-	
-	var _trim = __webpack_require__(777);
-	
-	var _trim2 = _interopRequireDefault(_trim);
-	
-	var _escape = __webpack_require__(778);
-	
-	var _escape2 = _interopRequireDefault(_escape);
-	
-	var _unescape = __webpack_require__(779);
-	
-	var _unescape2 = _interopRequireDefault(_unescape);
-	
-	var _stripLow = __webpack_require__(780);
-	
-	var _stripLow2 = _interopRequireDefault(_stripLow);
-	
-	var _whitelist = __webpack_require__(782);
-	
-	var _whitelist2 = _interopRequireDefault(_whitelist);
-	
-	var _blacklist = __webpack_require__(781);
-	
-	var _blacklist2 = _interopRequireDefault(_blacklist);
-	
-	var _isWhitelisted = __webpack_require__(783);
-	
-	var _isWhitelisted2 = _interopRequireDefault(_isWhitelisted);
-	
-	var _normalizeEmail = __webpack_require__(784);
-	
-	var _normalizeEmail2 = _interopRequireDefault(_normalizeEmail);
-	
-	var _toString = __webpack_require__(728);
-	
-	var _toString2 = _interopRequireDefault(_toString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var version = '6.1.0';
-	
-	var validator = {
-	  version: version,
-	  toDate: _toDate2.default,
-	  toFloat: _toFloat2.default, toInt: _toInt2.default,
-	  toBoolean: _toBoolean2.default,
-	  equals: _equals2.default, contains: _contains2.default, matches: _matches2.default,
-	  isEmail: _isEmail2.default, isURL: _isURL2.default, isMACAddress: _isMACAddress2.default, isIP: _isIP2.default, isFQDN: _isFQDN2.default,
-	  isBoolean: _isBoolean2.default,
-	  isAlpha: _isAlpha2.default, isAlphanumeric: _isAlphanumeric2.default, isNumeric: _isNumeric2.default, isLowercase: _isLowercase2.default, isUppercase: _isUppercase2.default,
-	  isAscii: _isAscii2.default, isFullWidth: _isFullWidth2.default, isHalfWidth: _isHalfWidth2.default, isVariableWidth: _isVariableWidth2.default,
-	  isMultibyte: _isMultibyte2.default, isSurrogatePair: _isSurrogatePair2.default,
-	  isInt: _isInt2.default, isFloat: _isFloat2.default, isDecimal: _isDecimal2.default, isHexadecimal: _isHexadecimal2.default, isDivisibleBy: _isDivisibleBy2.default,
-	  isHexColor: _isHexColor2.default,
-	  isMD5: _isMD2.default,
-	  isJSON: _isJSON2.default,
-	  isEmpty: _isEmpty2.default,
-	  isLength: _isLength2.default, isByteLength: _isByteLength2.default,
-	  isUUID: _isUUID2.default, isMongoId: _isMongoId2.default,
-	  isDate: _isDate2.default, isAfter: _isAfter2.default, isBefore: _isBefore2.default,
-	  isIn: _isIn2.default,
-	  isCreditCard: _isCreditCard2.default,
-	  isISIN: _isISIN2.default, isISBN: _isISBN2.default, isISSN: _isISSN2.default,
-	  isMobilePhone: _isMobilePhone2.default,
-	  isCurrency: _isCurrency2.default,
-	  isISO8601: _isISO2.default,
-	  isBase64: _isBase2.default, isDataURI: _isDataURI2.default,
-	  ltrim: _ltrim2.default, rtrim: _rtrim2.default, trim: _trim2.default,
-	  escape: _escape2.default, unescape: _unescape2.default, stripLow: _stripLow2.default,
-	  whitelist: _whitelist2.default, blacklist: _blacklist2.default,
-	  isWhitelisted: _isWhitelisted2.default,
-	  normalizeEmail: _normalizeEmail2.default,
-	  toString: _toString2.default
-	};
-	
-	exports.default = validator;
-	module.exports = exports['default'];
-
-/***/ },
-/* 721 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = toDate;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function toDate(date) {
-	  (0, _assertString2.default)(date);
-	  date = Date.parse(date);
-	  return !isNaN(date) ? new Date(date) : null;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 722 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = assertString;
-	function assertString(input) {
-	  if (typeof input !== 'string') {
-	    throw new TypeError('This library (validator.js) validates strings only');
-	  }
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 723 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = toFloat;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function toFloat(str) {
-	  (0, _assertString2.default)(str);
-	  return parseFloat(str);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 724 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = toInt;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function toInt(str, radix) {
-	  (0, _assertString2.default)(str);
-	  return parseInt(str, radix || 10);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 725 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = toBoolean;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function toBoolean(str, strict) {
-	  (0, _assertString2.default)(str);
-	  if (strict) {
-	    return str === '1' || str === 'true';
-	  }
-	  return str !== '0' && str !== 'false' && str !== '';
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 726 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = equals;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function equals(str, comparison) {
-	  (0, _assertString2.default)(str);
-	  return str === comparison;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 727 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = contains;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	var _toString = __webpack_require__(728);
-	
-	var _toString2 = _interopRequireDefault(_toString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function contains(str, elem) {
-	  (0, _assertString2.default)(str);
-	  return str.indexOf((0, _toString2.default)(elem)) >= 0;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 728 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-	
-	exports.default = toString;
-	function toString(input) {
-	  if ((typeof input === 'undefined' ? 'undefined' : _typeof(input)) === 'object' && input !== null) {
-	    if (typeof input.toString === 'function') {
-	      input = input.toString();
-	    } else {
-	      input = '[object Object]';
-	    }
-	  } else if (input === null || typeof input === 'undefined' || isNaN(input) && !input.length) {
-	    input = '';
-	  }
-	  return String(input);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 729 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = matches;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function matches(str, pattern, modifiers) {
-	  (0, _assertString2.default)(str);
-	  if (Object.prototype.toString.call(pattern) !== '[object RegExp]') {
-	    pattern = new RegExp(pattern, modifiers);
-	  }
-	  return pattern.test(str);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 730 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isEmail;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	var _merge = __webpack_require__(731);
-	
-	var _merge2 = _interopRequireDefault(_merge);
-	
-	var _isByteLength = __webpack_require__(732);
-	
-	var _isByteLength2 = _interopRequireDefault(_isByteLength);
-	
-	var _isFQDN = __webpack_require__(733);
-	
-	var _isFQDN2 = _interopRequireDefault(_isFQDN);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var default_email_options = {
-	  allow_display_name: false,
-	  allow_utf8_local_part: true,
-	  require_tld: true
-	};
-	
-	/* eslint-disable max-len */
-	/* eslint-disable no-control-regex */
-	var displayName = /^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\.\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\.\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF\s]*<(.+)>$/i;
-	var emailUserPart = /^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~]+$/i;
-	var quotedEmailUser = /^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f]))*$/i;
-	var emailUserUtf8Part = /^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$/i;
-	var quotedEmailUserUtf8 = /^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*$/i;
-	/* eslint-enable max-len */
-	/* eslint-enable no-control-regex */
-	
-	function isEmail(str, options) {
-	  (0, _assertString2.default)(str);
-	  options = (0, _merge2.default)(options, default_email_options);
-	
-	  if (options.allow_display_name) {
-	    var display_email = str.match(displayName);
-	    if (display_email) {
-	      str = display_email[1];
-	    }
-	  }
-	
-	  var parts = str.split('@');
-	  var domain = parts.pop();
-	  var user = parts.join('@');
-	
-	  var lower_domain = domain.toLowerCase();
-	  if (lower_domain === 'gmail.com' || lower_domain === 'googlemail.com') {
-	    user = user.replace(/\./g, '').toLowerCase();
-	  }
-	
-	  if (!(0, _isByteLength2.default)(user, { max: 64 }) || !(0, _isByteLength2.default)(domain, { max: 256 })) {
-	    return false;
-	  }
-	
-	  if (!(0, _isFQDN2.default)(domain, { require_tld: options.require_tld })) {
-	    return false;
-	  }
-	
-	  if (user[0] === '"') {
-	    user = user.slice(1, user.length - 1);
-	    return options.allow_utf8_local_part ? quotedEmailUserUtf8.test(user) : quotedEmailUser.test(user);
-	  }
-	
-	  var pattern = options.allow_utf8_local_part ? emailUserUtf8Part : emailUserPart;
-	
-	  var user_parts = user.split('.');
-	  for (var i = 0; i < user_parts.length; i++) {
-	    if (!pattern.test(user_parts[i])) {
-	      return false;
-	    }
-	  }
-	
-	  return true;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 731 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = merge;
-	function merge() {
-	  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-	  var defaults = arguments[1];
-	
-	  for (var key in defaults) {
-	    if (typeof obj[key] === 'undefined') {
-	      obj[key] = defaults[key];
-	    }
-	  }
-	  return obj;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 732 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-	
-	exports.default = isByteLength;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/* eslint-disable prefer-rest-params */
-	function isByteLength(str, options) {
-	  (0, _assertString2.default)(str);
-	  var min = void 0;
-	  var max = void 0;
-	  if ((typeof options === 'undefined' ? 'undefined' : _typeof(options)) === 'object') {
-	    min = options.min || 0;
-	    max = options.max;
-	  } else {
-	    // backwards compatibility: isByteLength(str, min [, max])
-	    min = arguments[1];
-	    max = arguments[2];
-	  }
-	  var len = encodeURI(str).split(/%..|./).length - 1;
-	  return len >= min && (typeof max === 'undefined' || len <= max);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 733 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isFDQN;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	var _merge = __webpack_require__(731);
-	
-	var _merge2 = _interopRequireDefault(_merge);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var default_fqdn_options = {
-	  require_tld: true,
-	  allow_underscores: false,
-	  allow_trailing_dot: false
-	};
-	
-	function isFDQN(str, options) {
-	  (0, _assertString2.default)(str);
-	  options = (0, _merge2.default)(options, default_fqdn_options);
-	
-	  /* Remove the optional trailing dot before checking validity */
-	  if (options.allow_trailing_dot && str[str.length - 1] === '.') {
-	    str = str.substring(0, str.length - 1);
-	  }
-	  var parts = str.split('.');
-	  if (options.require_tld) {
-	    var tld = parts.pop();
-	    if (!parts.length || !/^([a-z\u00a1-\uffff]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
-	      return false;
-	    }
-	  }
-	  for (var part, i = 0; i < parts.length; i++) {
-	    part = parts[i];
-	    if (options.allow_underscores) {
-	      part = part.replace(/_/g, '');
-	    }
-	    if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
-	      return false;
-	    }
-	    if (/[\uff01-\uff5e]/.test(part)) {
-	      // disallow full-width chars
-	      return false;
-	    }
-	    if (part[0] === '-' || part[part.length - 1] === '-') {
-	      return false;
-	    }
-	  }
-	  return true;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 734 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isURL;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	var _isFQDN = __webpack_require__(733);
-	
-	var _isFQDN2 = _interopRequireDefault(_isFQDN);
-	
-	var _isIP = __webpack_require__(735);
-	
-	var _isIP2 = _interopRequireDefault(_isIP);
-	
-	var _merge = __webpack_require__(731);
-	
-	var _merge2 = _interopRequireDefault(_merge);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var default_url_options = {
-	  protocols: ['http', 'https', 'ftp'],
-	  require_tld: true,
-	  require_protocol: false,
-	  require_host: true,
-	  require_valid_protocol: true,
-	  allow_underscores: false,
-	  allow_trailing_dot: false,
-	  allow_protocol_relative_urls: false
-	};
-	
-	var wrapped_ipv6 = /^\[([^\]]+)\](?::([0-9]+))?$/;
-	
-	function isRegExp(obj) {
-	  return Object.prototype.toString.call(obj) === '[object RegExp]';
-	}
-	
-	function checkHost(host, matches) {
-	  for (var i = 0; i < matches.length; i++) {
-	    var match = matches[i];
-	    if (host === match || isRegExp(match) && match.test(host)) {
-	      return true;
-	    }
-	  }
-	  return false;
-	}
-	
-	function isURL(url, options) {
-	  (0, _assertString2.default)(url);
-	  if (!url || url.length >= 2083 || /\s/.test(url)) {
-	    return false;
-	  }
-	  if (url.indexOf('mailto:') === 0) {
-	    return false;
-	  }
-	  options = (0, _merge2.default)(options, default_url_options);
-	  var protocol = void 0,
-	      auth = void 0,
-	      host = void 0,
-	      hostname = void 0,
-	      port = void 0,
-	      port_str = void 0,
-	      split = void 0,
-	      ipv6 = void 0;
-	
-	  split = url.split('#');
-	  url = split.shift();
-	
-	  split = url.split('?');
-	  url = split.shift();
-	
-	  split = url.split('://');
-	  if (split.length > 1) {
-	    protocol = split.shift();
-	    if (options.require_valid_protocol && options.protocols.indexOf(protocol) === -1) {
-	      return false;
-	    }
-	  } else if (options.require_protocol) {
-	    return false;
-	  } else if (options.allow_protocol_relative_urls && url.substr(0, 2) === '//') {
-	    split[0] = url.substr(2);
-	  }
-	  url = split.join('://');
-	
-	  split = url.split('/');
-	  url = split.shift();
-	
-	  if (url === '' && !options.require_host) {
-	    return true;
-	  }
-	
-	  split = url.split('@');
-	  if (split.length > 1) {
-	    auth = split.shift();
-	    if (auth.indexOf(':') >= 0 && auth.split(':').length > 2) {
-	      return false;
-	    }
-	  }
-	  hostname = split.join('@');
-	
-	  port_str = ipv6 = null;
-	  var ipv6_match = hostname.match(wrapped_ipv6);
-	  if (ipv6_match) {
-	    host = '';
-	    ipv6 = ipv6_match[1];
-	    port_str = ipv6_match[2] || null;
-	  } else {
-	    split = hostname.split(':');
-	    host = split.shift();
-	    if (split.length) {
-	      port_str = split.join(':');
-	    }
-	  }
-	
-	  if (port_str !== null) {
-	    port = parseInt(port_str, 10);
-	    if (!/^[0-9]+$/.test(port_str) || port <= 0 || port > 65535) {
-	      return false;
-	    }
-	  }
-	
-	  if (!(0, _isIP2.default)(host) && !(0, _isFQDN2.default)(host, options) && (!ipv6 || !(0, _isIP2.default)(ipv6, 6)) && host !== 'localhost') {
-	    return false;
-	  }
-	
-	  host = host || ipv6;
-	
-	  if (options.host_whitelist && !checkHost(host, options.host_whitelist)) {
-	    return false;
-	  }
-	  if (options.host_blacklist && checkHost(host, options.host_blacklist)) {
-	    return false;
-	  }
-	
-	  return true;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 735 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isIP;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var ipv4Maybe = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
-	var ipv6Block = /^[0-9A-F]{1,4}$/i;
-	
-	function isIP(str) {
-	  var version = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-	
-	  (0, _assertString2.default)(str);
-	  version = String(version);
-	  if (!version) {
-	    return isIP(str, 4) || isIP(str, 6);
-	  } else if (version === '4') {
-	    if (!ipv4Maybe.test(str)) {
-	      return false;
-	    }
-	    var parts = str.split('.').sort(function (a, b) {
-	      return a - b;
-	    });
-	    return parts[3] <= 255;
-	  } else if (version === '6') {
-	    var blocks = str.split(':');
-	    var foundOmissionBlock = false; // marker to indicate ::
-	
-	    // At least some OS accept the last 32 bits of an IPv6 address
-	    // (i.e. 2 of the blocks) in IPv4 notation, and RFC 3493 says
-	    // that '::ffff:a.b.c.d' is valid for IPv4-mapped IPv6 addresses,
-	    // and '::a.b.c.d' is deprecated, but also valid.
-	    var foundIPv4TransitionBlock = isIP(blocks[blocks.length - 1], 4);
-	    var expectedNumberOfBlocks = foundIPv4TransitionBlock ? 7 : 8;
-	
-	    if (blocks.length > expectedNumberOfBlocks) {
-	      return false;
-	    }
-	    // initial or final ::
-	    if (str === '::') {
-	      return true;
-	    } else if (str.substr(0, 2) === '::') {
-	      blocks.shift();
-	      blocks.shift();
-	      foundOmissionBlock = true;
-	    } else if (str.substr(str.length - 2) === '::') {
-	      blocks.pop();
-	      blocks.pop();
-	      foundOmissionBlock = true;
-	    }
-	
-	    for (var i = 0; i < blocks.length; ++i) {
-	      // test for a :: which can not be at the string start/end
-	      // since those cases have been handled above
-	      if (blocks[i] === '' && i > 0 && i < blocks.length - 1) {
-	        if (foundOmissionBlock) {
-	          return false; // multiple :: in address
-	        }
-	        foundOmissionBlock = true;
-	      } else if (foundIPv4TransitionBlock && i === blocks.length - 1) {
-	        // it has been checked before that the last
-	        // block is a valid IPv4 address
-	      } else if (!ipv6Block.test(blocks[i])) {
-	        return false;
-	      }
-	    }
-	    if (foundOmissionBlock) {
-	      return blocks.length >= 1;
-	    }
-	    return blocks.length === expectedNumberOfBlocks;
-	  }
-	  return false;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 736 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isMACAddress;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var macAddress = /^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$/;
-	
-	function isMACAddress(str) {
-	  (0, _assertString2.default)(str);
-	  return macAddress.test(str);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 737 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isBoolean;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function isBoolean(str) {
-	  (0, _assertString2.default)(str);
-	  return ['true', 'false', '1', '0'].indexOf(str) >= 0;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 738 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isAlpha;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	var _alpha = __webpack_require__(739);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function isAlpha(str) {
-	  var locale = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'en-US';
-	
-	  (0, _assertString2.default)(str);
-	  if (locale in _alpha.alpha) {
-	    return _alpha.alpha[locale].test(str);
-	  }
-	  throw new Error('Invalid locale \'' + locale + '\'');
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 739 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var alpha = exports.alpha = {
-	  'en-US': /^[A-Z]+$/i,
-	  'cs-CZ': /^[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]+$/i,
-	  'de-DE': /^[A-ZÄÖÜß]+$/i,
-	  'es-ES': /^[A-ZÁÉÍÑÓÚÜ]+$/i,
-	  'fr-FR': /^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ]+$/i,
-	  'nl-NL': /^[A-ZÉËÏÓÖÜ]+$/i,
-	  'hu-HU': /^[A-ZÁÉÍÓÖŐÚÜŰ]+$/i,
-	  'pl-PL': /^[A-ZĄĆĘŚŁŃÓŻŹ]+$/i,
-	  'pt-PT': /^[A-ZÃÁÀÂÇÉÊÍÕÓÔÚÜ]+$/i,
-	  'ru-RU': /^[А-ЯЁ]+$/i,
-	  'sr-RS@latin': /^[A-ZČĆŽŠĐ]+$/i,
-	  'sr-RS': /^[А-ЯЂЈЉЊЋЏ]+$/i,
-	  'tr-TR': /^[A-ZÇĞİıÖŞÜ]+$/i,
-	  'uk-UA': /^[А-ЯЄIЇҐ]+$/i,
-	  ar: /^[ءآأؤإئابةتثجحخدذرزسشصضطظعغفقكلمنهوىيًٌٍَُِّْٰ]+$/
-	};
-	
-	var alphanumeric = exports.alphanumeric = {
-	  'en-US': /^[0-9A-Z]+$/i,
-	  'cs-CZ': /^[0-9A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]+$/i,
-	  'de-DE': /^[0-9A-ZÄÖÜß]+$/i,
-	  'es-ES': /^[0-9A-ZÁÉÍÑÓÚÜ]+$/i,
-	  'fr-FR': /^[0-9A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ]+$/i,
-	  'hu-HU': /^[0-9A-ZÁÉÍÓÖŐÚÜŰ]+$/i,
-	  'nl-NL': /^[0-9A-ZÉËÏÓÖÜ]+$/i,
-	  'pl-PL': /^[0-9A-ZĄĆĘŚŁŃÓŻŹ]+$/i,
-	  'pt-PT': /^[0-9A-ZÃÁÀÂÇÉÊÍÕÓÔÚÜ]+$/i,
-	  'ru-RU': /^[0-9А-ЯЁ]+$/i,
-	  'sr-RS@latin': /^[0-9A-ZČĆŽŠĐ]+$/i,
-	  'sr-RS': /^[0-9А-ЯЂЈЉЊЋЏ]+$/i,
-	  'tr-TR': /^[0-9A-ZÇĞİıÖŞÜ]+$/i,
-	  'uk-UA': /^[0-9А-ЯЄIЇҐ]+$/i,
-	  ar: /^[٠١٢٣٤٥٦٧٨٩0-9ءآأؤإئابةتثجحخدذرزسشصضطظعغفقكلمنهوىيًٌٍَُِّْٰ]+$/
-	};
-	
-	var englishLocales = exports.englishLocales = ['AU', 'GB', 'HK', 'IN', 'NZ', 'ZA', 'ZM'];
-	
-	for (var locale, i = 0; i < englishLocales.length; i++) {
-	  locale = 'en-' + englishLocales[i];
-	  alpha[locale] = alpha['en-US'];
-	  alphanumeric[locale] = alphanumeric['en-US'];
-	}
-	
-	alpha['pt-BR'] = alpha['pt-PT'];
-	alphanumeric['pt-BR'] = alphanumeric['pt-PT'];
-	
-	// Source: http://www.localeplanet.com/java/
-	var arabicLocales = exports.arabicLocales = ['AE', 'BH', 'DZ', 'EG', 'IQ', 'JO', 'KW', 'LB', 'LY', 'MA', 'QM', 'QA', 'SA', 'SD', 'SY', 'TN', 'YE'];
-	
-	for (var _locale, _i = 0; _i < arabicLocales.length; _i++) {
-	  _locale = 'ar-' + arabicLocales[_i];
-	  alpha[_locale] = alpha.ar;
-	  alphanumeric[_locale] = alphanumeric.ar;
-	}
-
-/***/ },
-/* 740 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isAlphanumeric;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	var _alpha = __webpack_require__(739);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function isAlphanumeric(str) {
-	  var locale = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'en-US';
-	
-	  (0, _assertString2.default)(str);
-	  if (locale in _alpha.alphanumeric) {
-	    return _alpha.alphanumeric[locale].test(str);
-	  }
-	  throw new Error('Invalid locale \'' + locale + '\'');
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 741 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isNumeric;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var numeric = /^[-+]?[0-9]+$/;
-	
-	function isNumeric(str) {
-	  (0, _assertString2.default)(str);
-	  return numeric.test(str);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 742 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isLowercase;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function isLowercase(str) {
-	  (0, _assertString2.default)(str);
-	  return str === str.toLowerCase();
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 743 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isUppercase;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function isUppercase(str) {
-	  (0, _assertString2.default)(str);
-	  return str === str.toUpperCase();
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 744 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isAscii;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/* eslint-disable no-control-regex */
-	var ascii = /^[\x00-\x7F]+$/;
-	/* eslint-enable no-control-regex */
-	
-	function isAscii(str) {
-	  (0, _assertString2.default)(str);
-	  return ascii.test(str);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 745 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.fullWidth = undefined;
-	exports.default = isFullWidth;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var fullWidth = exports.fullWidth = /[^\u0020-\u007E\uFF61-\uFF9F\uFFA0-\uFFDC\uFFE8-\uFFEE0-9a-zA-Z]/;
-	
-	function isFullWidth(str) {
-	  (0, _assertString2.default)(str);
-	  return fullWidth.test(str);
-	}
-
-/***/ },
-/* 746 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.halfWidth = undefined;
-	exports.default = isHalfWidth;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var halfWidth = exports.halfWidth = /[\u0020-\u007E\uFF61-\uFF9F\uFFA0-\uFFDC\uFFE8-\uFFEE0-9a-zA-Z]/;
-	
-	function isHalfWidth(str) {
-	  (0, _assertString2.default)(str);
-	  return halfWidth.test(str);
-	}
-
-/***/ },
-/* 747 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isVariableWidth;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	var _isFullWidth = __webpack_require__(745);
-	
-	var _isHalfWidth = __webpack_require__(746);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function isVariableWidth(str) {
-	  (0, _assertString2.default)(str);
-	  return _isFullWidth.fullWidth.test(str) && _isHalfWidth.halfWidth.test(str);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 748 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isMultibyte;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/* eslint-disable no-control-regex */
-	var multibyte = /[^\x00-\x7F]/;
-	/* eslint-enable no-control-regex */
-	
-	function isMultibyte(str) {
-	  (0, _assertString2.default)(str);
-	  return multibyte.test(str);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 749 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isSurrogatePair;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var surrogatePair = /[\uD800-\uDBFF][\uDC00-\uDFFF]/;
-	
-	function isSurrogatePair(str) {
-	  (0, _assertString2.default)(str);
-	  return surrogatePair.test(str);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 750 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isInt;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var int = /^(?:[-+]?(?:0|[1-9][0-9]*))$/;
-	var intLeadingZeroes = /^[-+]?[0-9]+$/;
-	
-	function isInt(str, options) {
-	  (0, _assertString2.default)(str);
-	  options = options || {};
-	
-	  // Get the regex to use for testing, based on whether
-	  // leading zeroes are allowed or not.
-	  var regex = options.hasOwnProperty('allow_leading_zeroes') && !options.allow_leading_zeroes ? int : intLeadingZeroes;
-	
-	  // Check min/max
-	  var minCheckPassed = !options.hasOwnProperty('min') || str >= options.min;
-	  var maxCheckPassed = !options.hasOwnProperty('max') || str <= options.max;
-	
-	  return regex.test(str) && minCheckPassed && maxCheckPassed;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 751 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isFloat;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var float = /^(?:[-+]?(?:[0-9]+))?(?:\.[0-9]*)?(?:[eE][\+\-]?(?:[0-9]+))?$/;
-	
-	function isFloat(str, options) {
-	  (0, _assertString2.default)(str);
-	  options = options || {};
-	  if (str === '' || str === '.') {
-	    return false;
-	  }
-	  return float.test(str) && (!options.hasOwnProperty('min') || str >= options.min) && (!options.hasOwnProperty('max') || str <= options.max) && (!options.hasOwnProperty('lt') || str < options.lt) && (!options.hasOwnProperty('gt') || str > options.gt);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 752 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isDecimal;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var decimal = /^[-+]?([0-9]+|\.[0-9]+|[0-9]+\.[0-9]+)$/;
-	
-	function isDecimal(str) {
-	  (0, _assertString2.default)(str);
-	  return str !== '' && decimal.test(str);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 753 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isHexadecimal;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var hexadecimal = /^[0-9A-F]+$/i;
-	
-	function isHexadecimal(str) {
-	  (0, _assertString2.default)(str);
-	  return hexadecimal.test(str);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 754 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isDivisibleBy;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	var _toFloat = __webpack_require__(723);
-	
-	var _toFloat2 = _interopRequireDefault(_toFloat);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function isDivisibleBy(str, num) {
-	  (0, _assertString2.default)(str);
-	  return (0, _toFloat2.default)(str) % parseInt(num, 10) === 0;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 755 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isHexColor;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var hexcolor = /^#?([0-9A-F]{3}|[0-9A-F]{6})$/i;
-	
-	function isHexColor(str) {
-	  (0, _assertString2.default)(str);
-	  return hexcolor.test(str);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 756 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isMD5;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var md5 = /^[a-f0-9]{32}$/;
-	
-	function isMD5(str) {
-	  (0, _assertString2.default)(str);
-	  return md5.test(str);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 757 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-	
-	exports.default = isJSON;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function isJSON(str) {
-	  (0, _assertString2.default)(str);
-	  try {
-	    var obj = JSON.parse(str);
-	    return !!obj && (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object';
-	  } catch (e) {/* ignore */}
-	  return false;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 758 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isEmpty;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function isEmpty(str) {
-	  (0, _assertString2.default)(str);
-	  return str.length === 0;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 759 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-	
-	exports.default = isLength;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/* eslint-disable prefer-rest-params */
-	function isLength(str, options) {
-	  (0, _assertString2.default)(str);
-	  var min = void 0;
-	  var max = void 0;
-	  if ((typeof options === 'undefined' ? 'undefined' : _typeof(options)) === 'object') {
-	    min = options.min || 0;
-	    max = options.max;
-	  } else {
-	    // backwards compatibility: isLength(str, min [, max])
-	    min = arguments[1];
-	    max = arguments[2];
-	  }
-	  var surrogatePairs = str.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g) || [];
-	  var len = str.length - surrogatePairs.length;
-	  return len >= min && (typeof max === 'undefined' || len <= max);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 760 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isUUID;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var uuid = {
-	  3: /^[0-9A-F]{8}-[0-9A-F]{4}-3[0-9A-F]{3}-[0-9A-F]{4}-[0-9A-F]{12}$/i,
-	  4: /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i,
-	  5: /^[0-9A-F]{8}-[0-9A-F]{4}-5[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i,
-	  all: /^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/i
-	};
-	
-	function isUUID(str) {
-	  var version = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'all';
-	
-	  (0, _assertString2.default)(str);
-	  var pattern = uuid[version];
-	  return pattern && pattern.test(str);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 761 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isMongoId;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	var _isHexadecimal = __webpack_require__(753);
-	
-	var _isHexadecimal2 = _interopRequireDefault(_isHexadecimal);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function isMongoId(str) {
-	  (0, _assertString2.default)(str);
-	  return (0, _isHexadecimal2.default)(str) && str.length === 24;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 762 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isDate;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	var _isISO = __webpack_require__(763);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function getTimezoneOffset(str) {
-	  var iso8601Parts = str.match(_isISO.iso8601);
-	  var timezone = void 0,
-	      sign = void 0,
-	      hours = void 0,
-	      minutes = void 0;
-	  if (!iso8601Parts) {
-	    str = str.toLowerCase();
-	    timezone = str.match(/(?:\s|gmt\s*)(-|\+)(\d{1,4})(\s|$)/);
-	    if (!timezone) {
-	      return str.indexOf('gmt') !== -1 ? 0 : null;
-	    }
-	    sign = timezone[1];
-	    var offset = timezone[2];
-	    if (offset.length === 3) {
-	      offset = '0' + offset;
-	    }
-	    if (offset.length <= 2) {
-	      hours = 0;
-	      minutes = parseInt(offset, 10);
-	    } else {
-	      hours = parseInt(offset.slice(0, 2), 10);
-	      minutes = parseInt(offset.slice(2, 4), 10);
-	    }
-	  } else {
-	    timezone = iso8601Parts[21];
-	    if (!timezone) {
-	      // if no hour/minute was provided, the date is GMT
-	      return !iso8601Parts[12] ? 0 : null;
-	    }
-	    if (timezone === 'z' || timezone === 'Z') {
-	      return 0;
-	    }
-	    sign = iso8601Parts[22];
-	    if (timezone.indexOf(':') !== -1) {
-	      hours = parseInt(iso8601Parts[23], 10);
-	      minutes = parseInt(iso8601Parts[24], 10);
-	    } else {
-	      hours = 0;
-	      minutes = parseInt(iso8601Parts[23], 10);
-	    }
-	  }
-	  return (hours * 60 + minutes) * (sign === '-' ? 1 : -1);
-	}
-	
-	function isDate(str) {
-	  (0, _assertString2.default)(str);
-	  var normalizedDate = new Date(Date.parse(str));
-	  if (isNaN(normalizedDate)) {
-	    return false;
-	  }
-	
-	  // normalizedDate is in the user's timezone. Apply the input
-	  // timezone offset to the date so that the year and day match
-	  // the input
-	  var timezoneOffset = getTimezoneOffset(str);
-	  if (timezoneOffset !== null) {
-	    var timezoneDifference = normalizedDate.getTimezoneOffset() - timezoneOffset;
-	    normalizedDate = new Date(normalizedDate.getTime() + 60000 * timezoneDifference);
-	  }
-	
-	  var day = String(normalizedDate.getDate());
-	  var dayOrYear = void 0,
-	      dayOrYearMatches = void 0,
-	      year = void 0;
-	  // check for valid double digits that could be late days
-	  // check for all matches since a string like '12/23' is a valid date
-	  // ignore everything with nearby colons
-	  dayOrYearMatches = str.match(/(^|[^:\d])[23]\d([^T:\d]|$)/g);
-	  if (!dayOrYearMatches) {
-	    return true;
-	  }
-	  dayOrYear = dayOrYearMatches.map(function (digitString) {
-	    return digitString.match(/\d+/g)[0];
-	  }).join('/');
-	
-	  year = String(normalizedDate.getFullYear()).slice(-2);
-	  if (dayOrYear === day || dayOrYear === year) {
-	    return true;
-	  } else if (dayOrYear === '' + day / year || dayOrYear === '' + year / day) {
-	    return true;
-	  }
-	  return false;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 763 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.iso8601 = undefined;
-	
-	exports.default = function (str) {
-	  (0, _assertString2.default)(str);
-	  return iso8601.test(str);
-	};
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/* eslint-disable max-len */
-	// from http://goo.gl/0ejHHW
-	var iso8601 = exports.iso8601 = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
-	/* eslint-enable max-len */
-
-/***/ },
-/* 764 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isAfter;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	var _toDate = __webpack_require__(721);
-	
-	var _toDate2 = _interopRequireDefault(_toDate);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function isAfter(str) {
-	  var date = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : String(new Date());
-	
-	  (0, _assertString2.default)(str);
-	  var comparison = (0, _toDate2.default)(date);
-	  var original = (0, _toDate2.default)(str);
-	  return !!(original && comparison && original > comparison);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 765 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isBefore;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	var _toDate = __webpack_require__(721);
-	
-	var _toDate2 = _interopRequireDefault(_toDate);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function isBefore(str) {
-	  var date = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : String(new Date());
-	
-	  (0, _assertString2.default)(str);
-	  var comparison = (0, _toDate2.default)(date);
-	  var original = (0, _toDate2.default)(str);
-	  return !!(original && comparison && original < comparison);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 766 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-	
-	exports.default = isIn;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	var _toString = __webpack_require__(728);
-	
-	var _toString2 = _interopRequireDefault(_toString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function isIn(str, options) {
-	  (0, _assertString2.default)(str);
-	  var i = void 0;
-	  if (Object.prototype.toString.call(options) === '[object Array]') {
-	    var array = [];
-	    for (i in options) {
-	      if ({}.hasOwnProperty.call(options, i)) {
-	        array[i] = (0, _toString2.default)(options[i]);
-	      }
-	    }
-	    return array.indexOf(str) >= 0;
-	  } else if ((typeof options === 'undefined' ? 'undefined' : _typeof(options)) === 'object') {
-	    return options.hasOwnProperty(str);
-	  } else if (options && typeof options.indexOf === 'function') {
-	    return options.indexOf(str) >= 0;
-	  }
-	  return false;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 767 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isCreditCard;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/* eslint-disable max-len */
-	var creditCard = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|(222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})|62[0-9]{14}$/;
-	/* eslint-enable max-len */
-	
-	function isCreditCard(str) {
-	  (0, _assertString2.default)(str);
-	  var sanitized = str.replace(/[^0-9]+/g, '');
-	  if (!creditCard.test(sanitized)) {
-	    return false;
-	  }
-	  var sum = 0;
-	  var digit = void 0;
-	  var tmpNum = void 0;
-	  var shouldDouble = void 0;
-	  for (var i = sanitized.length - 1; i >= 0; i--) {
-	    digit = sanitized.substring(i, i + 1);
-	    tmpNum = parseInt(digit, 10);
-	    if (shouldDouble) {
-	      tmpNum *= 2;
-	      if (tmpNum >= 10) {
-	        sum += tmpNum % 10 + 1;
-	      } else {
-	        sum += tmpNum;
-	      }
-	    } else {
-	      sum += tmpNum;
-	    }
-	    shouldDouble = !shouldDouble;
-	  }
-	  return !!(sum % 10 === 0 ? sanitized : false);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 768 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isISIN;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var isin = /^[A-Z]{2}[0-9A-Z]{9}[0-9]$/;
-	
-	function isISIN(str) {
-	  (0, _assertString2.default)(str);
-	  if (!isin.test(str)) {
-	    return false;
-	  }
-	
-	  var checksumStr = str.replace(/[A-Z]/g, function (character) {
-	    return parseInt(character, 36);
-	  });
-	
-	  var sum = 0;
-	  var digit = void 0;
-	  var tmpNum = void 0;
-	  var shouldDouble = true;
-	  for (var i = checksumStr.length - 2; i >= 0; i--) {
-	    digit = checksumStr.substring(i, i + 1);
-	    tmpNum = parseInt(digit, 10);
-	    if (shouldDouble) {
-	      tmpNum *= 2;
-	      if (tmpNum >= 10) {
-	        sum += tmpNum + 1;
-	      } else {
-	        sum += tmpNum;
-	      }
-	    } else {
-	      sum += tmpNum;
-	    }
-	    shouldDouble = !shouldDouble;
-	  }
-	
-	  return parseInt(str.substr(str.length - 1), 10) === (10000 - sum) % 10;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 769 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isISBN;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var isbn10Maybe = /^(?:[0-9]{9}X|[0-9]{10})$/;
-	var isbn13Maybe = /^(?:[0-9]{13})$/;
-	var factor = [1, 3];
-	
-	function isISBN(str) {
-	  var version = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-	
-	  (0, _assertString2.default)(str);
-	  version = String(version);
-	  if (!version) {
-	    return isISBN(str, 10) || isISBN(str, 13);
-	  }
-	  var sanitized = str.replace(/[\s-]+/g, '');
-	  var checksum = 0;
-	  var i = void 0;
-	  if (version === '10') {
-	    if (!isbn10Maybe.test(sanitized)) {
-	      return false;
-	    }
-	    for (i = 0; i < 9; i++) {
-	      checksum += (i + 1) * sanitized.charAt(i);
-	    }
-	    if (sanitized.charAt(9) === 'X') {
-	      checksum += 10 * 10;
-	    } else {
-	      checksum += 10 * sanitized.charAt(9);
-	    }
-	    if (checksum % 11 === 0) {
-	      return !!sanitized;
-	    }
-	  } else if (version === '13') {
-	    if (!isbn13Maybe.test(sanitized)) {
-	      return false;
-	    }
-	    for (i = 0; i < 12; i++) {
-	      checksum += factor[i % 2] * sanitized.charAt(i);
-	    }
-	    if (sanitized.charAt(12) - (10 - checksum % 10) % 10 === 0) {
-	      return !!sanitized;
-	    }
-	  }
-	  return false;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 770 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isISSN;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var issn = '^\\d{4}-?\\d{3}[\\dX]$';
-	
-	function isISSN(str) {
-	  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-	
-	  (0, _assertString2.default)(str);
-	  var testIssn = issn;
-	  testIssn = options.require_hyphen ? testIssn.replace('?', '') : testIssn;
-	  testIssn = options.case_sensitive ? new RegExp(testIssn) : new RegExp(testIssn, 'i');
-	  if (!testIssn.test(str)) {
-	    return false;
-	  }
-	  var issnDigits = str.replace('-', '');
-	  var position = 8;
-	  var checksum = 0;
-	  var _iteratorNormalCompletion = true;
-	  var _didIteratorError = false;
-	  var _iteratorError = undefined;
-	
-	  try {
-	    for (var _iterator = issnDigits[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	      var digit = _step.value;
-	
-	      var digitValue = digit.toUpperCase() === 'X' ? 10 : +digit;
-	      checksum += digitValue * position;
-	      --position;
-	    }
-	  } catch (err) {
-	    _didIteratorError = true;
-	    _iteratorError = err;
-	  } finally {
-	    try {
-	      if (!_iteratorNormalCompletion && _iterator.return) {
-	        _iterator.return();
-	      }
-	    } finally {
-	      if (_didIteratorError) {
-	        throw _iteratorError;
-	      }
-	    }
-	  }
-	
-	  return checksum % 11 === 0;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 771 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isMobilePhone;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/* eslint-disable max-len */
-	var phones = {
-	  'ar-DZ': /^(\+?213|0)(5|6|7)\d{8}$/,
-	  'ar-SY': /^(!?(\+?963)|0)?9\d{8}$/,
-	  'ar-SA': /^(!?(\+?966)|0)?5\d{8}$/,
-	  'en-US': /^(\+?1)?[2-9]\d{2}[2-9](?!11)\d{6}$/,
-	  'cs-CZ': /^(\+?420)? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$/,
-	  'de-DE': /^(\+?49[ \.\-])?([\(]{1}[0-9]{1,6}[\)])?([0-9 \.\-\/]{3,20})((x|ext|extension)[ ]?[0-9]{1,4})?$/,
-	  'da-DK': /^(\+?45)?(\d{8})$/,
-	  'el-GR': /^(\+?30)?(69\d{8})$/,
-	  'en-AU': /^(\+?61|0)4\d{8}$/,
-	  'en-GB': /^(\+?44|0)7\d{9}$/,
-	  'en-HK': /^(\+?852\-?)?[569]\d{3}\-?\d{4}$/,
-	  'en-IN': /^(\+?91|0)?[789]\d{9}$/,
-	  'en-NZ': /^(\+?64|0)2\d{7,9}$/,
-	  'en-ZA': /^(\+?27|0)\d{9}$/,
-	  'en-ZM': /^(\+?26)?09[567]\d{7}$/,
-	  'es-ES': /^(\+?34)?(6\d{1}|7[1234])\d{7}$/,
-	  'fi-FI': /^(\+?358|0)\s?(4(0|1|2|4|5)?|50)\s?(\d\s?){4,8}\d$/,
-	  'fr-FR': /^(\+?33|0)[67]\d{8}$/,
-	  'hu-HU': /^(\+?36)(20|30|70)\d{7}$/,
-	  'it-IT': /^(\+?39)?\s?3\d{2} ?\d{6,7}$/,
-	  'ja-JP': /^(\+?81|0)\d{1,4}[ \-]?\d{1,4}[ \-]?\d{4}$/,
-	  'ms-MY': /^(\+?6?01){1}(([145]{1}(\-|\s)?\d{7,8})|([236789]{1}(\s|\-)?\d{7}))$/,
-	  'nb-NO': /^(\+?47)?[49]\d{7}$/,
-	  'nl-BE': /^(\+?32|0)4?\d{8}$/,
-	  'nn-NO': /^(\+?47)?[49]\d{7}$/,
-	  'pl-PL': /^(\+?48)? ?[5-8]\d ?\d{3} ?\d{2} ?\d{2}$/,
-	  'pt-BR': /^(\+?55|0)\-?[1-9]{2}\-?[2-9]{1}\d{3,4}\-?\d{4}$/,
-	  'pt-PT': /^(\+?351)?9[1236]\d{7}$/,
-	  'ru-RU': /^(\+?7|8)?9\d{9}$/,
-	  'sr-RS': /^(\+3816|06)[- \d]{5,9}$/,
-	  'tr-TR': /^(\+?90|0)?5\d{9}$/,
-	  'vi-VN': /^(\+?84|0)?((1(2([0-9])|6([2-9])|88|99))|(9((?!5)[0-9])))([0-9]{7})$/,
-	  'zh-CN': /^(\+?0?86\-?)?1[345789]\d{9}$/,
-	  'zh-TW': /^(\+?886\-?|0)?9\d{8}$/
-	};
-	/* eslint-enable max-len */
-	
-	// aliases
-	phones['en-CA'] = phones['en-US'];
-	phones['fr-BE'] = phones['nl-BE'];
-	
-	function isMobilePhone(str, locale) {
-	  (0, _assertString2.default)(str);
-	  if (locale in phones) {
-	    return phones[locale].test(str);
-	  }
-	  return false;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 772 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isCurrency;
-	
-	var _merge = __webpack_require__(731);
-	
-	var _merge2 = _interopRequireDefault(_merge);
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function currencyRegex(options) {
-	  var symbol = '(\\' + options.symbol.replace(/\./g, '\\.') + ')' + (options.require_symbol ? '' : '?'),
-	      negative = '-?',
-	      whole_dollar_amount_without_sep = '[1-9]\\d*',
-	      whole_dollar_amount_with_sep = '[1-9]\\d{0,2}(\\' + options.thousands_separator + '\\d{3})*',
-	      valid_whole_dollar_amounts = ['0', whole_dollar_amount_without_sep, whole_dollar_amount_with_sep],
-	      whole_dollar_amount = '(' + valid_whole_dollar_amounts.join('|') + ')?',
-	      decimal_amount = '(\\' + options.decimal_separator + '\\d{2})?';
-	  var pattern = whole_dollar_amount + decimal_amount;
-	
-	  // default is negative sign before symbol, but there are two other options (besides parens)
-	  if (options.allow_negatives && !options.parens_for_negatives) {
-	    if (options.negative_sign_after_digits) {
-	      pattern += negative;
-	    } else if (options.negative_sign_before_digits) {
-	      pattern = negative + pattern;
-	    }
-	  }
-	
-	  // South African Rand, for example, uses R 123 (space) and R-123 (no space)
-	  if (options.allow_negative_sign_placeholder) {
-	    pattern = '( (?!\\-))?' + pattern;
-	  } else if (options.allow_space_after_symbol) {
-	    pattern = ' ?' + pattern;
-	  } else if (options.allow_space_after_digits) {
-	    pattern += '( (?!$))?';
-	  }
-	
-	  if (options.symbol_after_digits) {
-	    pattern += symbol;
-	  } else {
-	    pattern = symbol + pattern;
-	  }
-	
-	  if (options.allow_negatives) {
-	    if (options.parens_for_negatives) {
-	      pattern = '(\\(' + pattern + '\\)|' + pattern + ')';
-	    } else if (!(options.negative_sign_before_digits || options.negative_sign_after_digits)) {
-	      pattern = negative + pattern;
-	    }
-	  }
-	
-	  /* eslint-disable prefer-template */
-	  return new RegExp('^' +
-	  // ensure there's a dollar and/or decimal amount, and that
-	  // it doesn't start with a space or a negative sign followed by a space
-	  '(?!-? )(?=.*\\d)' + pattern + '$');
-	  /* eslint-enable prefer-template */
-	}
-	
-	var default_currency_options = {
-	  symbol: '$',
-	  require_symbol: false,
-	  allow_space_after_symbol: false,
-	  symbol_after_digits: false,
-	  allow_negatives: true,
-	  parens_for_negatives: false,
-	  negative_sign_before_digits: false,
-	  negative_sign_after_digits: false,
-	  allow_negative_sign_placeholder: false,
-	  thousands_separator: ',',
-	  decimal_separator: '.',
-	  allow_space_after_digits: false
-	};
-	
-	function isCurrency(str, options) {
-	  (0, _assertString2.default)(str);
-	  options = (0, _merge2.default)(options, default_currency_options);
-	  return currencyRegex(options).test(str);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 773 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isBase64;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var notBase64 = /[^A-Z0-9+\/=]/i;
-	
-	function isBase64(str) {
-	  (0, _assertString2.default)(str);
-	  var len = str.length;
-	  if (!len || len % 4 !== 0 || notBase64.test(str)) {
-	    return false;
-	  }
-	  var firstPaddingChar = str.indexOf('=');
-	  return firstPaddingChar === -1 || firstPaddingChar === len - 1 || firstPaddingChar === len - 2 && str[len - 1] === '=';
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 774 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isDataURI;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var dataURI = /^\s*data:([a-z]+\/[a-z0-9\-\+]+(;[a-z\-]+=[a-z0-9\-]+)?)?(;base64)?,[a-z0-9!\$&',\(\)\*\+,;=\-\._~:@\/\?%\s]*\s*$/i; // eslint-disable-line max-len
-	
-	function isDataURI(str) {
-	  (0, _assertString2.default)(str);
-	  return dataURI.test(str);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 775 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = ltrim;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function ltrim(str, chars) {
-	  (0, _assertString2.default)(str);
-	  var pattern = chars ? new RegExp('^[' + chars + ']+', 'g') : /^\s+/g;
-	  return str.replace(pattern, '');
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 776 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = rtrim;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function rtrim(str, chars) {
-	  (0, _assertString2.default)(str);
-	  var pattern = chars ? new RegExp('[' + chars + ']') : /\s/;
-	
-	  var idx = str.length - 1;
-	  while (idx >= 0 && pattern.test(str[idx])) {
-	    idx--;
-	  }
-	
-	  return idx < str.length ? str.substr(0, idx + 1) : str;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 777 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = trim;
-	
-	var _rtrim = __webpack_require__(776);
-	
-	var _rtrim2 = _interopRequireDefault(_rtrim);
-	
-	var _ltrim = __webpack_require__(775);
-	
-	var _ltrim2 = _interopRequireDefault(_ltrim);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function trim(str, chars) {
-	  return (0, _rtrim2.default)((0, _ltrim2.default)(str, chars), chars);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 778 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	      value: true
-	});
-	exports.default = escape;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function escape(str) {
-	      (0, _assertString2.default)(str);
-	      return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\//g, '&#x2F;').replace(/\\/g, '&#x5C;').replace(/`/g, '&#96;');
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 779 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	      value: true
-	});
-	exports.default = unescape;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function unescape(str) {
-	      (0, _assertString2.default)(str);
-	      return str.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#x27;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#x2F;/g, '/').replace(/&#96;/g, '`');
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 780 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = stripLow;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	var _blacklist = __webpack_require__(781);
-	
-	var _blacklist2 = _interopRequireDefault(_blacklist);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function stripLow(str, keep_new_lines) {
-	  (0, _assertString2.default)(str);
-	  var chars = keep_new_lines ? '\\x00-\\x09\\x0B\\x0C\\x0E-\\x1F\\x7F' : '\\x00-\\x1F\\x7F';
-	  return (0, _blacklist2.default)(str, chars);
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 781 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = blacklist;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function blacklist(str, chars) {
-	  (0, _assertString2.default)(str);
-	  return str.replace(new RegExp('[' + chars + ']+', 'g'), '');
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 782 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = whitelist;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function whitelist(str, chars) {
-	  (0, _assertString2.default)(str);
-	  return str.replace(new RegExp('[^' + chars + ']+', 'g'), '');
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 783 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = isWhitelisted;
-	
-	var _assertString = __webpack_require__(722);
-	
-	var _assertString2 = _interopRequireDefault(_assertString);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function isWhitelisted(str, chars) {
-	  (0, _assertString2.default)(str);
-	  for (var i = str.length - 1; i >= 0; i--) {
-	    if (chars.indexOf(str[i]) === -1) {
-	      return false;
-	    }
-	  }
-	  return true;
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 784 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = normalizeEmail;
-	
-	var _isEmail = __webpack_require__(730);
-	
-	var _isEmail2 = _interopRequireDefault(_isEmail);
-	
-	var _merge = __webpack_require__(731);
-	
-	var _merge2 = _interopRequireDefault(_merge);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var default_normalize_email_options = {
-	  // The following options apply to all email addresses
-	  // Lowercases the local part of the email address.
-	  // Please note this may violate RFC 5321 as per http://stackoverflow.com/a/9808332/192024).
-	  // The domain is always lowercased, as per RFC 1035
-	  all_lowercase: true,
-	
-	  // The following conversions are specific to GMail
-	  // Lowercases the local part of the GMail address (known to be case-insensitive)
-	  gmail_lowercase: true,
-	  // Removes dots from the local part of the email address, as that's ignored by GMail
-	  gmail_remove_dots: true,
-	  // Removes the subaddress (e.g. "+foo") from the email address
-	  gmail_remove_subaddress: true,
-	  // Conversts the googlemail.com domain to gmail.com
-	  gmail_convert_googlemaildotcom: true,
-	
-	  // The following conversions are specific to Outlook.com / Windows Live / Hotmail
-	  // Lowercases the local part of the Outlook.com address (known to be case-insensitive)
-	  outlookdotcom_lowercase: true,
-	  // Removes the subaddress (e.g. "+foo") from the email address
-	  outlookdotcom_remove_subaddress: true,
-	
-	  // The following conversions are specific to Yahoo
-	  // Lowercases the local part of the Yahoo address (known to be case-insensitive)
-	  yahoo_lowercase: true,
-	  // Removes the subaddress (e.g. "-foo") from the email address
-	  yahoo_remove_subaddress: true,
-	
-	  // The following conversions are specific to iCloud
-	  // Lowercases the local part of the iCloud address (known to be case-insensitive)
-	  icloud_lowercase: true,
-	  // Removes the subaddress (e.g. "+foo") from the email address
-	  icloud_remove_subaddress: true
-	};
-	
-	// List of domains used by iCloud
-	var icloud_domains = ['icloud.com', 'me.com'];
-	
-	// List of domains used by Outlook.com and its predecessors
-	// This list is likely incomplete.
-	// Partial reference:
-	// https://blogs.office.com/2013/04/17/outlook-com-gets-two-step-verification-sign-in-by-alias-and-new-international-domains/
-	var outlookdotcom_domains = ['hotmail.at', 'hotmail.be', 'hotmail.ca', 'hotmail.cl', 'hotmail.co.il', 'hotmail.co.nz', 'hotmail.co.th', 'hotmail.co.uk', 'hotmail.com', 'hotmail.com.ar', 'hotmail.com.au', 'hotmail.com.br', 'hotmail.com.gr', 'hotmail.com.mx', 'hotmail.com.pe', 'hotmail.com.tr', 'hotmail.com.vn', 'hotmail.cz', 'hotmail.de', 'hotmail.dk', 'hotmail.es', 'hotmail.fr', 'hotmail.hu', 'hotmail.id', 'hotmail.ie', 'hotmail.in', 'hotmail.it', 'hotmail.jp', 'hotmail.kr', 'hotmail.lv', 'hotmail.my', 'hotmail.ph', 'hotmail.pt', 'hotmail.sa', 'hotmail.sg', 'hotmail.sk', 'live.be', 'live.co.uk', 'live.com', 'live.com.ar', 'live.com.mx', 'live.de', 'live.es', 'live.eu', 'live.fr', 'live.it', 'live.nl', 'msn.com', 'outlook.at', 'outlook.be', 'outlook.cl', 'outlook.co.il', 'outlook.co.nz', 'outlook.co.th', 'outlook.com', 'outlook.com.ar', 'outlook.com.au', 'outlook.com.br', 'outlook.com.gr', 'outlook.com.pe', 'outlook.com.tr', 'outlook.com.vn', 'outlook.cz', 'outlook.de', 'outlook.dk', 'outlook.es', 'outlook.fr', 'outlook.hu', 'outlook.id', 'outlook.ie', 'outlook.in', 'outlook.it', 'outlook.jp', 'outlook.kr', 'outlook.lv', 'outlook.my', 'outlook.ph', 'outlook.pt', 'outlook.sa', 'outlook.sg', 'outlook.sk', 'passport.com'];
-	
-	// List of domains used by Yahoo Mail
-	// This list is likely incomplete
-	var yahoo_domains = ['rocketmail.com', 'yahoo.ca', 'yahoo.co.uk', 'yahoo.com', 'yahoo.de', 'yahoo.fr', 'yahoo.in', 'yahoo.it', 'ymail.com'];
-	
-	function normalizeEmail(email, options) {
-	  options = (0, _merge2.default)(options, default_normalize_email_options);
-	
-	  if (!(0, _isEmail2.default)(email)) {
-	    return false;
-	  }
-	
-	  var raw_parts = email.split('@');
-	  var domain = raw_parts.pop();
-	  var user = raw_parts.join('@');
-	  var parts = [user, domain];
-	
-	  // The domain is always lowercased, as it's case-insensitive per RFC 1035
-	  parts[1] = parts[1].toLowerCase();
-	
-	  if (parts[1] === 'gmail.com' || parts[1] === 'googlemail.com') {
-	    // Address is GMail
-	    if (options.gmail_remove_subaddress) {
-	      parts[0] = parts[0].split('+')[0];
-	    }
-	    if (options.gmail_remove_dots) {
-	      parts[0] = parts[0].replace(/\./g, '');
-	    }
-	    if (!parts[0].length) {
-	      return false;
-	    }
-	    if (options.all_lowercase || options.gmail_lowercase) {
-	      parts[0] = parts[0].toLowerCase();
-	    }
-	    parts[1] = options.gmail_convert_googlemaildotcom ? 'gmail.com' : parts[1];
-	  } else if (~icloud_domains.indexOf(parts[1])) {
-	    // Address is iCloud
-	    if (options.icloud_remove_subaddress) {
-	      parts[0] = parts[0].split('+')[0];
-	    }
-	    if (!parts[0].length) {
-	      return false;
-	    }
-	    if (options.all_lowercase || options.icloud_lowercase) {
-	      parts[0] = parts[0].toLowerCase();
-	    }
-	  } else if (~outlookdotcom_domains.indexOf(parts[1])) {
-	    // Address is Outlook.com
-	    if (options.outlookdotcom_remove_subaddress) {
-	      parts[0] = parts[0].split('+')[0];
-	    }
-	    if (!parts[0].length) {
-	      return false;
-	    }
-	    if (options.all_lowercase || options.outlookdotcom_lowercase) {
-	      parts[0] = parts[0].toLowerCase();
-	    }
-	  } else if (~yahoo_domains.indexOf(parts[1])) {
-	    // Address is Yahoo
-	    if (options.yahoo_remove_subaddress) {
-	      var components = parts[0].split('-');
-	      parts[0] = components.length > 1 ? components.slice(0, -1).join('-') : components[0];
-	    }
-	    if (!parts[0].length) {
-	      return false;
-	    }
-	    if (options.all_lowercase || options.yahoo_lowercase) {
-	      parts[0] = parts[0].toLowerCase();
-	    }
-	  } else {
-	    // Any other address
-	    if (options.all_lowercase) {
-	      parts[0] = parts[0].toLowerCase();
-	    }
-	  }
-	  return parts.join('@');
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 785 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	
-	var validateInput = __webpack_require__(786);
-	var TextFieldGroup = __webpack_require__(787);
-	var _React$PropTypes = React.PropTypes;
-	var func = _React$PropTypes.func;
-	var object = _React$PropTypes.object;
-	
-	
-	var Signup = React.createClass({
-	  displayName: 'Signup',
-	
-	  propTypes: {
-	    userSignupRequest: func.isRequired,
-	    addFlashMessage: func.isRequired,
-	    isUserExists: func.isRequired
-	  },
-	
-	  getInitialState: function getInitialState() {
-	    return {
-	      username: '',
-	      email: '',
-	      password: '',
-	      passwordConfirmation: '',
-	      errors: {},
-	      isLoading: false,
-	      invalid: false
-	    };
-	  },
-	  onChange: function onChange(event) {
-	    /**
-	     * instead of setting state with {username: event.target.value},
-	     * using [event.target.name] will allow this function to be reused
-	     * by other form fields with onChange events. Thank you Rem Zolotykh
-	     * for sharing this method.
-	     */
-	    this.setState(_defineProperty({}, event.target.name, event.target.value));
-	  },
-	  isValid: function isValid() {
-	    var _validateInput = validateInput(this.state);
-	
-	    var errors = _validateInput.errors;
-	    var isValid = _validateInput.isValid;
-	
-	
-	    if (!isValid) {
-	      this.setState({ errors: errors });
-	    }
-	
-	    return isValid;
-	  },
-	  checkUserExists: function checkUserExists(event) {
-	    var _this = this;
-	
-	    var field = event.target.name;
-	    var val = event.target.value;
-	    if (val !== '') {
-	      this.props.isUserExists(val).then(function (res) {
-	        // if a user is found, pass an error message
-	        var errors = _this.state.errors;
-	        var invalid = void 0;
-	        if (res.data.user) {
-	          errors[field] = 'A user exists with this ' + field;
-	          invalid = true;
-	        } else {
-	          errors[field] = '';
-	          invalid = false;
-	        }
-	
-	        _this.setState({ errors: errors, invalid: invalid });
-	      });
-	    }
-	  },
-	  onSubmit: function onSubmit(event) {
-	    var _this2 = this;
-	
-	    event.preventDefault();
-	
-	    if (this.isValid()) {
-	      this.setState({ errors: {}, isLoading: true });
-	
-	      this.props.userSignupRequest(this.state).then(function (response) {
-	        _this2.props.addFlashMessage({
-	          type: 'success',
-	          text: 'Signup successful!'
-	        });
-	        _this2.context.router.push('/');
-	      }).catch(function (error) {
-	        _this2.setState({ errors: error.response.data, isLoading: false });
-	      });
-	    }
-	  },
-	  render: function render() {
-	    var errors = this.state.errors;
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'row' },
-	      React.createElement(
-	        'h1',
-	        { className: 'text-center' },
-	        'Sign up to make some polls!'
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'col-md-4 col-md-offset-4' },
-	        React.createElement(
-	          'form',
-	          { onSubmit: this.onSubmit },
-	          React.createElement(TextFieldGroup, {
-	            value: this.state.username,
-	            onChange: this.onChange,
-	            checkUserExists: this.checkUserExists,
-	            type: 'text',
-	            field: 'username',
-	            label: 'Username',
-	            error: errors.username
-	          }),
-	          React.createElement(TextFieldGroup, {
-	            value: this.state.email,
-	            onChange: this.onChange,
-	            checkUserExists: this.checkUserExists,
-	            type: 'text',
-	            field: 'email',
-	            label: 'Email',
-	            error: errors.email
-	          }),
-	          React.createElement(TextFieldGroup, {
-	            value: this.state.password,
-	            onChange: this.onChange,
-	            type: 'password',
-	            field: 'password',
-	            label: 'Password',
-	            error: errors.password
-	          }),
-	          React.createElement(TextFieldGroup, {
-	            value: this.state.passwordConfirmation,
-	            onChange: this.onChange,
-	            type: 'password',
-	            field: 'passwordConfirmation',
-	            label: 'Confirm Password',
-	            error: errors.passwordConfirmation
-	          }),
-	          React.createElement(
-	            'div',
-	            { className: 'form-group' },
-	            React.createElement(
-	              'button',
-	              { disabled: this.state.isLoading || this.state.invalid, className: 'btn btn-primary btn-lg' },
-	              'Sign up'
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	Signup.contextTypes = {
-	  router: object.isRequired
-	};
-	
-	module.exports = connector(Signup);
-
-/***/ },
-/* 786 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var Validator = __webpack_require__(720);
-	var isEmpty = __webpack_require__(449);
-	
-	function validateInput(data) {
-	  var errors = {};
-	
-	  // email ======================================
-	
-	  if (Validator.isEmpty(data.email)) {
-	    errors.email = 'A valid Email is required';
-	  }
-	
-	  if (!Validator.isEmail(data.email)) {
-	    errors.email = 'Email is invalid';
-	  }
-	
-	  // password ===================================
-	
-	  if (Validator.isEmpty(data.password)) {
-	    errors.password = 'A valid password is required';
-	  }
-	
-	  if (Validator.isEmpty(data.passwordConfirmation)) {
-	    errors.passwordConfirmation = 'You must confirm your password';
-	  }
-	
-	  if (!Validator.equals(data.password, data.passwordConfirmation)) {
-	    errors.passwordConfirmation = 'Passwords do not match';
-	  }
-	
-	  // username ===================================
-	
-	  if (Validator.isEmpty(data.username)) {
-	    errors.username = 'A valid username is required';
-	  }
-	
-	  return {
-	    errors: errors,
-	    isValid: isEmpty(errors)
-	  };
-	}
-	
-	module.exports = validateInput;
-
-/***/ },
-/* 787 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var classnames = __webpack_require__(708);
-	var _React$PropTypes = React.PropTypes;
-	var string = _React$PropTypes.string;
-	var func = _React$PropTypes.func;
-	
-	
-	var TextFieldGroup = function TextFieldGroup(_ref) {
-	  var field = _ref.field;
-	  var value = _ref.value;
-	  var label = _ref.label;
-	  var error = _ref.error;
-	  var type = _ref.type;
-	  var onChange = _ref.onChange;
-	  var checkUserExists = _ref.checkUserExists;
-	
-	  return React.createElement(
-	    'div',
-	    { className: classnames('form-group', { 'has-error': error }) },
-	    React.createElement(
-	      'label',
-	      { className: 'control-label' },
-	      label
-	    ),
-	    React.createElement('input', {
-	      value: value,
-	      onChange: onChange,
-	      onBlur: checkUserExists,
-	      type: type,
-	      name: field,
-	      className: 'form-control'
-	    }),
-	    error && React.createElement(
-	      'span',
-	      { className: 'help-block' },
-	      error
-	    )
-	  );
-	};
-	
-	TextFieldGroup.propTypes = {
-	  field: string.isRequired,
-	  value: string.isRequired,
-	  label: string.isRequired,
-	  error: string,
-	  type: string.isRequired,
-	  onChange: func.isRequired,
-	  checkUserExists: func
-	};
-	
-	TextFieldGroup.defaultProps = {
-	  type: 'text'
-	};
-	
-	module.exports = TextFieldGroup;
-
-/***/ },
-/* 788 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var LoginForm = __webpack_require__(789);
-	
-	var LoginPage = React.createClass({
-	  displayName: 'LoginPage',
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'row' },
-	      React.createElement(
-	        'div',
-	        { className: 'col-md-4 col-md-offset-4' },
-	        React.createElement(LoginForm, null)
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = LoginPage;
-
-/***/ },
-/* 789 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	
-	var TextFieldGroup = __webpack_require__(787);
-	var validateInput = __webpack_require__(790);
-	var _React$PropTypes = React.PropTypes;
-	var func = _React$PropTypes.func;
-	var object = _React$PropTypes.object;
-	
-	
-	var LoginForm = React.createClass({
-	  displayName: 'LoginForm',
-	
-	  propTypes: {
-	    login: func.isRequired
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      identifier: '',
-	      password: '',
-	      errors: '',
-	      isLoading: false
-	    };
-	  },
-	  isValid: function isValid() {
-	    var _validateInput = validateInput(this.state);
-	
-	    var errors = _validateInput.errors;
-	    var isValid = _validateInput.isValid;
-	
-	
-	    if (!isValid) {
-	      this.setState({ errors: errors });
-	    }
-	
-	    return isValid;
-	  },
-	  onSubmit: function onSubmit(event) {
-	    var _this = this;
-	
-	    event.preventDefault();
-	
-	    if (this.isValid()) {
-	      this.setState({ errors: {}, isLoading: true });
-	      this.props.login(this.state).then(function (response) {
-	        _this.setState({ isLoading: false });
-	        console.log('logged in!', response);
-	        _this.context.router.push('/');
-	      }).catch(function (error) {
-	        console.log('error logging in: ', error);
-	        _this.setState({
-	
-	          isLoading: false
-	        });
-	      });
-	    }
-	  },
-	  onChange: function onChange(event) {
-	    this.setState(_defineProperty({}, event.target.name, event.target.value));
-	  },
-	  render: function render() {
-	    var _state = this.state;
-	    var errors = _state.errors;
-	    var identifier = _state.identifier;
-	    var password = _state.password;
-	    var isLoading = _state.isLoading;
-	
-	    return React.createElement(
-	      'form',
-	      { onSubmit: this.onSubmit },
-	      React.createElement(
-	        'h1',
-	        null,
-	        'Login'
-	      ),
-	      errors.form && React.createElement(
-	        'div',
-	        { className: 'alert alert-danger' },
-	        errors.form
-	      ),
-	      React.createElement(TextFieldGroup, {
-	        field: 'identifier',
-	        label: 'Username / Email',
-	        value: identifier,
-	        error: errors.identifier,
-	        onChange: this.onChange
-	      }),
-	      React.createElement(TextFieldGroup, {
-	        field: 'password',
-	        label: 'Password',
-	        value: password,
-	        error: errors.password,
-	        onChange: this.onChange,
-	        type: 'password'
-	      }),
-	      React.createElement(
-	        'div',
-	        { className: 'form-group' },
-	        React.createElement(
-	          'button',
-	          { className: 'button btn btn-primary btn-lg', disabled: isLoading },
-	          'Login'
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	LoginForm.contextTypes = {
-	  router: object.isRequired
-	};
-	
-	module.exports = connector(LoginForm);
-
-/***/ },
-/* 790 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var Validator = __webpack_require__(720);
-	var isEmpty = __webpack_require__(449);
-	
-	function validateInput(data) {
-	  var errors = {};
-	
-	  if (Validator.isEmpty(data.identifier)) {
-	    errors.identifier = 'This field is required';
-	  }
-	
-	  if (Validator.isEmpty(data.password)) {
-	    errors.password = 'This field is required';
-	  }
-	
-	  return {
-	    errors: errors,
-	    isValid: isEmpty(errors)
-	  };
-	}
-	
-	module.exports = validateInput;
-
-/***/ },
-/* 791 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	
-	var isEmpty = __webpack_require__(449);
-	var _React$PropTypes = React.PropTypes;
-	var func = _React$PropTypes.func;
-	var object = _React$PropTypes.object;
-	
-	
-	var MyPollsPage = React.createClass({
-	  displayName: 'MyPollsPage',
-	
-	  propTypes: {
-	    getUserPolls: func,
-	    user: object
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      myPolls: {}
-	    };
-	  },
-	  getMyPolls: function getMyPolls() {
-	    var _this = this;
-	
-	    var username = this.props.user.username;
-	
-	    if (username && isEmpty(this.state.myPolls)) {
-	      this.props.getUserPolls(username).then(function (res) {
-	        if (res.data.length > 0) {
-	          _this.setState({ myPolls: res.data });
-	        } else {
-	          _this.setState({ myPolls: { polls: null } });
-	        }
-	      });
-	    }
-	  },
-	  render: function render() {
-	    this.getMyPolls();
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'pre',
-	        null,
-	        React.createElement(
-	          'code',
-	          null,
-	          JSON.stringify(this.state.myPolls, null, 4)
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = connector(MyPollsPage);
-
-/***/ },
-/* 792 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 793 */,
-/* 794 */,
-/* 795 */,
-/* 796 */,
-/* 797 */,
-/* 798 */,
-/* 799 */,
-/* 800 */,
-/* 801 */,
-/* 802 */,
-/* 803 */,
-/* 804 */,
-/* 805 */,
-/* 806 */,
-/* 807 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
 	var React = __webpack_require__(1);
 	
 	var _require = __webpack_require__(236);
@@ -76182,7 +72359,7 @@
 	var object = _React$PropTypes.object;
 	var func = _React$PropTypes.func;
 	
-	var D3Chart = __webpack_require__(808);
+	var D3Chart = __webpack_require__(712);
 	var isEmpty = __webpack_require__(449);
 	
 	var ResultsCard = React.createClass({
@@ -76234,7 +72411,7 @@
 	module.exports = connector(ResultsCard);
 
 /***/ },
-/* 808 */
+/* 712 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -76244,8 +72421,8 @@
 	var string = _React$PropTypes.string;
 	var array = _React$PropTypes.array;
 	
-	var d3 = __webpack_require__(809);
-	var ReactFauxDom = __webpack_require__(811);
+	var d3 = __webpack_require__(713);
+	var ReactFauxDom = __webpack_require__(714);
 	
 	var D3Chart = React.createClass({
 	  displayName: 'D3Chart',
@@ -76257,41 +72434,30 @@
 	  render: function render() {
 	    var chart = ReactFauxDom.createElement('div');
 	    console.log('data:', this.props.results);
-	    console.log('data.length:', this.props.results.length);
-	    // d3.select(chart)
-	    //   .selectAll('p')
-	    //   .data(this.props.results)
-	    //   .enter()
-	    //   .append('p')
-	    //   .text(d => {
-	    //     console.log('d', d)
-	    //     return d.option + ' ' + d.votes.length
-	    //   })
 	    var data = this.props.results;
-	    var width = 200;
-	    var height = 500;
+	    var width = 300;
+	    var height = 300;
+	    var xScale = d3.scaleLinear().domain([0, d3.max(data, function (d) {
+	      return d.votes.length;
+	    })]).range([1, width]);
 	
 	    var svg = d3.select(chart).append('svg').attr('width', width).attr('height', height);
 	
 	    svg.selectAll('rect').data(data).enter().append('rect').attr('x', 10).attr('y', function (d, i) {
 	      return i * (height / data.length);
 	    }).attr('width', function (d) {
+	      return xScale(d.votes.length);
+	    }).attr('height', height / data.length - 4).attr('fill', 'teal');
+	
+	    svg.selectAll('text').data(data).enter().append('text').text(function (d) {
+	      return d.option + ': ' + d.votes.length;
+	    }).attr('x', 16).attr('y', function (d, i) {
+	      return i * (height / data.length) + 24;
+	    }).attr('width', function (d) {
 	      return d.votes.length * 4;
 	    }).attr('height', function (d) {
 	      return height / data.length - 8;
-	    }).attr('fill', 'teal');
-	
-	    // svg.selectAll('text')
-	    //   .data(this.props.results)
-	    //   .enter()
-	    //   .append('text')
-	    //   .text(d => d.option + ': ' + d.votes)
-	    //   .attr('x', 16)
-	    //   .attr('y', (d,i) => i * (height/data.length) + 24)
-	    //   .attr('width', d => d.votes * 4)
-	    //   .attr('height', d => height/data.length - 8)
-	    //   .attr("font-family", "sans-serif")
-	    //   .attr("font-size", 18)
+	    }).attr("font-family", "sans-serif").attr("font-size", 18);
 	
 	    console.log('faux element:', chart);
 	    return chart.toReact();
@@ -76301,7 +72467,7 @@
 	module.exports = D3Chart;
 
 /***/ },
-/* 809 */
+/* 713 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org Version 4.4.0. Copyright 2016 Mike Bostock.
@@ -92700,14 +88866,13 @@
 
 
 /***/ },
-/* 810 */,
-/* 811 */
+/* 714 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Element = __webpack_require__(812)
-	var Window = __webpack_require__(824)
-	var core = __webpack_require__(825)
-	var anim = __webpack_require__(826)
+	var Element = __webpack_require__(715)
+	var Window = __webpack_require__(727)
+	var core = __webpack_require__(728)
+	var anim = __webpack_require__(729)
 	
 	var ReactFauxDOM = {
 	  Element: Element,
@@ -92735,18 +88900,18 @@
 
 
 /***/ },
-/* 812 */
+/* 715 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1)
-	var styleAttr = __webpack_require__(813)
-	var querySelectorAll = __webpack_require__(814)
-	var camelCase = __webpack_require__(818)
-	var isString = __webpack_require__(819)
-	var isUndefined = __webpack_require__(820)
-	var assign = __webpack_require__(821)
-	var mapValues = __webpack_require__(822)
-	var styleCamelCase = __webpack_require__(823)
+	var styleAttr = __webpack_require__(716)
+	var querySelectorAll = __webpack_require__(717)
+	var camelCase = __webpack_require__(721)
+	var isString = __webpack_require__(722)
+	var isUndefined = __webpack_require__(723)
+	var assign = __webpack_require__(724)
+	var mapValues = __webpack_require__(725)
+	var styleCamelCase = __webpack_require__(726)
 	
 	function Element (nodeName, parentNode) {
 	  this.nodeName = nodeName
@@ -93098,7 +89263,7 @@
 
 
 /***/ },
-/* 813 */
+/* 716 */
 /***/ function(module, exports) {
 
 	
@@ -93210,13 +89375,13 @@
 	module.exports.normalize = normalize;
 
 /***/ },
-/* 814 */
+/* 717 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(815);
+	module.exports = __webpack_require__(718);
 
 /***/ },
-/* 815 */
+/* 718 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -93225,8 +89390,8 @@
 	 * @author yiminghe@gmail.com
 	 */
 	
-	var util = __webpack_require__(816);
-	var parser = __webpack_require__(817);
+	var util = __webpack_require__(719);
+	var parser = __webpack_require__(720);
 	
 	var EXPANDO_SELECTOR_KEY = '_ks_data_selector_id_',
 	  caches = {},
@@ -93919,7 +90084,7 @@
 	 */
 
 /***/ },
-/* 816 */
+/* 719 */
 /***/ function(module, exports) {
 
 	/**
@@ -94270,7 +90435,7 @@
 	};
 
 /***/ },
-/* 817 */
+/* 720 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -95479,7 +91644,7 @@
 	}
 
 /***/ },
-/* 818 */
+/* 721 */
 /***/ function(module, exports) {
 
 	var hyphenExpression = /\-+([a-z])/gi
@@ -95502,7 +91667,7 @@
 
 
 /***/ },
-/* 819 */
+/* 722 */
 /***/ function(module, exports) {
 
 	function isString (value) {
@@ -95513,7 +91678,7 @@
 
 
 /***/ },
-/* 820 */
+/* 723 */
 /***/ function(module, exports) {
 
 	function isUndefined (value) {
@@ -95524,7 +91689,7 @@
 
 
 /***/ },
-/* 821 */
+/* 724 */
 /***/ function(module, exports) {
 
 	function assign (dest) {
@@ -95546,7 +91711,7 @@
 
 
 /***/ },
-/* 822 */
+/* 725 */
 /***/ function(module, exports) {
 
 	function mapValues (source, fn) {
@@ -95565,10 +91730,10 @@
 
 
 /***/ },
-/* 823 */
+/* 726 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var camelCase = __webpack_require__(818)
+	var camelCase = __webpack_require__(721)
 	
 	function styleCamelCase (name) {
 	  var camel = camelCase(name)
@@ -95591,7 +91756,7 @@
 
 
 /***/ },
-/* 824 */
+/* 727 */
 /***/ function(module, exports) {
 
 	var Window = {
@@ -95606,11 +91771,11 @@
 
 
 /***/ },
-/* 825 */
+/* 728 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Element = __webpack_require__(812)
-	var mapValues = __webpack_require__(822)
+	var Element = __webpack_require__(715)
+	var mapValues = __webpack_require__(725)
 	
 	var mixin = {
 	  componentWillMount: function () {
@@ -95634,7 +91799,7 @@
 
 
 /***/ },
-/* 826 */
+/* 729 */
 /***/ function(module, exports) {
 
 	var anim = {
@@ -95664,6 +91829,3818 @@
 	
 	module.exports = anim
 
+
+/***/ },
+/* 730 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var has = __webpack_require__(731);
+	var isEmpty = __webpack_require__(449);
+	var flatten = __webpack_require__(733);
+	/**
+	 * Params: poll object, voter string
+	 *
+	 * Checks if the current voter has already voted on the
+	 * current poll
+	 *
+	 * returns: BOOL
+	 */
+	var dupeVoterCheck = function dupeVoterCheck(poll, voter) {
+	  if (!voter) {
+	    return null;
+	  }
+	  var dupeCheck = poll.options.map(function (option) {
+	    if (!isEmpty(option.votes)) {
+	      var individualVoteCheck = option.votes.map(function (vote) {
+	        if (vote.voter === voter) {
+	          return true;
+	        } else {
+	          return;
+	        }
+	      });
+	      return individualVoteCheck;
+	    } else {
+	      return false;
+	    }
+	  });
+	  // if the bool 'true' is included in the dupCheck array,
+	  // dupePollCheck will return true, otherwise false
+	  dupeCheck = flatten(dupeCheck).includes(true);
+	  return dupeCheck;
+	};
+	
+	/**
+	 * Params: client's request object, client's ip address
+	 *
+	 * Assigns voter as the signed-in user, or IP address
+	 * of a user who is not signed in
+	 *
+	 * returns: username, IP address, or false
+	 */
+	var getVoterIdentity = function getVoterIdentity(req, ip) {
+	  var voter = void 0;
+	  if (has(req, 'body.voter') && req.body.voter) {
+	    voter = req.body.voter;
+	  } else if (ip) {
+	    voter = ip;
+	  } else {
+	    voter = false;
+	  }
+	  return voter;
+	};
+	
+	var tallyVoteTotal = function tallyVoteTotal(updatedDoc) {
+	  return updatedDoc.options.map(function (option) {
+	    return option.votes.length;
+	  }).reduce(function (prev, next) {
+	    return prev + next;
+	  }, 0);
+	};
+	
+	module.exports = { getVoterIdentity: getVoterIdentity, dupeVoterCheck: dupeVoterCheck, tallyVoteTotal: tallyVoteTotal };
+
+/***/ },
+/* 731 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var baseHas = __webpack_require__(732),
+	    hasPath = __webpack_require__(397);
+	
+	/**
+	 * Checks if `path` is a direct property of `object`.
+	 *
+	 * @static
+	 * @since 0.1.0
+	 * @memberOf _
+	 * @category Object
+	 * @param {Object} object The object to query.
+	 * @param {Array|string} path The path to check.
+	 * @returns {boolean} Returns `true` if `path` exists, else `false`.
+	 * @example
+	 *
+	 * var object = { 'a': { 'b': 2 } };
+	 * var other = _.create({ 'a': _.create({ 'b': 2 }) });
+	 *
+	 * _.has(object, 'a');
+	 * // => true
+	 *
+	 * _.has(object, 'a.b');
+	 * // => true
+	 *
+	 * _.has(object, ['a', 'b']);
+	 * // => true
+	 *
+	 * _.has(other, 'a');
+	 * // => false
+	 */
+	function has(object, path) {
+	  return object != null && hasPath(object, path, baseHas);
+	}
+	
+	module.exports = has;
+
+
+/***/ },
+/* 732 */
+/***/ function(module, exports) {
+
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+	
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+	
+	/**
+	 * The base implementation of `_.has` without support for deep paths.
+	 *
+	 * @private
+	 * @param {Object} [object] The object to query.
+	 * @param {Array|string} key The key to check.
+	 * @returns {boolean} Returns `true` if `key` exists, else `false`.
+	 */
+	function baseHas(object, key) {
+	  return object != null && hasOwnProperty.call(object, key);
+	}
+	
+	module.exports = baseHas;
+
+
+/***/ },
+/* 733 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var baseFlatten = __webpack_require__(680);
+	
+	/**
+	 * Flattens `array` a single level deep.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Array
+	 * @param {Array} array The array to flatten.
+	 * @returns {Array} Returns the new flattened array.
+	 * @example
+	 *
+	 * _.flatten([1, [2, [3, [4]], 5]]);
+	 * // => [1, 2, [3, [4]], 5]
+	 */
+	function flatten(array) {
+	  var length = array == null ? 0 : array.length;
+	  return length ? baseFlatten(array, 1) : [];
+	}
+	
+	module.exports = flatten;
+
+
+/***/ },
+/* 734 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	
+	var NewPollTitle = __webpack_require__(735);
+	var PendingPollOptions = __webpack_require__(736);
+	var SaveOrReset = __webpack_require__(737);
+	
+	var CreateAPoll = React.createClass({
+	  displayName: 'CreateAPoll',
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        { className: 'view-title text-center' },
+	        'Create a New Poll'
+	      ),
+	      React.createElement(NewPollTitle, null),
+	      React.createElement(PendingPollOptions, null),
+	      React.createElement(SaveOrReset, null)
+	    );
+	  }
+	});
+	
+	module.exports = connector(CreateAPoll);
+
+/***/ },
+/* 735 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	var _React$PropTypes = React.PropTypes;
+	var string = _React$PropTypes.string;
+	var func = _React$PropTypes.func;
+	var bool = _React$PropTypes.bool;
+	
+	
+	var NewPollTitle = React.createClass({
+	  displayName: 'NewPollTitle',
+	
+	  propTypes: {
+	    newPollTitle: string,
+	    setNewPollTitle: func,
+	    titleEditable: bool,
+	    setTitleEditable: func
+	  },
+	  handleNewPollTitleChange: function handleNewPollTitleChange(event) {
+	    this.props.setNewPollTitle(event.target.value);
+	  },
+	  handleSaveClick: function handleSaveClick(event) {
+	    if (this.props.newPollTitle === '') {
+	      this.props.setNewPollTitle('New Poll Title');
+	    }
+	    this.props.setTitleEditable(false);
+	  },
+	  handleEditClick: function handleEditClick(event) {
+	    this.props.setTitleEditable(true);
+	  },
+	  render: function render() {
+	    var savedPollTitle = React.createElement(
+	      'div',
+	      { className: 'new-poll-title-container' },
+	      React.createElement(
+	        'h2',
+	        { className: 'text-center saved-title' },
+	        this.props.newPollTitle
+	      ),
+	      React.createElement(
+	        'a',
+	        { href: '#' },
+	        React.createElement('i', {
+	          className: 'fa fa-pencil-square-o edit-icon',
+	          'aria-hidden': 'true',
+	          onClick: this.handleEditClick
+	        })
+	      )
+	    );
+	    var inputPollTitle = React.createElement(
+	      'div',
+	      { className: 'new-poll-title-container' },
+	      React.createElement('textarea', {
+	        value: this.props.newPollTitle,
+	        onChange: this.handleNewPollTitleChange,
+	        type: 'text',
+	        placeholder: 'New Poll Title',
+	        className: 'text-center form-control new-poll-title-textarea'
+	      }),
+	      React.createElement(
+	        'a',
+	        { href: '#' },
+	        React.createElement('i', {
+	          className: 'fa fa-floppy-o save-icon',
+	          'aria-hidden': 'true',
+	          onClick: this.handleSaveClick
+	        })
+	      )
+	    );
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'new-poll-title-container' },
+	      this.props.titleEditable ? inputPollTitle : savedPollTitle
+	    );
+	  }
+	});
+	
+	var connected = connector(NewPollTitle);
+	
+	// This exports the component itself for testing
+	connected.DisconnectedNewPollTitle = NewPollTitle;
+	
+	module.exports = connected;
+
+/***/ },
+/* 736 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	var _React$PropTypes = React.PropTypes;
+	var array = _React$PropTypes.array;
+	var func = _React$PropTypes.func;
+	
+	
+	var PendingPollOptions = React.createClass({
+	  displayName: 'PendingPollOptions',
+	
+	  propTypes: {
+	    newPollOptions: array.isRequired,
+	    updateOption: func.isRequired
+	  },
+	  editOption: function editOption(event) {
+	    var updatedOptions = this.props.newPollOptions.slice();
+	    updatedOptions[event.target.name] = event.target.value;
+	    this.props.updateOption(updatedOptions);
+	  },
+	  addAnotherOption: function addAnotherOption() {
+	    var updatedNewOptions = this.props.newPollOptions.slice();
+	    updatedNewOptions.push('');
+	    this.props.updateOption(updatedNewOptions);
+	  },
+	  deleteOption: function deleteOption(index) {
+	    if (this.props.newPollOptions.length === 2) {
+	      console.log('Two or more options required!');
+	      return;
+	    }
+	    var updatedDeleteOptions = this.props.newPollOptions.slice();
+	    updatedDeleteOptions.splice(index, 1);
+	    this.props.updateOption(updatedDeleteOptions);
+	  },
+	  render: function render() {
+	    var _this = this;
+	
+	    var options = this.props.newPollOptions.map(function (option, index) {
+	      return React.createElement(
+	        'div',
+	        { key: index },
+	        React.createElement('input', {
+	          type: 'text',
+	          value: option,
+	          name: index,
+	          placeholder: 'Option ' + (index + 1),
+	          onChange: _this.editOption,
+	          className: 'form-control option-input'
+	        }),
+	        React.createElement(
+	          'a',
+	          {
+	            className: 'btn btn-danger delete-button',
+	            href: '#',
+	            onClick: function onClick() {
+	              return _this.deleteOption(index);
+	            },
+	            'aria-label': 'Delete'
+	          },
+	          React.createElement('i', { className: 'fa fa-trash-o', 'aria-hidden': 'true' })
+	        )
+	      );
+	    });
+	    return React.createElement(
+	      'div',
+	      { className: 'form-group options-container' },
+	      options,
+	      React.createElement(
+	        'a',
+	        { href: '#' },
+	        React.createElement(
+	          'p',
+	          { className: 'add-another-option', onClick: this.addAnotherOption },
+	          React.createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
+	          ' Add another option'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	var connected = connector(PendingPollOptions);
+	
+	// This exports the component itself for testing
+	connected.DisconnectedPendingPollOptions = PendingPollOptions;
+	
+	module.exports = connected;
+
+/***/ },
+/* 737 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	var _React$PropTypes = React.PropTypes;
+	var string = _React$PropTypes.string;
+	var func = _React$PropTypes.func;
+	var array = _React$PropTypes.array;
+	var object = _React$PropTypes.object;
+	
+	var validateCreateAPollInput = __webpack_require__(738);
+	
+	var SaveOrReset = React.createClass({
+	  displayName: 'SaveOrReset',
+	
+	  propTypes: {
+	    newPollTitle: string,
+	    resetNewPoll: func,
+	    newPollOptions: array,
+	    submitNewPoll: func.isRequired,
+	    user: object.isRequired
+	  },
+	  getInitialState: function getInitialState() {
+	    return {
+	      errors: {}
+	    };
+	  },
+	  isValid: function isValid() {
+	    var inputData = {
+	      newPollTitle: this.props.newPollTitle,
+	      newPollOptions: this.props.newPollOptions
+	    };
+	
+	    var _validateCreateAPollI = validateCreateAPollInput(inputData);
+	
+	    var errors = _validateCreateAPollI.errors;
+	    var isValid = _validateCreateAPollI.isValid;
+	
+	    if (!isValid) {
+	      this.setState({ errors: errors });
+	    }
+	    return isValid;
+	  },
+	  saveButtonHandler: function saveButtonHandler() {
+	    if (this.isValid()) {
+	      var newPoll = {
+	        title: this.props.newPollTitle,
+	        options: this.props.newPollOptions,
+	        owner: this.props.user.username
+	      };
+	      this.props.submitNewPoll(newPoll).then(function (response) {
+	        console.log('Success!!:', response);
+	      }).catch(function (err) {
+	        console.error('Poll could not be saved', err);
+	      });
+	    }
+	  },
+	  resetButtonHandler: function resetButtonHandler() {
+	    this.props.resetNewPoll(true);
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'text-center' },
+	      React.createElement(
+	        'button',
+	        {
+	          className: 'btn btn-primary save-reset-buttons',
+	          onClick: this.saveButtonHandler
+	        },
+	        'Save'
+	      ),
+	      React.createElement(
+	        'button',
+	        {
+	          className: 'btn save-reset-buttons reset-poll-button',
+	          onClick: this.resetButtonHandler
+	        },
+	        'Reset'
+	      )
+	    );
+	  }
+	});
+	
+	var connected = connector(SaveOrReset);
+	
+	connected.DisconnectedSaveOrReset = SaveOrReset;
+	
+	module.exports = connected;
+
+/***/ },
+/* 738 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Validator = __webpack_require__(739);
+	var isEmpty = __webpack_require__(449);
+	
+	function validateCreateAPollInput(data) {
+	  var errors = {};
+	
+	  if (Validator.isEmpty(data.newPollTitle)) {
+	    errors.newPollTitle = 'A title is required';
+	  }
+	
+	  data.newPollOptions.map(function (option) {
+	    if (Validator.isEmpty(option)) {
+	      errors.newPollOptions = 'Blank options are not allowed';
+	    }
+	  });
+	
+	  return {
+	    errors: errors,
+	    isValid: isEmpty(errors)
+	  };
+	}
+	
+	module.exports = validateCreateAPollInput;
+
+/***/ },
+/* 739 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _toDate = __webpack_require__(740);
+	
+	var _toDate2 = _interopRequireDefault(_toDate);
+	
+	var _toFloat = __webpack_require__(742);
+	
+	var _toFloat2 = _interopRequireDefault(_toFloat);
+	
+	var _toInt = __webpack_require__(743);
+	
+	var _toInt2 = _interopRequireDefault(_toInt);
+	
+	var _toBoolean = __webpack_require__(744);
+	
+	var _toBoolean2 = _interopRequireDefault(_toBoolean);
+	
+	var _equals = __webpack_require__(745);
+	
+	var _equals2 = _interopRequireDefault(_equals);
+	
+	var _contains = __webpack_require__(746);
+	
+	var _contains2 = _interopRequireDefault(_contains);
+	
+	var _matches = __webpack_require__(748);
+	
+	var _matches2 = _interopRequireDefault(_matches);
+	
+	var _isEmail = __webpack_require__(749);
+	
+	var _isEmail2 = _interopRequireDefault(_isEmail);
+	
+	var _isURL = __webpack_require__(753);
+	
+	var _isURL2 = _interopRequireDefault(_isURL);
+	
+	var _isMACAddress = __webpack_require__(755);
+	
+	var _isMACAddress2 = _interopRequireDefault(_isMACAddress);
+	
+	var _isIP = __webpack_require__(754);
+	
+	var _isIP2 = _interopRequireDefault(_isIP);
+	
+	var _isFQDN = __webpack_require__(752);
+	
+	var _isFQDN2 = _interopRequireDefault(_isFQDN);
+	
+	var _isBoolean = __webpack_require__(756);
+	
+	var _isBoolean2 = _interopRequireDefault(_isBoolean);
+	
+	var _isAlpha = __webpack_require__(757);
+	
+	var _isAlpha2 = _interopRequireDefault(_isAlpha);
+	
+	var _isAlphanumeric = __webpack_require__(759);
+	
+	var _isAlphanumeric2 = _interopRequireDefault(_isAlphanumeric);
+	
+	var _isNumeric = __webpack_require__(760);
+	
+	var _isNumeric2 = _interopRequireDefault(_isNumeric);
+	
+	var _isLowercase = __webpack_require__(761);
+	
+	var _isLowercase2 = _interopRequireDefault(_isLowercase);
+	
+	var _isUppercase = __webpack_require__(762);
+	
+	var _isUppercase2 = _interopRequireDefault(_isUppercase);
+	
+	var _isAscii = __webpack_require__(763);
+	
+	var _isAscii2 = _interopRequireDefault(_isAscii);
+	
+	var _isFullWidth = __webpack_require__(764);
+	
+	var _isFullWidth2 = _interopRequireDefault(_isFullWidth);
+	
+	var _isHalfWidth = __webpack_require__(765);
+	
+	var _isHalfWidth2 = _interopRequireDefault(_isHalfWidth);
+	
+	var _isVariableWidth = __webpack_require__(766);
+	
+	var _isVariableWidth2 = _interopRequireDefault(_isVariableWidth);
+	
+	var _isMultibyte = __webpack_require__(767);
+	
+	var _isMultibyte2 = _interopRequireDefault(_isMultibyte);
+	
+	var _isSurrogatePair = __webpack_require__(768);
+	
+	var _isSurrogatePair2 = _interopRequireDefault(_isSurrogatePair);
+	
+	var _isInt = __webpack_require__(769);
+	
+	var _isInt2 = _interopRequireDefault(_isInt);
+	
+	var _isFloat = __webpack_require__(770);
+	
+	var _isFloat2 = _interopRequireDefault(_isFloat);
+	
+	var _isDecimal = __webpack_require__(771);
+	
+	var _isDecimal2 = _interopRequireDefault(_isDecimal);
+	
+	var _isHexadecimal = __webpack_require__(772);
+	
+	var _isHexadecimal2 = _interopRequireDefault(_isHexadecimal);
+	
+	var _isDivisibleBy = __webpack_require__(773);
+	
+	var _isDivisibleBy2 = _interopRequireDefault(_isDivisibleBy);
+	
+	var _isHexColor = __webpack_require__(774);
+	
+	var _isHexColor2 = _interopRequireDefault(_isHexColor);
+	
+	var _isMD = __webpack_require__(775);
+	
+	var _isMD2 = _interopRequireDefault(_isMD);
+	
+	var _isJSON = __webpack_require__(776);
+	
+	var _isJSON2 = _interopRequireDefault(_isJSON);
+	
+	var _isEmpty = __webpack_require__(777);
+	
+	var _isEmpty2 = _interopRequireDefault(_isEmpty);
+	
+	var _isLength = __webpack_require__(778);
+	
+	var _isLength2 = _interopRequireDefault(_isLength);
+	
+	var _isByteLength = __webpack_require__(751);
+	
+	var _isByteLength2 = _interopRequireDefault(_isByteLength);
+	
+	var _isUUID = __webpack_require__(779);
+	
+	var _isUUID2 = _interopRequireDefault(_isUUID);
+	
+	var _isMongoId = __webpack_require__(780);
+	
+	var _isMongoId2 = _interopRequireDefault(_isMongoId);
+	
+	var _isDate = __webpack_require__(781);
+	
+	var _isDate2 = _interopRequireDefault(_isDate);
+	
+	var _isAfter = __webpack_require__(783);
+	
+	var _isAfter2 = _interopRequireDefault(_isAfter);
+	
+	var _isBefore = __webpack_require__(784);
+	
+	var _isBefore2 = _interopRequireDefault(_isBefore);
+	
+	var _isIn = __webpack_require__(785);
+	
+	var _isIn2 = _interopRequireDefault(_isIn);
+	
+	var _isCreditCard = __webpack_require__(786);
+	
+	var _isCreditCard2 = _interopRequireDefault(_isCreditCard);
+	
+	var _isISIN = __webpack_require__(787);
+	
+	var _isISIN2 = _interopRequireDefault(_isISIN);
+	
+	var _isISBN = __webpack_require__(788);
+	
+	var _isISBN2 = _interopRequireDefault(_isISBN);
+	
+	var _isISSN = __webpack_require__(789);
+	
+	var _isISSN2 = _interopRequireDefault(_isISSN);
+	
+	var _isMobilePhone = __webpack_require__(790);
+	
+	var _isMobilePhone2 = _interopRequireDefault(_isMobilePhone);
+	
+	var _isCurrency = __webpack_require__(791);
+	
+	var _isCurrency2 = _interopRequireDefault(_isCurrency);
+	
+	var _isISO = __webpack_require__(782);
+	
+	var _isISO2 = _interopRequireDefault(_isISO);
+	
+	var _isBase = __webpack_require__(792);
+	
+	var _isBase2 = _interopRequireDefault(_isBase);
+	
+	var _isDataURI = __webpack_require__(793);
+	
+	var _isDataURI2 = _interopRequireDefault(_isDataURI);
+	
+	var _ltrim = __webpack_require__(794);
+	
+	var _ltrim2 = _interopRequireDefault(_ltrim);
+	
+	var _rtrim = __webpack_require__(795);
+	
+	var _rtrim2 = _interopRequireDefault(_rtrim);
+	
+	var _trim = __webpack_require__(796);
+	
+	var _trim2 = _interopRequireDefault(_trim);
+	
+	var _escape = __webpack_require__(797);
+	
+	var _escape2 = _interopRequireDefault(_escape);
+	
+	var _unescape = __webpack_require__(798);
+	
+	var _unescape2 = _interopRequireDefault(_unescape);
+	
+	var _stripLow = __webpack_require__(799);
+	
+	var _stripLow2 = _interopRequireDefault(_stripLow);
+	
+	var _whitelist = __webpack_require__(801);
+	
+	var _whitelist2 = _interopRequireDefault(_whitelist);
+	
+	var _blacklist = __webpack_require__(800);
+	
+	var _blacklist2 = _interopRequireDefault(_blacklist);
+	
+	var _isWhitelisted = __webpack_require__(802);
+	
+	var _isWhitelisted2 = _interopRequireDefault(_isWhitelisted);
+	
+	var _normalizeEmail = __webpack_require__(803);
+	
+	var _normalizeEmail2 = _interopRequireDefault(_normalizeEmail);
+	
+	var _toString = __webpack_require__(747);
+	
+	var _toString2 = _interopRequireDefault(_toString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var version = '6.1.0';
+	
+	var validator = {
+	  version: version,
+	  toDate: _toDate2.default,
+	  toFloat: _toFloat2.default, toInt: _toInt2.default,
+	  toBoolean: _toBoolean2.default,
+	  equals: _equals2.default, contains: _contains2.default, matches: _matches2.default,
+	  isEmail: _isEmail2.default, isURL: _isURL2.default, isMACAddress: _isMACAddress2.default, isIP: _isIP2.default, isFQDN: _isFQDN2.default,
+	  isBoolean: _isBoolean2.default,
+	  isAlpha: _isAlpha2.default, isAlphanumeric: _isAlphanumeric2.default, isNumeric: _isNumeric2.default, isLowercase: _isLowercase2.default, isUppercase: _isUppercase2.default,
+	  isAscii: _isAscii2.default, isFullWidth: _isFullWidth2.default, isHalfWidth: _isHalfWidth2.default, isVariableWidth: _isVariableWidth2.default,
+	  isMultibyte: _isMultibyte2.default, isSurrogatePair: _isSurrogatePair2.default,
+	  isInt: _isInt2.default, isFloat: _isFloat2.default, isDecimal: _isDecimal2.default, isHexadecimal: _isHexadecimal2.default, isDivisibleBy: _isDivisibleBy2.default,
+	  isHexColor: _isHexColor2.default,
+	  isMD5: _isMD2.default,
+	  isJSON: _isJSON2.default,
+	  isEmpty: _isEmpty2.default,
+	  isLength: _isLength2.default, isByteLength: _isByteLength2.default,
+	  isUUID: _isUUID2.default, isMongoId: _isMongoId2.default,
+	  isDate: _isDate2.default, isAfter: _isAfter2.default, isBefore: _isBefore2.default,
+	  isIn: _isIn2.default,
+	  isCreditCard: _isCreditCard2.default,
+	  isISIN: _isISIN2.default, isISBN: _isISBN2.default, isISSN: _isISSN2.default,
+	  isMobilePhone: _isMobilePhone2.default,
+	  isCurrency: _isCurrency2.default,
+	  isISO8601: _isISO2.default,
+	  isBase64: _isBase2.default, isDataURI: _isDataURI2.default,
+	  ltrim: _ltrim2.default, rtrim: _rtrim2.default, trim: _trim2.default,
+	  escape: _escape2.default, unescape: _unescape2.default, stripLow: _stripLow2.default,
+	  whitelist: _whitelist2.default, blacklist: _blacklist2.default,
+	  isWhitelisted: _isWhitelisted2.default,
+	  normalizeEmail: _normalizeEmail2.default,
+	  toString: _toString2.default
+	};
+	
+	exports.default = validator;
+	module.exports = exports['default'];
+
+/***/ },
+/* 740 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = toDate;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function toDate(date) {
+	  (0, _assertString2.default)(date);
+	  date = Date.parse(date);
+	  return !isNaN(date) ? new Date(date) : null;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 741 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = assertString;
+	function assertString(input) {
+	  if (typeof input !== 'string') {
+	    throw new TypeError('This library (validator.js) validates strings only');
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 742 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = toFloat;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function toFloat(str) {
+	  (0, _assertString2.default)(str);
+	  return parseFloat(str);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 743 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = toInt;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function toInt(str, radix) {
+	  (0, _assertString2.default)(str);
+	  return parseInt(str, radix || 10);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 744 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = toBoolean;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function toBoolean(str, strict) {
+	  (0, _assertString2.default)(str);
+	  if (strict) {
+	    return str === '1' || str === 'true';
+	  }
+	  return str !== '0' && str !== 'false' && str !== '';
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 745 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = equals;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function equals(str, comparison) {
+	  (0, _assertString2.default)(str);
+	  return str === comparison;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 746 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = contains;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	var _toString = __webpack_require__(747);
+	
+	var _toString2 = _interopRequireDefault(_toString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function contains(str, elem) {
+	  (0, _assertString2.default)(str);
+	  return str.indexOf((0, _toString2.default)(elem)) >= 0;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 747 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	exports.default = toString;
+	function toString(input) {
+	  if ((typeof input === 'undefined' ? 'undefined' : _typeof(input)) === 'object' && input !== null) {
+	    if (typeof input.toString === 'function') {
+	      input = input.toString();
+	    } else {
+	      input = '[object Object]';
+	    }
+	  } else if (input === null || typeof input === 'undefined' || isNaN(input) && !input.length) {
+	    input = '';
+	  }
+	  return String(input);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 748 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = matches;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function matches(str, pattern, modifiers) {
+	  (0, _assertString2.default)(str);
+	  if (Object.prototype.toString.call(pattern) !== '[object RegExp]') {
+	    pattern = new RegExp(pattern, modifiers);
+	  }
+	  return pattern.test(str);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 749 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isEmail;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	var _merge = __webpack_require__(750);
+	
+	var _merge2 = _interopRequireDefault(_merge);
+	
+	var _isByteLength = __webpack_require__(751);
+	
+	var _isByteLength2 = _interopRequireDefault(_isByteLength);
+	
+	var _isFQDN = __webpack_require__(752);
+	
+	var _isFQDN2 = _interopRequireDefault(_isFQDN);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var default_email_options = {
+	  allow_display_name: false,
+	  allow_utf8_local_part: true,
+	  require_tld: true
+	};
+	
+	/* eslint-disable max-len */
+	/* eslint-disable no-control-regex */
+	var displayName = /^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\.\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\.\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF\s]*<(.+)>$/i;
+	var emailUserPart = /^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~]+$/i;
+	var quotedEmailUser = /^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f]))*$/i;
+	var emailUserUtf8Part = /^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$/i;
+	var quotedEmailUserUtf8 = /^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*$/i;
+	/* eslint-enable max-len */
+	/* eslint-enable no-control-regex */
+	
+	function isEmail(str, options) {
+	  (0, _assertString2.default)(str);
+	  options = (0, _merge2.default)(options, default_email_options);
+	
+	  if (options.allow_display_name) {
+	    var display_email = str.match(displayName);
+	    if (display_email) {
+	      str = display_email[1];
+	    }
+	  }
+	
+	  var parts = str.split('@');
+	  var domain = parts.pop();
+	  var user = parts.join('@');
+	
+	  var lower_domain = domain.toLowerCase();
+	  if (lower_domain === 'gmail.com' || lower_domain === 'googlemail.com') {
+	    user = user.replace(/\./g, '').toLowerCase();
+	  }
+	
+	  if (!(0, _isByteLength2.default)(user, { max: 64 }) || !(0, _isByteLength2.default)(domain, { max: 256 })) {
+	    return false;
+	  }
+	
+	  if (!(0, _isFQDN2.default)(domain, { require_tld: options.require_tld })) {
+	    return false;
+	  }
+	
+	  if (user[0] === '"') {
+	    user = user.slice(1, user.length - 1);
+	    return options.allow_utf8_local_part ? quotedEmailUserUtf8.test(user) : quotedEmailUser.test(user);
+	  }
+	
+	  var pattern = options.allow_utf8_local_part ? emailUserUtf8Part : emailUserPart;
+	
+	  var user_parts = user.split('.');
+	  for (var i = 0; i < user_parts.length; i++) {
+	    if (!pattern.test(user_parts[i])) {
+	      return false;
+	    }
+	  }
+	
+	  return true;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 750 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = merge;
+	function merge() {
+	  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	  var defaults = arguments[1];
+	
+	  for (var key in defaults) {
+	    if (typeof obj[key] === 'undefined') {
+	      obj[key] = defaults[key];
+	    }
+	  }
+	  return obj;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 751 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	exports.default = isByteLength;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* eslint-disable prefer-rest-params */
+	function isByteLength(str, options) {
+	  (0, _assertString2.default)(str);
+	  var min = void 0;
+	  var max = void 0;
+	  if ((typeof options === 'undefined' ? 'undefined' : _typeof(options)) === 'object') {
+	    min = options.min || 0;
+	    max = options.max;
+	  } else {
+	    // backwards compatibility: isByteLength(str, min [, max])
+	    min = arguments[1];
+	    max = arguments[2];
+	  }
+	  var len = encodeURI(str).split(/%..|./).length - 1;
+	  return len >= min && (typeof max === 'undefined' || len <= max);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 752 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isFDQN;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	var _merge = __webpack_require__(750);
+	
+	var _merge2 = _interopRequireDefault(_merge);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var default_fqdn_options = {
+	  require_tld: true,
+	  allow_underscores: false,
+	  allow_trailing_dot: false
+	};
+	
+	function isFDQN(str, options) {
+	  (0, _assertString2.default)(str);
+	  options = (0, _merge2.default)(options, default_fqdn_options);
+	
+	  /* Remove the optional trailing dot before checking validity */
+	  if (options.allow_trailing_dot && str[str.length - 1] === '.') {
+	    str = str.substring(0, str.length - 1);
+	  }
+	  var parts = str.split('.');
+	  if (options.require_tld) {
+	    var tld = parts.pop();
+	    if (!parts.length || !/^([a-z\u00a1-\uffff]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
+	      return false;
+	    }
+	  }
+	  for (var part, i = 0; i < parts.length; i++) {
+	    part = parts[i];
+	    if (options.allow_underscores) {
+	      part = part.replace(/_/g, '');
+	    }
+	    if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
+	      return false;
+	    }
+	    if (/[\uff01-\uff5e]/.test(part)) {
+	      // disallow full-width chars
+	      return false;
+	    }
+	    if (part[0] === '-' || part[part.length - 1] === '-') {
+	      return false;
+	    }
+	  }
+	  return true;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 753 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isURL;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	var _isFQDN = __webpack_require__(752);
+	
+	var _isFQDN2 = _interopRequireDefault(_isFQDN);
+	
+	var _isIP = __webpack_require__(754);
+	
+	var _isIP2 = _interopRequireDefault(_isIP);
+	
+	var _merge = __webpack_require__(750);
+	
+	var _merge2 = _interopRequireDefault(_merge);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var default_url_options = {
+	  protocols: ['http', 'https', 'ftp'],
+	  require_tld: true,
+	  require_protocol: false,
+	  require_host: true,
+	  require_valid_protocol: true,
+	  allow_underscores: false,
+	  allow_trailing_dot: false,
+	  allow_protocol_relative_urls: false
+	};
+	
+	var wrapped_ipv6 = /^\[([^\]]+)\](?::([0-9]+))?$/;
+	
+	function isRegExp(obj) {
+	  return Object.prototype.toString.call(obj) === '[object RegExp]';
+	}
+	
+	function checkHost(host, matches) {
+	  for (var i = 0; i < matches.length; i++) {
+	    var match = matches[i];
+	    if (host === match || isRegExp(match) && match.test(host)) {
+	      return true;
+	    }
+	  }
+	  return false;
+	}
+	
+	function isURL(url, options) {
+	  (0, _assertString2.default)(url);
+	  if (!url || url.length >= 2083 || /\s/.test(url)) {
+	    return false;
+	  }
+	  if (url.indexOf('mailto:') === 0) {
+	    return false;
+	  }
+	  options = (0, _merge2.default)(options, default_url_options);
+	  var protocol = void 0,
+	      auth = void 0,
+	      host = void 0,
+	      hostname = void 0,
+	      port = void 0,
+	      port_str = void 0,
+	      split = void 0,
+	      ipv6 = void 0;
+	
+	  split = url.split('#');
+	  url = split.shift();
+	
+	  split = url.split('?');
+	  url = split.shift();
+	
+	  split = url.split('://');
+	  if (split.length > 1) {
+	    protocol = split.shift();
+	    if (options.require_valid_protocol && options.protocols.indexOf(protocol) === -1) {
+	      return false;
+	    }
+	  } else if (options.require_protocol) {
+	    return false;
+	  } else if (options.allow_protocol_relative_urls && url.substr(0, 2) === '//') {
+	    split[0] = url.substr(2);
+	  }
+	  url = split.join('://');
+	
+	  split = url.split('/');
+	  url = split.shift();
+	
+	  if (url === '' && !options.require_host) {
+	    return true;
+	  }
+	
+	  split = url.split('@');
+	  if (split.length > 1) {
+	    auth = split.shift();
+	    if (auth.indexOf(':') >= 0 && auth.split(':').length > 2) {
+	      return false;
+	    }
+	  }
+	  hostname = split.join('@');
+	
+	  port_str = ipv6 = null;
+	  var ipv6_match = hostname.match(wrapped_ipv6);
+	  if (ipv6_match) {
+	    host = '';
+	    ipv6 = ipv6_match[1];
+	    port_str = ipv6_match[2] || null;
+	  } else {
+	    split = hostname.split(':');
+	    host = split.shift();
+	    if (split.length) {
+	      port_str = split.join(':');
+	    }
+	  }
+	
+	  if (port_str !== null) {
+	    port = parseInt(port_str, 10);
+	    if (!/^[0-9]+$/.test(port_str) || port <= 0 || port > 65535) {
+	      return false;
+	    }
+	  }
+	
+	  if (!(0, _isIP2.default)(host) && !(0, _isFQDN2.default)(host, options) && (!ipv6 || !(0, _isIP2.default)(ipv6, 6)) && host !== 'localhost') {
+	    return false;
+	  }
+	
+	  host = host || ipv6;
+	
+	  if (options.host_whitelist && !checkHost(host, options.host_whitelist)) {
+	    return false;
+	  }
+	  if (options.host_blacklist && checkHost(host, options.host_blacklist)) {
+	    return false;
+	  }
+	
+	  return true;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 754 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isIP;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var ipv4Maybe = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+	var ipv6Block = /^[0-9A-F]{1,4}$/i;
+	
+	function isIP(str) {
+	  var version = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+	
+	  (0, _assertString2.default)(str);
+	  version = String(version);
+	  if (!version) {
+	    return isIP(str, 4) || isIP(str, 6);
+	  } else if (version === '4') {
+	    if (!ipv4Maybe.test(str)) {
+	      return false;
+	    }
+	    var parts = str.split('.').sort(function (a, b) {
+	      return a - b;
+	    });
+	    return parts[3] <= 255;
+	  } else if (version === '6') {
+	    var blocks = str.split(':');
+	    var foundOmissionBlock = false; // marker to indicate ::
+	
+	    // At least some OS accept the last 32 bits of an IPv6 address
+	    // (i.e. 2 of the blocks) in IPv4 notation, and RFC 3493 says
+	    // that '::ffff:a.b.c.d' is valid for IPv4-mapped IPv6 addresses,
+	    // and '::a.b.c.d' is deprecated, but also valid.
+	    var foundIPv4TransitionBlock = isIP(blocks[blocks.length - 1], 4);
+	    var expectedNumberOfBlocks = foundIPv4TransitionBlock ? 7 : 8;
+	
+	    if (blocks.length > expectedNumberOfBlocks) {
+	      return false;
+	    }
+	    // initial or final ::
+	    if (str === '::') {
+	      return true;
+	    } else if (str.substr(0, 2) === '::') {
+	      blocks.shift();
+	      blocks.shift();
+	      foundOmissionBlock = true;
+	    } else if (str.substr(str.length - 2) === '::') {
+	      blocks.pop();
+	      blocks.pop();
+	      foundOmissionBlock = true;
+	    }
+	
+	    for (var i = 0; i < blocks.length; ++i) {
+	      // test for a :: which can not be at the string start/end
+	      // since those cases have been handled above
+	      if (blocks[i] === '' && i > 0 && i < blocks.length - 1) {
+	        if (foundOmissionBlock) {
+	          return false; // multiple :: in address
+	        }
+	        foundOmissionBlock = true;
+	      } else if (foundIPv4TransitionBlock && i === blocks.length - 1) {
+	        // it has been checked before that the last
+	        // block is a valid IPv4 address
+	      } else if (!ipv6Block.test(blocks[i])) {
+	        return false;
+	      }
+	    }
+	    if (foundOmissionBlock) {
+	      return blocks.length >= 1;
+	    }
+	    return blocks.length === expectedNumberOfBlocks;
+	  }
+	  return false;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 755 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isMACAddress;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var macAddress = /^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$/;
+	
+	function isMACAddress(str) {
+	  (0, _assertString2.default)(str);
+	  return macAddress.test(str);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 756 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isBoolean;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function isBoolean(str) {
+	  (0, _assertString2.default)(str);
+	  return ['true', 'false', '1', '0'].indexOf(str) >= 0;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 757 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isAlpha;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	var _alpha = __webpack_require__(758);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function isAlpha(str) {
+	  var locale = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'en-US';
+	
+	  (0, _assertString2.default)(str);
+	  if (locale in _alpha.alpha) {
+	    return _alpha.alpha[locale].test(str);
+	  }
+	  throw new Error('Invalid locale \'' + locale + '\'');
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 758 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var alpha = exports.alpha = {
+	  'en-US': /^[A-Z]+$/i,
+	  'cs-CZ': /^[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]+$/i,
+	  'de-DE': /^[A-ZÄÖÜß]+$/i,
+	  'es-ES': /^[A-ZÁÉÍÑÓÚÜ]+$/i,
+	  'fr-FR': /^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ]+$/i,
+	  'nl-NL': /^[A-ZÉËÏÓÖÜ]+$/i,
+	  'hu-HU': /^[A-ZÁÉÍÓÖŐÚÜŰ]+$/i,
+	  'pl-PL': /^[A-ZĄĆĘŚŁŃÓŻŹ]+$/i,
+	  'pt-PT': /^[A-ZÃÁÀÂÇÉÊÍÕÓÔÚÜ]+$/i,
+	  'ru-RU': /^[А-ЯЁ]+$/i,
+	  'sr-RS@latin': /^[A-ZČĆŽŠĐ]+$/i,
+	  'sr-RS': /^[А-ЯЂЈЉЊЋЏ]+$/i,
+	  'tr-TR': /^[A-ZÇĞİıÖŞÜ]+$/i,
+	  'uk-UA': /^[А-ЯЄIЇҐ]+$/i,
+	  ar: /^[ءآأؤإئابةتثجحخدذرزسشصضطظعغفقكلمنهوىيًٌٍَُِّْٰ]+$/
+	};
+	
+	var alphanumeric = exports.alphanumeric = {
+	  'en-US': /^[0-9A-Z]+$/i,
+	  'cs-CZ': /^[0-9A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]+$/i,
+	  'de-DE': /^[0-9A-ZÄÖÜß]+$/i,
+	  'es-ES': /^[0-9A-ZÁÉÍÑÓÚÜ]+$/i,
+	  'fr-FR': /^[0-9A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ]+$/i,
+	  'hu-HU': /^[0-9A-ZÁÉÍÓÖŐÚÜŰ]+$/i,
+	  'nl-NL': /^[0-9A-ZÉËÏÓÖÜ]+$/i,
+	  'pl-PL': /^[0-9A-ZĄĆĘŚŁŃÓŻŹ]+$/i,
+	  'pt-PT': /^[0-9A-ZÃÁÀÂÇÉÊÍÕÓÔÚÜ]+$/i,
+	  'ru-RU': /^[0-9А-ЯЁ]+$/i,
+	  'sr-RS@latin': /^[0-9A-ZČĆŽŠĐ]+$/i,
+	  'sr-RS': /^[0-9А-ЯЂЈЉЊЋЏ]+$/i,
+	  'tr-TR': /^[0-9A-ZÇĞİıÖŞÜ]+$/i,
+	  'uk-UA': /^[0-9А-ЯЄIЇҐ]+$/i,
+	  ar: /^[٠١٢٣٤٥٦٧٨٩0-9ءآأؤإئابةتثجحخدذرزسشصضطظعغفقكلمنهوىيًٌٍَُِّْٰ]+$/
+	};
+	
+	var englishLocales = exports.englishLocales = ['AU', 'GB', 'HK', 'IN', 'NZ', 'ZA', 'ZM'];
+	
+	for (var locale, i = 0; i < englishLocales.length; i++) {
+	  locale = 'en-' + englishLocales[i];
+	  alpha[locale] = alpha['en-US'];
+	  alphanumeric[locale] = alphanumeric['en-US'];
+	}
+	
+	alpha['pt-BR'] = alpha['pt-PT'];
+	alphanumeric['pt-BR'] = alphanumeric['pt-PT'];
+	
+	// Source: http://www.localeplanet.com/java/
+	var arabicLocales = exports.arabicLocales = ['AE', 'BH', 'DZ', 'EG', 'IQ', 'JO', 'KW', 'LB', 'LY', 'MA', 'QM', 'QA', 'SA', 'SD', 'SY', 'TN', 'YE'];
+	
+	for (var _locale, _i = 0; _i < arabicLocales.length; _i++) {
+	  _locale = 'ar-' + arabicLocales[_i];
+	  alpha[_locale] = alpha.ar;
+	  alphanumeric[_locale] = alphanumeric.ar;
+	}
+
+/***/ },
+/* 759 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isAlphanumeric;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	var _alpha = __webpack_require__(758);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function isAlphanumeric(str) {
+	  var locale = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'en-US';
+	
+	  (0, _assertString2.default)(str);
+	  if (locale in _alpha.alphanumeric) {
+	    return _alpha.alphanumeric[locale].test(str);
+	  }
+	  throw new Error('Invalid locale \'' + locale + '\'');
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 760 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isNumeric;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var numeric = /^[-+]?[0-9]+$/;
+	
+	function isNumeric(str) {
+	  (0, _assertString2.default)(str);
+	  return numeric.test(str);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 761 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isLowercase;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function isLowercase(str) {
+	  (0, _assertString2.default)(str);
+	  return str === str.toLowerCase();
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 762 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isUppercase;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function isUppercase(str) {
+	  (0, _assertString2.default)(str);
+	  return str === str.toUpperCase();
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 763 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isAscii;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* eslint-disable no-control-regex */
+	var ascii = /^[\x00-\x7F]+$/;
+	/* eslint-enable no-control-regex */
+	
+	function isAscii(str) {
+	  (0, _assertString2.default)(str);
+	  return ascii.test(str);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 764 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.fullWidth = undefined;
+	exports.default = isFullWidth;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var fullWidth = exports.fullWidth = /[^\u0020-\u007E\uFF61-\uFF9F\uFFA0-\uFFDC\uFFE8-\uFFEE0-9a-zA-Z]/;
+	
+	function isFullWidth(str) {
+	  (0, _assertString2.default)(str);
+	  return fullWidth.test(str);
+	}
+
+/***/ },
+/* 765 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.halfWidth = undefined;
+	exports.default = isHalfWidth;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var halfWidth = exports.halfWidth = /[\u0020-\u007E\uFF61-\uFF9F\uFFA0-\uFFDC\uFFE8-\uFFEE0-9a-zA-Z]/;
+	
+	function isHalfWidth(str) {
+	  (0, _assertString2.default)(str);
+	  return halfWidth.test(str);
+	}
+
+/***/ },
+/* 766 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isVariableWidth;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	var _isFullWidth = __webpack_require__(764);
+	
+	var _isHalfWidth = __webpack_require__(765);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function isVariableWidth(str) {
+	  (0, _assertString2.default)(str);
+	  return _isFullWidth.fullWidth.test(str) && _isHalfWidth.halfWidth.test(str);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 767 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isMultibyte;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* eslint-disable no-control-regex */
+	var multibyte = /[^\x00-\x7F]/;
+	/* eslint-enable no-control-regex */
+	
+	function isMultibyte(str) {
+	  (0, _assertString2.default)(str);
+	  return multibyte.test(str);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 768 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isSurrogatePair;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var surrogatePair = /[\uD800-\uDBFF][\uDC00-\uDFFF]/;
+	
+	function isSurrogatePair(str) {
+	  (0, _assertString2.default)(str);
+	  return surrogatePair.test(str);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 769 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isInt;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var int = /^(?:[-+]?(?:0|[1-9][0-9]*))$/;
+	var intLeadingZeroes = /^[-+]?[0-9]+$/;
+	
+	function isInt(str, options) {
+	  (0, _assertString2.default)(str);
+	  options = options || {};
+	
+	  // Get the regex to use for testing, based on whether
+	  // leading zeroes are allowed or not.
+	  var regex = options.hasOwnProperty('allow_leading_zeroes') && !options.allow_leading_zeroes ? int : intLeadingZeroes;
+	
+	  // Check min/max
+	  var minCheckPassed = !options.hasOwnProperty('min') || str >= options.min;
+	  var maxCheckPassed = !options.hasOwnProperty('max') || str <= options.max;
+	
+	  return regex.test(str) && minCheckPassed && maxCheckPassed;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 770 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isFloat;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var float = /^(?:[-+]?(?:[0-9]+))?(?:\.[0-9]*)?(?:[eE][\+\-]?(?:[0-9]+))?$/;
+	
+	function isFloat(str, options) {
+	  (0, _assertString2.default)(str);
+	  options = options || {};
+	  if (str === '' || str === '.') {
+	    return false;
+	  }
+	  return float.test(str) && (!options.hasOwnProperty('min') || str >= options.min) && (!options.hasOwnProperty('max') || str <= options.max) && (!options.hasOwnProperty('lt') || str < options.lt) && (!options.hasOwnProperty('gt') || str > options.gt);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 771 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isDecimal;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var decimal = /^[-+]?([0-9]+|\.[0-9]+|[0-9]+\.[0-9]+)$/;
+	
+	function isDecimal(str) {
+	  (0, _assertString2.default)(str);
+	  return str !== '' && decimal.test(str);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 772 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isHexadecimal;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var hexadecimal = /^[0-9A-F]+$/i;
+	
+	function isHexadecimal(str) {
+	  (0, _assertString2.default)(str);
+	  return hexadecimal.test(str);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 773 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isDivisibleBy;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	var _toFloat = __webpack_require__(742);
+	
+	var _toFloat2 = _interopRequireDefault(_toFloat);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function isDivisibleBy(str, num) {
+	  (0, _assertString2.default)(str);
+	  return (0, _toFloat2.default)(str) % parseInt(num, 10) === 0;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 774 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isHexColor;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var hexcolor = /^#?([0-9A-F]{3}|[0-9A-F]{6})$/i;
+	
+	function isHexColor(str) {
+	  (0, _assertString2.default)(str);
+	  return hexcolor.test(str);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 775 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isMD5;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var md5 = /^[a-f0-9]{32}$/;
+	
+	function isMD5(str) {
+	  (0, _assertString2.default)(str);
+	  return md5.test(str);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 776 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	exports.default = isJSON;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function isJSON(str) {
+	  (0, _assertString2.default)(str);
+	  try {
+	    var obj = JSON.parse(str);
+	    return !!obj && (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object';
+	  } catch (e) {/* ignore */}
+	  return false;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 777 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isEmpty;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function isEmpty(str) {
+	  (0, _assertString2.default)(str);
+	  return str.length === 0;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 778 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	exports.default = isLength;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* eslint-disable prefer-rest-params */
+	function isLength(str, options) {
+	  (0, _assertString2.default)(str);
+	  var min = void 0;
+	  var max = void 0;
+	  if ((typeof options === 'undefined' ? 'undefined' : _typeof(options)) === 'object') {
+	    min = options.min || 0;
+	    max = options.max;
+	  } else {
+	    // backwards compatibility: isLength(str, min [, max])
+	    min = arguments[1];
+	    max = arguments[2];
+	  }
+	  var surrogatePairs = str.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g) || [];
+	  var len = str.length - surrogatePairs.length;
+	  return len >= min && (typeof max === 'undefined' || len <= max);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 779 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isUUID;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var uuid = {
+	  3: /^[0-9A-F]{8}-[0-9A-F]{4}-3[0-9A-F]{3}-[0-9A-F]{4}-[0-9A-F]{12}$/i,
+	  4: /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i,
+	  5: /^[0-9A-F]{8}-[0-9A-F]{4}-5[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i,
+	  all: /^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/i
+	};
+	
+	function isUUID(str) {
+	  var version = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'all';
+	
+	  (0, _assertString2.default)(str);
+	  var pattern = uuid[version];
+	  return pattern && pattern.test(str);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 780 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isMongoId;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	var _isHexadecimal = __webpack_require__(772);
+	
+	var _isHexadecimal2 = _interopRequireDefault(_isHexadecimal);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function isMongoId(str) {
+	  (0, _assertString2.default)(str);
+	  return (0, _isHexadecimal2.default)(str) && str.length === 24;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 781 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isDate;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	var _isISO = __webpack_require__(782);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function getTimezoneOffset(str) {
+	  var iso8601Parts = str.match(_isISO.iso8601);
+	  var timezone = void 0,
+	      sign = void 0,
+	      hours = void 0,
+	      minutes = void 0;
+	  if (!iso8601Parts) {
+	    str = str.toLowerCase();
+	    timezone = str.match(/(?:\s|gmt\s*)(-|\+)(\d{1,4})(\s|$)/);
+	    if (!timezone) {
+	      return str.indexOf('gmt') !== -1 ? 0 : null;
+	    }
+	    sign = timezone[1];
+	    var offset = timezone[2];
+	    if (offset.length === 3) {
+	      offset = '0' + offset;
+	    }
+	    if (offset.length <= 2) {
+	      hours = 0;
+	      minutes = parseInt(offset, 10);
+	    } else {
+	      hours = parseInt(offset.slice(0, 2), 10);
+	      minutes = parseInt(offset.slice(2, 4), 10);
+	    }
+	  } else {
+	    timezone = iso8601Parts[21];
+	    if (!timezone) {
+	      // if no hour/minute was provided, the date is GMT
+	      return !iso8601Parts[12] ? 0 : null;
+	    }
+	    if (timezone === 'z' || timezone === 'Z') {
+	      return 0;
+	    }
+	    sign = iso8601Parts[22];
+	    if (timezone.indexOf(':') !== -1) {
+	      hours = parseInt(iso8601Parts[23], 10);
+	      minutes = parseInt(iso8601Parts[24], 10);
+	    } else {
+	      hours = 0;
+	      minutes = parseInt(iso8601Parts[23], 10);
+	    }
+	  }
+	  return (hours * 60 + minutes) * (sign === '-' ? 1 : -1);
+	}
+	
+	function isDate(str) {
+	  (0, _assertString2.default)(str);
+	  var normalizedDate = new Date(Date.parse(str));
+	  if (isNaN(normalizedDate)) {
+	    return false;
+	  }
+	
+	  // normalizedDate is in the user's timezone. Apply the input
+	  // timezone offset to the date so that the year and day match
+	  // the input
+	  var timezoneOffset = getTimezoneOffset(str);
+	  if (timezoneOffset !== null) {
+	    var timezoneDifference = normalizedDate.getTimezoneOffset() - timezoneOffset;
+	    normalizedDate = new Date(normalizedDate.getTime() + 60000 * timezoneDifference);
+	  }
+	
+	  var day = String(normalizedDate.getDate());
+	  var dayOrYear = void 0,
+	      dayOrYearMatches = void 0,
+	      year = void 0;
+	  // check for valid double digits that could be late days
+	  // check for all matches since a string like '12/23' is a valid date
+	  // ignore everything with nearby colons
+	  dayOrYearMatches = str.match(/(^|[^:\d])[23]\d([^T:\d]|$)/g);
+	  if (!dayOrYearMatches) {
+	    return true;
+	  }
+	  dayOrYear = dayOrYearMatches.map(function (digitString) {
+	    return digitString.match(/\d+/g)[0];
+	  }).join('/');
+	
+	  year = String(normalizedDate.getFullYear()).slice(-2);
+	  if (dayOrYear === day || dayOrYear === year) {
+	    return true;
+	  } else if (dayOrYear === '' + day / year || dayOrYear === '' + year / day) {
+	    return true;
+	  }
+	  return false;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 782 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.iso8601 = undefined;
+	
+	exports.default = function (str) {
+	  (0, _assertString2.default)(str);
+	  return iso8601.test(str);
+	};
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* eslint-disable max-len */
+	// from http://goo.gl/0ejHHW
+	var iso8601 = exports.iso8601 = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
+	/* eslint-enable max-len */
+
+/***/ },
+/* 783 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isAfter;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	var _toDate = __webpack_require__(740);
+	
+	var _toDate2 = _interopRequireDefault(_toDate);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function isAfter(str) {
+	  var date = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : String(new Date());
+	
+	  (0, _assertString2.default)(str);
+	  var comparison = (0, _toDate2.default)(date);
+	  var original = (0, _toDate2.default)(str);
+	  return !!(original && comparison && original > comparison);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 784 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isBefore;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	var _toDate = __webpack_require__(740);
+	
+	var _toDate2 = _interopRequireDefault(_toDate);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function isBefore(str) {
+	  var date = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : String(new Date());
+	
+	  (0, _assertString2.default)(str);
+	  var comparison = (0, _toDate2.default)(date);
+	  var original = (0, _toDate2.default)(str);
+	  return !!(original && comparison && original < comparison);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 785 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	exports.default = isIn;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	var _toString = __webpack_require__(747);
+	
+	var _toString2 = _interopRequireDefault(_toString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function isIn(str, options) {
+	  (0, _assertString2.default)(str);
+	  var i = void 0;
+	  if (Object.prototype.toString.call(options) === '[object Array]') {
+	    var array = [];
+	    for (i in options) {
+	      if ({}.hasOwnProperty.call(options, i)) {
+	        array[i] = (0, _toString2.default)(options[i]);
+	      }
+	    }
+	    return array.indexOf(str) >= 0;
+	  } else if ((typeof options === 'undefined' ? 'undefined' : _typeof(options)) === 'object') {
+	    return options.hasOwnProperty(str);
+	  } else if (options && typeof options.indexOf === 'function') {
+	    return options.indexOf(str) >= 0;
+	  }
+	  return false;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 786 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isCreditCard;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* eslint-disable max-len */
+	var creditCard = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|(222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})|62[0-9]{14}$/;
+	/* eslint-enable max-len */
+	
+	function isCreditCard(str) {
+	  (0, _assertString2.default)(str);
+	  var sanitized = str.replace(/[^0-9]+/g, '');
+	  if (!creditCard.test(sanitized)) {
+	    return false;
+	  }
+	  var sum = 0;
+	  var digit = void 0;
+	  var tmpNum = void 0;
+	  var shouldDouble = void 0;
+	  for (var i = sanitized.length - 1; i >= 0; i--) {
+	    digit = sanitized.substring(i, i + 1);
+	    tmpNum = parseInt(digit, 10);
+	    if (shouldDouble) {
+	      tmpNum *= 2;
+	      if (tmpNum >= 10) {
+	        sum += tmpNum % 10 + 1;
+	      } else {
+	        sum += tmpNum;
+	      }
+	    } else {
+	      sum += tmpNum;
+	    }
+	    shouldDouble = !shouldDouble;
+	  }
+	  return !!(sum % 10 === 0 ? sanitized : false);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 787 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isISIN;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var isin = /^[A-Z]{2}[0-9A-Z]{9}[0-9]$/;
+	
+	function isISIN(str) {
+	  (0, _assertString2.default)(str);
+	  if (!isin.test(str)) {
+	    return false;
+	  }
+	
+	  var checksumStr = str.replace(/[A-Z]/g, function (character) {
+	    return parseInt(character, 36);
+	  });
+	
+	  var sum = 0;
+	  var digit = void 0;
+	  var tmpNum = void 0;
+	  var shouldDouble = true;
+	  for (var i = checksumStr.length - 2; i >= 0; i--) {
+	    digit = checksumStr.substring(i, i + 1);
+	    tmpNum = parseInt(digit, 10);
+	    if (shouldDouble) {
+	      tmpNum *= 2;
+	      if (tmpNum >= 10) {
+	        sum += tmpNum + 1;
+	      } else {
+	        sum += tmpNum;
+	      }
+	    } else {
+	      sum += tmpNum;
+	    }
+	    shouldDouble = !shouldDouble;
+	  }
+	
+	  return parseInt(str.substr(str.length - 1), 10) === (10000 - sum) % 10;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 788 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isISBN;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var isbn10Maybe = /^(?:[0-9]{9}X|[0-9]{10})$/;
+	var isbn13Maybe = /^(?:[0-9]{13})$/;
+	var factor = [1, 3];
+	
+	function isISBN(str) {
+	  var version = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+	
+	  (0, _assertString2.default)(str);
+	  version = String(version);
+	  if (!version) {
+	    return isISBN(str, 10) || isISBN(str, 13);
+	  }
+	  var sanitized = str.replace(/[\s-]+/g, '');
+	  var checksum = 0;
+	  var i = void 0;
+	  if (version === '10') {
+	    if (!isbn10Maybe.test(sanitized)) {
+	      return false;
+	    }
+	    for (i = 0; i < 9; i++) {
+	      checksum += (i + 1) * sanitized.charAt(i);
+	    }
+	    if (sanitized.charAt(9) === 'X') {
+	      checksum += 10 * 10;
+	    } else {
+	      checksum += 10 * sanitized.charAt(9);
+	    }
+	    if (checksum % 11 === 0) {
+	      return !!sanitized;
+	    }
+	  } else if (version === '13') {
+	    if (!isbn13Maybe.test(sanitized)) {
+	      return false;
+	    }
+	    for (i = 0; i < 12; i++) {
+	      checksum += factor[i % 2] * sanitized.charAt(i);
+	    }
+	    if (sanitized.charAt(12) - (10 - checksum % 10) % 10 === 0) {
+	      return !!sanitized;
+	    }
+	  }
+	  return false;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 789 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isISSN;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var issn = '^\\d{4}-?\\d{3}[\\dX]$';
+	
+	function isISSN(str) {
+	  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	
+	  (0, _assertString2.default)(str);
+	  var testIssn = issn;
+	  testIssn = options.require_hyphen ? testIssn.replace('?', '') : testIssn;
+	  testIssn = options.case_sensitive ? new RegExp(testIssn) : new RegExp(testIssn, 'i');
+	  if (!testIssn.test(str)) {
+	    return false;
+	  }
+	  var issnDigits = str.replace('-', '');
+	  var position = 8;
+	  var checksum = 0;
+	  var _iteratorNormalCompletion = true;
+	  var _didIteratorError = false;
+	  var _iteratorError = undefined;
+	
+	  try {
+	    for (var _iterator = issnDigits[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	      var digit = _step.value;
+	
+	      var digitValue = digit.toUpperCase() === 'X' ? 10 : +digit;
+	      checksum += digitValue * position;
+	      --position;
+	    }
+	  } catch (err) {
+	    _didIteratorError = true;
+	    _iteratorError = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion && _iterator.return) {
+	        _iterator.return();
+	      }
+	    } finally {
+	      if (_didIteratorError) {
+	        throw _iteratorError;
+	      }
+	    }
+	  }
+	
+	  return checksum % 11 === 0;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 790 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isMobilePhone;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* eslint-disable max-len */
+	var phones = {
+	  'ar-DZ': /^(\+?213|0)(5|6|7)\d{8}$/,
+	  'ar-SY': /^(!?(\+?963)|0)?9\d{8}$/,
+	  'ar-SA': /^(!?(\+?966)|0)?5\d{8}$/,
+	  'en-US': /^(\+?1)?[2-9]\d{2}[2-9](?!11)\d{6}$/,
+	  'cs-CZ': /^(\+?420)? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$/,
+	  'de-DE': /^(\+?49[ \.\-])?([\(]{1}[0-9]{1,6}[\)])?([0-9 \.\-\/]{3,20})((x|ext|extension)[ ]?[0-9]{1,4})?$/,
+	  'da-DK': /^(\+?45)?(\d{8})$/,
+	  'el-GR': /^(\+?30)?(69\d{8})$/,
+	  'en-AU': /^(\+?61|0)4\d{8}$/,
+	  'en-GB': /^(\+?44|0)7\d{9}$/,
+	  'en-HK': /^(\+?852\-?)?[569]\d{3}\-?\d{4}$/,
+	  'en-IN': /^(\+?91|0)?[789]\d{9}$/,
+	  'en-NZ': /^(\+?64|0)2\d{7,9}$/,
+	  'en-ZA': /^(\+?27|0)\d{9}$/,
+	  'en-ZM': /^(\+?26)?09[567]\d{7}$/,
+	  'es-ES': /^(\+?34)?(6\d{1}|7[1234])\d{7}$/,
+	  'fi-FI': /^(\+?358|0)\s?(4(0|1|2|4|5)?|50)\s?(\d\s?){4,8}\d$/,
+	  'fr-FR': /^(\+?33|0)[67]\d{8}$/,
+	  'hu-HU': /^(\+?36)(20|30|70)\d{7}$/,
+	  'it-IT': /^(\+?39)?\s?3\d{2} ?\d{6,7}$/,
+	  'ja-JP': /^(\+?81|0)\d{1,4}[ \-]?\d{1,4}[ \-]?\d{4}$/,
+	  'ms-MY': /^(\+?6?01){1}(([145]{1}(\-|\s)?\d{7,8})|([236789]{1}(\s|\-)?\d{7}))$/,
+	  'nb-NO': /^(\+?47)?[49]\d{7}$/,
+	  'nl-BE': /^(\+?32|0)4?\d{8}$/,
+	  'nn-NO': /^(\+?47)?[49]\d{7}$/,
+	  'pl-PL': /^(\+?48)? ?[5-8]\d ?\d{3} ?\d{2} ?\d{2}$/,
+	  'pt-BR': /^(\+?55|0)\-?[1-9]{2}\-?[2-9]{1}\d{3,4}\-?\d{4}$/,
+	  'pt-PT': /^(\+?351)?9[1236]\d{7}$/,
+	  'ru-RU': /^(\+?7|8)?9\d{9}$/,
+	  'sr-RS': /^(\+3816|06)[- \d]{5,9}$/,
+	  'tr-TR': /^(\+?90|0)?5\d{9}$/,
+	  'vi-VN': /^(\+?84|0)?((1(2([0-9])|6([2-9])|88|99))|(9((?!5)[0-9])))([0-9]{7})$/,
+	  'zh-CN': /^(\+?0?86\-?)?1[345789]\d{9}$/,
+	  'zh-TW': /^(\+?886\-?|0)?9\d{8}$/
+	};
+	/* eslint-enable max-len */
+	
+	// aliases
+	phones['en-CA'] = phones['en-US'];
+	phones['fr-BE'] = phones['nl-BE'];
+	
+	function isMobilePhone(str, locale) {
+	  (0, _assertString2.default)(str);
+	  if (locale in phones) {
+	    return phones[locale].test(str);
+	  }
+	  return false;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 791 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isCurrency;
+	
+	var _merge = __webpack_require__(750);
+	
+	var _merge2 = _interopRequireDefault(_merge);
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function currencyRegex(options) {
+	  var symbol = '(\\' + options.symbol.replace(/\./g, '\\.') + ')' + (options.require_symbol ? '' : '?'),
+	      negative = '-?',
+	      whole_dollar_amount_without_sep = '[1-9]\\d*',
+	      whole_dollar_amount_with_sep = '[1-9]\\d{0,2}(\\' + options.thousands_separator + '\\d{3})*',
+	      valid_whole_dollar_amounts = ['0', whole_dollar_amount_without_sep, whole_dollar_amount_with_sep],
+	      whole_dollar_amount = '(' + valid_whole_dollar_amounts.join('|') + ')?',
+	      decimal_amount = '(\\' + options.decimal_separator + '\\d{2})?';
+	  var pattern = whole_dollar_amount + decimal_amount;
+	
+	  // default is negative sign before symbol, but there are two other options (besides parens)
+	  if (options.allow_negatives && !options.parens_for_negatives) {
+	    if (options.negative_sign_after_digits) {
+	      pattern += negative;
+	    } else if (options.negative_sign_before_digits) {
+	      pattern = negative + pattern;
+	    }
+	  }
+	
+	  // South African Rand, for example, uses R 123 (space) and R-123 (no space)
+	  if (options.allow_negative_sign_placeholder) {
+	    pattern = '( (?!\\-))?' + pattern;
+	  } else if (options.allow_space_after_symbol) {
+	    pattern = ' ?' + pattern;
+	  } else if (options.allow_space_after_digits) {
+	    pattern += '( (?!$))?';
+	  }
+	
+	  if (options.symbol_after_digits) {
+	    pattern += symbol;
+	  } else {
+	    pattern = symbol + pattern;
+	  }
+	
+	  if (options.allow_negatives) {
+	    if (options.parens_for_negatives) {
+	      pattern = '(\\(' + pattern + '\\)|' + pattern + ')';
+	    } else if (!(options.negative_sign_before_digits || options.negative_sign_after_digits)) {
+	      pattern = negative + pattern;
+	    }
+	  }
+	
+	  /* eslint-disable prefer-template */
+	  return new RegExp('^' +
+	  // ensure there's a dollar and/or decimal amount, and that
+	  // it doesn't start with a space or a negative sign followed by a space
+	  '(?!-? )(?=.*\\d)' + pattern + '$');
+	  /* eslint-enable prefer-template */
+	}
+	
+	var default_currency_options = {
+	  symbol: '$',
+	  require_symbol: false,
+	  allow_space_after_symbol: false,
+	  symbol_after_digits: false,
+	  allow_negatives: true,
+	  parens_for_negatives: false,
+	  negative_sign_before_digits: false,
+	  negative_sign_after_digits: false,
+	  allow_negative_sign_placeholder: false,
+	  thousands_separator: ',',
+	  decimal_separator: '.',
+	  allow_space_after_digits: false
+	};
+	
+	function isCurrency(str, options) {
+	  (0, _assertString2.default)(str);
+	  options = (0, _merge2.default)(options, default_currency_options);
+	  return currencyRegex(options).test(str);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 792 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isBase64;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var notBase64 = /[^A-Z0-9+\/=]/i;
+	
+	function isBase64(str) {
+	  (0, _assertString2.default)(str);
+	  var len = str.length;
+	  if (!len || len % 4 !== 0 || notBase64.test(str)) {
+	    return false;
+	  }
+	  var firstPaddingChar = str.indexOf('=');
+	  return firstPaddingChar === -1 || firstPaddingChar === len - 1 || firstPaddingChar === len - 2 && str[len - 1] === '=';
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 793 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isDataURI;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var dataURI = /^\s*data:([a-z]+\/[a-z0-9\-\+]+(;[a-z\-]+=[a-z0-9\-]+)?)?(;base64)?,[a-z0-9!\$&',\(\)\*\+,;=\-\._~:@\/\?%\s]*\s*$/i; // eslint-disable-line max-len
+	
+	function isDataURI(str) {
+	  (0, _assertString2.default)(str);
+	  return dataURI.test(str);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 794 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = ltrim;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function ltrim(str, chars) {
+	  (0, _assertString2.default)(str);
+	  var pattern = chars ? new RegExp('^[' + chars + ']+', 'g') : /^\s+/g;
+	  return str.replace(pattern, '');
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 795 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = rtrim;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function rtrim(str, chars) {
+	  (0, _assertString2.default)(str);
+	  var pattern = chars ? new RegExp('[' + chars + ']') : /\s/;
+	
+	  var idx = str.length - 1;
+	  while (idx >= 0 && pattern.test(str[idx])) {
+	    idx--;
+	  }
+	
+	  return idx < str.length ? str.substr(0, idx + 1) : str;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 796 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = trim;
+	
+	var _rtrim = __webpack_require__(795);
+	
+	var _rtrim2 = _interopRequireDefault(_rtrim);
+	
+	var _ltrim = __webpack_require__(794);
+	
+	var _ltrim2 = _interopRequireDefault(_ltrim);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function trim(str, chars) {
+	  return (0, _rtrim2.default)((0, _ltrim2.default)(str, chars), chars);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 797 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	      value: true
+	});
+	exports.default = escape;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function escape(str) {
+	      (0, _assertString2.default)(str);
+	      return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\//g, '&#x2F;').replace(/\\/g, '&#x5C;').replace(/`/g, '&#96;');
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 798 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	      value: true
+	});
+	exports.default = unescape;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function unescape(str) {
+	      (0, _assertString2.default)(str);
+	      return str.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#x27;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#x2F;/g, '/').replace(/&#96;/g, '`');
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 799 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = stripLow;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	var _blacklist = __webpack_require__(800);
+	
+	var _blacklist2 = _interopRequireDefault(_blacklist);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function stripLow(str, keep_new_lines) {
+	  (0, _assertString2.default)(str);
+	  var chars = keep_new_lines ? '\\x00-\\x09\\x0B\\x0C\\x0E-\\x1F\\x7F' : '\\x00-\\x1F\\x7F';
+	  return (0, _blacklist2.default)(str, chars);
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 800 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = blacklist;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function blacklist(str, chars) {
+	  (0, _assertString2.default)(str);
+	  return str.replace(new RegExp('[' + chars + ']+', 'g'), '');
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 801 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = whitelist;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function whitelist(str, chars) {
+	  (0, _assertString2.default)(str);
+	  return str.replace(new RegExp('[^' + chars + ']+', 'g'), '');
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 802 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isWhitelisted;
+	
+	var _assertString = __webpack_require__(741);
+	
+	var _assertString2 = _interopRequireDefault(_assertString);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function isWhitelisted(str, chars) {
+	  (0, _assertString2.default)(str);
+	  for (var i = str.length - 1; i >= 0; i--) {
+	    if (chars.indexOf(str[i]) === -1) {
+	      return false;
+	    }
+	  }
+	  return true;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 803 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = normalizeEmail;
+	
+	var _isEmail = __webpack_require__(749);
+	
+	var _isEmail2 = _interopRequireDefault(_isEmail);
+	
+	var _merge = __webpack_require__(750);
+	
+	var _merge2 = _interopRequireDefault(_merge);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var default_normalize_email_options = {
+	  // The following options apply to all email addresses
+	  // Lowercases the local part of the email address.
+	  // Please note this may violate RFC 5321 as per http://stackoverflow.com/a/9808332/192024).
+	  // The domain is always lowercased, as per RFC 1035
+	  all_lowercase: true,
+	
+	  // The following conversions are specific to GMail
+	  // Lowercases the local part of the GMail address (known to be case-insensitive)
+	  gmail_lowercase: true,
+	  // Removes dots from the local part of the email address, as that's ignored by GMail
+	  gmail_remove_dots: true,
+	  // Removes the subaddress (e.g. "+foo") from the email address
+	  gmail_remove_subaddress: true,
+	  // Conversts the googlemail.com domain to gmail.com
+	  gmail_convert_googlemaildotcom: true,
+	
+	  // The following conversions are specific to Outlook.com / Windows Live / Hotmail
+	  // Lowercases the local part of the Outlook.com address (known to be case-insensitive)
+	  outlookdotcom_lowercase: true,
+	  // Removes the subaddress (e.g. "+foo") from the email address
+	  outlookdotcom_remove_subaddress: true,
+	
+	  // The following conversions are specific to Yahoo
+	  // Lowercases the local part of the Yahoo address (known to be case-insensitive)
+	  yahoo_lowercase: true,
+	  // Removes the subaddress (e.g. "-foo") from the email address
+	  yahoo_remove_subaddress: true,
+	
+	  // The following conversions are specific to iCloud
+	  // Lowercases the local part of the iCloud address (known to be case-insensitive)
+	  icloud_lowercase: true,
+	  // Removes the subaddress (e.g. "+foo") from the email address
+	  icloud_remove_subaddress: true
+	};
+	
+	// List of domains used by iCloud
+	var icloud_domains = ['icloud.com', 'me.com'];
+	
+	// List of domains used by Outlook.com and its predecessors
+	// This list is likely incomplete.
+	// Partial reference:
+	// https://blogs.office.com/2013/04/17/outlook-com-gets-two-step-verification-sign-in-by-alias-and-new-international-domains/
+	var outlookdotcom_domains = ['hotmail.at', 'hotmail.be', 'hotmail.ca', 'hotmail.cl', 'hotmail.co.il', 'hotmail.co.nz', 'hotmail.co.th', 'hotmail.co.uk', 'hotmail.com', 'hotmail.com.ar', 'hotmail.com.au', 'hotmail.com.br', 'hotmail.com.gr', 'hotmail.com.mx', 'hotmail.com.pe', 'hotmail.com.tr', 'hotmail.com.vn', 'hotmail.cz', 'hotmail.de', 'hotmail.dk', 'hotmail.es', 'hotmail.fr', 'hotmail.hu', 'hotmail.id', 'hotmail.ie', 'hotmail.in', 'hotmail.it', 'hotmail.jp', 'hotmail.kr', 'hotmail.lv', 'hotmail.my', 'hotmail.ph', 'hotmail.pt', 'hotmail.sa', 'hotmail.sg', 'hotmail.sk', 'live.be', 'live.co.uk', 'live.com', 'live.com.ar', 'live.com.mx', 'live.de', 'live.es', 'live.eu', 'live.fr', 'live.it', 'live.nl', 'msn.com', 'outlook.at', 'outlook.be', 'outlook.cl', 'outlook.co.il', 'outlook.co.nz', 'outlook.co.th', 'outlook.com', 'outlook.com.ar', 'outlook.com.au', 'outlook.com.br', 'outlook.com.gr', 'outlook.com.pe', 'outlook.com.tr', 'outlook.com.vn', 'outlook.cz', 'outlook.de', 'outlook.dk', 'outlook.es', 'outlook.fr', 'outlook.hu', 'outlook.id', 'outlook.ie', 'outlook.in', 'outlook.it', 'outlook.jp', 'outlook.kr', 'outlook.lv', 'outlook.my', 'outlook.ph', 'outlook.pt', 'outlook.sa', 'outlook.sg', 'outlook.sk', 'passport.com'];
+	
+	// List of domains used by Yahoo Mail
+	// This list is likely incomplete
+	var yahoo_domains = ['rocketmail.com', 'yahoo.ca', 'yahoo.co.uk', 'yahoo.com', 'yahoo.de', 'yahoo.fr', 'yahoo.in', 'yahoo.it', 'ymail.com'];
+	
+	function normalizeEmail(email, options) {
+	  options = (0, _merge2.default)(options, default_normalize_email_options);
+	
+	  if (!(0, _isEmail2.default)(email)) {
+	    return false;
+	  }
+	
+	  var raw_parts = email.split('@');
+	  var domain = raw_parts.pop();
+	  var user = raw_parts.join('@');
+	  var parts = [user, domain];
+	
+	  // The domain is always lowercased, as it's case-insensitive per RFC 1035
+	  parts[1] = parts[1].toLowerCase();
+	
+	  if (parts[1] === 'gmail.com' || parts[1] === 'googlemail.com') {
+	    // Address is GMail
+	    if (options.gmail_remove_subaddress) {
+	      parts[0] = parts[0].split('+')[0];
+	    }
+	    if (options.gmail_remove_dots) {
+	      parts[0] = parts[0].replace(/\./g, '');
+	    }
+	    if (!parts[0].length) {
+	      return false;
+	    }
+	    if (options.all_lowercase || options.gmail_lowercase) {
+	      parts[0] = parts[0].toLowerCase();
+	    }
+	    parts[1] = options.gmail_convert_googlemaildotcom ? 'gmail.com' : parts[1];
+	  } else if (~icloud_domains.indexOf(parts[1])) {
+	    // Address is iCloud
+	    if (options.icloud_remove_subaddress) {
+	      parts[0] = parts[0].split('+')[0];
+	    }
+	    if (!parts[0].length) {
+	      return false;
+	    }
+	    if (options.all_lowercase || options.icloud_lowercase) {
+	      parts[0] = parts[0].toLowerCase();
+	    }
+	  } else if (~outlookdotcom_domains.indexOf(parts[1])) {
+	    // Address is Outlook.com
+	    if (options.outlookdotcom_remove_subaddress) {
+	      parts[0] = parts[0].split('+')[0];
+	    }
+	    if (!parts[0].length) {
+	      return false;
+	    }
+	    if (options.all_lowercase || options.outlookdotcom_lowercase) {
+	      parts[0] = parts[0].toLowerCase();
+	    }
+	  } else if (~yahoo_domains.indexOf(parts[1])) {
+	    // Address is Yahoo
+	    if (options.yahoo_remove_subaddress) {
+	      var components = parts[0].split('-');
+	      parts[0] = components.length > 1 ? components.slice(0, -1).join('-') : components[0];
+	    }
+	    if (!parts[0].length) {
+	      return false;
+	    }
+	    if (options.all_lowercase || options.yahoo_lowercase) {
+	      parts[0] = parts[0].toLowerCase();
+	    }
+	  } else {
+	    // Any other address
+	    if (options.all_lowercase) {
+	      parts[0] = parts[0].toLowerCase();
+	    }
+	  }
+	  return parts.join('@');
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 804 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	
+	var validateInput = __webpack_require__(805);
+	var TextFieldGroup = __webpack_require__(806);
+	var _React$PropTypes = React.PropTypes;
+	var func = _React$PropTypes.func;
+	var object = _React$PropTypes.object;
+	
+	
+	var Signup = React.createClass({
+	  displayName: 'Signup',
+	
+	  propTypes: {
+	    userSignupRequest: func.isRequired,
+	    addFlashMessage: func.isRequired,
+	    isUserExists: func.isRequired
+	  },
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      username: '',
+	      email: '',
+	      password: '',
+	      passwordConfirmation: '',
+	      errors: {},
+	      isLoading: false,
+	      invalid: false
+	    };
+	  },
+	  onChange: function onChange(event) {
+	    /**
+	     * instead of setting state with {username: event.target.value},
+	     * using [event.target.name] will allow this function to be reused
+	     * by other form fields with onChange events. Thank you Rem Zolotykh
+	     * for sharing this method.
+	     */
+	    this.setState(_defineProperty({}, event.target.name, event.target.value));
+	  },
+	  isValid: function isValid() {
+	    var _validateInput = validateInput(this.state);
+	
+	    var errors = _validateInput.errors;
+	    var isValid = _validateInput.isValid;
+	
+	
+	    if (!isValid) {
+	      this.setState({ errors: errors });
+	    }
+	
+	    return isValid;
+	  },
+	  checkUserExists: function checkUserExists(event) {
+	    var _this = this;
+	
+	    var field = event.target.name;
+	    var val = event.target.value;
+	    if (val !== '') {
+	      this.props.isUserExists(val).then(function (res) {
+	        // if a user is found, pass an error message
+	        var errors = _this.state.errors;
+	        var invalid = void 0;
+	        if (res.data.user) {
+	          errors[field] = 'A user exists with this ' + field;
+	          invalid = true;
+	        } else {
+	          errors[field] = '';
+	          invalid = false;
+	        }
+	
+	        _this.setState({ errors: errors, invalid: invalid });
+	      });
+	    }
+	  },
+	  onSubmit: function onSubmit(event) {
+	    var _this2 = this;
+	
+	    event.preventDefault();
+	
+	    if (this.isValid()) {
+	      this.setState({ errors: {}, isLoading: true });
+	
+	      this.props.userSignupRequest(this.state).then(function (response) {
+	        _this2.props.addFlashMessage({
+	          type: 'success',
+	          text: 'Signup successful!'
+	        });
+	        _this2.context.router.push('/');
+	      }).catch(function (error) {
+	        _this2.setState({ errors: error.response.data, isLoading: false });
+	      });
+	    }
+	  },
+	  render: function render() {
+	    var errors = this.state.errors;
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'row' },
+	      React.createElement(
+	        'h1',
+	        { className: 'text-center' },
+	        'Sign up to make some polls!'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'col-md-4 col-md-offset-4' },
+	        React.createElement(
+	          'form',
+	          { onSubmit: this.onSubmit },
+	          React.createElement(TextFieldGroup, {
+	            value: this.state.username,
+	            onChange: this.onChange,
+	            checkUserExists: this.checkUserExists,
+	            type: 'text',
+	            field: 'username',
+	            label: 'Username',
+	            error: errors.username
+	          }),
+	          React.createElement(TextFieldGroup, {
+	            value: this.state.email,
+	            onChange: this.onChange,
+	            checkUserExists: this.checkUserExists,
+	            type: 'text',
+	            field: 'email',
+	            label: 'Email',
+	            error: errors.email
+	          }),
+	          React.createElement(TextFieldGroup, {
+	            value: this.state.password,
+	            onChange: this.onChange,
+	            type: 'password',
+	            field: 'password',
+	            label: 'Password',
+	            error: errors.password
+	          }),
+	          React.createElement(TextFieldGroup, {
+	            value: this.state.passwordConfirmation,
+	            onChange: this.onChange,
+	            type: 'password',
+	            field: 'passwordConfirmation',
+	            label: 'Confirm Password',
+	            error: errors.passwordConfirmation
+	          }),
+	          React.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            React.createElement(
+	              'button',
+	              { disabled: this.state.isLoading || this.state.invalid, className: 'btn btn-primary btn-lg' },
+	              'Sign up'
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	Signup.contextTypes = {
+	  router: object.isRequired
+	};
+	
+	module.exports = connector(Signup);
+
+/***/ },
+/* 805 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Validator = __webpack_require__(739);
+	var isEmpty = __webpack_require__(449);
+	
+	function validateInput(data) {
+	  var errors = {};
+	
+	  // email ======================================
+	
+	  if (Validator.isEmpty(data.email)) {
+	    errors.email = 'A valid Email is required';
+	  }
+	
+	  if (!Validator.isEmail(data.email)) {
+	    errors.email = 'Email is invalid';
+	  }
+	
+	  // password ===================================
+	
+	  if (Validator.isEmpty(data.password)) {
+	    errors.password = 'A valid password is required';
+	  }
+	
+	  if (Validator.isEmpty(data.passwordConfirmation)) {
+	    errors.passwordConfirmation = 'You must confirm your password';
+	  }
+	
+	  if (!Validator.equals(data.password, data.passwordConfirmation)) {
+	    errors.passwordConfirmation = 'Passwords do not match';
+	  }
+	
+	  // username ===================================
+	
+	  if (Validator.isEmpty(data.username)) {
+	    errors.username = 'A valid username is required';
+	  }
+	
+	  return {
+	    errors: errors,
+	    isValid: isEmpty(errors)
+	  };
+	}
+	
+	module.exports = validateInput;
+
+/***/ },
+/* 806 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var classnames = __webpack_require__(708);
+	var _React$PropTypes = React.PropTypes;
+	var string = _React$PropTypes.string;
+	var func = _React$PropTypes.func;
+	
+	
+	var TextFieldGroup = function TextFieldGroup(_ref) {
+	  var field = _ref.field;
+	  var value = _ref.value;
+	  var label = _ref.label;
+	  var error = _ref.error;
+	  var type = _ref.type;
+	  var onChange = _ref.onChange;
+	  var checkUserExists = _ref.checkUserExists;
+	
+	  return React.createElement(
+	    'div',
+	    { className: classnames('form-group', { 'has-error': error }) },
+	    React.createElement(
+	      'label',
+	      { className: 'control-label' },
+	      label
+	    ),
+	    React.createElement('input', {
+	      value: value,
+	      onChange: onChange,
+	      onBlur: checkUserExists,
+	      type: type,
+	      name: field,
+	      className: 'form-control'
+	    }),
+	    error && React.createElement(
+	      'span',
+	      { className: 'help-block' },
+	      error
+	    )
+	  );
+	};
+	
+	TextFieldGroup.propTypes = {
+	  field: string.isRequired,
+	  value: string.isRequired,
+	  label: string.isRequired,
+	  error: string,
+	  type: string.isRequired,
+	  onChange: func.isRequired,
+	  checkUserExists: func
+	};
+	
+	TextFieldGroup.defaultProps = {
+	  type: 'text'
+	};
+	
+	module.exports = TextFieldGroup;
+
+/***/ },
+/* 807 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var LoginForm = __webpack_require__(808);
+	
+	var LoginPage = React.createClass({
+	  displayName: 'LoginPage',
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'row' },
+	      React.createElement(
+	        'div',
+	        { className: 'col-md-4 col-md-offset-4' },
+	        React.createElement(LoginForm, null)
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = LoginPage;
+
+/***/ },
+/* 808 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	
+	var TextFieldGroup = __webpack_require__(806);
+	var validateInput = __webpack_require__(809);
+	var _React$PropTypes = React.PropTypes;
+	var func = _React$PropTypes.func;
+	var object = _React$PropTypes.object;
+	
+	
+	var LoginForm = React.createClass({
+	  displayName: 'LoginForm',
+	
+	  propTypes: {
+	    login: func.isRequired
+	  },
+	  getInitialState: function getInitialState() {
+	    return {
+	      identifier: '',
+	      password: '',
+	      errors: '',
+	      isLoading: false
+	    };
+	  },
+	  isValid: function isValid() {
+	    var _validateInput = validateInput(this.state);
+	
+	    var errors = _validateInput.errors;
+	    var isValid = _validateInput.isValid;
+	
+	
+	    if (!isValid) {
+	      this.setState({ errors: errors });
+	    }
+	
+	    return isValid;
+	  },
+	  onSubmit: function onSubmit(event) {
+	    var _this = this;
+	
+	    event.preventDefault();
+	
+	    if (this.isValid()) {
+	      this.setState({ errors: {}, isLoading: true });
+	      this.props.login(this.state).then(function (response) {
+	        _this.setState({ isLoading: false });
+	        console.log('logged in!', response);
+	        _this.context.router.push('/');
+	      }).catch(function (error) {
+	        console.log('error logging in: ', error);
+	        _this.setState({
+	
+	          isLoading: false
+	        });
+	      });
+	    }
+	  },
+	  onChange: function onChange(event) {
+	    this.setState(_defineProperty({}, event.target.name, event.target.value));
+	  },
+	  render: function render() {
+	    var _state = this.state;
+	    var errors = _state.errors;
+	    var identifier = _state.identifier;
+	    var password = _state.password;
+	    var isLoading = _state.isLoading;
+	
+	    return React.createElement(
+	      'form',
+	      { onSubmit: this.onSubmit },
+	      React.createElement(
+	        'h1',
+	        null,
+	        'Login'
+	      ),
+	      errors.form && React.createElement(
+	        'div',
+	        { className: 'alert alert-danger' },
+	        errors.form
+	      ),
+	      React.createElement(TextFieldGroup, {
+	        field: 'identifier',
+	        label: 'Username / Email',
+	        value: identifier,
+	        error: errors.identifier,
+	        onChange: this.onChange
+	      }),
+	      React.createElement(TextFieldGroup, {
+	        field: 'password',
+	        label: 'Password',
+	        value: password,
+	        error: errors.password,
+	        onChange: this.onChange,
+	        type: 'password'
+	      }),
+	      React.createElement(
+	        'div',
+	        { className: 'form-group' },
+	        React.createElement(
+	          'button',
+	          { className: 'button btn btn-primary btn-lg', disabled: isLoading },
+	          'Login'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	LoginForm.contextTypes = {
+	  router: object.isRequired
+	};
+	
+	module.exports = connector(LoginForm);
+
+/***/ },
+/* 809 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Validator = __webpack_require__(739);
+	var isEmpty = __webpack_require__(449);
+	
+	function validateInput(data) {
+	  var errors = {};
+	
+	  if (Validator.isEmpty(data.identifier)) {
+	    errors.identifier = 'This field is required';
+	  }
+	
+	  if (Validator.isEmpty(data.password)) {
+	    errors.password = 'This field is required';
+	  }
+	
+	  return {
+	    errors: errors,
+	    isValid: isEmpty(errors)
+	  };
+	}
+	
+	module.exports = validateInput;
+
+/***/ },
+/* 810 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var _require = __webpack_require__(236);
+	
+	var connector = _require.connector;
+	
+	var isEmpty = __webpack_require__(449);
+	var _React$PropTypes = React.PropTypes;
+	var func = _React$PropTypes.func;
+	var object = _React$PropTypes.object;
+	
+	
+	var MyPollsPage = React.createClass({
+	  displayName: 'MyPollsPage',
+	
+	  propTypes: {
+	    getUserPolls: func,
+	    user: object
+	  },
+	  getInitialState: function getInitialState() {
+	    return {
+	      myPolls: {}
+	    };
+	  },
+	  getMyPolls: function getMyPolls() {
+	    var _this = this;
+	
+	    var username = this.props.user.username;
+	
+	    if (username && isEmpty(this.state.myPolls)) {
+	      this.props.getUserPolls(username).then(function (res) {
+	        if (res.data.length > 0) {
+	          _this.setState({ myPolls: res.data });
+	        } else {
+	          _this.setState({ myPolls: { polls: null } });
+	        }
+	      });
+	    }
+	  },
+	  render: function render() {
+	    this.getMyPolls();
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'pre',
+	        null,
+	        React.createElement(
+	          'code',
+	          null,
+	          JSON.stringify(this.state.myPolls, null, 4)
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = connector(MyPollsPage);
+
+/***/ },
+/* 811 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
 
 /***/ }
 /******/ ]);

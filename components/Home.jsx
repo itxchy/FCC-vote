@@ -2,13 +2,14 @@ const React = require('react')
 const { connector } = require('../redux/Store')
 const PollCard = require('./common/PollCard')
 const ResultsCard = require('./common/ResultsCard')
-const { func } = React.PropTypes
+const { func, object } = React.PropTypes
 const { dupeVoterCheck } = require('../routes/lib/pollsLib')
 const isEmpty = require('lodash/isEmpty')
 
 const Home = React.createClass({
   propTypes: {
-    getAllPolls: func
+    getAllPolls: func,
+    user: object
   },
   getInitialState () {
     return {
@@ -29,21 +30,11 @@ const Home = React.createClass({
   },
   populatedCards () {
     return this.state.allPolls.map(poll => {
-        const dupeVoter = dupeVoterCheck(poll, this.props.user.username)
-        const { title, options, totalVotes, _id } = poll
-        if (dupeVoter) {
-          return (
-            <ResultsCard
-              key={_id}
-              title={title}
-              options={options}
-              totalVotes={totalVotes}
-              id={_id}
-            />  
-          )  
-        }
+      const dupeVoter = dupeVoterCheck(poll, this.props.user.username)
+      const { title, options, totalVotes, _id } = poll
+      if (dupeVoter) {
         return (
-          <PollCard
+          <ResultsCard
             key={_id}
             title={title}
             options={options}
@@ -51,7 +42,17 @@ const Home = React.createClass({
             id={_id}
           />
         )
-      })
+      }
+      return (
+        <PollCard
+          key={_id}
+          title={title}
+          options={options}
+          totalVotes={totalVotes}
+          id={_id}
+        />
+      )
+    })
   },
   handleEmptyAllPollsObject () {
     this.getRecentPolls()
@@ -63,12 +64,12 @@ const Home = React.createClass({
       )
     }
     if (this.state.allPolls === false) {
-      return ( 
+      return (
         <div className='text-center'>
           <h3>No polls have been submitted yet :(</h3>
           <p>Why not create one?</p>
         </div>
-      )    
+      )
     }
   },
   render () {
