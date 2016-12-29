@@ -20,7 +20,7 @@ const PendingPollOptions = React.createClass({
   deleteOption (index) {
     if (this.props.newPollOptions.length === 2) {
       console.log('Two or more options required!')
-      return 
+      return
     }
     let updatedDeleteOptions = this.props.newPollOptions.slice()
     updatedDeleteOptions.splice(index, 1)

@@ -1,6 +1,6 @@
 const React = require('react')
 const { connector } = require('../../redux/Store')
-const { string, array, number, object, func } = React.PropTypes
+const { string, array, number, object } = React.PropTypes
 const D3Chart = require('./D3Chart')
 const isEmpty = require('lodash/isEmpty')
 
@@ -22,7 +22,7 @@ const ResultsCard = React.createClass({
         <h2>{this.props.title}</h2>
         <div className='col-sm-10'>
           <div className='row'>
-            {d3Component ? d3Component : 'loading results...'}
+            {d3Component || 'loading results...'}
           </div>
           <div className='row'>
             <p>Total votes: {this.props.totalVotes}</p>

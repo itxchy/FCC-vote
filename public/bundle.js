@@ -72357,7 +72357,6 @@
 	var array = _React$PropTypes.array;
 	var number = _React$PropTypes.number;
 	var object = _React$PropTypes.object;
-	var func = _React$PropTypes.func;
 	
 	var D3Chart = __webpack_require__(712);
 	var isEmpty = __webpack_require__(449);
@@ -72391,7 +72390,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'row' },
-	          d3Component ? d3Component : 'loading results...'
+	          d3Component || 'loading results...'
 	        ),
 	        React.createElement(
 	          'div',
