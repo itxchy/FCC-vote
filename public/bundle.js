@@ -72457,7 +72457,7 @@
 	      return d.votes.length * 4;
 	    }).attr('height', function (d) {
 	      return height / data.length - 8;
-	    }).attr("font-family", "sans-serif").attr("font-size", 18);
+	    }).attr('font-family', 'sans-serif').attr('font-size', 18);
 	
 	    console.log('faux element:', chart);
 	    return chart.toReact();
