@@ -16,6 +16,10 @@ import {
   reduceResetNewPoll
 } from './modules/createNewPoll'
 
+import {
+  SET_CURRENT_USER,
+  reduceSetCurrentUser
+} from './modules/auth'
 
 const initialState = {
   newPollTitle: '',
