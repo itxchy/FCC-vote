@@ -1,4 +1,11 @@
-export SET_CURRENT_USER = 'setCurrentUser'
+/* global localStorage */
+
+import axios from 'axios'
+import jwt from 'jsonwebtoken'
+import setAuthorizationToken from '../../auth/setAuthorizationToken'
+import isEmpty from 'lodash/isEmpty'
+
+export const SET_CURRENT_USER = 'setCurrentUser'
 
 export function login (data) {
   return axios.post('/api/auth', data).then(res => {
@@ -15,7 +22,7 @@ export function logout () {
   return { type: SET_CURRENT_USER, user: {} }
 }
 
-export reduceSetCurrentUser = (state, action) => {
+export const reduceSetCurrentUser = (state, action) => {
   const newState = {}
   console.log('action.user', action.user)
   let authenticationStatus = false

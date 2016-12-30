@@ -1,5 +1,10 @@
-export ADD_FLASH_MESSAGE = 'ADD_FLASH_MESSAGE'
-export DELETE_FLASH_MESSAGE = 'DELETE_FLASH_MESSAGE'
+import shortid from 'shortid'
+import findIndex from 'lodash/findIndex'
+import loMap from 'lodash/map'
+import clone from 'lodash/clone'
+
+export const ADD_FLASH_MESSAGE = 'ADD_FLASH_MESSAGE'
+export const DELETE_FLASH_MESSAGE = 'DELETE_FLASH_MESSAGE'
 
 export function addFlashMessage (message) {
   return { type: ADD_FLASH_MESSAGE, value: message }
@@ -8,7 +13,7 @@ export function deleteFlashMessage (id) {
   return { type: DELETE_FLASH_MESSAGE, value: id }
 }
 
-export reduceAddFlashMessage = (state, action) => {
+export const reduceAddFlashMessage = (state, action) => {
   const newState = {}
 
   Object.assign(newState, state, {
@@ -23,7 +28,7 @@ export reduceAddFlashMessage = (state, action) => {
   })
   return newState
 }
-export reduceDeleteFlashMessage = (state, action) => {
+export const reduceDeleteFlashMessage = (state, action) => {
   const newState = {}
 
   const index = findIndex(state.flashMessages, {id: action.value})
