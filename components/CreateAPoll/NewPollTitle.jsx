@@ -6,7 +6,7 @@ import { setNewPollTitle, setTitleEditable } from '../../redux/modules/createNew
 const NewPollTitle = React.createClass({
   propTypes: {
     newPollTitle: string,
-    titleEditable: bool,    
+    titleEditable: bool,
     dispatchSetNewPollTitle: func,
     dispatchSetTitleEditable: func
   },
@@ -74,7 +74,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchSetNewPollTitle (pollTitle) {
-      dispatch(setNewPollTitle(polltitle))
+      dispatch(setNewPollTitle(pollTitle))
     },
     dispatchSetTitleEditable (bool) {
       dispatch(setTitleEditable(bool))

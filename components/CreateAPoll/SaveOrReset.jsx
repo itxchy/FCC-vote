@@ -9,7 +9,7 @@ const SaveOrReset = React.createClass({
   propTypes: {
     newPollTitle: string,
     newPollOptions: array,
-    dispatchResetNewPoll: func,    
+    dispatchResetNewPoll: func,
     dispatchSubmitNewPoll: func.isRequired,
     user: object.isRequired
   },

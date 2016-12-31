@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export function submitNewPoll (newPoll) {
   return axios.post('/api/polls', newPoll)
 }

@@ -69,7 +69,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispach) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     dispatchUpdateOption (newOptions) {
       dispatch(updateOption(newOptions))

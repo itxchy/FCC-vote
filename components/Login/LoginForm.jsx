@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux' 
+import { connect } from 'react-redux'
 import TextFieldGroup from '../common/TextFieldGroup'
 import validateInput from '../../routes/shared/loginValidation'
 const { func, object } = React.PropTypes

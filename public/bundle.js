@@ -92251,7 +92251,7 @@
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    dispatchSetNewPollTitle: function dispatchSetNewPollTitle(pollTitle) {
-	      dispatch((0, _createNewPoll.setNewPollTitle)(polltitle));
+	      dispatch((0, _createNewPoll.setNewPollTitle)(pollTitle));
 	    },
 	    dispatchSetTitleEditable: function dispatchSetTitleEditable(bool) {
 	      dispatch((0, _createNewPoll.setTitleEditable)(bool));
@@ -92371,7 +92371,7 @@
 	  };
 	};
 	
-	var mapDispatchToProps = function mapDispatchToProps(dispach) {
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    dispatchUpdateOption: function dispatchUpdateOption(newOptions) {
 	      dispatch((0, _createNewPoll.updateOption)(newOptions));
@@ -95895,7 +95895,7 @@
 /* 828 */,
 /* 829 */,
 /* 830 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
@@ -95908,23 +95908,30 @@
 	exports.submitVote = submitVote;
 	exports.userSignupRequest = userSignupRequest;
 	exports.isUserExists = isUserExists;
+	
+	var _axios = __webpack_require__(409);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	function submitNewPoll(newPoll) {
-	  return axios.post('/api/polls', newPoll);
+	  return _axios2.default.post('/api/polls', newPoll);
 	}
 	function getUserPolls(user) {
-	  return axios.get('/api/polls/' + user);
+	  return _axios2.default.get('/api/polls/' + user);
 	}
 	function getAllPolls() {
-	  return axios.get('/api/polls');
+	  return _axios2.default.get('/api/polls');
 	}
 	function submitVote(id, vote) {
-	  return axios.put('/api/polls/' + id, vote);
+	  return _axios2.default.put('/api/polls/' + id, vote);
 	}
 	function userSignupRequest(userData) {
-	  return axios.post('/api/users', userData);
+	  return _axios2.default.post('/api/users', userData);
 	}
 	function isUserExists(identifier) {
-	  return axios.get('/api/users/' + identifier);
+	  return _axios2.default.get('/api/users/' + identifier);
 	}
 
 /***/ }
