@@ -79,6 +79,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const connector = reactRedux.connect(mapStateToProps, mapDispatchToProps)
-
-module.exports = { connector, store, rootReducer, SET_CURRENT_USER }
+module.exports = { store, rootReducer, SET_CURRENT_USER }
