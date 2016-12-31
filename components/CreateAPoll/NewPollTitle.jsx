@@ -1,6 +1,7 @@
-const React = require('react')
-const { connector } = require('../../redux/Store')
-const { string, func, bool } = React.PropTypes
+import React from 'react'
+import { connect } from 'react-redux'
+import { string, func, bool } from React.PropTypes
+import { setNewPollTitle } from '../../redux/modules/createNewPoll'
 
 const NewPollTitle = React.createClass({
   propTypes: {
@@ -10,16 +11,16 @@ const NewPollTitle = React.createClass({
     setTitleEditable: func
   },
   handleNewPollTitleChange (event) {
-    this.props.setNewPollTitle(event.target.value)
+    this.props.dispatchSetNewPollTitle(event.target.value)
   },
   handleSaveClick (event) {
     if (this.props.newPollTitle === '') {
-      this.props.setNewPollTitle('New Poll Title')
+      this.props.dispatchSetNewPollTitle('New Poll Title')
     }
-    this.props.setTitleEditable(false)
+    this.props.dispatchSetTitleEditable(false)
   },
   handleEditClick (event) {
-    this.props.setTitleEditable(true)
+    this.props.dispatchSetTitleEditable(true)
   },
   render () {
     let savedPollTitle = (
@@ -63,7 +64,25 @@ const NewPollTitle = React.createClass({
   }
 })
 
-let connected = connector(NewPollTitle)
+const mapStateToProps = (state) => {
+  return {
+    newPollTitle: state.newPollTitle,
+    titleEditable: state.titleEditable
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchSetNewPollTitle (pollTitle) {
+      dispatch(setNewPollTitle(polltitle))
+    },
+    dispatchSetTitleEditable (bool) {
+      dispatch(setTitleEditable(bool))
+    }
+  }
+}
+
+let connected = connect(mapStateToProps, mapDispatchToProps)(NewPollTitle)
 
 // This exports the component itself for testing
 connected.DisconnectedNewPollTitle = NewPollTitle

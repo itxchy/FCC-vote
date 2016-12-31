@@ -92124,7 +92124,7 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var NewPollTitle = __webpack_require__(739);
+	var NewPollTitle = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./NewPollTitle\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	var PendingPollOptions = __webpack_require__(740);
 	var SaveOrReset = __webpack_require__(741);
 	
@@ -92146,99 +92146,7 @@
 	module.exports = CreateAPoll;
 
 /***/ },
-/* 739 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
-	var string = _React$PropTypes.string;
-	var func = _React$PropTypes.func;
-	var bool = _React$PropTypes.bool;
-	
-	
-	var NewPollTitle = React.createClass({
-	  displayName: 'NewPollTitle',
-	
-	  propTypes: {
-	    newPollTitle: string,
-	    setNewPollTitle: func,
-	    titleEditable: bool,
-	    setTitleEditable: func
-	  },
-	  handleNewPollTitleChange: function handleNewPollTitleChange(event) {
-	    this.props.setNewPollTitle(event.target.value);
-	  },
-	  handleSaveClick: function handleSaveClick(event) {
-	    if (this.props.newPollTitle === '') {
-	      this.props.setNewPollTitle('New Poll Title');
-	    }
-	    this.props.setTitleEditable(false);
-	  },
-	  handleEditClick: function handleEditClick(event) {
-	    this.props.setTitleEditable(true);
-	  },
-	  render: function render() {
-	    var savedPollTitle = React.createElement(
-	      'div',
-	      { className: 'new-poll-title-container' },
-	      React.createElement(
-	        'h2',
-	        { className: 'text-center saved-title' },
-	        this.props.newPollTitle
-	      ),
-	      React.createElement(
-	        'a',
-	        { href: '#' },
-	        React.createElement('i', {
-	          className: 'fa fa-pencil-square-o edit-icon',
-	          'aria-hidden': 'true',
-	          onClick: this.handleEditClick
-	        })
-	      )
-	    );
-	    var inputPollTitle = React.createElement(
-	      'div',
-	      { className: 'new-poll-title-container' },
-	      React.createElement('textarea', {
-	        value: this.props.newPollTitle,
-	        onChange: this.handleNewPollTitleChange,
-	        type: 'text',
-	        placeholder: 'New Poll Title',
-	        className: 'text-center form-control new-poll-title-textarea'
-	      }),
-	      React.createElement(
-	        'a',
-	        { href: '#' },
-	        React.createElement('i', {
-	          className: 'fa fa-floppy-o save-icon',
-	          'aria-hidden': 'true',
-	          onClick: this.handleSaveClick
-	        })
-	      )
-	    );
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'new-poll-title-container' },
-	      this.props.titleEditable ? inputPollTitle : savedPollTitle
-	    );
-	  }
-	});
-	
-	var connected = connector(NewPollTitle);
-	
-	// This exports the component itself for testing
-	connected.DisconnectedNewPollTitle = NewPollTitle;
-	
-	module.exports = connected;
-
-/***/ },
+/* 739 */,
 /* 740 */
 /***/ function(module, exports, __webpack_require__) {
 
