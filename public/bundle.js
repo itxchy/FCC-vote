@@ -92424,7 +92424,7 @@
 	
 	var _createAPollValidation2 = _interopRequireDefault(_createAPollValidation);
 	
-	var _createNewPoll = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../redux/createNewPoll\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _createNewPoll = __webpack_require__(407);
 	
 	var _apiCalls = __webpack_require__(830);
 	
