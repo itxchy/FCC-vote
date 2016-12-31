@@ -1,11 +1,12 @@
-const React = require('react')
-const { connector } = require('../../redux/Store')
-const isEmpty = require('lodash/isEmpty')
+import React from 'react'
+import { connect } from 'react-redux'
+import isEmpty from 'lodash/isEmpty'
 const { func, object } = React.PropTypes
+import { getUserPolls } from '../../redux/apiCalls'
 
 const MyPollsPage = React.createClass({
   propTypes: {
-    getUserPolls: func,
+    dispatchGetUserPolls: func,
     user: object
   },
   getInitialState () {
@@ -17,11 +18,11 @@ const MyPollsPage = React.createClass({
     const username = this.props.user.username
 
     if (username && isEmpty(this.state.myPolls)) {
-      this.props.getUserPolls(username).then(res => {
+      this.props.dispatchGetUserPolls(username).then(res => {
         if (res.data.length > 0) {
-          this.setState({myPolls: res.data})
+          this.setState({ myPolls: res.data })
         } else {
-          this.setState({myPolls: {polls: null}})
+          this.setState({ myPolls: { polls: null } })
         }
       })
     }
@@ -36,4 +37,18 @@ const MyPollsPage = React.createClass({
   }
 })
 
-module.exports = connector(MyPollsPage)
+const mapStateToProps = (state) => {
+  return {
+    user: state.user
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchGetUserPolls (username) {
+      dispatch(getUserPolls(username))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyPollsPage)

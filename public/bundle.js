@@ -95626,22 +95626,33 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
-	var LoginForm = __webpack_require__(812);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _LoginForm = __webpack_require__(812);
+	
+	var _LoginForm2 = _interopRequireDefault(_LoginForm);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var LoginPage = function LoginPage() {
-	  return React.createElement(
+	  return _react2.default.createElement(
 	    'div',
 	    { className: 'row' },
-	    React.createElement(
+	    _react2.default.createElement(
 	      'div',
 	      { className: 'col-md-4 col-md-offset-4' },
-	      React.createElement(LoginForm, null)
+	      _react2.default.createElement(_LoginForm2.default, null)
 	    )
 	  );
 	};
 	
-	module.exports = LoginPage;
+	exports.default = LoginPage;
 
 /***/ },
 /* 812 */
@@ -95828,23 +95839,34 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
+	var _react2 = _interopRequireDefault(_react);
 	
-	var isEmpty = __webpack_require__(629);
-	var _React$PropTypes = React.PropTypes;
+	var _reactRedux = __webpack_require__(641);
+	
+	var _isEmpty = __webpack_require__(629);
+	
+	var _isEmpty2 = _interopRequireDefault(_isEmpty);
+	
+	var _apiCalls = __webpack_require__(830);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
 	
 	
-	var MyPollsPage = React.createClass({
+	var MyPollsPage = _react2.default.createClass({
 	  displayName: 'MyPollsPage',
 	
 	  propTypes: {
-	    getUserPolls: func,
+	    dispatchGetUserPolls: func,
 	    user: object
 	  },
 	  getInitialState: function getInitialState() {
@@ -95857,8 +95879,8 @@
 	
 	    var username = this.props.user.username;
 	
-	    if (username && isEmpty(this.state.myPolls)) {
-	      this.props.getUserPolls(username).then(function (res) {
+	    if (username && (0, _isEmpty2.default)(this.state.myPolls)) {
+	      this.props.dispatchGetUserPolls(username).then(function (res) {
 	        if (res.data.length > 0) {
 	          _this.setState({ myPolls: res.data });
 	        } else {
@@ -95869,13 +95891,13 @@
 	  },
 	  render: function render() {
 	    this.getMyPolls();
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      null,
-	      React.createElement(
+	      _react2.default.createElement(
 	        'pre',
 	        null,
-	        React.createElement(
+	        _react2.default.createElement(
 	          'code',
 	          null,
 	          JSON.stringify(this.state.myPolls, null, 4)
@@ -95885,7 +95907,21 @@
 	  }
 	});
 	
-	module.exports = connector(MyPollsPage);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    user: state.user
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchGetUserPolls: function dispatchGetUserPolls(username) {
+	      dispatch((0, _apiCalls.getUserPolls)(username));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MyPollsPage);
 
 /***/ },
 /* 815 */
