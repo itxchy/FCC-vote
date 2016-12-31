@@ -1,12 +1,13 @@
-const React = require('react')
-const { connector } = require('../../redux/Store')
-const TextFieldGroup = require('../common/TextFieldGroup')
-const validateInput = require('../../routes/shared/loginValidation')
+import React from 'react'
+import { connect } from 'react-redux' 
+import TextFieldGroup from '../common/TextFieldGroup'
+import validateInput from '../../routes/shared/loginValidation'
 const { func, object } = React.PropTypes
+import { login } from '../../redux/modules/auth'
 
 const LoginForm = React.createClass({
   propTypes: {
-    login: func.isRequired
+    dispatchLogin: func.isRequired
   },
   getInitialState () {
     return {
@@ -32,7 +33,7 @@ const LoginForm = React.createClass({
 
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true })
-      this.props.login(this.state)
+      this.props.dispatchLogin(this.state)
         .then(response => {
           this.setState({ isLoading: false })
           console.log('logged in!', response)
@@ -90,4 +91,16 @@ LoginForm.contextTypes = {
   router: object.isRequired
 }
 
-module.exports = connector(LoginForm)
+const mapStateToProps = (state) => {
+  return
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchLogin (credentials) {
+      dispatch(login(credentials))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)

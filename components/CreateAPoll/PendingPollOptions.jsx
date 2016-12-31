@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { array, func } from React.PropTypes
+const { array, func } = React.PropTypes
 import { updateOption } from '../../redux/modules/createNewPoll'
 
 const PendingPollOptions = React.createClass({
   propTypes: {
     newPollOptions: array.isRequired,
-    updateOption: func.isRequired
+    dispatchUpdateOption: func.isRequired
   },
   editOption (event) {
     let updatedOptions = this.props.newPollOptions.slice()

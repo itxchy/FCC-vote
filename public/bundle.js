@@ -92124,9 +92124,9 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var NewPollTitle = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./NewPollTitle\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-	var PendingPollOptions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./PendingPollOptions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-	var SaveOrReset = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./SaveOrReset\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var NewPollTitle = __webpack_require__(739);
+	var PendingPollOptions = __webpack_require__(740);
+	var SaveOrReset = __webpack_require__(741);
 	
 	var CreateAPoll = function CreateAPoll() {
 	  return React.createElement(
@@ -92146,10 +92146,419 @@
 	module.exports = CreateAPoll;
 
 /***/ },
-/* 739 */,
-/* 740 */,
-/* 741 */,
-/* 742 */,
+/* 739 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.DisconnectedNewPollTitle = undefined;
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _createNewPoll = __webpack_require__(407);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
+	var string = _React$PropTypes.string;
+	var func = _React$PropTypes.func;
+	var bool = _React$PropTypes.bool;
+	
+	
+	var NewPollTitle = _react2.default.createClass({
+	  displayName: 'NewPollTitle',
+	
+	  propTypes: {
+	    newPollTitle: string,
+	    titleEditable: bool,
+	    dispatchSetNewPollTitle: func,
+	    dispatchSetTitleEditable: func
+	  },
+	  handleNewPollTitleChange: function handleNewPollTitleChange(event) {
+	    this.props.dispatchSetNewPollTitle(event.target.value);
+	  },
+	  handleSaveClick: function handleSaveClick(event) {
+	    if (this.props.newPollTitle === '') {
+	      this.props.dispatchSetNewPollTitle('New Poll Title');
+	    }
+	    this.props.dispatchSetTitleEditable(false);
+	  },
+	  handleEditClick: function handleEditClick(event) {
+	    this.props.dispatchSetTitleEditable(true);
+	  },
+	  render: function render() {
+	    var savedPollTitle = _react2.default.createElement(
+	      'div',
+	      { className: 'new-poll-title-container' },
+	      _react2.default.createElement(
+	        'h2',
+	        { className: 'text-center saved-title' },
+	        this.props.newPollTitle
+	      ),
+	      _react2.default.createElement(
+	        'a',
+	        { href: '#' },
+	        _react2.default.createElement('i', {
+	          className: 'fa fa-pencil-square-o edit-icon',
+	          'aria-hidden': 'true',
+	          onClick: this.handleEditClick
+	        })
+	      )
+	    );
+	    var inputPollTitle = _react2.default.createElement(
+	      'div',
+	      { className: 'new-poll-title-container' },
+	      _react2.default.createElement('textarea', {
+	        value: this.props.newPollTitle,
+	        onChange: this.handleNewPollTitleChange,
+	        type: 'text',
+	        placeholder: 'New Poll Title',
+	        className: 'text-center form-control new-poll-title-textarea'
+	      }),
+	      _react2.default.createElement(
+	        'a',
+	        { href: '#' },
+	        _react2.default.createElement('i', {
+	          className: 'fa fa-floppy-o save-icon',
+	          'aria-hidden': 'true',
+	          onClick: this.handleSaveClick
+	        })
+	      )
+	    );
+	
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'new-poll-title-container' },
+	      this.props.titleEditable ? inputPollTitle : savedPollTitle
+	    );
+	  }
+	});
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    newPollTitle: state.newPollTitle,
+	    titleEditable: state.titleEditable
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchSetNewPollTitle: function dispatchSetNewPollTitle(pollTitle) {
+	      dispatch((0, _createNewPoll.setNewPollTitle)(polltitle));
+	    },
+	    dispatchSetTitleEditable: function dispatchSetTitleEditable(bool) {
+	      dispatch((0, _createNewPoll.setTitleEditable)(bool));
+	    }
+	  };
+	};
+	
+	var connected = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(NewPollTitle);
+	
+	// This exports the component itself for testing
+	var DisconnectedNewPollTitle = exports.DisconnectedNewPollTitle = NewPollTitle;
+	
+	exports.default = connected;
+
+/***/ },
+/* 740 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.DisconnectedPendingPollOptions = undefined;
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _createNewPoll = __webpack_require__(407);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
+	var array = _React$PropTypes.array;
+	var func = _React$PropTypes.func;
+	
+	
+	var PendingPollOptions = _react2.default.createClass({
+	  displayName: 'PendingPollOptions',
+	
+	  propTypes: {
+	    newPollOptions: array.isRequired,
+	    dispatchUpdateOption: func.isRequired
+	  },
+	  editOption: function editOption(event) {
+	    var updatedOptions = this.props.newPollOptions.slice();
+	    updatedOptions[event.target.name] = event.target.value;
+	    this.props.dispatchUpdateOption(updatedOptions);
+	  },
+	  addAnotherOption: function addAnotherOption() {
+	    var updatedNewOptions = this.props.newPollOptions.slice();
+	    updatedNewOptions.push('');
+	    this.props.dispatchUpdateOption(updatedNewOptions);
+	  },
+	  deleteOption: function deleteOption(index) {
+	    if (this.props.newPollOptions.length === 2) {
+	      console.log('Two or more options required!');
+	      return;
+	    }
+	    var updatedDeleteOptions = this.props.newPollOptions.slice();
+	    updatedDeleteOptions.splice(index, 1);
+	    this.props.dispatchUpdateOption(updatedDeleteOptions);
+	  },
+	  render: function render() {
+	    var _this = this;
+	
+	    var options = this.props.newPollOptions.map(function (option, index) {
+	      return _react2.default.createElement(
+	        'div',
+	        { key: index },
+	        _react2.default.createElement('input', {
+	          type: 'text',
+	          value: option,
+	          name: index,
+	          placeholder: 'Option ' + (index + 1),
+	          onChange: _this.editOption,
+	          className: 'form-control option-input'
+	        }),
+	        _react2.default.createElement(
+	          'a',
+	          {
+	            className: 'btn btn-danger delete-button',
+	            href: '#',
+	            onClick: function onClick() {
+	              return _this.deleteOption(index);
+	            },
+	            'aria-label': 'Delete'
+	          },
+	          _react2.default.createElement('i', { className: 'fa fa-trash-o', 'aria-hidden': 'true' })
+	        )
+	      );
+	    });
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'form-group options-container' },
+	      options,
+	      _react2.default.createElement(
+	        'a',
+	        { href: '#' },
+	        _react2.default.createElement(
+	          'p',
+	          { className: 'add-another-option', onClick: this.addAnotherOption },
+	          _react2.default.createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
+	          ' Add another option'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    newPollOptions: state.newPollOptions
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispach) {
+	  return {
+	    dispatchUpdateOption: function dispatchUpdateOption(newOptions) {
+	      dispatch((0, _createNewPoll.updateOption)(newOptions));
+	    }
+	  };
+	};
+	
+	var connected = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(PendingPollOptions);
+	
+	// This exports the component itself for testing
+	var DisconnectedPendingPollOptions = exports.DisconnectedPendingPollOptions = PendingPollOptions;
+	
+	exports.default = connected;
+
+/***/ },
+/* 741 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.DisconnectedSaveOrReset = undefined;
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _createAPollValidation = __webpack_require__(742);
+	
+	var _createAPollValidation2 = _interopRequireDefault(_createAPollValidation);
+	
+	var _createNewPoll = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../redux/createNewPoll\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	
+	var _apiCalls = __webpack_require__(830);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
+	var string = _React$PropTypes.string;
+	var func = _React$PropTypes.func;
+	var array = _React$PropTypes.array;
+	var object = _React$PropTypes.object;
+	
+	
+	var SaveOrReset = _react2.default.createClass({
+	  displayName: 'SaveOrReset',
+	
+	  propTypes: {
+	    newPollTitle: string,
+	    newPollOptions: array,
+	    dispatchResetNewPoll: func,
+	    dispatchSubmitNewPoll: func.isRequired,
+	    user: object.isRequired
+	  },
+	  getInitialState: function getInitialState() {
+	    return {
+	      errors: {}
+	    };
+	  },
+	  isValid: function isValid() {
+	    var inputData = {
+	      newPollTitle: this.props.newPollTitle,
+	      newPollOptions: this.props.newPollOptions
+	    };
+	
+	    var _validateCreateAPollI = (0, _createAPollValidation2.default)(inputData);
+	
+	    var errors = _validateCreateAPollI.errors;
+	    var isValid = _validateCreateAPollI.isValid;
+	
+	    if (!isValid) {
+	      this.setState({ errors: errors });
+	    }
+	    return isValid;
+	  },
+	  saveButtonHandler: function saveButtonHandler() {
+	    if (this.isValid()) {
+	      var newPoll = {
+	        title: this.props.newPollTitle,
+	        options: this.props.newPollOptions,
+	        owner: this.props.user.username
+	      };
+	      this.props.dispatchSubmitNewPoll(newPoll).then(function (response) {
+	        console.log('Success!!:', response);
+	      }).catch(function (err) {
+	        console.error('Poll could not be saved', err);
+	      });
+	    }
+	  },
+	  resetButtonHandler: function resetButtonHandler() {
+	    this.props.dispatchResetNewPoll();
+	  },
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'text-center' },
+	      _react2.default.createElement(
+	        'button',
+	        {
+	          className: 'btn btn-primary save-reset-buttons',
+	          onClick: this.saveButtonHandler
+	        },
+	        'Save'
+	      ),
+	      _react2.default.createElement(
+	        'button',
+	        {
+	          className: 'btn save-reset-buttons reset-poll-button',
+	          onClick: this.resetButtonHandler
+	        },
+	        'Reset'
+	      )
+	    );
+	  }
+	});
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    newPollTitle: state.newPollTitle,
+	    newPollOptions: state.newPollOptions,
+	    user: state.user
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchResetNewPoll: function dispatchResetNewPoll() {
+	      dispatch((0, _createNewPoll.resetNewPoll)());
+	    },
+	    dispatchSubmitNewPoll: function dispatchSubmitNewPoll(newPoll) {
+	      dispatch((0, _apiCalls.submitNewPoll)(newPoll));
+	    }
+	  };
+	};
+	
+	var connected = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SaveOrReset);
+	
+	var DisconnectedSaveOrReset = exports.DisconnectedSaveOrReset = SaveOrReset;
+	
+	exports.default = connected;
+
+/***/ },
+/* 742 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _validator = __webpack_require__(743);
+	
+	var _validator2 = _interopRequireDefault(_validator);
+	
+	var _isEmpty = __webpack_require__(629);
+	
+	var _isEmpty2 = _interopRequireDefault(_isEmpty);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function validateCreateAPollInput(data) {
+	  var errors = {};
+	
+	  if (_validator2.default.isEmpty(data.newPollTitle)) {
+	    errors.newPollTitle = 'A title is required';
+	  }
+	
+	  data.newPollOptions.map(function (option) {
+	    if (_validator2.default.isEmpty(option)) {
+	      errors.newPollOptions = 'Blank options are not allowed';
+	    }
+	  });
+	
+	  return {
+	    errors: errors,
+	    isValid: (0, _isEmpty2.default)(errors)
+	  };
+	}
+	
+	exports.default = validateCreateAPollInput;
+
+/***/ },
 /* 743 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -95226,26 +95635,40 @@
 
 	'use strict';
 	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _TextFieldGroup = __webpack_require__(810);
+	
+	var _TextFieldGroup2 = _interopRequireDefault(_TextFieldGroup);
+	
+	var _loginValidation = __webpack_require__(813);
+	
+	var _loginValidation2 = _interopRequireDefault(_loginValidation);
+	
+	var _auth = __webpack_require__(408);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	
-	var TextFieldGroup = __webpack_require__(810);
-	var validateInput = __webpack_require__(813);
-	var _React$PropTypes = React.PropTypes;
+	var _React$PropTypes = _react2.default.PropTypes;
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
 	
 	
-	var LoginForm = React.createClass({
+	var LoginForm = _react2.default.createClass({
 	  displayName: 'LoginForm',
 	
 	  propTypes: {
-	    login: func.isRequired
+	    dispatchLogin: func.isRequired
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
@@ -95256,7 +95679,7 @@
 	    };
 	  },
 	  isValid: function isValid() {
-	    var _validateInput = validateInput(this.state);
+	    var _validateInput = (0, _loginValidation2.default)(this.state);
 	
 	    var errors = _validateInput.errors;
 	    var isValid = _validateInput.isValid;
@@ -95275,7 +95698,7 @@
 	
 	    if (this.isValid()) {
 	      this.setState({ errors: {}, isLoading: true });
-	      this.props.login(this.state).then(function (response) {
+	      this.props.dispatchLogin(this.state).then(function (response) {
 	        _this.setState({ isLoading: false });
 	        console.log('logged in!', response);
 	        _this.context.router.push('/');
@@ -95298,27 +95721,27 @@
 	    var password = _state.password;
 	    var isLoading = _state.isLoading;
 	
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'form',
 	      { onSubmit: this.onSubmit },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'h1',
 	        null,
 	        'Login'
 	      ),
-	      errors.form && React.createElement(
+	      errors.form && _react2.default.createElement(
 	        'div',
 	        { className: 'alert alert-danger' },
 	        errors.form
 	      ),
-	      React.createElement(TextFieldGroup, {
+	      _react2.default.createElement(_TextFieldGroup2.default, {
 	        field: 'identifier',
 	        label: 'Username / Email',
 	        value: identifier,
 	        error: errors.identifier,
 	        onChange: this.onChange
 	      }),
-	      React.createElement(TextFieldGroup, {
+	      _react2.default.createElement(_TextFieldGroup2.default, {
 	        field: 'password',
 	        label: 'Password',
 	        value: password,
@@ -95326,10 +95749,10 @@
 	        onChange: this.onChange,
 	        type: 'password'
 	      }),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'form-group' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'button',
 	          { className: 'button btn btn-primary btn-lg', disabled: isLoading },
 	          'Login'
@@ -95343,7 +95766,19 @@
 	  router: object.isRequired
 	};
 	
-	module.exports = connector(LoginForm);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return;
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchLogin: function dispatchLogin(credentials) {
+	      dispatch((0, _auth.login)(credentials));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LoginForm);
 
 /***/ },
 /* 813 */
@@ -95443,6 +95878,54 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 816 */,
+/* 817 */,
+/* 818 */,
+/* 819 */,
+/* 820 */,
+/* 821 */,
+/* 822 */,
+/* 823 */,
+/* 824 */,
+/* 825 */,
+/* 826 */,
+/* 827 */,
+/* 828 */,
+/* 829 */,
+/* 830 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.submitNewPoll = submitNewPoll;
+	exports.getUserPolls = getUserPolls;
+	exports.getAllPolls = getAllPolls;
+	exports.submitVote = submitVote;
+	exports.userSignupRequest = userSignupRequest;
+	exports.isUserExists = isUserExists;
+	function submitNewPoll(newPoll) {
+	  return axios.post('/api/polls', newPoll);
+	}
+	function getUserPolls(user) {
+	  return axios.get('/api/polls/' + user);
+	}
+	function getAllPolls() {
+	  return axios.get('/api/polls');
+	}
+	function submitVote(id, vote) {
+	  return axios.put('/api/polls/' + id, vote);
+	}
+	function userSignupRequest(userData) {
+	  return axios.post('/api/users', userData);
+	}
+	function isUserExists(identifier) {
+	  return axios.get('/api/users/' + identifier);
+	}
 
 /***/ }
 /******/ ]);

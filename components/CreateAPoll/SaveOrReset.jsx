@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { string, func, array, object } from React.PropTypes
+const { string, func, array, object } = React.PropTypes
 import validateCreateAPollInput from '../../routes/shared/createAPollValidation'
 import { resetNewPoll } from '../../redux/createNewPoll'
 import { submitNewPoll } from '../../redux/apiCalls.js'
@@ -8,9 +8,9 @@ import { submitNewPoll } from '../../redux/apiCalls.js'
 const SaveOrReset = React.createClass({
   propTypes: {
     newPollTitle: string,
-    resetNewPoll: func,
     newPollOptions: array,
-    submitNewPoll: func.isRequired,
+    dispatchResetNewPoll: func,    
+    dispatchSubmitNewPoll: func.isRequired,
     user: object.isRequired
   },
   getInitialState () {

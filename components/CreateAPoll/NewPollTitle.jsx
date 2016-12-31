@@ -1,14 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { string, func, bool } from React.PropTypes
+const { string, func, bool } = React.PropTypes
 import { setNewPollTitle, setTitleEditable } from '../../redux/modules/createNewPoll'
 
 const NewPollTitle = React.createClass({
   propTypes: {
     newPollTitle: string,
-    setNewPollTitle: func,
-    titleEditable: bool,
-    setTitleEditable: func
+    titleEditable: bool,    
+    dispatchSetNewPollTitle: func,
+    dispatchSetTitleEditable: func
   },
   handleNewPollTitleChange (event) {
     this.props.dispatchSetNewPollTitle(event.target.value)
