@@ -92123,27 +92123,44 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
-	var NewPollTitle = __webpack_require__(739);
-	var PendingPollOptions = __webpack_require__(740);
-	var SaveOrReset = __webpack_require__(741);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _NewPollTitle = __webpack_require__(739);
+	
+	var _NewPollTitle2 = _interopRequireDefault(_NewPollTitle);
+	
+	var _PendingPollOptions = __webpack_require__(740);
+	
+	var _PendingPollOptions2 = _interopRequireDefault(_PendingPollOptions);
+	
+	var _SaveOrReset = __webpack_require__(741);
+	
+	var _SaveOrReset2 = _interopRequireDefault(_SaveOrReset);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var CreateAPoll = function CreateAPoll() {
-	  return React.createElement(
+	  return _react2.default.createElement(
 	    'div',
 	    null,
-	    React.createElement(
+	    _react2.default.createElement(
 	      'h1',
 	      { className: 'view-title text-center' },
 	      'Create a New Poll'
 	    ),
-	    React.createElement(NewPollTitle, null),
-	    React.createElement(PendingPollOptions, null),
-	    React.createElement(SaveOrReset, null)
+	    _react2.default.createElement(_NewPollTitle2.default, null),
+	    _react2.default.createElement(_PendingPollOptions2.default, null),
+	    _react2.default.createElement(_SaveOrReset2.default, null)
 	  );
 	};
 	
-	module.exports = CreateAPoll;
+	exports.default = CreateAPoll;
 
 /***/ },
 /* 739 */
@@ -95612,20 +95629,17 @@
 	var React = __webpack_require__(1);
 	var LoginForm = __webpack_require__(812);
 	
-	var LoginPage = React.createClass({
-	  displayName: 'LoginPage',
-	  render: function render() {
-	    return React.createElement(
+	var LoginPage = function LoginPage() {
+	  return React.createElement(
+	    'div',
+	    { className: 'row' },
+	    React.createElement(
 	      'div',
-	      { className: 'row' },
-	      React.createElement(
-	        'div',
-	        { className: 'col-md-4 col-md-offset-4' },
-	        React.createElement(LoginForm, null)
-	      )
-	    );
-	  }
-	});
+	      { className: 'col-md-4 col-md-offset-4' },
+	      React.createElement(LoginForm, null)
+	    )
+	  );
+	};
 	
 	module.exports = LoginPage;
 

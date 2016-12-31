@@ -1,7 +1,7 @@
-const React = require('react')
-const NewPollTitle = require('./NewPollTitle')
-const PendingPollOptions = require('./PendingPollOptions')
-const SaveOrReset = require('./SaveOrReset')
+import React from 'react'
+import NewPollTitle from './NewPollTitle'
+import PendingPollOptions from './PendingPollOptions'
+import SaveOrReset from './SaveOrReset'
 
 const CreateAPoll = () => {
   return (
@@ -14,4 +14,4 @@ const CreateAPoll = () => {
   )
 }
 
-module.exports = CreateAPoll
+export default CreateAPoll

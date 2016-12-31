@@ -1,16 +1,14 @@
-const React = require('react')
-const LoginForm = require('./LoginForm')
+import React from 'react'
+import LoginForm from './LoginForm'
 
-const LoginPage = React.createClass({
-  render () {
-    return (
-      <div className='row'>
-        <div className='col-md-4 col-md-offset-4'>
-          <LoginForm />
-        </div>
+const LoginPage = () => {
+  return (
+    <div className='row'>
+      <div className='col-md-4 col-md-offset-4'>
+        <LoginForm />
       </div>
-    )
-  }
-})
+    </div>
+  )
+}
 
-module.exports = LoginPage
+export default LoginPage
