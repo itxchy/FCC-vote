@@ -32984,8 +32984,8 @@
 	function updateOption(updatedOptions) {
 	  return { type: UPDATE_OPTION, value: updatedOptions };
 	}
-	function resetNewPoll(bool) {
-	  return { type: RESET_NEW_POLL, value: bool };
+	function resetNewPoll() {
+	  return { type: RESET_NEW_POLL };
 	}
 	
 	var reduceNewPollTitle = exports.reduceNewPollTitle = function reduceNewPollTitle(state, action) {
@@ -92126,7 +92126,7 @@
 	var React = __webpack_require__(1);
 	var NewPollTitle = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./NewPollTitle\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	var PendingPollOptions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./PendingPollOptions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-	var SaveOrReset = __webpack_require__(741);
+	var SaveOrReset = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./SaveOrReset\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	
 	var CreateAPoll = function CreateAPoll() {
 	  return React.createElement(
@@ -92148,133 +92148,8 @@
 /***/ },
 /* 739 */,
 /* 740 */,
-/* 741 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
-	var string = _React$PropTypes.string;
-	var func = _React$PropTypes.func;
-	var array = _React$PropTypes.array;
-	var object = _React$PropTypes.object;
-	
-	var validateCreateAPollInput = __webpack_require__(742);
-	
-	var SaveOrReset = React.createClass({
-	  displayName: 'SaveOrReset',
-	
-	  propTypes: {
-	    newPollTitle: string,
-	    resetNewPoll: func,
-	    newPollOptions: array,
-	    submitNewPoll: func.isRequired,
-	    user: object.isRequired
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      errors: {}
-	    };
-	  },
-	  isValid: function isValid() {
-	    var inputData = {
-	      newPollTitle: this.props.newPollTitle,
-	      newPollOptions: this.props.newPollOptions
-	    };
-	
-	    var _validateCreateAPollI = validateCreateAPollInput(inputData);
-	
-	    var errors = _validateCreateAPollI.errors;
-	    var isValid = _validateCreateAPollI.isValid;
-	
-	    if (!isValid) {
-	      this.setState({ errors: errors });
-	    }
-	    return isValid;
-	  },
-	  saveButtonHandler: function saveButtonHandler() {
-	    if (this.isValid()) {
-	      var newPoll = {
-	        title: this.props.newPollTitle,
-	        options: this.props.newPollOptions,
-	        owner: this.props.user.username
-	      };
-	      this.props.submitNewPoll(newPoll).then(function (response) {
-	        console.log('Success!!:', response);
-	      }).catch(function (err) {
-	        console.error('Poll could not be saved', err);
-	      });
-	    }
-	  },
-	  resetButtonHandler: function resetButtonHandler() {
-	    this.props.resetNewPoll(true);
-	  },
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'text-center' },
-	      React.createElement(
-	        'button',
-	        {
-	          className: 'btn btn-primary save-reset-buttons',
-	          onClick: this.saveButtonHandler
-	        },
-	        'Save'
-	      ),
-	      React.createElement(
-	        'button',
-	        {
-	          className: 'btn save-reset-buttons reset-poll-button',
-	          onClick: this.resetButtonHandler
-	        },
-	        'Reset'
-	      )
-	    );
-	  }
-	});
-	
-	var connected = connector(SaveOrReset);
-	
-	connected.DisconnectedSaveOrReset = SaveOrReset;
-	
-	module.exports = connected;
-
-/***/ },
-/* 742 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var Validator = __webpack_require__(743);
-	var isEmpty = __webpack_require__(629);
-	
-	function validateCreateAPollInput(data) {
-	  var errors = {};
-	
-	  if (Validator.isEmpty(data.newPollTitle)) {
-	    errors.newPollTitle = 'A title is required';
-	  }
-	
-	  data.newPollOptions.map(function (option) {
-	    if (Validator.isEmpty(option)) {
-	      errors.newPollOptions = 'Blank options are not allowed';
-	    }
-	  });
-	
-	  return {
-	    errors: errors,
-	    isValid: isEmpty(errors)
-	  };
-	}
-	
-	module.exports = validateCreateAPollInput;
-
-/***/ },
+/* 741 */,
+/* 742 */,
 /* 743 */
 /***/ function(module, exports, __webpack_require__) {
 

@@ -12,8 +12,8 @@ export function setTitleEditable (bool) {
 export function updateOption (updatedOptions) {
   return { type: UPDATE_OPTION, value: updatedOptions }
 }
-export function resetNewPoll (bool) {
-  return { type: RESET_NEW_POLL, value: bool }
+export function resetNewPoll () {
+  return { type: RESET_NEW_POLL }
 }
 
 export const reduceNewPollTitle = (state, action) => {

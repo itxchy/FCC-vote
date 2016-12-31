@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { array, func } from React.PropTypes
+import { updateOption } from '../../redux/modules/createNewPoll'
 
 const PendingPollOptions = React.createClass({
   propTypes: {
@@ -10,12 +11,12 @@ const PendingPollOptions = React.createClass({
   editOption (event) {
     let updatedOptions = this.props.newPollOptions.slice()
     updatedOptions[event.target.name] = event.target.value
-    this.props.updateOption(updatedOptions)
+    this.props.dispatchUpdateOption(updatedOptions)
   },
   addAnotherOption () {
     let updatedNewOptions = this.props.newPollOptions.slice()
     updatedNewOptions.push('')
-    this.props.updateOption(updatedNewOptions)
+    this.props.dispatchUpdateOption(updatedNewOptions)
   },
   deleteOption (index) {
     if (this.props.newPollOptions.length === 2) {
@@ -24,7 +25,7 @@ const PendingPollOptions = React.createClass({
     }
     let updatedDeleteOptions = this.props.newPollOptions.slice()
     updatedDeleteOptions.splice(index, 1)
-    this.props.updateOption(updatedDeleteOptions)
+    this.props.dispatchUpdateOption(updatedDeleteOptions)
   },
   render () {
     let options = this.props.newPollOptions.map((option, index) => {

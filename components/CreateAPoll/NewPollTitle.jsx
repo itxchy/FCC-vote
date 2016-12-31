@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { string, func, bool } from React.PropTypes
-import { setNewPollTitle } from '../../redux/modules/createNewPoll'
+import { setNewPollTitle, setTitleEditable } from '../../redux/modules/createNewPoll'
 
 const NewPollTitle = React.createClass({
   propTypes: {
