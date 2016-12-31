@@ -85,6 +85,6 @@ const mapDispatchToProps = (dispatch) => {
 let connected = connect(mapStateToProps, mapDispatchToProps)(NewPollTitle)
 
 // This exports the component itself for testing
-connected.DisconnectedNewPollTitle = NewPollTitle
+export const DisconnectedNewPollTitle = NewPollTitle
 
-module.exports = connected
+export default connected

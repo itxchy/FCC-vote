@@ -92125,7 +92125,7 @@
 	
 	var React = __webpack_require__(1);
 	var NewPollTitle = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./NewPollTitle\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-	var PendingPollOptions = __webpack_require__(740);
+	var PendingPollOptions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./PendingPollOptions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	var SaveOrReset = __webpack_require__(741);
 	
 	var CreateAPoll = function CreateAPoll() {
@@ -92147,102 +92147,7 @@
 
 /***/ },
 /* 739 */,
-/* 740 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
-	var array = _React$PropTypes.array;
-	var func = _React$PropTypes.func;
-	
-	
-	var PendingPollOptions = React.createClass({
-	  displayName: 'PendingPollOptions',
-	
-	  propTypes: {
-	    newPollOptions: array.isRequired,
-	    updateOption: func.isRequired
-	  },
-	  editOption: function editOption(event) {
-	    var updatedOptions = this.props.newPollOptions.slice();
-	    updatedOptions[event.target.name] = event.target.value;
-	    this.props.updateOption(updatedOptions);
-	  },
-	  addAnotherOption: function addAnotherOption() {
-	    var updatedNewOptions = this.props.newPollOptions.slice();
-	    updatedNewOptions.push('');
-	    this.props.updateOption(updatedNewOptions);
-	  },
-	  deleteOption: function deleteOption(index) {
-	    if (this.props.newPollOptions.length === 2) {
-	      console.log('Two or more options required!');
-	      return;
-	    }
-	    var updatedDeleteOptions = this.props.newPollOptions.slice();
-	    updatedDeleteOptions.splice(index, 1);
-	    this.props.updateOption(updatedDeleteOptions);
-	  },
-	  render: function render() {
-	    var _this = this;
-	
-	    var options = this.props.newPollOptions.map(function (option, index) {
-	      return React.createElement(
-	        'div',
-	        { key: index },
-	        React.createElement('input', {
-	          type: 'text',
-	          value: option,
-	          name: index,
-	          placeholder: 'Option ' + (index + 1),
-	          onChange: _this.editOption,
-	          className: 'form-control option-input'
-	        }),
-	        React.createElement(
-	          'a',
-	          {
-	            className: 'btn btn-danger delete-button',
-	            href: '#',
-	            onClick: function onClick() {
-	              return _this.deleteOption(index);
-	            },
-	            'aria-label': 'Delete'
-	          },
-	          React.createElement('i', { className: 'fa fa-trash-o', 'aria-hidden': 'true' })
-	        )
-	      );
-	    });
-	    return React.createElement(
-	      'div',
-	      { className: 'form-group options-container' },
-	      options,
-	      React.createElement(
-	        'a',
-	        { href: '#' },
-	        React.createElement(
-	          'p',
-	          { className: 'add-another-option', onClick: this.addAnotherOption },
-	          React.createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
-	          ' Add another option'
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	var connected = connector(PendingPollOptions);
-	
-	// This exports the component itself for testing
-	connected.DisconnectedPendingPollOptions = PendingPollOptions;
-	
-	module.exports = connected;
-
-/***/ },
+/* 740 */,
 /* 741 */
 /***/ function(module, exports, __webpack_require__) {
 

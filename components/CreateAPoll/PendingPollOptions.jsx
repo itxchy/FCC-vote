@@ -1,6 +1,6 @@
-const React = require('react')
-const { connector } = require('../../redux/Store')
-const { array, func } = React.PropTypes
+import React from 'react'
+import { connect } from 'react-redux'
+import { array, func } from React.PropTypes
 
 const PendingPollOptions = React.createClass({
   propTypes: {
@@ -62,9 +62,23 @@ const PendingPollOptions = React.createClass({
   }
 })
 
-let connected = connector(PendingPollOptions)
+const mapStateToProps = (state) => {
+  return {
+    newPollOptions: state.newPollOptions
+  }
+}
+
+const mapDispatchToProps = (dispach) => {
+  return {
+    dispatchUpdateOption (newOptions) {
+      dispatch(updateOption(newOptions))
+    }
+  }
+}
+
+let connected = connect(mapStateToProps, mapDispatchToProps)(PendingPollOptions)
 
 // This exports the component itself for testing
-connected.DisconnectedPendingPollOptions = PendingPollOptions
+export const DisconnectedPendingPollOptions = PendingPollOptions
 
-module.exports = connected
+export default connected
