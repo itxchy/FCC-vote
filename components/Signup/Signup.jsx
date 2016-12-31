@@ -1,14 +1,16 @@
-const React = require('react')
-const { connector } = require('../../redux/Store')
-const validateInput = require('../../routes/shared/signupValidation')
-const TextFieldGroup = require('../common/TextFieldGroup')
+import React from 'react'
+import { connect } from 'react-redux'
+import validateInput from '../../routes/shared/signupValidation'
+import TextFieldGroup from '../common/TextFieldGroup'
 const { func, object } = React.PropTypes
+import { userSignupRequest, isUserExists } from '../../redux/apiCalls'
+import { addFlashMessage } from '../../redux/modules/flashMessage'
 
 const Signup = React.createClass({
   propTypes: {
-    userSignupRequest: func.isRequired,
-    addFlashMessage: func.isRequired,
-    isUserExists: func.isRequired
+    dispatechUserSignupRequest: func.isRequired,
+    dispatchAddFlashMessage: func.isRequired,
+    dispatchIsUserExists: func.isRequired
   },
 
   getInitialState () {
@@ -47,7 +49,7 @@ const Signup = React.createClass({
     const field = event.target.name
     const val = event.target.value
     if (val !== '') {
-      this.props.isUserExists(val).then(res => {
+      this.props.dispatchIsUserExists(val).then(res => {
         // if a user is found, pass an error message
         let errors = this.state.errors
         let invalid
@@ -68,18 +70,18 @@ const Signup = React.createClass({
     event.preventDefault()
 
     if (this.isValid()) {
-      this.setState({errors: {}, isLoading: true})
+      this.setState({ errors: {}, isLoading: true })
 
-      this.props.userSignupRequest(this.state)
+      this.props.dispatchUserSignupRequest(this.state)
         .then(response => {
-          this.props.addFlashMessage({
+          this.props.dispatchAddFlashMessage({
             type: 'success',
             text: 'Signup successful!'
           })
           this.context.router.push('/')
         })
         .catch(error => {
-          this.setState({errors: error.response.data, isLoading: false})
+          this.setState({ errors: error.response.data, isLoading: false })
         })
     }
   },
@@ -148,4 +150,18 @@ Signup.contextTypes = {
   router: object.isRequired
 }
 
-module.exports = connector(Signup)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchUserSignupRequest (state) {
+      dispatch(userSignupRequest(state))
+    },
+    dispatchAddFlashMessage (messageObj) {
+      dispatch(addFlashMessage(messageObj))
+    },
+    dispatchIsUserExists (val) {
+      dispatch(isUserExists(val))
+    }
+  }
+}
+
+export default connect(mapDispatchToProps)(Signup)

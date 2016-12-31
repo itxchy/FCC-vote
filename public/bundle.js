@@ -95338,28 +95338,44 @@
 
 	'use strict';
 	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _signupValidation = __webpack_require__(809);
+	
+	var _signupValidation2 = _interopRequireDefault(_signupValidation);
+	
+	var _TextFieldGroup = __webpack_require__(810);
+	
+	var _TextFieldGroup2 = _interopRequireDefault(_TextFieldGroup);
+	
+	var _apiCalls = __webpack_require__(830);
+	
+	var _flashMessage = __webpack_require__(238);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	
-	var validateInput = __webpack_require__(809);
-	var TextFieldGroup = __webpack_require__(810);
-	var _React$PropTypes = React.PropTypes;
+	var _React$PropTypes = _react2.default.PropTypes;
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
 	
 	
-	var Signup = React.createClass({
+	var Signup = _react2.default.createClass({
 	  displayName: 'Signup',
 	
 	  propTypes: {
-	    userSignupRequest: func.isRequired,
-	    addFlashMessage: func.isRequired,
-	    isUserExists: func.isRequired
+	    dispatechUserSignupRequest: func.isRequired,
+	    dispatchAddFlashMessage: func.isRequired,
+	    dispatchIsUserExists: func.isRequired
 	  },
 	
 	  getInitialState: function getInitialState() {
@@ -95383,7 +95399,7 @@
 	    this.setState(_defineProperty({}, event.target.name, event.target.value));
 	  },
 	  isValid: function isValid() {
-	    var _validateInput = validateInput(this.state);
+	    var _validateInput = (0, _signupValidation2.default)(this.state);
 	
 	    var errors = _validateInput.errors;
 	    var isValid = _validateInput.isValid;
@@ -95401,7 +95417,7 @@
 	    var field = event.target.name;
 	    var val = event.target.value;
 	    if (val !== '') {
-	      this.props.isUserExists(val).then(function (res) {
+	      this.props.dispatchIsUserExists(val).then(function (res) {
 	        // if a user is found, pass an error message
 	        var errors = _this.state.errors;
 	        var invalid = void 0;
@@ -95425,8 +95441,8 @@
 	    if (this.isValid()) {
 	      this.setState({ errors: {}, isLoading: true });
 	
-	      this.props.userSignupRequest(this.state).then(function (response) {
-	        _this2.props.addFlashMessage({
+	      this.props.dispatchUserSignupRequest(this.state).then(function (response) {
+	        _this2.props.dispatchAddFlashMessage({
 	          type: 'success',
 	          text: 'Signup successful!'
 	        });
@@ -95439,21 +95455,21 @@
 	  render: function render() {
 	    var errors = this.state.errors;
 	
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      { className: 'row' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'h1',
 	        { className: 'text-center' },
 	        'Sign up to make some polls!'
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'col-md-4 col-md-offset-4' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'form',
 	          { onSubmit: this.onSubmit },
-	          React.createElement(TextFieldGroup, {
+	          _react2.default.createElement(_TextFieldGroup2.default, {
 	            value: this.state.username,
 	            onChange: this.onChange,
 	            checkUserExists: this.checkUserExists,
@@ -95462,7 +95478,7 @@
 	            label: 'Username',
 	            error: errors.username
 	          }),
-	          React.createElement(TextFieldGroup, {
+	          _react2.default.createElement(_TextFieldGroup2.default, {
 	            value: this.state.email,
 	            onChange: this.onChange,
 	            checkUserExists: this.checkUserExists,
@@ -95471,7 +95487,7 @@
 	            label: 'Email',
 	            error: errors.email
 	          }),
-	          React.createElement(TextFieldGroup, {
+	          _react2.default.createElement(_TextFieldGroup2.default, {
 	            value: this.state.password,
 	            onChange: this.onChange,
 	            type: 'password',
@@ -95479,7 +95495,7 @@
 	            label: 'Password',
 	            error: errors.password
 	          }),
-	          React.createElement(TextFieldGroup, {
+	          _react2.default.createElement(_TextFieldGroup2.default, {
 	            value: this.state.passwordConfirmation,
 	            onChange: this.onChange,
 	            type: 'password',
@@ -95487,10 +95503,10 @@
 	            label: 'Confirm Password',
 	            error: errors.passwordConfirmation
 	          }),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { className: 'form-group' },
-	            React.createElement(
+	            _react2.default.createElement(
 	              'button',
 	              { disabled: this.state.isLoading || this.state.invalid, className: 'btn btn-primary btn-lg' },
 	              'Sign up'
@@ -95506,7 +95522,21 @@
 	  router: object.isRequired
 	};
 	
-	module.exports = connector(Signup);
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchUserSignupRequest: function dispatchUserSignupRequest(state) {
+	      dispatch((0, _apiCalls.userSignupRequest)(state));
+	    },
+	    dispatchAddFlashMessage: function dispatchAddFlashMessage(messageObj) {
+	      dispatch((0, _flashMessage.addFlashMessage)(messageObj));
+	    },
+	    dispatchIsUserExists: function dispatchIsUserExists(val) {
+	      dispatch((0, _apiCalls.isUserExists)(val));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapDispatchToProps)(Signup);
 
 /***/ },
 /* 809 */
