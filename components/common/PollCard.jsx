@@ -1,5 +1,6 @@
-const React = require('react')
-const { connector } = require('../../redux/Store')
+import React from 'react'
+import { connect } from 'react-redux'
+import { submitVote } from '../../redux/apiCalls'
 const { string, array, number, object, func } = React.PropTypes
 
 const PollCard = React.createClass({
@@ -9,7 +10,7 @@ const PollCard = React.createClass({
     totalVotes: number,
     id: string,
     user: object,
-    submitVote: func
+    dispatchSubmitVote: func
   },
   getInitialState () {
     return {
@@ -27,7 +28,7 @@ const PollCard = React.createClass({
     const voter = this.props.user.username || null
     if (selectedOption !== null) {
       const vote = { selectedOption, voter }
-      this.props.submitVote(pollID, vote)
+      this.props.dispatchSubmitVote(pollID, vote)
       .then(res => {
         this.setState({ updatedTotalVotes: res.data.poll.totalVotes })
       })
@@ -76,4 +77,18 @@ const PollCard = React.createClass({
   }
 })
 
-module.exports = connector(PollCard)
+const mapStateToProps = (state) => {
+  return {
+    user: state.user
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchSubmitVote (id, vote) {
+      dispatch(submitVote(id, vote))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PollCard)

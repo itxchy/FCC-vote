@@ -72064,17 +72064,26 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
+	var _react2 = _interopRequireDefault(_react);
 	
-	var FlashMessage = __webpack_require__(711);
-	var array = React.PropTypes.array;
+	var _reactRedux = __webpack_require__(641);
+	
+	var _FlashMessage = __webpack_require__(711);
+	
+	var _FlashMessage2 = _interopRequireDefault(_FlashMessage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var array = _react2.default.PropTypes.array;
 	
 	
-	var FlashMessagesList = React.createClass({
+	var FlashMessagesList = _react2.default.createClass({
 	  displayName: 'FlashMessagesList',
 	
 	  propTypes: {
@@ -72082,9 +72091,9 @@
 	  },
 	  render: function render() {
 	    var messages = this.props.flashMessages.map(function (message) {
-	      return React.createElement(FlashMessage, { key: message.id, message: message });
+	      return _react2.default.createElement(_FlashMessage2.default, { key: message.id, message: message });
 	    });
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      null,
 	      messages
@@ -72092,7 +72101,13 @@
 	  }
 	});
 	
-	module.exports = connector(FlashMessagesList);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    flashMessages: state.flashMessages
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(FlashMessagesList);
 
 /***/ },
 /* 711 */
@@ -72364,12 +72379,21 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _apiCalls = __webpack_require__(808);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var string = _React$PropTypes.string;
 	var array = _React$PropTypes.array;
 	var number = _React$PropTypes.number;
@@ -72377,7 +72401,7 @@
 	var func = _React$PropTypes.func;
 	
 	
-	var PollCard = React.createClass({
+	var PollCard = _react2.default.createClass({
 	  displayName: 'PollCard',
 	
 	  propTypes: {
@@ -72386,7 +72410,7 @@
 	    totalVotes: number,
 	    id: string,
 	    user: object,
-	    submitVote: func
+	    dispatchSubmitVote: func
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
@@ -72406,7 +72430,7 @@
 	    var voter = this.props.user.username || null;
 	    if (selectedOption !== null) {
 	      var vote = { selectedOption: selectedOption, voter: voter };
-	      this.props.submitVote(pollID, vote).then(function (res) {
+	      this.props.dispatchSubmitVote(pollID, vote).then(function (res) {
 	        _this.setState({ updatedTotalVotes: res.data.poll.totalVotes });
 	      });
 	    } else {
@@ -72419,13 +72443,13 @@
 	    var options = this.props.options.map(function (option, index) {
 	      var id = 'gridRadios' + index;
 	      var value = '' + index;
-	      return React.createElement(
+	      return _react2.default.createElement(
 	        'div',
 	        { key: option.option, className: 'form-check' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'label',
 	          { className: 'form-check-label poll-card-label' },
-	          React.createElement('input', {
+	          _react2.default.createElement('input', {
 	            className: 'form-check-input radio-option',
 	            type: 'radio',
 	            onChange: _this2.onOptionChange,
@@ -72437,39 +72461,39 @@
 	        )
 	      );
 	    });
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      { className: 'col-sm-4' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'form',
 	        { onSubmit: this.onPollSubmit },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'h2',
 	          null,
 	          this.props.title
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'fieldset',
 	          { className: 'form-group row' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { className: 'col-sm-10' },
 	            options
 	          )
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'p',
 	          null,
 	          'Total votes cast: ',
 	          this.state.updatedTotalVotes || this.props.totalVotes
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'form-group row' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { className: 'offset-sm-2 col-sm-10' },
-	            React.createElement(
+	            _react2.default.createElement(
 	              'button',
 	              { type: 'submit', className: 'btn btn-primary' },
 	              'Vote'
@@ -72481,7 +72505,21 @@
 	  }
 	});
 	
-	module.exports = connector(PollCard);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    user: state.user
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchSubmitVote: function dispatchSubmitVote(id, vote) {
+	      dispatch((0, _apiCalls.submitVote)(id, vote));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(PollCard);
 
 /***/ },
 /* 715 */
