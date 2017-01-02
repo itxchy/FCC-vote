@@ -27180,99 +27180,28 @@
 
 	'use strict';
 	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _redux = __webpack_require__(630);
+	
+	var _reduxThunk = __webpack_require__(648);
+	
+	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
+	
+	var _remoteReduxDevtools = __webpack_require__(649);
+	
 	var _rootReducer = __webpack_require__(237);
 	
 	var _rootReducer2 = _interopRequireDefault(_rootReducer);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _require = __webpack_require__(630);
+	var composeEnhancers = (0, _remoteReduxDevtools.composeWithDevTools)({ realtime: true, port: 8000 });
+	var store = (0, _redux.createStore)(_rootReducer2.default, composeEnhancers((0, _redux.applyMiddleware)(_reduxThunk2.default)));
 	
-	var applyMiddleware = _require.applyMiddleware;
-	var createStore = _require.createStore;
-	
-	var reactRedux = __webpack_require__(641);
-	var thunk = __webpack_require__(648).default;
-	var axios = __webpack_require__(409);
-	var jwt = __webpack_require__(434);
-	
-	var _require2 = __webpack_require__(649);
-	
-	var composeWithDevTools = _require2.composeWithDevTools;
-	
-	var setAuthorizationToken = __webpack_require__(628);
-	
-	
-	var composeEnhancers = composeWithDevTools({ realtime: true, port: 8000 });
-	var store = createStore(_rootReducer2.default, composeEnhancers(applyMiddleware(thunk)));
-	
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    newPollTitle: state.newPollTitle,
-	    titleEditable: state.titleEditable,
-	    newPollOptions: state.newPollOptions,
-	    flashMessages: state.flashMessages,
-	    isAuthenticated: state.isAuthenticated,
-	    user: state.user
-	  };
-	};
-	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    setNewPollTitle: function setNewPollTitle(pollTitle) {
-	      dispatch({ type: SET_NEW_POLL_TITLE, value: pollTitle });
-	    },
-	    setTitleEditable: function setTitleEditable(bool) {
-	      dispatch({ type: SET_TITLE_EDITABLE, value: bool });
-	    },
-	    updateOption: function updateOption(updatedOptions) {
-	      dispatch({ type: UPDATE_OPTION, value: updatedOptions });
-	    },
-	    resetNewPoll: function resetNewPoll(bool) {
-	      dispatch({ type: RESET_NEW_POLL, value: bool });
-	    },
-	    submitNewPoll: function submitNewPoll(newPoll) {
-	      return axios.post('/api/polls', newPoll);
-	    },
-	    getUserPolls: function getUserPolls(user) {
-	      return axios.get('/api/polls/' + user);
-	    },
-	    getAllPolls: function getAllPolls() {
-	      return axios.get('/api/polls');
-	    },
-	    submitVote: function submitVote(id, vote) {
-	      return axios.put('/api/polls/' + id, vote);
-	    },
-	    userSignupRequest: function userSignupRequest(userData) {
-	      return axios.post('/api/users', userData);
-	    },
-	    isUserExists: function isUserExists(identifier) {
-	      return axios.get('/api/users/' + identifier);
-	    },
-	    login: function login(data) {
-	      return axios.post('/api/auth', data).then(function (res) {
-	        var token = res.data.token;
-	        localStorage.setItem('jwtToken', token);
-	        setAuthorizationToken(token);
-	        var user = jwt.decode(token);
-	        dispatch({ type: SET_CURRENT_USER, user: user });
-	      });
-	    },
-	    logout: function logout() {
-	      localStorage.removeItem('jwtToken');
-	      setAuthorizationToken(false);
-	      dispatch({ type: SET_CURRENT_USER, user: {} });
-	    },
-	    addFlashMessage: function addFlashMessage(message) {
-	      dispatch({ type: ADD_FLASH_MESSAGE, value: message });
-	    },
-	    deleteFlashMessage: function deleteFlashMessage(id) {
-	      dispatch({ type: DELETE_FLASH_MESSAGE, value: id });
-	    }
-	  };
-	};
-	
-	module.exports = { store: store, rootReducer: _rootReducer2.default, SET_CURRENT_USER: SET_CURRENT_USER };
+	exports.default = store;
 
 /***/ },
 /* 237 */
