@@ -6,11 +6,10 @@ export function submitNewPoll (newPoll) {
 export function getUserPolls (user) {
   return axios.get(`/api/polls/${user}`)
 }
-export function getAllPolls () {
-  return axios.get(`/api/polls`)
-}
 export function submitVote (id, vote) {
-  return axios.put(`/api/polls/${id}`, vote)
+  return dispatch => {
+    axios.put(`/api/polls/${id}`, vote)
+  }
 }
 export function userSignupRequest (userData) {
   return axios.post('/api/users', userData)

@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import PollCard from './common/PollCard'
 import ResultsCard from './common/ResultsCard'
-import { getAllPolls } from '../redux/apiCalls'
+import { getAllPolls } from '../redux/modules/getAllPolls'
 const { func, object } = React.PropTypes
 import { dupeVoterCheck } from '../routes/lib/pollsLib'
 import isEmpty from 'lodash/isEmpty'
@@ -10,27 +10,16 @@ import isEmpty from 'lodash/isEmpty'
 const Home = React.createClass({
   propTypes: {
     dispatchGetAllPolls: func,
-    user: object
-  },
-  getInitialState () {
-    return {
-      allPolls: null
-    }
+    user: object,
+    allPolls: object
   },
   getRecentPolls () {
-    if (this.state.allPolls === null) {
+    if (this.props.allPolls === null) {
       this.props.dispatchGetAllPolls()
-      .then(res => {
-        if (res.data.length > 0) {
-          this.setState({ allPolls: res.data })
-        } else {
-          this.setState({ allPolls: false })
-        }
-      })
     }
   },
   populatedCards () {
-    return this.state.allPolls.map(poll => {
+    return this.props.allPolls.map(poll => {
       const dupeVoter = dupeVoterCheck(poll, this.props.user.username)
       const { title, options, totalVotes, _id } = poll
       if (dupeVoter) {
@@ -57,14 +46,14 @@ const Home = React.createClass({
   },
   handleEmptyAllPollsObject () {
     this.getRecentPolls()
-    if (this.state.allPolls === null) {
+    if (this.props.allPolls === null) {
       return (
         <div className='text-center'>
           <h3>loading...</h3>
         </div>
       )
     }
-    if (this.state.allPolls === false) {
+    if (this.props.allPolls === false) {
       return (
         <div className='text-center'>
           <h3>No polls have been submitted yet :(</h3>
@@ -76,7 +65,7 @@ const Home = React.createClass({
   render () {
     this.getRecentPolls()
     let showPolls = null
-    if (isEmpty(this.state.allPolls)) {
+    if (isEmpty(this.props.allPolls)) {
       showPolls = this.handleEmptyAllPollsObject()
     } else {
       showPolls = this.populatedCards()
@@ -95,7 +84,8 @@ const Home = React.createClass({
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user,
+    allPolls: state.allPolls
   }
 }
 

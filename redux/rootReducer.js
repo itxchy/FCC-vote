@@ -21,6 +21,11 @@ import {
   reduceSetCurrentUser
 } from './modules/auth'
 
+import {
+  ALL_POLLS_DATA,
+  reduceAllPollsData
+} from './modules/getAllPolls'
+
 const initialState = {
   newPollTitle: '',
   titleEditable: true,
@@ -30,11 +35,14 @@ const initialState = {
   ],
   flashMessages: [],
   isAuthenticated: false,
-  user: {}
+  user: {},
+  allPolls: null
 }
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
+    case ALL_POLLS_DATA:
+      return reduceAllPollsData(state, action)
     case SET_NEW_POLL_TITLE:
       return reduceNewPollTitle(state, action)
     case SET_TITLE_EDITABLE:

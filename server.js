@@ -10,12 +10,12 @@ const React = require('react')
 const ReactDOMServer = require('react-dom/server')
 const { match, RouterContext } = require('react-router')
 const { Provider } = require('react-redux')
-const { store } = require('./redux/Store.jsx')
+const { store } = require('./redux/Store.js')
 const baseTemplate = fs.readFileSync('./index.html')
 const template = _.template(baseTemplate)
 const ClientApp = require('./components/ClientApp.jsx')
 
-const Routes = ClientApp.Routes
+const { Routes } = require('./components/Routes.jsx')
 const users = require('./routes/users.js')
 const auth = require('./routes/auth.js')
 const polls = require('./routes/polls.js')
@@ -60,6 +60,7 @@ app.use('/public', express.static('./public'))
  * If a match finds an error, a redirectLocation value, or simply
  * "misses", the relevent case gets handled.
  */
+ console.log('routes():', Routes)
 app.use((req, res) => {
   match({ routes: Routes(), location: req.url }, (error, redirectLocation, renderProps) => {
     if (error) {

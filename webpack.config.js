@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-// const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 const validate = require('webpack-validator')
 
 const config = {
@@ -34,7 +34,7 @@ const config = {
     loaders: [
       {
         test: /\.jsx?$/,
-        loader: 'babel-loader',
+        loader: 'babel-loader?sourceMap',
         exclude: /node_modules/
       },
       {
@@ -58,6 +58,7 @@ const config = {
       }
     ]
   },
+  debug: true,
   devtool: 'source-map',
   plugins: [
     new ExtractTextPlugin('/css/style.css'),
@@ -66,12 +67,12 @@ const config = {
       jQuery: 'jquery',
       'window.jQuery': 'jquery'
     })
-    /*,
+    ,
     new BrowserSyncPlugin({
       host: 'localhost',
       port: 3000,
       server: { baseDir: [''] }
-    }) */
+    })
   ]
 }
 
