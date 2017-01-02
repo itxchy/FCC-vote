@@ -1,8 +1,8 @@
-const React = require('react')
-const { connector } = require('../../redux/Store')
+import React from 'react'
+import { connect } from 'react-redux'
 const { string, array, number, object } = React.PropTypes
-const D3Chart = require('./D3Chart')
-const isEmpty = require('lodash/isEmpty')
+import D3Chart from './D3Chart'
+import isEmpty from 'lodash/isEmpty'
 
 const ResultsCard = React.createClass({
   propTypes: {
@@ -33,4 +33,10 @@ const ResultsCard = React.createClass({
   }
 })
 
-module.exports = connector(ResultsCard)
+const mapStateToProps = (state) => {
+  return {
+    user: state.user
+  }
+}
+
+export default connect(mapStateToProps)(ResultsCard)

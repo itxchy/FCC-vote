@@ -49,7 +49,7 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(34);
 	var App = __webpack_require__(172);
-	__webpack_require__(815);
+	__webpack_require__(816);
 	
 	ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
 
@@ -21450,9 +21450,9 @@
 	var Layout = __webpack_require__(708);
 	var Home = __webpack_require__(713);
 	var CreateAPoll = __webpack_require__(738);
-	var Signup = __webpack_require__(808);
-	var LoginPage = __webpack_require__(811);
-	var MyPollsPage = __webpack_require__(814);
+	var Signup = __webpack_require__(809);
+	var LoginPage = __webpack_require__(812);
+	var MyPollsPage = __webpack_require__(815);
 	var setAuthorizationToken = __webpack_require__(628);
 	
 	var Routes = function Routes() {
@@ -72100,44 +72100,53 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
+	var _react2 = _interopRequireDefault(_react);
 	
-	var classnames = __webpack_require__(712);
-	var _React$PropTypes = React.PropTypes;
+	var _reactRedux = __webpack_require__(641);
+	
+	var _classnames = __webpack_require__(712);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var object = _React$PropTypes.object;
 	var func = _React$PropTypes.func;
 	
 	
-	var FlashMessage = React.createClass({
+	var FlashMessage = _react2.default.createClass({
 	  displayName: 'FlashMessage',
 	
 	  propTypes: {
 	    message: object.isRequired,
-	    deleteFlashMessage: func.isRequired
+	    dispatchDeleteFlashMessage: func.isRequired
 	  },
 	
 	  onClick: function onClick() {
-	    this.props.deleteFlashMessage(this.props.message.id);
+	    this.props.dispatchDeleteFlashMessage(this.props.message.id);
 	  },
 	  render: function render() {
 	    var _props$message = this.props.message;
 	    var messageType = _props$message.messageType;
 	    var messageText = _props$message.messageText;
 	
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
-	      { className: classnames('alert', {
+	      { className: (0, _classnames2.default)('alert', {
 	          'alert-success': messageType === 'success',
 	          'alert-danger': messageType === 'error'
 	        }) },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'button',
 	        { onClick: this.onClick, className: 'close' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'span',
 	          null,
 	          '\xD7'
@@ -72148,7 +72157,15 @@
 	  }
 	});
 	
-	module.exports = connector(FlashMessage);
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchDeleteFlashMessage: function dispatchDeleteFlashMessage(id) {
+	      dispatch(deleteFlashMessage(id));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapDispatchToProps)(FlashMessage);
 
 /***/ },
 /* 712 */
@@ -72470,21 +72487,34 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _D3Chart = __webpack_require__(716);
+	
+	var _D3Chart2 = _interopRequireDefault(_D3Chart);
+	
+	var _isEmpty = __webpack_require__(629);
+	
+	var _isEmpty2 = _interopRequireDefault(_isEmpty);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var string = _React$PropTypes.string;
 	var array = _React$PropTypes.array;
 	var number = _React$PropTypes.number;
 	var object = _React$PropTypes.object;
 	
-	var D3Chart = __webpack_require__(716);
-	var isEmpty = __webpack_require__(629);
 	
-	var ResultsCard = React.createClass({
+	var ResultsCard = _react2.default.createClass({
 	  displayName: 'ResultsCard',
 	
 	  propTypes: {
@@ -72496,29 +72526,29 @@
 	  },
 	  render: function render() {
 	    var d3Component = null;
-	    if (!isEmpty(this.props.options)) {
-	      d3Component = React.createElement(D3Chart, { results: this.props.options, pollId: this.props.id });
+	    if (!(0, _isEmpty2.default)(this.props.options)) {
+	      d3Component = _react2.default.createElement(_D3Chart2.default, { results: this.props.options, pollId: this.props.id });
 	    }
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      { className: 'col-sm-4' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'h2',
 	        null,
 	        this.props.title
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'col-sm-10' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
 	          d3Component || 'loading results...'
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'p',
 	            null,
 	            'Total votes: ',
@@ -72530,7 +72560,13 @@
 	  }
 	});
 	
-	module.exports = connector(ResultsCard);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    user: state.user
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ResultsCard);
 
 /***/ },
 /* 716 */
@@ -72538,15 +72574,30 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
-	var _React$PropTypes = React.PropTypes;
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _d = __webpack_require__(717);
+	
+	var _d2 = _interopRequireDefault(_d);
+	
+	var _reactFauxDom = __webpack_require__(718);
+	
+	var _reactFauxDom2 = _interopRequireDefault(_reactFauxDom);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var string = _React$PropTypes.string;
 	var array = _React$PropTypes.array;
 	
-	var d3 = __webpack_require__(717);
-	var ReactFauxDom = __webpack_require__(718);
 	
-	var D3Chart = React.createClass({
+	var D3Chart = _react2.default.createClass({
 	  displayName: 'D3Chart',
 	
 	  propTypes: {
@@ -72554,16 +72605,16 @@
 	    pollId: string
 	  },
 	  render: function render() {
-	    var chart = ReactFauxDom.createElement('div');
+	    var chart = _reactFauxDom2.default.createElement('div');
 	    console.log('data:', this.props.results);
 	    var data = this.props.results;
 	    var width = 300;
 	    var height = 300;
-	    var xScale = d3.scaleLinear().domain([0, d3.max(data, function (d) {
+	    var xScale = _d2.default.scaleLinear().domain([0, _d2.default.max(data, function (d) {
 	      return d.votes.length;
 	    })]).range([1, width]);
 	
-	    var svg = d3.select(chart).append('svg').attr('width', width).attr('height', height);
+	    var svg = _d2.default.select(chart).append('svg').attr('width', width).attr('height', height);
 	
 	    svg.selectAll('rect').data(data).enter().append('rect').attr('x', 10).attr('y', function (d, i) {
 	      return i * (height / data.length);
@@ -72586,7 +72637,7 @@
 	  }
 	});
 	
-	module.exports = D3Chart;
+	exports.default = D3Chart;
 
 /***/ },
 /* 717 */
@@ -92426,7 +92477,7 @@
 	
 	var _createNewPoll = __webpack_require__(407);
 	
-	var _apiCalls = __webpack_require__(830);
+	var _apiCalls = __webpack_require__(808);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -95341,6 +95392,47 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.submitNewPoll = submitNewPoll;
+	exports.getUserPolls = getUserPolls;
+	exports.getAllPolls = getAllPolls;
+	exports.submitVote = submitVote;
+	exports.userSignupRequest = userSignupRequest;
+	exports.isUserExists = isUserExists;
+	
+	var _axios = __webpack_require__(409);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function submitNewPoll(newPoll) {
+	  return _axios2.default.post('/api/polls', newPoll);
+	}
+	function getUserPolls(user) {
+	  return _axios2.default.get('/api/polls/' + user);
+	}
+	function getAllPolls() {
+	  return _axios2.default.get('/api/polls');
+	}
+	function submitVote(id, vote) {
+	  return _axios2.default.put('/api/polls/' + id, vote);
+	}
+	function userSignupRequest(userData) {
+	  return _axios2.default.post('/api/users', userData);
+	}
+	function isUserExists(identifier) {
+	  return _axios2.default.get('/api/users/' + identifier);
+	}
+
+/***/ },
+/* 809 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
 	var _react = __webpack_require__(1);
 	
@@ -95348,15 +95440,15 @@
 	
 	var _reactRedux = __webpack_require__(641);
 	
-	var _signupValidation = __webpack_require__(809);
+	var _signupValidation = __webpack_require__(810);
 	
 	var _signupValidation2 = _interopRequireDefault(_signupValidation);
 	
-	var _TextFieldGroup = __webpack_require__(810);
+	var _TextFieldGroup = __webpack_require__(811);
 	
 	var _TextFieldGroup2 = _interopRequireDefault(_TextFieldGroup);
 	
-	var _apiCalls = __webpack_require__(830);
+	var _apiCalls = __webpack_require__(808);
 	
 	var _flashMessage = __webpack_require__(238);
 	
@@ -95539,7 +95631,7 @@
 	exports.default = (0, _reactRedux.connect)(mapDispatchToProps)(Signup);
 
 /***/ },
-/* 809 */
+/* 810 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -95589,7 +95681,7 @@
 	module.exports = validateInput;
 
 /***/ },
-/* 810 */
+/* 811 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -95651,7 +95743,7 @@
 	module.exports = TextFieldGroup;
 
 /***/ },
-/* 811 */
+/* 812 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -95664,7 +95756,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _LoginForm = __webpack_require__(812);
+	var _LoginForm = __webpack_require__(813);
 	
 	var _LoginForm2 = _interopRequireDefault(_LoginForm);
 	
@@ -95685,7 +95777,7 @@
 	exports.default = LoginPage;
 
 /***/ },
-/* 812 */
+/* 813 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -95700,11 +95792,11 @@
 	
 	var _reactRedux = __webpack_require__(641);
 	
-	var _TextFieldGroup = __webpack_require__(810);
+	var _TextFieldGroup = __webpack_require__(811);
 	
 	var _TextFieldGroup2 = _interopRequireDefault(_TextFieldGroup);
 	
-	var _loginValidation = __webpack_require__(813);
+	var _loginValidation = __webpack_require__(814);
 	
 	var _loginValidation2 = _interopRequireDefault(_loginValidation);
 	
@@ -95836,7 +95928,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LoginForm);
 
 /***/ },
-/* 813 */
+/* 814 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -95864,7 +95956,7 @@
 	module.exports = validateInput;
 
 /***/ },
-/* 814 */
+/* 815 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -95883,7 +95975,7 @@
 	
 	var _isEmpty2 = _interopRequireDefault(_isEmpty);
 	
-	var _apiCalls = __webpack_require__(830);
+	var _apiCalls = __webpack_require__(808);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -95954,65 +96046,10 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MyPollsPage);
 
 /***/ },
-/* 815 */
+/* 816 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 816 */,
-/* 817 */,
-/* 818 */,
-/* 819 */,
-/* 820 */,
-/* 821 */,
-/* 822 */,
-/* 823 */,
-/* 824 */,
-/* 825 */,
-/* 826 */,
-/* 827 */,
-/* 828 */,
-/* 829 */,
-/* 830 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.submitNewPoll = submitNewPoll;
-	exports.getUserPolls = getUserPolls;
-	exports.getAllPolls = getAllPolls;
-	exports.submitVote = submitVote;
-	exports.userSignupRequest = userSignupRequest;
-	exports.isUserExists = isUserExists;
-	
-	var _axios = __webpack_require__(409);
-	
-	var _axios2 = _interopRequireDefault(_axios);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function submitNewPoll(newPoll) {
-	  return _axios2.default.post('/api/polls', newPoll);
-	}
-	function getUserPolls(user) {
-	  return _axios2.default.get('/api/polls/' + user);
-	}
-	function getAllPolls() {
-	  return _axios2.default.get('/api/polls');
-	}
-	function submitVote(id, vote) {
-	  return _axios2.default.put('/api/polls/' + id, vote);
-	}
-	function userSignupRequest(userData) {
-	  return _axios2.default.post('/api/users', userData);
-	}
-	function isUserExists(identifier) {
-	  return _axios2.default.get('/api/users/' + identifier);
-	}
 
 /***/ }
 /******/ ]);
