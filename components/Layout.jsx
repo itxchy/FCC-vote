@@ -1,6 +1,7 @@
-const React = require('react')
-const NavBar = require('./NavBar')
-const FlashMessagesList = require('./common/FlashMessagesList')
+import React from 'react'
+import NavBar from './NavBar'
+import FlashMessagesList from './common/FlashMessagesList'
+const { element } = React.PropTypes
 
 const Layout = (props) => (
   <div className='container'>
@@ -10,10 +11,8 @@ const Layout = (props) => (
   </div>
 )
 
-const { element } = React.PropTypes
-
 Layout.propTypes = {
   children: element.isRequired
 }
 
-module.exports = Layout
+export default Layout

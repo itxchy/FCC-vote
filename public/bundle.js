@@ -46,12 +46,23 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(34);
-	var App = __webpack_require__(172);
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(34);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _ClientApp = __webpack_require__(172);
+	
+	var _ClientApp2 = _interopRequireDefault(_ClientApp);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	__webpack_require__(816);
 	
-	ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
+	_reactDom2.default.render(_react2.default.createElement(_ClientApp2.default, null), document.getElementById('app'));
 
 /***/ },
 /* 1 */
@@ -21426,60 +21437,81 @@
 
 	'use strict';
 	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(173);
+	
+	var _Store = __webpack_require__(236);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _jsonwebtoken = __webpack_require__(434);
+	
+	var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+	
+	var _Layout = __webpack_require__(708);
+	
+	var _Layout2 = _interopRequireDefault(_Layout);
+	
+	var _Home = __webpack_require__(713);
+	
+	var _Home2 = _interopRequireDefault(_Home);
+	
+	var _CreateAPoll = __webpack_require__(738);
+	
+	var _CreateAPoll2 = _interopRequireDefault(_CreateAPoll);
+	
+	var _Signup = __webpack_require__(809);
+	
+	var _Signup2 = _interopRequireDefault(_Signup);
+	
+	var _LoginPage = __webpack_require__(812);
+	
+	var _LoginPage2 = _interopRequireDefault(_LoginPage);
+	
+	var _MyPollsPage = __webpack_require__(815);
+	
+	var _MyPollsPage2 = _interopRequireDefault(_MyPollsPage);
+	
+	var _setAuthorizationToken = __webpack_require__(628);
+	
+	var _setAuthorizationToken2 = _interopRequireDefault(_setAuthorizationToken);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	/* global localStorage */
 	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(173);
-	
-	var Router = _require.Router;
-	var Route = _require.Route;
-	var browserHistory = _require.browserHistory;
-	var IndexRoute = _require.IndexRoute;
-	
-	var _require2 = __webpack_require__(236);
-	
-	var store = _require2.store;
-	var SET_CURRENT_USER = _require2.SET_CURRENT_USER;
-	
-	var _require3 = __webpack_require__(641);
-	
-	var Provider = _require3.Provider;
-	
-	var jwt = __webpack_require__(434);
-	var Layout = __webpack_require__(708);
-	var Home = __webpack_require__(713);
-	var CreateAPoll = __webpack_require__(738);
-	var Signup = __webpack_require__(809);
-	var LoginPage = __webpack_require__(812);
-	var MyPollsPage = __webpack_require__(815);
-	var setAuthorizationToken = __webpack_require__(628);
-	
 	var Routes = function Routes() {
-	  return React.createElement(
-	    Route,
-	    { path: '/', component: Layout },
-	    React.createElement(IndexRoute, { component: Home }),
-	    React.createElement(Route, { path: 'create', component: CreateAPoll }),
-	    React.createElement(Route, { path: 'mypolls', component: MyPollsPage }),
-	    React.createElement(Route, { path: 'signup', component: Signup }),
-	    React.createElement(Route, { path: 'login', component: LoginPage })
+	  return _react2.default.createElement(
+	    _reactRouter.Route,
+	    { path: '/', component: _Layout2.default },
+	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'create', component: _CreateAPoll2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'mypolls', component: _MyPollsPage2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _Signup2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _LoginPage2.default })
 	  );
 	};
 	
-	var App = React.createClass({
+	var App = _react2.default.createClass({
 	  displayName: 'App',
 	  render: function render() {
 	    if (localStorage.jwtToken) {
-	      setAuthorizationToken(localStorage.jwtToken);
-	      store.dispatch({ type: SET_CURRENT_USER, user: jwt.decode(localStorage.jwtToken) });
+	      (0, _setAuthorizationToken2.default)(localStorage.jwtToken);
+	      _Store.store.dispatch({ type: _Store.SET_CURRENT_USER, user: _jsonwebtoken2.default.decode(localStorage.jwtToken) });
 	    }
-	    return React.createElement(
-	      Provider,
-	      { store: store },
-	      React.createElement(
-	        Router,
-	        { history: browserHistory },
+	    return _react2.default.createElement(
+	      _reactRedux.Provider,
+	      { store: _Store.store },
+	      _react2.default.createElement(
+	        _reactRouter.Router,
+	        { history: _reactRouter.browserHistory },
 	        Routes()
 	      )
 	    );
@@ -21488,7 +21520,7 @@
 	
 	App.Routes = Routes;
 	
-	module.exports = App;
+	exports.default = App;
 
 /***/ },
 /* 173 */
@@ -71880,28 +71912,42 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
-	var NavBar = __webpack_require__(709);
-	var FlashMessagesList = __webpack_require__(710);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _NavBar = __webpack_require__(709);
+	
+	var _NavBar2 = _interopRequireDefault(_NavBar);
+	
+	var _FlashMessagesList = __webpack_require__(710);
+	
+	var _FlashMessagesList2 = _interopRequireDefault(_FlashMessagesList);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var element = _react2.default.PropTypes.element;
+	
 	
 	var Layout = function Layout(props) {
-	  return React.createElement(
+	  return _react2.default.createElement(
 	    'div',
 	    { className: 'container' },
-	    React.createElement(NavBar, null),
-	    React.createElement(FlashMessagesList, null),
+	    _react2.default.createElement(_NavBar2.default, null),
+	    _react2.default.createElement(_FlashMessagesList2.default, null),
 	    props.children
 	  );
 	};
-	
-	var element = React.PropTypes.element;
-	
 	
 	Layout.propTypes = {
 	  children: element.isRequired
 	};
 	
-	module.exports = Layout;
+	exports.default = Layout;
 
 /***/ },
 /* 709 */
@@ -71909,22 +71955,29 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _reactRouter = __webpack_require__(173);
+	
+	var _auth = __webpack_require__(408);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var object = _React$PropTypes.object;
 	var bool = _React$PropTypes.bool;
 	var func = _React$PropTypes.func;
 	
-	var _require2 = __webpack_require__(173);
 	
-	var Link = _require2.Link;
-	
-	
-	var NavBar = React.createClass({
+	var NavBar = _react2.default.createClass({
 	  displayName: 'NavBar',
 	
 	  propTypes: {
@@ -71945,38 +71998,38 @@
 	    this.setState({ isMounted: true });
 	  },
 	  render: function render() {
-	    var showAuthenticatedNav = React.createElement(
+	    var showAuthenticatedNav = _react2.default.createElement(
 	      'div',
 	      { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'ul',
 	        { className: 'nav navbar-nav' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'li',
 	          null,
-	          React.createElement(
-	            Link,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/mypolls' },
 	            'My Polls'
 	          )
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'li',
 	          null,
-	          React.createElement(
-	            Link,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/create' },
 	            'Create a Poll'
 	          )
 	        )
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'ul',
 	        { className: 'nav navbar-nav navbar-right' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'li',
 	          null,
-	          React.createElement(
+	          _react2.default.createElement(
 	            'p',
 	            { className: 'navbar-text' },
 	            'Welcome back, ',
@@ -71984,10 +72037,10 @@
 	            '!'
 	          )
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'li',
 	          null,
-	          React.createElement(
+	          _react2.default.createElement(
 	            'a',
 	            { href: '#', onClick: this.logout },
 	            'Logout'
@@ -71996,26 +72049,26 @@
 	      )
 	    );
 	
-	    var showGuestNav = React.createElement(
+	    var showGuestNav = _react2.default.createElement(
 	      'div',
 	      { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'ul',
 	        { className: 'nav navbar-nav navbar-right' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'li',
 	          null,
-	          React.createElement(
-	            Link,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/signup' },
 	            'Sign up'
 	          )
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'li',
 	          null,
-	          React.createElement(
-	            Link,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/login' },
 	            'Login'
 	          )
@@ -72023,29 +72076,29 @@
 	      )
 	    );
 	
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'nav',
 	      { className: 'navbar navbar-default' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'container-fluid' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'navbar-header' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'button',
 	            { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
-	            React.createElement(
+	            _react2.default.createElement(
 	              'span',
 	              { className: 'sr-only' },
 	              'Toggle navigation'
 	            ),
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' })
+	            _react2.default.createElement('span', { className: 'icon-bar' }),
+	            _react2.default.createElement('span', { className: 'icon-bar' }),
+	            _react2.default.createElement('span', { className: 'icon-bar' })
 	          ),
-	          React.createElement(
-	            Link,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/', className: 'navbar-brand' },
 	            'Vote.'
 	          )
@@ -72056,7 +72109,22 @@
 	  }
 	});
 	
-	module.exports = connector(NavBar);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    user: state.user,
+	    isAuthenticated: state.isAuthenticated
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchLogout: function dispatchLogout() {
+	      dispatch((0, _auth.logout)());
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(NavBar);
 
 /***/ },
 /* 710 */
@@ -72244,29 +72312,44 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
+	var _react2 = _interopRequireDefault(_react);
 	
-	var PollCard = __webpack_require__(714);
-	var ResultsCard = __webpack_require__(715);
-	var _React$PropTypes = React.PropTypes;
+	var _reactRedux = __webpack_require__(641);
+	
+	var _PollCard = __webpack_require__(714);
+	
+	var _PollCard2 = _interopRequireDefault(_PollCard);
+	
+	var _ResultsCard = __webpack_require__(715);
+	
+	var _ResultsCard2 = _interopRequireDefault(_ResultsCard);
+	
+	var _apiCalls = __webpack_require__(808);
+	
+	var _pollsLib = __webpack_require__(734);
+	
+	var _isEmpty = __webpack_require__(629);
+	
+	var _isEmpty2 = _interopRequireDefault(_isEmpty);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
 	
-	var _require2 = __webpack_require__(734);
 	
-	var dupeVoterCheck = _require2.dupeVoterCheck;
-	
-	var isEmpty = __webpack_require__(629);
-	
-	var Home = React.createClass({
+	var Home = _react2.default.createClass({
 	  displayName: 'Home',
 	
 	  propTypes: {
-	    getAllPolls: func,
+	    dispatchGetAllPolls: func,
 	    user: object
 	  },
 	  getInitialState: function getInitialState() {
@@ -72278,7 +72361,7 @@
 	    var _this = this;
 	
 	    if (this.state.allPolls === null) {
-	      this.props.getAllPolls().then(function (res) {
+	      this.props.dispatchGetAllPolls().then(function (res) {
 	        if (res.data.length > 0) {
 	          _this.setState({ allPolls: res.data });
 	        } else {
@@ -72291,14 +72374,14 @@
 	    var _this2 = this;
 	
 	    return this.state.allPolls.map(function (poll) {
-	      var dupeVoter = dupeVoterCheck(poll, _this2.props.user.username);
+	      var dupeVoter = (0, _pollsLib.dupeVoterCheck)(poll, _this2.props.user.username);
 	      var title = poll.title;
 	      var options = poll.options;
 	      var totalVotes = poll.totalVotes;
 	      var _id = poll._id;
 	
 	      if (dupeVoter) {
-	        return React.createElement(ResultsCard, {
+	        return _react2.default.createElement(_ResultsCard2.default, {
 	          key: _id,
 	          title: title,
 	          options: options,
@@ -72306,7 +72389,7 @@
 	          id: _id
 	        });
 	      }
-	      return React.createElement(PollCard, {
+	      return _react2.default.createElement(_PollCard2.default, {
 	        key: _id,
 	        title: title,
 	        options: options,
@@ -72318,10 +72401,10 @@
 	  handleEmptyAllPollsObject: function handleEmptyAllPollsObject() {
 	    this.getRecentPolls();
 	    if (this.state.allPolls === null) {
-	      return React.createElement(
+	      return _react2.default.createElement(
 	        'div',
 	        { className: 'text-center' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'h3',
 	          null,
 	          'loading...'
@@ -72329,15 +72412,15 @@
 	      );
 	    }
 	    if (this.state.allPolls === false) {
-	      return React.createElement(
+	      return _react2.default.createElement(
 	        'div',
 	        { className: 'text-center' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'h3',
 	          null,
 	          'No polls have been submitted yet :('
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'p',
 	          null,
 	          'Why not create one?'
@@ -72348,21 +72431,21 @@
 	  render: function render() {
 	    this.getRecentPolls();
 	    var showPolls = null;
-	    if (isEmpty(this.state.allPolls)) {
+	    if ((0, _isEmpty2.default)(this.state.allPolls)) {
 	      showPolls = this.handleEmptyAllPollsObject();
 	    } else {
 	      showPolls = this.populatedCards();
 	      console.log('populatedCards:', showPolls);
 	    }
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      null,
-	      React.createElement(
+	      _react2.default.createElement(
 	        'h1',
 	        { className: 'view-title text-center' },
 	        'Latest Polls'
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'row' },
 	        showPolls
@@ -72371,7 +72454,21 @@
 	  }
 	});
 	
-	module.exports = connector(Home);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    user: state.user
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchGetAllPolls: function dispatchGetAllPolls() {
+	      dispatch((0, _apiCalls.getAllPolls)());
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Home);
 
 /***/ },
 /* 714 */
@@ -95726,9 +95823,21 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
-	var classnames = __webpack_require__(712);
-	var _React$PropTypes = React.PropTypes;
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _classnames = __webpack_require__(712);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var string = _React$PropTypes.string;
 	var func = _React$PropTypes.func;
 	
@@ -95742,15 +95851,15 @@
 	  var onChange = _ref.onChange;
 	  var checkUserExists = _ref.checkUserExists;
 	
-	  return React.createElement(
+	  return _react2.default.createElement(
 	    'div',
-	    { className: classnames('form-group', { 'has-error': error }) },
-	    React.createElement(
+	    { className: (0, _classnames2.default)('form-group', { 'has-error': error }) },
+	    _react2.default.createElement(
 	      'label',
 	      { className: 'control-label' },
 	      label
 	    ),
-	    React.createElement('input', {
+	    _react2.default.createElement('input', {
 	      value: value,
 	      onChange: onChange,
 	      onBlur: checkUserExists,
@@ -95758,7 +95867,7 @@
 	      name: field,
 	      className: 'form-control'
 	    }),
-	    error && React.createElement(
+	    error && _react2.default.createElement(
 	      'span',
 	      { className: 'help-block' },
 	      error
@@ -95780,7 +95889,7 @@
 	  type: 'text'
 	};
 	
-	module.exports = TextFieldGroup;
+	exports.default = TextFieldGroup;
 
 /***/ },
 /* 812 */

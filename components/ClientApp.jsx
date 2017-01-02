@@ -1,17 +1,17 @@
 /* global localStorage */
 
-const React = require('react')
-const { Router, Route, browserHistory, IndexRoute } = require('react-router')
-const { store, SET_CURRENT_USER } = require('../redux/Store')
-const { Provider } = require('react-redux')
-const jwt = require('jsonwebtoken')
-const Layout = require('./Layout')
-const Home = require('./Home')
-const CreateAPoll = require('./CreateAPoll/CreateAPoll')
-const Signup = require('./Signup/Signup')
-const LoginPage = require('./Login/LoginPage')
-const MyPollsPage = require('./MyPolls/MyPollsPage')
-const setAuthorizationToken = require('../auth/setAuthorizationToken')
+import React from 'react'
+import { Router, Route, browserHistory, IndexRoute } from 'react-router'
+import { store, SET_CURRENT_USER } from '../redux/Store'
+import { Provider } from 'react-redux'
+import jwt from 'jsonwebtoken'
+import Layout from './Layout'
+import Home from './Home'
+import CreateAPoll from './CreateAPoll/CreateAPoll'
+import Signup from './Signup/Signup'
+import LoginPage from './Login/LoginPage'
+import MyPollsPage from './MyPolls/MyPollsPage'
+import setAuthorizationToken from '../auth/setAuthorizationToken'
 
 const Routes = () => (
   <Route path='/' component={Layout}>
@@ -41,4 +41,4 @@ const App = React.createClass({
 
 App.Routes = Routes
 
-module.exports = App
+export default App
