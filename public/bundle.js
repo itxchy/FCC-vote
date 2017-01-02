@@ -72114,6 +72114,8 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
+	var _flashMessage = __webpack_require__(238);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var _React$PropTypes = _react2.default.PropTypes;
@@ -72160,7 +72162,7 @@
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    dispatchDeleteFlashMessage: function dispatchDeleteFlashMessage(id) {
-	      dispatch(deleteFlashMessage(id));
+	      dispatch((0, _flashMessage.deleteFlashMessage)(id));
 	    }
 	  };
 	};
@@ -95465,7 +95467,7 @@
 	  displayName: 'Signup',
 	
 	  propTypes: {
-	    dispatechUserSignupRequest: func.isRequired,
+	    dispatchUserSignupRequest: func.isRequired,
 	    dispatchAddFlashMessage: func.isRequired,
 	    dispatchIsUserExists: func.isRequired
 	  },

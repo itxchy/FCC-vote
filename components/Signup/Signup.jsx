@@ -8,7 +8,7 @@ import { addFlashMessage } from '../../redux/modules/flashMessage'
 
 const Signup = React.createClass({
   propTypes: {
-    dispatechUserSignupRequest: func.isRequired,
+    dispatchUserSignupRequest: func.isRequired,
     dispatchAddFlashMessage: func.isRequired,
     dispatchIsUserExists: func.isRequired
   },

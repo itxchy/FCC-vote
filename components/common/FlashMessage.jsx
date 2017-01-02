@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
+import { deleteFlashMessage } from '../../redux/modules/flashMessage'
 const { object, func } = React.PropTypes
 
 const FlashMessage = React.createClass({
