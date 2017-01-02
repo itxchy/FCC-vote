@@ -46,12 +46,23 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(34);
-	var App = __webpack_require__(172);
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(34);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _ClientApp = __webpack_require__(172);
+	
+	var _ClientApp2 = _interopRequireDefault(_ClientApp);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	__webpack_require__(816);
 	
-	ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
+	_reactDom2.default.render(_react2.default.createElement(_ClientApp2.default, null), document.getElementById('app'));
 
 /***/ },
 /* 1 */
@@ -21426,60 +21437,81 @@
 
 	'use strict';
 	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(173);
+	
+	var _Store = __webpack_require__(236);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _jsonwebtoken = __webpack_require__(434);
+	
+	var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+	
+	var _Layout = __webpack_require__(708);
+	
+	var _Layout2 = _interopRequireDefault(_Layout);
+	
+	var _Home = __webpack_require__(713);
+	
+	var _Home2 = _interopRequireDefault(_Home);
+	
+	var _CreateAPoll = __webpack_require__(738);
+	
+	var _CreateAPoll2 = _interopRequireDefault(_CreateAPoll);
+	
+	var _Signup = __webpack_require__(809);
+	
+	var _Signup2 = _interopRequireDefault(_Signup);
+	
+	var _LoginPage = __webpack_require__(812);
+	
+	var _LoginPage2 = _interopRequireDefault(_LoginPage);
+	
+	var _MyPollsPage = __webpack_require__(815);
+	
+	var _MyPollsPage2 = _interopRequireDefault(_MyPollsPage);
+	
+	var _setAuthorizationToken = __webpack_require__(628);
+	
+	var _setAuthorizationToken2 = _interopRequireDefault(_setAuthorizationToken);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	/* global localStorage */
 	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(173);
-	
-	var Router = _require.Router;
-	var Route = _require.Route;
-	var browserHistory = _require.browserHistory;
-	var IndexRoute = _require.IndexRoute;
-	
-	var _require2 = __webpack_require__(236);
-	
-	var store = _require2.store;
-	var SET_CURRENT_USER = _require2.SET_CURRENT_USER;
-	
-	var _require3 = __webpack_require__(641);
-	
-	var Provider = _require3.Provider;
-	
-	var jwt = __webpack_require__(434);
-	var Layout = __webpack_require__(708);
-	var Home = __webpack_require__(713);
-	var CreateAPoll = __webpack_require__(738);
-	var Signup = __webpack_require__(809);
-	var LoginPage = __webpack_require__(812);
-	var MyPollsPage = __webpack_require__(815);
-	var setAuthorizationToken = __webpack_require__(628);
-	
 	var Routes = function Routes() {
-	  return React.createElement(
-	    Route,
-	    { path: '/', component: Layout },
-	    React.createElement(IndexRoute, { component: Home }),
-	    React.createElement(Route, { path: 'create', component: CreateAPoll }),
-	    React.createElement(Route, { path: 'mypolls', component: MyPollsPage }),
-	    React.createElement(Route, { path: 'signup', component: Signup }),
-	    React.createElement(Route, { path: 'login', component: LoginPage })
+	  return _react2.default.createElement(
+	    _reactRouter.Route,
+	    { path: '/', component: _Layout2.default },
+	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'create', component: _CreateAPoll2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'mypolls', component: _MyPollsPage2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _Signup2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _LoginPage2.default })
 	  );
 	};
 	
-	var App = React.createClass({
+	var App = _react2.default.createClass({
 	  displayName: 'App',
 	  render: function render() {
 	    if (localStorage.jwtToken) {
-	      setAuthorizationToken(localStorage.jwtToken);
-	      store.dispatch({ type: SET_CURRENT_USER, user: jwt.decode(localStorage.jwtToken) });
+	      (0, _setAuthorizationToken2.default)(localStorage.jwtToken);
+	      _Store.store.dispatch({ type: _Store.SET_CURRENT_USER, user: _jsonwebtoken2.default.decode(localStorage.jwtToken) });
 	    }
-	    return React.createElement(
-	      Provider,
-	      { store: store },
-	      React.createElement(
-	        Router,
-	        { history: browserHistory },
+	    return _react2.default.createElement(
+	      _reactRedux.Provider,
+	      { store: _Store.store },
+	      _react2.default.createElement(
+	        _reactRouter.Router,
+	        { history: _reactRouter.browserHistory },
 	        Routes()
 	      )
 	    );
@@ -21488,7 +21520,7 @@
 	
 	App.Routes = Routes;
 	
-	module.exports = App;
+	exports.default = App;
 
 /***/ },
 /* 173 */
@@ -27148,41 +27180,44 @@
 
 	'use strict';
 	
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	
-	/* global localStorage */
+	var _redux = __webpack_require__(630);
 	
-	var _require = __webpack_require__(630);
+	var _reduxThunk = __webpack_require__(648);
 	
-	var applyMiddleware = _require.applyMiddleware;
-	var createStore = _require.createStore;
+	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
-	var reactRedux = __webpack_require__(641);
-	var thunk = __webpack_require__(648).default;
-	var axios = __webpack_require__(409);
-	var shortid = __webpack_require__(239);
-	var findIndex = __webpack_require__(248);
-	var loMap = __webpack_require__(362);
-	var clone = __webpack_require__(369);
-	var isEmpty = __webpack_require__(629);
-	var jwt = __webpack_require__(434);
+	var _remoteReduxDevtools = __webpack_require__(649);
 	
-	var _require2 = __webpack_require__(649);
+	var _rootReducer = __webpack_require__(237);
 	
-	var composeWithDevTools = _require2.composeWithDevTools;
+	var _rootReducer2 = _interopRequireDefault(_rootReducer);
 	
-	var setAuthorizationToken = __webpack_require__(628);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var SET_NEW_POLL_TITLE = 'setNewPollTitle';
-	var SET_TITLE_EDITABLE = 'setTitleEditable';
+	var composeEnhancers = (0, _remoteReduxDevtools.composeWithDevTools)({ realtime: true, port: 8000 });
+	var store = (0, _redux.createStore)(_rootReducer2.default, composeEnhancers((0, _redux.applyMiddleware)(_reduxThunk2.default)));
 	
-	var UPDATE_OPTION = 'updateOption';
-	var RESET_NEW_POLL = 'resetNewPoll';
+	exports.default = store;
+
+/***/ },
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 	
-	var ADD_FLASH_MESSAGE = 'addFlashMessage';
-	var DELETE_FLASH_MESSAGE = 'DELETE_FLASH_MESSAGE';
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	var SET_CURRENT_USER = 'setCurrentUser';
+	var _flashMessage = __webpack_require__(238);
+	
+	var _createNewPoll = __webpack_require__(407);
+	
+	var _auth = __webpack_require__(408);
 	
 	var initialState = {
 	  newPollTitle: '',
@@ -27198,78 +27233,90 @@
 	  var action = arguments[1];
 	
 	  switch (action.type) {
-	    case SET_NEW_POLL_TITLE:
-	      return reduceNewPollTitle(state, action);
-	    case SET_TITLE_EDITABLE:
-	      return reduceTitleEditableState(state, action);
-	    case UPDATE_OPTION:
-	      return reduceOptionUpdate(state, action);
-	    case RESET_NEW_POLL:
-	      return reduceResetNewPoll(state, action);
-	    case ADD_FLASH_MESSAGE:
-	      return reduceAddFlashMessage(state, action);
-	    case DELETE_FLASH_MESSAGE:
-	      return reduceDeleteFlashMessage(state, action);
-	    case SET_CURRENT_USER:
-	      return reduceSetCurrentUser(state, action);
+	    case _createNewPoll.SET_NEW_POLL_TITLE:
+	      return (0, _createNewPoll.reduceNewPollTitle)(state, action);
+	    case _createNewPoll.SET_TITLE_EDITABLE:
+	      return (0, _createNewPoll.reduceTitleEditableState)(state, action);
+	    case _createNewPoll.UPDATE_OPTION:
+	      return (0, _createNewPoll.reduceOptionUpdate)(state, action);
+	    case _createNewPoll.RESET_NEW_POLL:
+	      return (0, _createNewPoll.reduceResetNewPoll)(state, action);
+	    case _flashMessage.ADD_FLASH_MESSAGE:
+	      return (0, _flashMessage.reduceAddFlashMessage)(state, action);
+	    case _flashMessage.DELETE_FLASH_MESSAGE:
+	      return (0, _flashMessage.reduceDeleteFlashMessage)(state, action);
+	    case _auth.SET_CURRENT_USER:
+	      return (0, _auth.reduceSetCurrentUser)(state, action);
 	    default:
 	      return state;
 	  }
 	};
 	
-	var reduceSetCurrentUser = function reduceSetCurrentUser(state, action) {
-	  var newState = {};
-	  console.log('action.user', action.user);
-	  var authenticationStatus = false;
-	  if (action.user && !isEmpty(action.user)) {
-	    authenticationStatus = true;
-	  }
-	  Object.assign(newState, state, {
-	    isAuthenticated: authenticationStatus,
-	    user: action.user
-	  });
-	  return newState;
-	};
+	exports.default = rootReducer;
+
+/***/ },
+/* 238 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 	
-	var reduceNewPollTitle = function reduceNewPollTitle(state, action) {
-	  var newState = {};
-	  Object.assign(newState, state, { newPollTitle: action.value });
-	  return newState;
-	};
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.reduceDeleteFlashMessage = exports.reduceAddFlashMessage = exports.DELETE_FLASH_MESSAGE = exports.ADD_FLASH_MESSAGE = undefined;
+	exports.addFlashMessage = addFlashMessage;
+	exports.deleteFlashMessage = deleteFlashMessage;
 	
-	var reduceTitleEditableState = function reduceTitleEditableState(state, action) {
-	  var newState = {};
-	  Object.assign(newState, state, { titleEditable: action.value });
-	  return newState;
-	};
+	var _shortid = __webpack_require__(239);
 	
-	var reduceOptionUpdate = function reduceOptionUpdate(state, action) {
-	  var newState = {};
-	  Object.assign(newState, state, { newPollOptions: action.value });
-	  return newState;
-	};
+	var _shortid2 = _interopRequireDefault(_shortid);
 	
-	var reduceAddFlashMessage = function reduceAddFlashMessage(state, action) {
+	var _findIndex = __webpack_require__(248);
+	
+	var _findIndex2 = _interopRequireDefault(_findIndex);
+	
+	var _map = __webpack_require__(362);
+	
+	var _map2 = _interopRequireDefault(_map);
+	
+	var _clone = __webpack_require__(369);
+	
+	var _clone2 = _interopRequireDefault(_clone);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	var ADD_FLASH_MESSAGE = exports.ADD_FLASH_MESSAGE = 'ADD_FLASH_MESSAGE';
+	var DELETE_FLASH_MESSAGE = exports.DELETE_FLASH_MESSAGE = 'DELETE_FLASH_MESSAGE';
+	
+	function addFlashMessage(message) {
+	  return { type: ADD_FLASH_MESSAGE, value: message };
+	}
+	function deleteFlashMessage(id) {
+	  return { type: DELETE_FLASH_MESSAGE, value: id };
+	}
+	
+	var reduceAddFlashMessage = exports.reduceAddFlashMessage = function reduceAddFlashMessage(state, action) {
 	  var newState = {};
 	
 	  Object.assign(newState, state, {
 	    flashMessages: [].concat(_toConsumableArray(state.flashMessages), [{
-	      id: shortid.generate(),
+	      id: _shortid2.default.generate(),
 	      messageType: action.value.type,
 	      messageText: action.value.text
 	    }])
 	  });
 	  return newState;
 	};
-	
-	var reduceDeleteFlashMessage = function reduceDeleteFlashMessage(state, action) {
+	var reduceDeleteFlashMessage = exports.reduceDeleteFlashMessage = function reduceDeleteFlashMessage(state, action) {
 	  var newState = {};
 	
-	  var index = findIndex(state.flashMessages, { id: action.value });
+	  var index = (0, _findIndex2.default)(state.flashMessages, { id: action.value });
 	
 	  if (index >= 0) {
 	    // makes a clone of state.flashMessages to be mutated
-	    var newFlashMessages = loMap(state.flashMessages, clone);
+	    var newFlashMessages = (0, _map2.default)(state.flashMessages, _clone2.default);
 	
 	    newFlashMessages.splice(index, 1);
 	    Object.assign(newState, state, {
@@ -27280,94 +27327,8 @@
 	
 	  return state;
 	};
-	
-	var reduceResetNewPoll = function reduceResetNewPoll(state, action) {
-	  var newState = {};
-	  var blankPollState = {
-	    newPollTitle: '',
-	    titleEditable: true,
-	    newPollOptions: ['', '']
-	  };
-	  Object.assign(newState, state, blankPollState);
-	  return newState;
-	};
-	
-	var composeEnhancers = composeWithDevTools({ realtime: true, port: 8000 });
-	var store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
-	
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    newPollTitle: state.newPollTitle,
-	    titleEditable: state.titleEditable,
-	    newPollOptions: state.newPollOptions,
-	    flashMessages: state.flashMessages,
-	    isAuthenticated: state.isAuthenticated,
-	    user: state.user
-	  };
-	};
-	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    setNewPollTitle: function setNewPollTitle(pollTitle) {
-	      dispatch({ type: SET_NEW_POLL_TITLE, value: pollTitle });
-	    },
-	    setTitleEditable: function setTitleEditable(bool) {
-	      dispatch({ type: SET_TITLE_EDITABLE, value: bool });
-	    },
-	    updateOption: function updateOption(updatedOptions) {
-	      dispatch({ type: UPDATE_OPTION, value: updatedOptions });
-	    },
-	    resetNewPoll: function resetNewPoll(bool) {
-	      dispatch({ type: RESET_NEW_POLL, value: bool });
-	    },
-	    submitNewPoll: function submitNewPoll(newPoll) {
-	      return axios.post('/api/polls', newPoll);
-	    },
-	    getUserPolls: function getUserPolls(user) {
-	      return axios.get('/api/polls/' + user);
-	    },
-	    getAllPolls: function getAllPolls() {
-	      return axios.get('/api/polls');
-	    },
-	    submitVote: function submitVote(id, vote) {
-	      return axios.put('/api/polls/' + id, vote);
-	    },
-	    userSignupRequest: function userSignupRequest(userData) {
-	      return axios.post('/api/users', userData);
-	    },
-	    isUserExists: function isUserExists(identifier) {
-	      return axios.get('/api/users/' + identifier);
-	    },
-	    login: function login(data) {
-	      return axios.post('/api/auth', data).then(function (res) {
-	        var token = res.data.token;
-	        localStorage.setItem('jwtToken', token);
-	        setAuthorizationToken(token);
-	        var user = jwt.decode(token);
-	        dispatch({ type: SET_CURRENT_USER, user: user });
-	      });
-	    },
-	    logout: function logout() {
-	      localStorage.removeItem('jwtToken');
-	      setAuthorizationToken(false);
-	      dispatch({ type: SET_CURRENT_USER, user: {} });
-	    },
-	    addFlashMessage: function addFlashMessage(message) {
-	      dispatch({ type: ADD_FLASH_MESSAGE, value: message });
-	    },
-	    deleteFlashMessage: function deleteFlashMessage(id) {
-	      dispatch({ type: DELETE_FLASH_MESSAGE, value: id });
-	    }
-	  };
-	};
-	
-	var connector = reactRedux.connect(mapStateToProps, mapDispatchToProps);
-	
-	module.exports = { connector: connector, store: store, rootReducer: rootReducer, SET_CURRENT_USER: SET_CURRENT_USER };
 
 /***/ },
-/* 237 */,
-/* 238 */,
 /* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -32958,8 +32919,127 @@
 
 
 /***/ },
-/* 407 */,
-/* 408 */,
+/* 407 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.setNewPollTitle = setNewPollTitle;
+	exports.setTitleEditable = setTitleEditable;
+	exports.updateOption = updateOption;
+	exports.resetNewPoll = resetNewPoll;
+	var SET_NEW_POLL_TITLE = exports.SET_NEW_POLL_TITLE = 'setNewPollTitle';
+	var SET_TITLE_EDITABLE = exports.SET_TITLE_EDITABLE = 'setTitleEditable';
+	var UPDATE_OPTION = exports.UPDATE_OPTION = 'updateOption';
+	var RESET_NEW_POLL = exports.RESET_NEW_POLL = 'resetNewPoll';
+	
+	function setNewPollTitle(pollTitle) {
+	  return { type: SET_NEW_POLL_TITLE, value: pollTitle };
+	}
+	function setTitleEditable(bool) {
+	  return { type: SET_TITLE_EDITABLE, value: bool };
+	}
+	function updateOption(updatedOptions) {
+	  return { type: UPDATE_OPTION, value: updatedOptions };
+	}
+	function resetNewPoll() {
+	  return { type: RESET_NEW_POLL };
+	}
+	
+	var reduceNewPollTitle = exports.reduceNewPollTitle = function reduceNewPollTitle(state, action) {
+	  var newState = {};
+	  Object.assign(newState, state, { newPollTitle: action.value });
+	  return newState;
+	};
+	var reduceTitleEditableState = exports.reduceTitleEditableState = function reduceTitleEditableState(state, action) {
+	  var newState = {};
+	  Object.assign(newState, state, { titleEditable: action.value });
+	  return newState;
+	};
+	var reduceOptionUpdate = exports.reduceOptionUpdate = function reduceOptionUpdate(state, action) {
+	  var newState = {};
+	  Object.assign(newState, state, { newPollOptions: action.value });
+	  return newState;
+	};
+	var reduceResetNewPoll = exports.reduceResetNewPoll = function reduceResetNewPoll(state, action) {
+	  var newState = {};
+	  var blankPollState = {
+	    newPollTitle: '',
+	    titleEditable: true,
+	    newPollOptions: ['', '']
+	  };
+	  Object.assign(newState, state, blankPollState);
+	  return newState;
+	};
+
+/***/ },
+/* 408 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.reduceSetCurrentUser = exports.SET_CURRENT_USER = undefined;
+	exports.login = login;
+	exports.logout = logout;
+	
+	var _axios = __webpack_require__(409);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	var _jsonwebtoken = __webpack_require__(434);
+	
+	var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+	
+	var _setAuthorizationToken = __webpack_require__(628);
+	
+	var _setAuthorizationToken2 = _interopRequireDefault(_setAuthorizationToken);
+	
+	var _isEmpty = __webpack_require__(629);
+	
+	var _isEmpty2 = _interopRequireDefault(_isEmpty);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* global localStorage */
+	
+	var SET_CURRENT_USER = exports.SET_CURRENT_USER = 'setCurrentUser';
+	
+	function login(data) {
+	  return _axios2.default.post('/api/auth', data).then(function (res) {
+	    var token = res.data.token;
+	    localStorage.setItem('jwtToken', token);
+	    (0, _setAuthorizationToken2.default)(token);
+	    var user = _jsonwebtoken2.default.decode(token);
+	    return { type: SET_CURRENT_USER, user: user };
+	  });
+	}
+	function logout() {
+	  localStorage.removeItem('jwtToken');
+	  (0, _setAuthorizationToken2.default)(false);
+	  return { type: SET_CURRENT_USER, user: {} };
+	}
+	
+	var reduceSetCurrentUser = exports.reduceSetCurrentUser = function reduceSetCurrentUser(state, action) {
+	  var newState = {};
+	  console.log('action.user', action.user);
+	  var authenticationStatus = false;
+	  if (action.user && !(0, _isEmpty2.default)(action.user)) {
+	    authenticationStatus = true;
+	  }
+	  Object.assign(newState, state, {
+	    isAuthenticated: authenticationStatus,
+	    user: action.user
+	  });
+	  return newState;
+	};
+
+/***/ },
 /* 409 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -71761,28 +71841,42 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
-	var NavBar = __webpack_require__(709);
-	var FlashMessagesList = __webpack_require__(710);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _NavBar = __webpack_require__(709);
+	
+	var _NavBar2 = _interopRequireDefault(_NavBar);
+	
+	var _FlashMessagesList = __webpack_require__(710);
+	
+	var _FlashMessagesList2 = _interopRequireDefault(_FlashMessagesList);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var element = _react2.default.PropTypes.element;
+	
 	
 	var Layout = function Layout(props) {
-	  return React.createElement(
+	  return _react2.default.createElement(
 	    'div',
 	    { className: 'container' },
-	    React.createElement(NavBar, null),
-	    React.createElement(FlashMessagesList, null),
+	    _react2.default.createElement(_NavBar2.default, null),
+	    _react2.default.createElement(_FlashMessagesList2.default, null),
 	    props.children
 	  );
 	};
-	
-	var element = React.PropTypes.element;
-	
 	
 	Layout.propTypes = {
 	  children: element.isRequired
 	};
 	
-	module.exports = Layout;
+	exports.default = Layout;
 
 /***/ },
 /* 709 */
@@ -71790,22 +71884,29 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _reactRouter = __webpack_require__(173);
+	
+	var _auth = __webpack_require__(408);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var object = _React$PropTypes.object;
 	var bool = _React$PropTypes.bool;
 	var func = _React$PropTypes.func;
 	
-	var _require2 = __webpack_require__(173);
 	
-	var Link = _require2.Link;
-	
-	
-	var NavBar = React.createClass({
+	var NavBar = _react2.default.createClass({
 	  displayName: 'NavBar',
 	
 	  propTypes: {
@@ -71826,38 +71927,38 @@
 	    this.setState({ isMounted: true });
 	  },
 	  render: function render() {
-	    var showAuthenticatedNav = React.createElement(
+	    var showAuthenticatedNav = _react2.default.createElement(
 	      'div',
 	      { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'ul',
 	        { className: 'nav navbar-nav' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'li',
 	          null,
-	          React.createElement(
-	            Link,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/mypolls' },
 	            'My Polls'
 	          )
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'li',
 	          null,
-	          React.createElement(
-	            Link,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/create' },
 	            'Create a Poll'
 	          )
 	        )
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'ul',
 	        { className: 'nav navbar-nav navbar-right' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'li',
 	          null,
-	          React.createElement(
+	          _react2.default.createElement(
 	            'p',
 	            { className: 'navbar-text' },
 	            'Welcome back, ',
@@ -71865,10 +71966,10 @@
 	            '!'
 	          )
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'li',
 	          null,
-	          React.createElement(
+	          _react2.default.createElement(
 	            'a',
 	            { href: '#', onClick: this.logout },
 	            'Logout'
@@ -71877,26 +71978,26 @@
 	      )
 	    );
 	
-	    var showGuestNav = React.createElement(
+	    var showGuestNav = _react2.default.createElement(
 	      'div',
 	      { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'ul',
 	        { className: 'nav navbar-nav navbar-right' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'li',
 	          null,
-	          React.createElement(
-	            Link,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/signup' },
 	            'Sign up'
 	          )
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'li',
 	          null,
-	          React.createElement(
-	            Link,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/login' },
 	            'Login'
 	          )
@@ -71904,29 +72005,29 @@
 	      )
 	    );
 	
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'nav',
 	      { className: 'navbar navbar-default' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'container-fluid' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'navbar-header' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'button',
 	            { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
-	            React.createElement(
+	            _react2.default.createElement(
 	              'span',
 	              { className: 'sr-only' },
 	              'Toggle navigation'
 	            ),
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' })
+	            _react2.default.createElement('span', { className: 'icon-bar' }),
+	            _react2.default.createElement('span', { className: 'icon-bar' }),
+	            _react2.default.createElement('span', { className: 'icon-bar' })
 	          ),
-	          React.createElement(
-	            Link,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/', className: 'navbar-brand' },
 	            'Vote.'
 	          )
@@ -71937,7 +72038,22 @@
 	  }
 	});
 	
-	module.exports = connector(NavBar);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    user: state.user,
+	    isAuthenticated: state.isAuthenticated
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchLogout: function dispatchLogout() {
+	      dispatch((0, _auth.logout)());
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(NavBar);
 
 /***/ },
 /* 710 */
@@ -71945,17 +72061,26 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
+	var _react2 = _interopRequireDefault(_react);
 	
-	var FlashMessage = __webpack_require__(711);
-	var array = React.PropTypes.array;
+	var _reactRedux = __webpack_require__(641);
+	
+	var _FlashMessage = __webpack_require__(711);
+	
+	var _FlashMessage2 = _interopRequireDefault(_FlashMessage);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var array = _react2.default.PropTypes.array;
 	
 	
-	var FlashMessagesList = React.createClass({
+	var FlashMessagesList = _react2.default.createClass({
 	  displayName: 'FlashMessagesList',
 	
 	  propTypes: {
@@ -71963,9 +72088,9 @@
 	  },
 	  render: function render() {
 	    var messages = this.props.flashMessages.map(function (message) {
-	      return React.createElement(FlashMessage, { key: message.id, message: message });
+	      return _react2.default.createElement(_FlashMessage2.default, { key: message.id, message: message });
 	    });
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      null,
 	      messages
@@ -71973,7 +72098,13 @@
 	  }
 	});
 	
-	module.exports = connector(FlashMessagesList);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    flashMessages: state.flashMessages
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(FlashMessagesList);
 
 /***/ },
 /* 711 */
@@ -71981,44 +72112,55 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
+	var _react2 = _interopRequireDefault(_react);
 	
-	var classnames = __webpack_require__(712);
-	var _React$PropTypes = React.PropTypes;
+	var _reactRedux = __webpack_require__(641);
+	
+	var _classnames = __webpack_require__(712);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _flashMessage = __webpack_require__(238);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var object = _React$PropTypes.object;
 	var func = _React$PropTypes.func;
 	
 	
-	var FlashMessage = React.createClass({
+	var FlashMessage = _react2.default.createClass({
 	  displayName: 'FlashMessage',
 	
 	  propTypes: {
 	    message: object.isRequired,
-	    deleteFlashMessage: func.isRequired
+	    dispatchDeleteFlashMessage: func.isRequired
 	  },
 	
 	  onClick: function onClick() {
-	    this.props.deleteFlashMessage(this.props.message.id);
+	    this.props.dispatchDeleteFlashMessage(this.props.message.id);
 	  },
 	  render: function render() {
 	    var _props$message = this.props.message;
 	    var messageType = _props$message.messageType;
 	    var messageText = _props$message.messageText;
 	
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
-	      { className: classnames('alert', {
+	      { className: (0, _classnames2.default)('alert', {
 	          'alert-success': messageType === 'success',
 	          'alert-danger': messageType === 'error'
 	        }) },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'button',
 	        { onClick: this.onClick, className: 'close' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'span',
 	          null,
 	          '\xD7'
@@ -72029,7 +72171,15 @@
 	  }
 	});
 	
-	module.exports = connector(FlashMessage);
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchDeleteFlashMessage: function dispatchDeleteFlashMessage(id) {
+	      dispatch((0, _flashMessage.deleteFlashMessage)(id));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapDispatchToProps)(FlashMessage);
 
 /***/ },
 /* 712 */
@@ -72091,29 +72241,44 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
+	var _react2 = _interopRequireDefault(_react);
 	
-	var PollCard = __webpack_require__(714);
-	var ResultsCard = __webpack_require__(715);
-	var _React$PropTypes = React.PropTypes;
+	var _reactRedux = __webpack_require__(641);
+	
+	var _PollCard = __webpack_require__(714);
+	
+	var _PollCard2 = _interopRequireDefault(_PollCard);
+	
+	var _ResultsCard = __webpack_require__(715);
+	
+	var _ResultsCard2 = _interopRequireDefault(_ResultsCard);
+	
+	var _apiCalls = __webpack_require__(808);
+	
+	var _pollsLib = __webpack_require__(734);
+	
+	var _isEmpty = __webpack_require__(629);
+	
+	var _isEmpty2 = _interopRequireDefault(_isEmpty);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
 	
-	var _require2 = __webpack_require__(734);
 	
-	var dupeVoterCheck = _require2.dupeVoterCheck;
-	
-	var isEmpty = __webpack_require__(629);
-	
-	var Home = React.createClass({
+	var Home = _react2.default.createClass({
 	  displayName: 'Home',
 	
 	  propTypes: {
-	    getAllPolls: func,
+	    dispatchGetAllPolls: func,
 	    user: object
 	  },
 	  getInitialState: function getInitialState() {
@@ -72125,7 +72290,7 @@
 	    var _this = this;
 	
 	    if (this.state.allPolls === null) {
-	      this.props.getAllPolls().then(function (res) {
+	      this.props.dispatchGetAllPolls().then(function (res) {
 	        if (res.data.length > 0) {
 	          _this.setState({ allPolls: res.data });
 	        } else {
@@ -72138,14 +72303,14 @@
 	    var _this2 = this;
 	
 	    return this.state.allPolls.map(function (poll) {
-	      var dupeVoter = dupeVoterCheck(poll, _this2.props.user.username);
+	      var dupeVoter = (0, _pollsLib.dupeVoterCheck)(poll, _this2.props.user.username);
 	      var title = poll.title;
 	      var options = poll.options;
 	      var totalVotes = poll.totalVotes;
 	      var _id = poll._id;
 	
 	      if (dupeVoter) {
-	        return React.createElement(ResultsCard, {
+	        return _react2.default.createElement(_ResultsCard2.default, {
 	          key: _id,
 	          title: title,
 	          options: options,
@@ -72153,7 +72318,7 @@
 	          id: _id
 	        });
 	      }
-	      return React.createElement(PollCard, {
+	      return _react2.default.createElement(_PollCard2.default, {
 	        key: _id,
 	        title: title,
 	        options: options,
@@ -72165,10 +72330,10 @@
 	  handleEmptyAllPollsObject: function handleEmptyAllPollsObject() {
 	    this.getRecentPolls();
 	    if (this.state.allPolls === null) {
-	      return React.createElement(
+	      return _react2.default.createElement(
 	        'div',
 	        { className: 'text-center' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'h3',
 	          null,
 	          'loading...'
@@ -72176,15 +72341,15 @@
 	      );
 	    }
 	    if (this.state.allPolls === false) {
-	      return React.createElement(
+	      return _react2.default.createElement(
 	        'div',
 	        { className: 'text-center' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'h3',
 	          null,
 	          'No polls have been submitted yet :('
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'p',
 	          null,
 	          'Why not create one?'
@@ -72195,21 +72360,21 @@
 	  render: function render() {
 	    this.getRecentPolls();
 	    var showPolls = null;
-	    if (isEmpty(this.state.allPolls)) {
+	    if ((0, _isEmpty2.default)(this.state.allPolls)) {
 	      showPolls = this.handleEmptyAllPollsObject();
 	    } else {
 	      showPolls = this.populatedCards();
 	      console.log('populatedCards:', showPolls);
 	    }
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      null,
-	      React.createElement(
+	      _react2.default.createElement(
 	        'h1',
 	        { className: 'view-title text-center' },
 	        'Latest Polls'
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'row' },
 	        showPolls
@@ -72218,7 +72383,21 @@
 	  }
 	});
 	
-	module.exports = connector(Home);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    user: state.user
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchGetAllPolls: function dispatchGetAllPolls() {
+	      dispatch((0, _apiCalls.getAllPolls)());
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Home);
 
 /***/ },
 /* 714 */
@@ -72226,12 +72405,21 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _apiCalls = __webpack_require__(808);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var string = _React$PropTypes.string;
 	var array = _React$PropTypes.array;
 	var number = _React$PropTypes.number;
@@ -72239,7 +72427,7 @@
 	var func = _React$PropTypes.func;
 	
 	
-	var PollCard = React.createClass({
+	var PollCard = _react2.default.createClass({
 	  displayName: 'PollCard',
 	
 	  propTypes: {
@@ -72248,7 +72436,7 @@
 	    totalVotes: number,
 	    id: string,
 	    user: object,
-	    submitVote: func
+	    dispatchSubmitVote: func
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
@@ -72268,7 +72456,7 @@
 	    var voter = this.props.user.username || null;
 	    if (selectedOption !== null) {
 	      var vote = { selectedOption: selectedOption, voter: voter };
-	      this.props.submitVote(pollID, vote).then(function (res) {
+	      this.props.dispatchSubmitVote(pollID, vote).then(function (res) {
 	        _this.setState({ updatedTotalVotes: res.data.poll.totalVotes });
 	      });
 	    } else {
@@ -72281,13 +72469,13 @@
 	    var options = this.props.options.map(function (option, index) {
 	      var id = 'gridRadios' + index;
 	      var value = '' + index;
-	      return React.createElement(
+	      return _react2.default.createElement(
 	        'div',
 	        { key: option.option, className: 'form-check' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'label',
 	          { className: 'form-check-label poll-card-label' },
-	          React.createElement('input', {
+	          _react2.default.createElement('input', {
 	            className: 'form-check-input radio-option',
 	            type: 'radio',
 	            onChange: _this2.onOptionChange,
@@ -72299,39 +72487,39 @@
 	        )
 	      );
 	    });
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      { className: 'col-sm-4' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'form',
 	        { onSubmit: this.onPollSubmit },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'h2',
 	          null,
 	          this.props.title
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'fieldset',
 	          { className: 'form-group row' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { className: 'col-sm-10' },
 	            options
 	          )
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'p',
 	          null,
 	          'Total votes cast: ',
 	          this.state.updatedTotalVotes || this.props.totalVotes
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'form-group row' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { className: 'offset-sm-2 col-sm-10' },
-	            React.createElement(
+	            _react2.default.createElement(
 	              'button',
 	              { type: 'submit', className: 'btn btn-primary' },
 	              'Vote'
@@ -72343,7 +72531,21 @@
 	  }
 	});
 	
-	module.exports = connector(PollCard);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    user: state.user
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchSubmitVote: function dispatchSubmitVote(id, vote) {
+	      dispatch((0, _apiCalls.submitVote)(id, vote));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(PollCard);
 
 /***/ },
 /* 715 */
@@ -72351,21 +72553,34 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _D3Chart = __webpack_require__(716);
+	
+	var _D3Chart2 = _interopRequireDefault(_D3Chart);
+	
+	var _isEmpty = __webpack_require__(629);
+	
+	var _isEmpty2 = _interopRequireDefault(_isEmpty);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var string = _React$PropTypes.string;
 	var array = _React$PropTypes.array;
 	var number = _React$PropTypes.number;
 	var object = _React$PropTypes.object;
 	
-	var D3Chart = __webpack_require__(716);
-	var isEmpty = __webpack_require__(629);
 	
-	var ResultsCard = React.createClass({
+	var ResultsCard = _react2.default.createClass({
 	  displayName: 'ResultsCard',
 	
 	  propTypes: {
@@ -72377,29 +72592,29 @@
 	  },
 	  render: function render() {
 	    var d3Component = null;
-	    if (!isEmpty(this.props.options)) {
-	      d3Component = React.createElement(D3Chart, { results: this.props.options, pollId: this.props.id });
+	    if (!(0, _isEmpty2.default)(this.props.options)) {
+	      d3Component = _react2.default.createElement(_D3Chart2.default, { results: this.props.options, pollId: this.props.id });
 	    }
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      { className: 'col-sm-4' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'h2',
 	        null,
 	        this.props.title
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'col-sm-10' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
 	          d3Component || 'loading results...'
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'p',
 	            null,
 	            'Total votes: ',
@@ -72411,7 +72626,13 @@
 	  }
 	});
 	
-	module.exports = connector(ResultsCard);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    user: state.user
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ResultsCard);
 
 /***/ },
 /* 716 */
@@ -72419,15 +72640,30 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
-	var _React$PropTypes = React.PropTypes;
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _d = __webpack_require__(717);
+	
+	var _d2 = _interopRequireDefault(_d);
+	
+	var _reactFauxDom = __webpack_require__(718);
+	
+	var _reactFauxDom2 = _interopRequireDefault(_reactFauxDom);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var string = _React$PropTypes.string;
 	var array = _React$PropTypes.array;
 	
-	var d3 = __webpack_require__(717);
-	var ReactFauxDom = __webpack_require__(718);
 	
-	var D3Chart = React.createClass({
+	var D3Chart = _react2.default.createClass({
 	  displayName: 'D3Chart',
 	
 	  propTypes: {
@@ -72435,16 +72671,16 @@
 	    pollId: string
 	  },
 	  render: function render() {
-	    var chart = ReactFauxDom.createElement('div');
+	    var chart = _reactFauxDom2.default.createElement('div');
 	    console.log('data:', this.props.results);
 	    var data = this.props.results;
 	    var width = 300;
 	    var height = 300;
-	    var xScale = d3.scaleLinear().domain([0, d3.max(data, function (d) {
+	    var xScale = _d2.default.scaleLinear().domain([0, _d2.default.max(data, function (d) {
 	      return d.votes.length;
 	    })]).range([1, width]);
 	
-	    var svg = d3.select(chart).append('svg').attr('width', width).attr('height', height);
+	    var svg = _d2.default.select(chart).append('svg').attr('width', width).attr('height', height);
 	
 	    svg.selectAll('rect').data(data).enter().append('rect').attr('x', 10).attr('y', function (d, i) {
 	      return i * (height / data.length);
@@ -72467,7 +72703,7 @@
 	  }
 	});
 	
-	module.exports = D3Chart;
+	exports.default = D3Chart;
 
 /***/ },
 /* 717 */
@@ -92004,35 +92240,44 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	
-	var NewPollTitle = __webpack_require__(739);
-	var PendingPollOptions = __webpack_require__(740);
-	var SaveOrReset = __webpack_require__(741);
-	
-	var CreateAPoll = React.createClass({
-	  displayName: 'CreateAPoll',
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h1',
-	        { className: 'view-title text-center' },
-	        'Create a New Poll'
-	      ),
-	      React.createElement(NewPollTitle, null),
-	      React.createElement(PendingPollOptions, null),
-	      React.createElement(SaveOrReset, null)
-	    );
-	  }
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
 	});
 	
-	module.exports = connector(CreateAPoll);
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _NewPollTitle = __webpack_require__(739);
+	
+	var _NewPollTitle2 = _interopRequireDefault(_NewPollTitle);
+	
+	var _PendingPollOptions = __webpack_require__(740);
+	
+	var _PendingPollOptions2 = _interopRequireDefault(_PendingPollOptions);
+	
+	var _SaveOrReset = __webpack_require__(741);
+	
+	var _SaveOrReset2 = _interopRequireDefault(_SaveOrReset);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var CreateAPoll = function CreateAPoll() {
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(
+	      'h1',
+	      { className: 'view-title text-center' },
+	      'Create a New Poll'
+	    ),
+	    _react2.default.createElement(_NewPollTitle2.default, null),
+	    _react2.default.createElement(_PendingPollOptions2.default, null),
+	    _react2.default.createElement(_SaveOrReset2.default, null)
+	  );
+	};
+	
+	exports.default = CreateAPoll;
 
 /***/ },
 /* 739 */
@@ -92040,71 +92285,81 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.DisconnectedNewPollTitle = undefined;
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _createNewPoll = __webpack_require__(407);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var string = _React$PropTypes.string;
 	var func = _React$PropTypes.func;
 	var bool = _React$PropTypes.bool;
 	
 	
-	var NewPollTitle = React.createClass({
+	var NewPollTitle = _react2.default.createClass({
 	  displayName: 'NewPollTitle',
 	
 	  propTypes: {
 	    newPollTitle: string,
-	    setNewPollTitle: func,
 	    titleEditable: bool,
-	    setTitleEditable: func
+	    dispatchSetNewPollTitle: func,
+	    dispatchSetTitleEditable: func
 	  },
 	  handleNewPollTitleChange: function handleNewPollTitleChange(event) {
-	    this.props.setNewPollTitle(event.target.value);
+	    this.props.dispatchSetNewPollTitle(event.target.value);
 	  },
 	  handleSaveClick: function handleSaveClick(event) {
 	    if (this.props.newPollTitle === '') {
-	      this.props.setNewPollTitle('New Poll Title');
+	      this.props.dispatchSetNewPollTitle('New Poll Title');
 	    }
-	    this.props.setTitleEditable(false);
+	    this.props.dispatchSetTitleEditable(false);
 	  },
 	  handleEditClick: function handleEditClick(event) {
-	    this.props.setTitleEditable(true);
+	    this.props.dispatchSetTitleEditable(true);
 	  },
 	  render: function render() {
-	    var savedPollTitle = React.createElement(
+	    var savedPollTitle = _react2.default.createElement(
 	      'div',
 	      { className: 'new-poll-title-container' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'h2',
 	        { className: 'text-center saved-title' },
 	        this.props.newPollTitle
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'a',
 	        { href: '#' },
-	        React.createElement('i', {
+	        _react2.default.createElement('i', {
 	          className: 'fa fa-pencil-square-o edit-icon',
 	          'aria-hidden': 'true',
 	          onClick: this.handleEditClick
 	        })
 	      )
 	    );
-	    var inputPollTitle = React.createElement(
+	    var inputPollTitle = _react2.default.createElement(
 	      'div',
 	      { className: 'new-poll-title-container' },
-	      React.createElement('textarea', {
+	      _react2.default.createElement('textarea', {
 	        value: this.props.newPollTitle,
 	        onChange: this.handleNewPollTitleChange,
 	        type: 'text',
 	        placeholder: 'New Poll Title',
 	        className: 'text-center form-control new-poll-title-textarea'
 	      }),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'a',
 	        { href: '#' },
-	        React.createElement('i', {
+	        _react2.default.createElement('i', {
 	          className: 'fa fa-floppy-o save-icon',
 	          'aria-hidden': 'true',
 	          onClick: this.handleSaveClick
@@ -92112,7 +92367,7 @@
 	      )
 	    );
 	
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      { className: 'new-poll-title-container' },
 	      this.props.titleEditable ? inputPollTitle : savedPollTitle
@@ -92120,12 +92375,30 @@
 	  }
 	});
 	
-	var connected = connector(NewPollTitle);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    newPollTitle: state.newPollTitle,
+	    titleEditable: state.titleEditable
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchSetNewPollTitle: function dispatchSetNewPollTitle(pollTitle) {
+	      dispatch((0, _createNewPoll.setNewPollTitle)(pollTitle));
+	    },
+	    dispatchSetTitleEditable: function dispatchSetTitleEditable(bool) {
+	      dispatch((0, _createNewPoll.setTitleEditable)(bool));
+	    }
+	  };
+	};
+	
+	var connected = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(NewPollTitle);
 	
 	// This exports the component itself for testing
-	connected.DisconnectedNewPollTitle = NewPollTitle;
+	var DisconnectedNewPollTitle = exports.DisconnectedNewPollTitle = NewPollTitle;
 	
-	module.exports = connected;
+	exports.default = connected;
 
 /***/ },
 /* 740 */
@@ -92133,32 +92406,42 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.DisconnectedPendingPollOptions = undefined;
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _createNewPoll = __webpack_require__(407);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var array = _React$PropTypes.array;
 	var func = _React$PropTypes.func;
 	
 	
-	var PendingPollOptions = React.createClass({
+	var PendingPollOptions = _react2.default.createClass({
 	  displayName: 'PendingPollOptions',
 	
 	  propTypes: {
 	    newPollOptions: array.isRequired,
-	    updateOption: func.isRequired
+	    dispatchUpdateOption: func.isRequired
 	  },
 	  editOption: function editOption(event) {
 	    var updatedOptions = this.props.newPollOptions.slice();
 	    updatedOptions[event.target.name] = event.target.value;
-	    this.props.updateOption(updatedOptions);
+	    this.props.dispatchUpdateOption(updatedOptions);
 	  },
 	  addAnotherOption: function addAnotherOption() {
 	    var updatedNewOptions = this.props.newPollOptions.slice();
 	    updatedNewOptions.push('');
-	    this.props.updateOption(updatedNewOptions);
+	    this.props.dispatchUpdateOption(updatedNewOptions);
 	  },
 	  deleteOption: function deleteOption(index) {
 	    if (this.props.newPollOptions.length === 2) {
@@ -92167,16 +92450,16 @@
 	    }
 	    var updatedDeleteOptions = this.props.newPollOptions.slice();
 	    updatedDeleteOptions.splice(index, 1);
-	    this.props.updateOption(updatedDeleteOptions);
+	    this.props.dispatchUpdateOption(updatedDeleteOptions);
 	  },
 	  render: function render() {
 	    var _this = this;
 	
 	    var options = this.props.newPollOptions.map(function (option, index) {
-	      return React.createElement(
+	      return _react2.default.createElement(
 	        'div',
 	        { key: index },
-	        React.createElement('input', {
+	        _react2.default.createElement('input', {
 	          type: 'text',
 	          value: option,
 	          name: index,
@@ -92184,7 +92467,7 @@
 	          onChange: _this.editOption,
 	          className: 'form-control option-input'
 	        }),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'a',
 	          {
 	            className: 'btn btn-danger delete-button',
@@ -92194,21 +92477,21 @@
 	            },
 	            'aria-label': 'Delete'
 	          },
-	          React.createElement('i', { className: 'fa fa-trash-o', 'aria-hidden': 'true' })
+	          _react2.default.createElement('i', { className: 'fa fa-trash-o', 'aria-hidden': 'true' })
 	        )
 	      );
 	    });
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      { className: 'form-group options-container' },
 	      options,
-	      React.createElement(
+	      _react2.default.createElement(
 	        'a',
 	        { href: '#' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'p',
 	          { className: 'add-another-option', onClick: this.addAnotherOption },
-	          React.createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
+	          _react2.default.createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
 	          ' Add another option'
 	        )
 	      )
@@ -92216,12 +92499,26 @@
 	  }
 	});
 	
-	var connected = connector(PendingPollOptions);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    newPollOptions: state.newPollOptions
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchUpdateOption: function dispatchUpdateOption(newOptions) {
+	      dispatch((0, _createNewPoll.updateOption)(newOptions));
+	    }
+	  };
+	};
+	
+	var connected = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(PendingPollOptions);
 	
 	// This exports the component itself for testing
-	connected.DisconnectedPendingPollOptions = PendingPollOptions;
+	var DisconnectedPendingPollOptions = exports.DisconnectedPendingPollOptions = PendingPollOptions;
 	
-	module.exports = connected;
+	exports.default = connected;
 
 /***/ },
 /* 741 */
@@ -92229,27 +92526,42 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.DisconnectedSaveOrReset = undefined;
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
-	var _React$PropTypes = React.PropTypes;
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _createAPollValidation = __webpack_require__(742);
+	
+	var _createAPollValidation2 = _interopRequireDefault(_createAPollValidation);
+	
+	var _createNewPoll = __webpack_require__(407);
+	
+	var _apiCalls = __webpack_require__(808);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var string = _React$PropTypes.string;
 	var func = _React$PropTypes.func;
 	var array = _React$PropTypes.array;
 	var object = _React$PropTypes.object;
 	
-	var validateCreateAPollInput = __webpack_require__(742);
 	
-	var SaveOrReset = React.createClass({
+	var SaveOrReset = _react2.default.createClass({
 	  displayName: 'SaveOrReset',
 	
 	  propTypes: {
 	    newPollTitle: string,
-	    resetNewPoll: func,
 	    newPollOptions: array,
-	    submitNewPoll: func.isRequired,
+	    dispatchResetNewPoll: func,
+	    dispatchSubmitNewPoll: func.isRequired,
 	    user: object.isRequired
 	  },
 	  getInitialState: function getInitialState() {
@@ -92263,7 +92575,7 @@
 	      newPollOptions: this.props.newPollOptions
 	    };
 	
-	    var _validateCreateAPollI = validateCreateAPollInput(inputData);
+	    var _validateCreateAPollI = (0, _createAPollValidation2.default)(inputData);
 	
 	    var errors = _validateCreateAPollI.errors;
 	    var isValid = _validateCreateAPollI.isValid;
@@ -92280,7 +92592,7 @@
 	        options: this.props.newPollOptions,
 	        owner: this.props.user.username
 	      };
-	      this.props.submitNewPoll(newPoll).then(function (response) {
+	      this.props.dispatchSubmitNewPoll(newPoll).then(function (response) {
 	        console.log('Success!!:', response);
 	      }).catch(function (err) {
 	        console.error('Poll could not be saved', err);
@@ -92288,13 +92600,13 @@
 	    }
 	  },
 	  resetButtonHandler: function resetButtonHandler() {
-	    this.props.resetNewPoll(true);
+	    this.props.dispatchResetNewPoll();
 	  },
 	  render: function render() {
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      { className: 'text-center' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'button',
 	        {
 	          className: 'btn btn-primary save-reset-buttons',
@@ -92302,7 +92614,7 @@
 	        },
 	        'Save'
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'button',
 	        {
 	          className: 'btn save-reset-buttons reset-poll-button',
@@ -92314,11 +92626,30 @@
 	  }
 	});
 	
-	var connected = connector(SaveOrReset);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    newPollTitle: state.newPollTitle,
+	    newPollOptions: state.newPollOptions,
+	    user: state.user
+	  };
+	};
 	
-	connected.DisconnectedSaveOrReset = SaveOrReset;
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchResetNewPoll: function dispatchResetNewPoll() {
+	      dispatch((0, _createNewPoll.resetNewPoll)());
+	    },
+	    dispatchSubmitNewPoll: function dispatchSubmitNewPoll(newPoll) {
+	      dispatch((0, _apiCalls.submitNewPoll)(newPoll));
+	    }
+	  };
+	};
 	
-	module.exports = connected;
+	var connected = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SaveOrReset);
+	
+	var DisconnectedSaveOrReset = exports.DisconnectedSaveOrReset = SaveOrReset;
+	
+	exports.default = connected;
 
 /***/ },
 /* 742 */
@@ -92326,29 +92657,40 @@
 
 	'use strict';
 	
-	var Validator = __webpack_require__(743);
-	var isEmpty = __webpack_require__(629);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _validator = __webpack_require__(743);
+	
+	var _validator2 = _interopRequireDefault(_validator);
+	
+	var _isEmpty = __webpack_require__(629);
+	
+	var _isEmpty2 = _interopRequireDefault(_isEmpty);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function validateCreateAPollInput(data) {
 	  var errors = {};
 	
-	  if (Validator.isEmpty(data.newPollTitle)) {
+	  if (_validator2.default.isEmpty(data.newPollTitle)) {
 	    errors.newPollTitle = 'A title is required';
 	  }
 	
 	  data.newPollOptions.map(function (option) {
-	    if (Validator.isEmpty(option)) {
+	    if (_validator2.default.isEmpty(option)) {
 	      errors.newPollOptions = 'Blank options are not allowed';
 	    }
 	  });
 	
 	  return {
 	    errors: errors,
-	    isValid: isEmpty(errors)
+	    isValid: (0, _isEmpty2.default)(errors)
 	  };
 	}
 	
-	module.exports = validateCreateAPollInput;
+	exports.default = validateCreateAPollInput;
 
 /***/ },
 /* 743 */
@@ -95108,34 +95450,90 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 808 */,
+/* 808 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.submitNewPoll = submitNewPoll;
+	exports.getUserPolls = getUserPolls;
+	exports.getAllPolls = getAllPolls;
+	exports.submitVote = submitVote;
+	exports.userSignupRequest = userSignupRequest;
+	exports.isUserExists = isUserExists;
+	
+	var _axios = __webpack_require__(409);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function submitNewPoll(newPoll) {
+	  return _axios2.default.post('/api/polls', newPoll);
+	}
+	function getUserPolls(user) {
+	  return _axios2.default.get('/api/polls/' + user);
+	}
+	function getAllPolls() {
+	  return _axios2.default.get('/api/polls');
+	}
+	function submitVote(id, vote) {
+	  return _axios2.default.put('/api/polls/' + id, vote);
+	}
+	function userSignupRequest(userData) {
+	  return _axios2.default.post('/api/users', userData);
+	}
+	function isUserExists(identifier) {
+	  return _axios2.default.get('/api/users/' + identifier);
+	}
+
+/***/ },
 /* 809 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _signupValidation = __webpack_require__(810);
+	
+	var _signupValidation2 = _interopRequireDefault(_signupValidation);
+	
+	var _TextFieldGroup = __webpack_require__(811);
+	
+	var _TextFieldGroup2 = _interopRequireDefault(_TextFieldGroup);
+	
+	var _apiCalls = __webpack_require__(808);
+	
+	var _flashMessage = __webpack_require__(238);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	
-	var validateInput = __webpack_require__(810);
-	var TextFieldGroup = __webpack_require__(811);
-	var _React$PropTypes = React.PropTypes;
+	var _React$PropTypes = _react2.default.PropTypes;
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
 	
 	
-	var Signup = React.createClass({
+	var Signup = _react2.default.createClass({
 	  displayName: 'Signup',
 	
 	  propTypes: {
-	    userSignupRequest: func.isRequired,
-	    addFlashMessage: func.isRequired,
-	    isUserExists: func.isRequired
+	    dispatchUserSignupRequest: func.isRequired,
+	    dispatchAddFlashMessage: func.isRequired,
+	    dispatchIsUserExists: func.isRequired
 	  },
 	
 	  getInitialState: function getInitialState() {
@@ -95159,7 +95557,7 @@
 	    this.setState(_defineProperty({}, event.target.name, event.target.value));
 	  },
 	  isValid: function isValid() {
-	    var _validateInput = validateInput(this.state);
+	    var _validateInput = (0, _signupValidation2.default)(this.state);
 	
 	    var errors = _validateInput.errors;
 	    var isValid = _validateInput.isValid;
@@ -95177,7 +95575,7 @@
 	    var field = event.target.name;
 	    var val = event.target.value;
 	    if (val !== '') {
-	      this.props.isUserExists(val).then(function (res) {
+	      this.props.dispatchIsUserExists(val).then(function (res) {
 	        // if a user is found, pass an error message
 	        var errors = _this.state.errors;
 	        var invalid = void 0;
@@ -95201,8 +95599,8 @@
 	    if (this.isValid()) {
 	      this.setState({ errors: {}, isLoading: true });
 	
-	      this.props.userSignupRequest(this.state).then(function (response) {
-	        _this2.props.addFlashMessage({
+	      this.props.dispatchUserSignupRequest(this.state).then(function (response) {
+	        _this2.props.dispatchAddFlashMessage({
 	          type: 'success',
 	          text: 'Signup successful!'
 	        });
@@ -95215,21 +95613,21 @@
 	  render: function render() {
 	    var errors = this.state.errors;
 	
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      { className: 'row' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'h1',
 	        { className: 'text-center' },
 	        'Sign up to make some polls!'
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'col-md-4 col-md-offset-4' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'form',
 	          { onSubmit: this.onSubmit },
-	          React.createElement(TextFieldGroup, {
+	          _react2.default.createElement(_TextFieldGroup2.default, {
 	            value: this.state.username,
 	            onChange: this.onChange,
 	            checkUserExists: this.checkUserExists,
@@ -95238,7 +95636,7 @@
 	            label: 'Username',
 	            error: errors.username
 	          }),
-	          React.createElement(TextFieldGroup, {
+	          _react2.default.createElement(_TextFieldGroup2.default, {
 	            value: this.state.email,
 	            onChange: this.onChange,
 	            checkUserExists: this.checkUserExists,
@@ -95247,7 +95645,7 @@
 	            label: 'Email',
 	            error: errors.email
 	          }),
-	          React.createElement(TextFieldGroup, {
+	          _react2.default.createElement(_TextFieldGroup2.default, {
 	            value: this.state.password,
 	            onChange: this.onChange,
 	            type: 'password',
@@ -95255,7 +95653,7 @@
 	            label: 'Password',
 	            error: errors.password
 	          }),
-	          React.createElement(TextFieldGroup, {
+	          _react2.default.createElement(_TextFieldGroup2.default, {
 	            value: this.state.passwordConfirmation,
 	            onChange: this.onChange,
 	            type: 'password',
@@ -95263,10 +95661,10 @@
 	            label: 'Confirm Password',
 	            error: errors.passwordConfirmation
 	          }),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { className: 'form-group' },
-	            React.createElement(
+	            _react2.default.createElement(
 	              'button',
 	              { disabled: this.state.isLoading || this.state.invalid, className: 'btn btn-primary btn-lg' },
 	              'Sign up'
@@ -95282,7 +95680,21 @@
 	  router: object.isRequired
 	};
 	
-	module.exports = connector(Signup);
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchUserSignupRequest: function dispatchUserSignupRequest(state) {
+	      dispatch((0, _apiCalls.userSignupRequest)(state));
+	    },
+	    dispatchAddFlashMessage: function dispatchAddFlashMessage(messageObj) {
+	      dispatch((0, _flashMessage.addFlashMessage)(messageObj));
+	    },
+	    dispatchIsUserExists: function dispatchIsUserExists(val) {
+	      dispatch((0, _apiCalls.isUserExists)(val));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapDispatchToProps)(Signup);
 
 /***/ },
 /* 810 */
@@ -95340,9 +95752,21 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
-	var classnames = __webpack_require__(712);
-	var _React$PropTypes = React.PropTypes;
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _classnames = __webpack_require__(712);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var string = _React$PropTypes.string;
 	var func = _React$PropTypes.func;
 	
@@ -95356,15 +95780,15 @@
 	  var onChange = _ref.onChange;
 	  var checkUserExists = _ref.checkUserExists;
 	
-	  return React.createElement(
+	  return _react2.default.createElement(
 	    'div',
-	    { className: classnames('form-group', { 'has-error': error }) },
-	    React.createElement(
+	    { className: (0, _classnames2.default)('form-group', { 'has-error': error }) },
+	    _react2.default.createElement(
 	      'label',
 	      { className: 'control-label' },
 	      label
 	    ),
-	    React.createElement('input', {
+	    _react2.default.createElement('input', {
 	      value: value,
 	      onChange: onChange,
 	      onBlur: checkUserExists,
@@ -95372,7 +95796,7 @@
 	      name: field,
 	      className: 'form-control'
 	    }),
-	    error && React.createElement(
+	    error && _react2.default.createElement(
 	      'span',
 	      { className: 'help-block' },
 	      error
@@ -95394,7 +95818,7 @@
 	  type: 'text'
 	};
 	
-	module.exports = TextFieldGroup;
+	exports.default = TextFieldGroup;
 
 /***/ },
 /* 812 */
@@ -95402,25 +95826,33 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
-	var LoginForm = __webpack_require__(813);
-	
-	var LoginPage = React.createClass({
-	  displayName: 'LoginPage',
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'row' },
-	      React.createElement(
-	        'div',
-	        { className: 'col-md-4 col-md-offset-4' },
-	        React.createElement(LoginForm, null)
-	      )
-	    );
-	  }
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
 	});
 	
-	module.exports = LoginPage;
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _LoginForm = __webpack_require__(813);
+	
+	var _LoginForm2 = _interopRequireDefault(_LoginForm);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var LoginPage = function LoginPage() {
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'row' },
+	    _react2.default.createElement(
+	      'div',
+	      { className: 'col-md-4 col-md-offset-4' },
+	      _react2.default.createElement(_LoginForm2.default, null)
+	    )
+	  );
+	};
+	
+	exports.default = LoginPage;
 
 /***/ },
 /* 813 */
@@ -95428,26 +95860,40 @@
 
 	'use strict';
 	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(641);
+	
+	var _TextFieldGroup = __webpack_require__(811);
+	
+	var _TextFieldGroup2 = _interopRequireDefault(_TextFieldGroup);
+	
+	var _loginValidation = __webpack_require__(814);
+	
+	var _loginValidation2 = _interopRequireDefault(_loginValidation);
+	
+	var _auth = __webpack_require__(408);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
-	var React = __webpack_require__(1);
-	
-	var _require = __webpack_require__(236);
-	
-	var connector = _require.connector;
-	
-	var TextFieldGroup = __webpack_require__(811);
-	var validateInput = __webpack_require__(814);
-	var _React$PropTypes = React.PropTypes;
+	var _React$PropTypes = _react2.default.PropTypes;
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
 	
 	
-	var LoginForm = React.createClass({
+	var LoginForm = _react2.default.createClass({
 	  displayName: 'LoginForm',
 	
 	  propTypes: {
-	    login: func.isRequired
+	    dispatchLogin: func.isRequired
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
@@ -95458,7 +95904,7 @@
 	    };
 	  },
 	  isValid: function isValid() {
-	    var _validateInput = validateInput(this.state);
+	    var _validateInput = (0, _loginValidation2.default)(this.state);
 	
 	    var errors = _validateInput.errors;
 	    var isValid = _validateInput.isValid;
@@ -95477,7 +95923,7 @@
 	
 	    if (this.isValid()) {
 	      this.setState({ errors: {}, isLoading: true });
-	      this.props.login(this.state).then(function (response) {
+	      this.props.dispatchLogin(this.state).then(function (response) {
 	        _this.setState({ isLoading: false });
 	        console.log('logged in!', response);
 	        _this.context.router.push('/');
@@ -95500,27 +95946,27 @@
 	    var password = _state.password;
 	    var isLoading = _state.isLoading;
 	
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'form',
 	      { onSubmit: this.onSubmit },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'h1',
 	        null,
 	        'Login'
 	      ),
-	      errors.form && React.createElement(
+	      errors.form && _react2.default.createElement(
 	        'div',
 	        { className: 'alert alert-danger' },
 	        errors.form
 	      ),
-	      React.createElement(TextFieldGroup, {
+	      _react2.default.createElement(_TextFieldGroup2.default, {
 	        field: 'identifier',
 	        label: 'Username / Email',
 	        value: identifier,
 	        error: errors.identifier,
 	        onChange: this.onChange
 	      }),
-	      React.createElement(TextFieldGroup, {
+	      _react2.default.createElement(_TextFieldGroup2.default, {
 	        field: 'password',
 	        label: 'Password',
 	        value: password,
@@ -95528,10 +95974,10 @@
 	        onChange: this.onChange,
 	        type: 'password'
 	      }),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'form-group' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'button',
 	          { className: 'button btn btn-primary btn-lg', disabled: isLoading },
 	          'Login'
@@ -95545,7 +95991,19 @@
 	  router: object.isRequired
 	};
 	
-	module.exports = connector(LoginForm);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return;
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchLogin: function dispatchLogin(credentials) {
+	      dispatch((0, _auth.login)(credentials));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LoginForm);
 
 /***/ },
 /* 814 */
@@ -95581,23 +96039,34 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
-	var _require = __webpack_require__(236);
+	var _react = __webpack_require__(1);
 	
-	var connector = _require.connector;
+	var _react2 = _interopRequireDefault(_react);
 	
-	var isEmpty = __webpack_require__(629);
-	var _React$PropTypes = React.PropTypes;
+	var _reactRedux = __webpack_require__(641);
+	
+	var _isEmpty = __webpack_require__(629);
+	
+	var _isEmpty2 = _interopRequireDefault(_isEmpty);
+	
+	var _apiCalls = __webpack_require__(808);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
 	
 	
-	var MyPollsPage = React.createClass({
+	var MyPollsPage = _react2.default.createClass({
 	  displayName: 'MyPollsPage',
 	
 	  propTypes: {
-	    getUserPolls: func,
+	    dispatchGetUserPolls: func,
 	    user: object
 	  },
 	  getInitialState: function getInitialState() {
@@ -95610,8 +96079,8 @@
 	
 	    var username = this.props.user.username;
 	
-	    if (username && isEmpty(this.state.myPolls)) {
-	      this.props.getUserPolls(username).then(function (res) {
+	    if (username && (0, _isEmpty2.default)(this.state.myPolls)) {
+	      this.props.dispatchGetUserPolls(username).then(function (res) {
 	        if (res.data.length > 0) {
 	          _this.setState({ myPolls: res.data });
 	        } else {
@@ -95622,13 +96091,13 @@
 	  },
 	  render: function render() {
 	    this.getMyPolls();
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      null,
-	      React.createElement(
+	      _react2.default.createElement(
 	        'pre',
 	        null,
-	        React.createElement(
+	        _react2.default.createElement(
 	          'code',
 	          null,
 	          JSON.stringify(this.state.myPolls, null, 4)
@@ -95638,7 +96107,21 @@
 	  }
 	});
 	
-	module.exports = connector(MyPollsPage);
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    user: state.user
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchGetUserPolls: function dispatchGetUserPolls(username) {
+	      dispatch((0, _apiCalls.getUserPolls)(username));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MyPollsPage);
 
 /***/ },
 /* 816 */

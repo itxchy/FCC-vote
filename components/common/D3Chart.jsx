@@ -1,7 +1,7 @@
-const React = require('react')
+import React from 'react'
 const { string, array } = React.PropTypes
-const d3 = require('d3')
-const ReactFauxDom = require('react-faux-dom')
+import d3 from 'd3'
+import ReactFauxDom from 'react-faux-dom'
 
 const D3Chart = React.createClass({
   propTypes: {
@@ -50,4 +50,4 @@ const D3Chart = React.createClass({
   }
 })
 
-module.exports = D3Chart
+export default D3Chart

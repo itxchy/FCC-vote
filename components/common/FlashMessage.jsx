@@ -1,16 +1,17 @@
-const React = require('react')
-const { connector } = require('../../redux/Store')
-const classnames = require('classnames')
+import React from 'react'
+import { connect } from 'react-redux'
+import classnames from 'classnames'
+import { deleteFlashMessage } from '../../redux/modules/flashMessage'
 const { object, func } = React.PropTypes
 
 const FlashMessage = React.createClass({
   propTypes: {
     message: object.isRequired,
-    deleteFlashMessage: func.isRequired
+    dispatchDeleteFlashMessage: func.isRequired
   },
 
   onClick () {
-    this.props.deleteFlashMessage(this.props.message.id)
+    this.props.dispatchDeleteFlashMessage(this.props.message.id)
   },
   render () {
     const { messageType, messageText } = this.props.message
@@ -26,4 +27,12 @@ const FlashMessage = React.createClass({
   }
 })
 
-module.exports = connector(FlashMessage)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchDeleteFlashMessage (id) {
+      dispatch(deleteFlashMessage(id))
+    }
+  }
+}
+
+export default connect(mapDispatchToProps)(FlashMessage)

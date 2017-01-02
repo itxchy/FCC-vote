@@ -1,6 +1,6 @@
-const React = require('react')
-const { connector } = require('../../redux/Store')
-const FlashMessage = require('./FlashMessage')
+import React from 'react'
+import { connect } from 'react-redux'
+import FlashMessage from './FlashMessage'
 const { array } = React.PropTypes
 
 const FlashMessagesList = React.createClass({
@@ -19,4 +19,10 @@ const FlashMessagesList = React.createClass({
   }
 })
 
-module.exports = connector(FlashMessagesList)
+const mapStateToProps = (state) => {
+  return {
+    flashMessages: state.flashMessages
+  }
+}
+
+export default connect(mapStateToProps)(FlashMessagesList)

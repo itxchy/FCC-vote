@@ -1,5 +1,5 @@
-const Validator = require('validator')
-const isEmpty = require('lodash/isEmpty')
+import Validator from 'validator'
+import isEmpty from 'lodash/isEmpty'
 
 function validateCreateAPollInput (data) {
   let errors = {}
@@ -20,4 +20,4 @@ function validateCreateAPollInput (data) {
   }
 }
 
-module.exports = validateCreateAPollInput
+export default validateCreateAPollInput

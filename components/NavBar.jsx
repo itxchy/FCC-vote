@@ -1,7 +1,8 @@
-const React = require('react')
-const { connector } = require('../redux/Store')
+import React from 'react'
+import { connect } from 'react-redux'
 const { object, bool, func } = React.PropTypes
-const { Link } = require('react-router')
+import { Link } from 'react-router'
+import { logout } from '../redux/modules/auth'
 
 const NavBar = React.createClass({
   propTypes: {
@@ -65,4 +66,19 @@ const NavBar = React.createClass({
   }
 })
 
-module.exports = connector(NavBar)
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+    isAuthenticated: state.isAuthenticated
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchLogout () {
+      dispatch(logout())
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar)

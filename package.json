@@ -5,12 +5,12 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "tdd": "jest --watch",
+    "tdd": "NODE_ENV=test jest --watch",
     "coverage": "jest --coverage",
     "lint": "eslint 'server.js' webpack.config.js 'server/**' 'routes/**' 'auth/**'; exit 0",
     "build": "webpack",
     "watch": "webpack --watch",
-    "server": "nodemon server.js",
+    "server": "NODE_ENV=server nodemon server.js",
     "remotedev": "remotedev --hostname=localhost --port=8000",
     "mongo": "mongod --port 27017 --dbpath=./data",
     "all": "xfce4-terminal -H -e \"npm run remotedev\" & xfce4-terminal -H -e \"npm run tdd\" & xfce4-terminal -H -e \"npm run server\" & xfce4-terminal -H -e \"npm run watch\" & xfce4-terminal -H -e \"mongod --port 27017 --dbpath=./data\""
@@ -56,6 +56,7 @@
   },
   "dependencies": {
     "axios": "^0.15.2",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.18.0",
     "bcrypt": "^0.8.7",
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",

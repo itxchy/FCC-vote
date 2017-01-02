@@ -1,14 +1,15 @@
-const React = require('react')
-const { connector } = require('../redux/Store')
-const PollCard = require('./common/PollCard')
-const ResultsCard = require('./common/ResultsCard')
+import React from 'react'
+import { connect } from 'react-redux'
+import PollCard from './common/PollCard'
+import ResultsCard from './common/ResultsCard'
+import { getAllPolls } from '../redux/apiCalls'
 const { func, object } = React.PropTypes
-const { dupeVoterCheck } = require('../routes/lib/pollsLib')
-const isEmpty = require('lodash/isEmpty')
+import { dupeVoterCheck } from '../routes/lib/pollsLib'
+import isEmpty from 'lodash/isEmpty'
 
 const Home = React.createClass({
   propTypes: {
-    getAllPolls: func,
+    dispatchGetAllPolls: func,
     user: object
   },
   getInitialState () {
@@ -18,7 +19,7 @@ const Home = React.createClass({
   },
   getRecentPolls () {
     if (this.state.allPolls === null) {
-      this.props.getAllPolls()
+      this.props.dispatchGetAllPolls()
       .then(res => {
         if (res.data.length > 0) {
           this.setState({ allPolls: res.data })
@@ -92,4 +93,18 @@ const Home = React.createClass({
   }
 })
 
-module.exports = connector(Home)
+const mapStateToProps = (state) => {
+  return {
+    user: state.user
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchGetAllPolls () {
+      dispatch(getAllPolls())
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

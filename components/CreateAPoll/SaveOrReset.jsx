@@ -1,14 +1,16 @@
-const React = require('react')
-const { connector } = require('../../redux/Store')
+import React from 'react'
+import { connect } from 'react-redux'
 const { string, func, array, object } = React.PropTypes
-const validateCreateAPollInput = require('../../routes/shared/createAPollValidation')
+import validateCreateAPollInput from '../../routes/shared/createAPollValidation'
+import { resetNewPoll } from '../../redux/modules/createNewPoll'
+import { submitNewPoll } from '../../redux/apiCalls.js'
 
 const SaveOrReset = React.createClass({
   propTypes: {
     newPollTitle: string,
-    resetNewPoll: func,
     newPollOptions: array,
-    submitNewPoll: func.isRequired,
+    dispatchResetNewPoll: func,
+    dispatchSubmitNewPoll: func.isRequired,
     user: object.isRequired
   },
   getInitialState () {
@@ -34,7 +36,7 @@ const SaveOrReset = React.createClass({
         options: this.props.newPollOptions,
         owner: this.props.user.username
       }
-      this.props.submitNewPoll(newPoll)
+      this.props.dispatchSubmitNewPoll(newPoll)
         .then(response => {
           console.log('Success!!:', response)
         })
@@ -44,7 +46,7 @@ const SaveOrReset = React.createClass({
     }
   },
   resetButtonHandler () {
-    this.props.resetNewPoll(true)
+    this.props.dispatchResetNewPoll()
   },
   render () {
     return (
@@ -66,8 +68,27 @@ const SaveOrReset = React.createClass({
   }
 })
 
-let connected = connector(SaveOrReset)
+const mapStateToProps = (state) => {
+  return {
+    newPollTitle: state.newPollTitle,
+    newPollOptions: state.newPollOptions,
+    user: state.user
+  }
+}
 
-connected.DisconnectedSaveOrReset = SaveOrReset
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchResetNewPoll () {
+      dispatch(resetNewPoll())
+    },
+    dispatchSubmitNewPoll (newPoll) {
+      dispatch(submitNewPoll(newPoll))
+    }
+  }
+}
 
-module.exports = connected
+let connected = connect(mapStateToProps, mapDispatchToProps)(SaveOrReset)
+
+export const DisconnectedSaveOrReset = SaveOrReset
+
+export default connected

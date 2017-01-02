@@ -1,5 +1,5 @@
-const React = require('react')
-const classnames = require('classnames')
+import React from 'react'
+import classnames from 'classnames'
 const { string, func } = React.PropTypes
 
 const TextFieldGroup = ({field, value, label, error, type, onChange, checkUserExists}) => {
@@ -37,4 +37,4 @@ TextFieldGroup.defaultProps = {
   type: 'text'
 }
 
-module.exports = TextFieldGroup
+export default TextFieldGroup
