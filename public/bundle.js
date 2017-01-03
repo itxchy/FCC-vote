@@ -27156,8 +27156,6 @@
 	exports.store = undefined;
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-	// import { composeWithDevTools } from 'remote-redux-devtools'
-	
 	
 	var _redux = __webpack_require__(237);
 	
@@ -27170,12 +27168,6 @@
 	var _rootReducer2 = _interopRequireDefault(_rootReducer);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	// const composeEnhancers = composeWithDevTools({ realtime: true, port: 8000 })
-	// const store = createStore(rootReducer, composeEnhancers(
-	//     applyMiddleware(thunk)
-	//   )
-	// )
 	
 	var store = exports.store = (0, _redux.createStore)(_rootReducer2.default, (0, _redux.compose)((0, _redux.applyMiddleware)(_reduxThunk2.default), (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' && typeof window.devToolsExtension !== 'undefined' ? window.devToolsExtension() : function (f) {
 	    return f;
@@ -33742,11 +33734,13 @@
 	exports.updateOption = updateOption;
 	exports.resetNewPoll = resetNewPoll;
 	exports.default = newPoll;
+	// Actions
 	var SET_NEW_POLL_TITLE = exports.SET_NEW_POLL_TITLE = 'setNewPollTitle';
 	var SET_TITLE_EDITABLE = exports.SET_TITLE_EDITABLE = 'setTitleEditable';
 	var UPDATE_OPTION = exports.UPDATE_OPTION = 'updateOption';
 	var RESET_NEW_POLL = exports.RESET_NEW_POLL = 'resetNewPoll';
 	
+	// Action Creators
 	function setNewPollTitle(pollTitle) {
 	  return { type: SET_NEW_POLL_TITLE, value: pollTitle };
 	}
@@ -33760,6 +33754,7 @@
 	  return { type: RESET_NEW_POLL };
 	}
 	
+	// Reducers
 	var reduceNewPollTitle = exports.reduceNewPollTitle = function reduceNewPollTitle(state, action) {
 	  var newState = {};
 	  Object.assign(newState, state, { newPollTitle: action.value });
@@ -33786,10 +33781,7 @@
 	  return newState;
 	};
 	
-	/**
-	 * Slice Reducer style
-	 */
-	
+	// Reducer Slice
 	function newPoll() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	  var action = arguments[1];
@@ -33840,10 +33832,12 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	// Action
 	/* global localStorage */
 	
 	var SET_CURRENT_USER = exports.SET_CURRENT_USER = 'setCurrentUser';
 	
+	// Action Creators
 	function login(data) {
 	  return _axios2.default.post('/api/auth', data).then(function (res) {
 	    var token = res.data.token;
@@ -33859,6 +33853,7 @@
 	  return { type: SET_CURRENT_USER, user: {} };
 	}
 	
+	// Reducer
 	var reduceSetCurrentUser = exports.reduceSetCurrentUser = function reduceSetCurrentUser(state, action) {
 	  var newState = {};
 	  console.log('action.user', action.user);
@@ -33873,6 +33868,7 @@
 	  return newState;
 	};
 	
+	// Reducer Slice
 	function user() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	  var action = arguments[1];
@@ -90712,22 +90708,27 @@
 	});
 	exports.loading = loading;
 	exports.default = isLoading;
+	// Action
 	var IS_LOADING = exports.IS_LOADING = 'IS_LOADING';
 	
+	// Action Creator
 	function loading(bool) {
 	  return { type: IS_LOADING, isLoading: bool };
 	}
 	
+	// Reducer
 	var reduceIsLoading = function reduceIsLoading(state, action) {
 	  var newState = {};
 	  Object.assign(newState, state, { isLoading: action.isLoading });
 	  return newState;
 	};
 	
+	// State Slice
 	var defaultState = {
 	  isLoading: false
 	};
 	
+	// Reducer Slice
 	function isLoading() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
 	  var action = arguments[1];

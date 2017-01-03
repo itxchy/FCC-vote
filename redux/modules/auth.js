@@ -5,8 +5,10 @@ import jwt from 'jsonwebtoken'
 import setAuthorizationToken from '../../auth/setAuthorizationToken'
 import isEmpty from 'lodash/isEmpty'
 
+// Action
 export const SET_CURRENT_USER = 'setCurrentUser'
 
+// Action Creators
 export function login (data) {
   return axios.post('/api/auth', data).then(res => {
     const token = res.data.token
@@ -22,6 +24,7 @@ export function logout () {
   return { type: SET_CURRENT_USER, user: {} }
 }
 
+// Reducer
 export const reduceSetCurrentUser = (state, action) => {
   const newState = {}
   console.log('action.user', action.user)
@@ -36,6 +39,7 @@ export const reduceSetCurrentUser = (state, action) => {
   return newState
 }
 
+// Reducer Slice
 export default function user (state = {}, action) {
   switch (action.type) {
     case SET_CURRENT_USER:

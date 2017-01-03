@@ -1,8 +1,10 @@
+// Actions
 export const SET_NEW_POLL_TITLE = 'setNewPollTitle'
 export const SET_TITLE_EDITABLE = 'setTitleEditable'
 export const UPDATE_OPTION = 'updateOption'
 export const RESET_NEW_POLL = 'resetNewPoll'
 
+// Action Creators
 export function setNewPollTitle (pollTitle) {
   return { type: SET_NEW_POLL_TITLE, value: pollTitle }
 }
@@ -16,6 +18,7 @@ export function resetNewPoll () {
   return { type: RESET_NEW_POLL }
 }
 
+// Reducers
 export const reduceNewPollTitle = (state, action) => {
   const newState = {}
   Object.assign(newState, state, {newPollTitle: action.value})
@@ -45,10 +48,7 @@ export const reduceResetNewPoll = (state, action) => {
   return newState
 }
 
-/**
- * Slice Reducer style
- */
-
+// Reducer Slice
 export default function newPoll (state = {}, action) {
   switch (action.type) {
     case SET_NEW_POLL_TITLE:
