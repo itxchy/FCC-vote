@@ -28272,49 +28272,18 @@
 	
 	var _getAllPolls2 = _interopRequireDefault(_getAllPolls);
 	
+	var _isLoading = __webpack_require__(776);
+	
+	var _isLoading2 = _interopRequireDefault(_isLoading);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	// const initialState = {
-	//   newPollTitle: '',
-	//   titleEditable: true,
-	//   newPollOptions: [
-	//     '',
-	//     ''
-	//   ],
-	//   flashMessages: [],
-	//   isAuthenticated: false,
-	//   user: {},
-	//   allPolls: null
-	// }
-	
-	// const rootReducer = (state = initialState, action) => {
-	//   switch (action.type) {
-	//     case ALL_POLLS_DATA:
-	//       return reduceAllPollsData(state, action)
-	//     case SET_NEW_POLL_TITLE:
-	//       return reduceNewPollTitle(state, action)
-	//     case SET_TITLE_EDITABLE:
-	//       return reduceTitleEditableState(state, action)
-	//     case UPDATE_OPTION:
-	//       return reduceOptionUpdate(state, action)
-	//     case RESET_NEW_POLL:
-	//       return reduceResetNewPoll(state, action)
-	//     case ADD_FLASH_MESSAGE:
-	//       return reduceAddFlashMessage(state, action)
-	//     case DELETE_FLASH_MESSAGE:
-	//       return reduceDeleteFlashMessage(state, action)
-	//     case SET_CURRENT_USER:
-	//       return reduceSetCurrentUser(state, action)
-	//     default:
-	//       return state
-	//   }
-	// }
 	
 	exports.default = (0, _redux.combineReducers)({
 	  flashMessages: _flashMessage2.default,
 	  newPoll: _createNewPoll2.default,
 	  user: _auth2.default,
-	  allPolls: _getAllPolls2.default
+	  allPolls: _getAllPolls2.default,
+	  isLoading: _isLoading2.default
 	});
 
 /***/ },
@@ -90459,6 +90428,8 @@
 	
 	var _auth = __webpack_require__(420);
 	
+	var _isLoading = __webpack_require__(776);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -90466,20 +90437,22 @@
 	var _React$PropTypes = _react2.default.PropTypes;
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
+	var bool = _React$PropTypes.bool;
 	
 	
 	var LoginForm = _react2.default.createClass({
 	  displayName: 'LoginForm',
 	
 	  propTypes: {
-	    dispatchLogin: func.isRequired
+	    dispatchLogin: func.isRequired,
+	    dispatchIsLoading: func.isRequired,
+	    isLoading: bool.isRequired
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
 	      identifier: '',
 	      password: '',
-	      errors: '',
-	      isLoading: false
+	      errors: ''
 	    };
 	  },
 	  isValid: function isValid() {
@@ -90509,7 +90482,6 @@
 	      }).catch(function (error) {
 	        console.log('error logging in: ', error);
 	        _this.setState({
-	
 	          isLoading: false
 	        });
 	      });
@@ -90572,15 +90544,24 @@
 	
 	// TODO add blank mapStateToProps or figure out how to ommit it
 	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    isLoading: state.isLoading.isLoading
+	  };
+	};
+	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    dispatchLogin: function dispatchLogin(credentials) {
 	      dispatch((0, _auth.login)(credentials));
+	    },
+	    dispatchIsLoading: function dispatchIsLoading(bool) {
+	      dispatch((0, _isLoading.loading)(bool));
 	    }
 	  };
 	};
 	
-	exports.default = (0, _reactRedux.connect)(mapDispatchToProps)(LoginForm);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LoginForm);
 
 /***/ },
 /* 759 */
@@ -90705,6 +90686,59 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 762 */,
+/* 763 */,
+/* 764 */,
+/* 765 */,
+/* 766 */,
+/* 767 */,
+/* 768 */,
+/* 769 */,
+/* 770 */,
+/* 771 */,
+/* 772 */,
+/* 773 */,
+/* 774 */,
+/* 775 */,
+/* 776 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.loading = loading;
+	exports.default = isLoading;
+	var IS_LOADING = exports.IS_LOADING = 'IS_LOADING';
+	
+	function loading(bool) {
+	  return { type: IS_LOADING, isLoading: bool };
+	}
+	
+	var reduceIsLoading = function reduceIsLoading(state, action) {
+	  var newState = {};
+	  Object.assign(newState, state, { isLoading: action.isLoading });
+	  return newState;
+	};
+	
+	var defaultState = {
+	  isLoading: false
+	};
+	
+	function isLoading() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case IS_LOADING:
+	      return reduceIsLoading(state, action);
+	    default:
+	      return state;
+	  }
+	}
 
 /***/ }
 /******/ ]);

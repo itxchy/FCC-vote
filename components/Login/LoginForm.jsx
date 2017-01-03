@@ -2,19 +2,21 @@ import React from 'react'
 import { connect } from 'react-redux'
 import TextFieldGroup from '../common/TextFieldGroup'
 import validateInput from '../../routes/shared/loginValidation'
-const { func, object } = React.PropTypes
+const { func, object, bool } = React.PropTypes
 import { login } from '../../redux/modules/auth'
+import { loading } from '../../redux/modules/isLoading'
 
 const LoginForm = React.createClass({
   propTypes: {
-    dispatchLogin: func.isRequired
+    dispatchLogin: func.isRequired,
+    dispatchIsLoading: func.isRequired,
+    isLoading: bool.isRequired
   },
   getInitialState () {
     return {
       identifier: '',
       password: '',
-      errors: '',
-      isLoading: false
+      errors: ''
     }
   },
 
@@ -42,7 +44,6 @@ const LoginForm = React.createClass({
         .catch(error => {
           console.log('error logging in: ', error)
           this.setState({
-
             isLoading: false
           })
         })
@@ -93,12 +94,21 @@ LoginForm.contextTypes = {
 
 // TODO add blank mapStateToProps or figure out how to ommit it
 
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.isLoading.isLoading
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchLogin (credentials) {
       dispatch(login(credentials))
+    },
+    dispatchIsLoading (bool) {
+      dispatch(loading(bool))
     }
   }
 }
 
-export default connect(mapDispatchToProps)(LoginForm)
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
