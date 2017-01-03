@@ -10,6 +10,7 @@ export function submitVote (id, vote) {
   return dispatch => {
     axios.put(`/api/polls/${id}`, vote)
   }
+  // dispatch getAllPolls
 }
 export function userSignupRequest (userData) {
   return axios.post('/api/users', userData)

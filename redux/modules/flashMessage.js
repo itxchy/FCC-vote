@@ -46,3 +46,14 @@ export const reduceDeleteFlashMessage = (state, action) => {
 
   return state
 }
+
+export default function flashMessages(state = [], action) => {
+  switch (action.type) {
+    case ADD_FLASH_MESSAGE:
+      return reduceAddFlashMessage(state, action)
+    case DELETE_FLASH_MESSAGE:
+      return reduceDeleteFlashMessage(state, action)
+    default:
+      return state
+  }
+}

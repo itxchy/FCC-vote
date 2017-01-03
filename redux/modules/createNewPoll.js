@@ -44,3 +44,22 @@ export const reduceResetNewPoll = (state, action) => {
   Object.assign(newState, state, blankPollState)
   return newState
 }
+
+/**
+ * Slice Reducer style
+ */
+
+export default function newPoll(state = {}, action) {
+  switch (action.type) {
+    case SET_NEW_POLL_TITLE:
+      return reduceNewPollTitle(state, action)
+    case SET_TITLE_EDITABLE:
+      return reduceTitleEditableState(state, action)
+    case UPDATE_OPTION:
+      return reduceTitleEditableState(state, action)  
+    case RESET_NEW_POLL:
+      return reduceResetNewPoll(state, action)
+    default:
+      return state
+  }
+}

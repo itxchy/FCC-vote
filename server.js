@@ -60,7 +60,6 @@ app.use('/public', express.static('./public'))
  * If a match finds an error, a redirectLocation value, or simply
  * "misses", the relevent case gets handled.
  */
- console.log('routes():', Routes)
 app.use((req, res) => {
   match({ routes: Routes(), location: req.url }, (error, redirectLocation, renderProps) => {
     if (error) {
