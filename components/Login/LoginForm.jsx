@@ -91,9 +91,7 @@ LoginForm.contextTypes = {
   router: object.isRequired
 }
 
-const mapStateToProps = (state) => {
-  return
-}
+// TODO add blank mapStateToProps or figure out how to ommit it
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -103,4 +101,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
+export default connect(mapDispatchToProps)(LoginForm)

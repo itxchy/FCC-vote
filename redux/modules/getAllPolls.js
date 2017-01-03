@@ -24,7 +24,7 @@ export const reduceAllPollsData = (state, action) => {
   return newState
 }
 
-export default function allPolls(state = null, action) => {
+export default function allPolls (state = null, action) {
   switch (action.type) {
     case ALL_POLLS_DATA:
       return reduceAllPollsData(state, action)

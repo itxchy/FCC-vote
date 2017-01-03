@@ -36,7 +36,7 @@ export const reduceSetCurrentUser = (state, action) => {
   return newState
 }
 
-export default function user(state = {}, action) {
+export default function user (state = {}, action) {
   switch (action.type) {
     case SET_CURRENT_USER:
       return reduceSetCurrentUser(state, action)

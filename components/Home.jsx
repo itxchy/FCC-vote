@@ -19,7 +19,7 @@ const Home = React.createClass({
     }
   },
   populatedCards () {
-    return this.props.allPolls.map(poll => {
+    return this.props.allPolls.allPolls.map(poll => {
       const dupeVoter = dupeVoterCheck(poll, this.props.user.username)
       const { title, options, totalVotes, _id } = poll
       if (dupeVoter) {
@@ -65,6 +65,7 @@ const Home = React.createClass({
   render () {
     this.getRecentPolls()
     let showPolls = null
+    console.log('this.props.allPolls', this.props.allPolls)
     if (isEmpty(this.props.allPolls)) {
       showPolls = this.handleEmptyAllPollsObject()
     } else {
