@@ -13,13 +13,13 @@ export function pollsData (res) {
 export function getAllPolls () {
   return dispatch => {
     axios.get(`/api/polls`)
-    .then(res => {
-      if (res.data.length > 0) {
-        dispatch(pollsData(res.data))
-      } else {
-        dispatch(pollsData(false))
-      }
-    })
+      .then(res => {
+        if (res.data.length > 0) {
+          dispatch(pollsData(res.data))
+        } else {
+          dispatch(pollsData(false))
+        }
+      })
   }
 }
 

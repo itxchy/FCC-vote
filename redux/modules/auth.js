@@ -9,14 +9,24 @@ import isEmpty from 'lodash/isEmpty'
 export const SET_CURRENT_USER = 'setCurrentUser'
 
 // Action Creators
+export function setCurrentUser (user) {
+  return {
+    type: SET_CURRENT_USER, 
+    user
+  }
+}
+
 export function login (data) {
-  return axios.post('/api/auth', data).then(res => {
-    const token = res.data.token
-    localStorage.setItem('jwtToken', token)
-    setAuthorizationToken(token)
-    const user = jwt.decode(token)
-    return { type: SET_CURRENT_USER, user }
-  })
+  return dispatch => {
+    axios.post('/api/auth', data)
+      .then(res => {
+        const token = res.data.token
+        localStorage.setItem('jwtToken', token)
+        setAuthorizationToken(token)
+        const user = jwt.decode(token)
+        return dispatch(setCurrentUser(user))
+      })
+  }
 }
 export function logout () {
   localStorage.removeItem('jwtToken')

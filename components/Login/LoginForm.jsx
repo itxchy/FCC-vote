@@ -22,17 +22,14 @@ const LoginForm = React.createClass({
 
   isValid () {
     const { errors, isValid } = validateInput(this.state)
-
     if (!isValid) {
       this.setState({ errors })
     }
-
     return isValid
   },
 
   onSubmit (event) {
     event.preventDefault()
-
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true })
       this.props.dispatchLogin(this.state)

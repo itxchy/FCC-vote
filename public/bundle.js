@@ -33814,6 +33814,7 @@
 	  value: true
 	});
 	exports.reduceSetCurrentUser = exports.SET_CURRENT_USER = undefined;
+	exports.setCurrentUser = setCurrentUser;
 	exports.login = login;
 	exports.logout = logout;
 	exports.default = user;
@@ -33842,14 +33843,23 @@
 	var SET_CURRENT_USER = exports.SET_CURRENT_USER = 'setCurrentUser';
 	
 	// Action Creators
+	function setCurrentUser(user) {
+	  return {
+	    type: SET_CURRENT_USER,
+	    user: user
+	  };
+	}
+	
 	function login(data) {
-	  return _axios2.default.post('/api/auth', data).then(function (res) {
-	    var token = res.data.token;
-	    localStorage.setItem('jwtToken', token);
-	    (0, _setAuthorizationToken2.default)(token);
-	    var user = _jsonwebtoken2.default.decode(token);
-	    return { type: SET_CURRENT_USER, user: user };
-	  });
+	  return function (dispatch) {
+	    _axios2.default.post('/api/auth', data).then(function (res) {
+	      var token = res.data.token;
+	      localStorage.setItem('jwtToken', token);
+	      (0, _setAuthorizationToken2.default)(token);
+	      var user = _jsonwebtoken2.default.decode(token);
+	      return dispatch(setCurrentUser(user));
+	    });
+	  };
 	}
 	function logout() {
 	  localStorage.removeItem('jwtToken');
@@ -90513,18 +90523,15 @@
 	    var errors = _validateInput.errors;
 	    var isValid = _validateInput.isValid;
 	
-	
 	    if (!isValid) {
 	      this.setState({ errors: errors });
 	    }
-	
 	    return isValid;
 	  },
 	  onSubmit: function onSubmit(event) {
 	    var _this = this;
 	
 	    event.preventDefault();
-	
 	    if (this.isValid()) {
 	      this.setState({ errors: {}, isLoading: true });
 	      this.props.dispatchLogin(this.state).then(function (response) {
