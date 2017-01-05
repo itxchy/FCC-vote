@@ -39,7 +39,7 @@ export const reduceSetCurrentUser = (state, action) => {
   return newState
 }
 
-// Reducer Slice
+// Root Reducer Slice
 export default function user (state = {}, action) {
   switch (action.type) {
     case SET_CURRENT_USER:

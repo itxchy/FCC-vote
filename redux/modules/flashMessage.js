@@ -3,9 +3,11 @@ import findIndex from 'lodash/findIndex'
 import loMap from 'lodash/map'
 import clone from 'lodash/clone'
 
+// Actions
 export const ADD_FLASH_MESSAGE = 'ADD_FLASH_MESSAGE'
 export const DELETE_FLASH_MESSAGE = 'DELETE_FLASH_MESSAGE'
 
+// Action Creators
 export function addFlashMessage (message) {
   return { type: ADD_FLASH_MESSAGE, value: message }
 }
@@ -13,6 +15,7 @@ export function deleteFlashMessage (id) {
   return { type: DELETE_FLASH_MESSAGE, value: id }
 }
 
+// Reducers
 export const reduceAddFlashMessage = (state, action) => {
   const newState = {}
 
@@ -47,6 +50,7 @@ export const reduceDeleteFlashMessage = (state, action) => {
   return state
 }
 
+// Root Reducer Slice
 export default function flashMessages (state = [], action) {
   switch (action.type) {
     case ADD_FLASH_MESSAGE:

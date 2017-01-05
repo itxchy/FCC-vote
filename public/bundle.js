@@ -28312,9 +28312,11 @@
 	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
+	// Actions
 	var ADD_FLASH_MESSAGE = exports.ADD_FLASH_MESSAGE = 'ADD_FLASH_MESSAGE';
 	var DELETE_FLASH_MESSAGE = exports.DELETE_FLASH_MESSAGE = 'DELETE_FLASH_MESSAGE';
 	
+	// Action Creators
 	function addFlashMessage(message) {
 	  return { type: ADD_FLASH_MESSAGE, value: message };
 	}
@@ -28322,6 +28324,7 @@
 	  return { type: DELETE_FLASH_MESSAGE, value: id };
 	}
 	
+	// Reducers
 	var reduceAddFlashMessage = exports.reduceAddFlashMessage = function reduceAddFlashMessage(state, action) {
 	  var newState = {};
 	
@@ -28353,6 +28356,7 @@
 	  return state;
 	};
 	
+	// Root Reducer Slice
 	function flashMessages() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 	  var action = arguments[1];
@@ -33781,7 +33785,7 @@
 	  return newState;
 	};
 	
-	// Reducer Slice
+	// Root Reducer Slice
 	function newPoll() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	  var action = arguments[1];
@@ -33868,7 +33872,7 @@
 	  return newState;
 	};
 	
-	// Reducer Slice
+	// Root Reducer Slice
 	function user() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	  var action = arguments[1];
