@@ -1,9 +1,14 @@
 import axios from 'axios'
 
+// Action
 export const ALL_POLLS_DATA = 'ALL_POLLS_DATA'
 
-function pollsData (res) {
-  return { type: ALL_POLLS_DATA, allPolls: res }
+// Action Creators
+export function pollsData (res) {
+  return {
+    type: ALL_POLLS_DATA,
+    allPolls: res
+  }
 }
 export function getAllPolls () {
   return dispatch => {
@@ -18,12 +23,15 @@ export function getAllPolls () {
   }
 }
 
+// Reducer
 export const reduceAllPollsData = (state, action) => {
   const newState = {}
   Object.assign(newState, state, { allPolls: action.allPolls })
   return newState
 }
 
+
+// Root Reducer Slice
 export default function allPolls (state = null, action) {
   switch (action.type) {
     case ALL_POLLS_DATA:
