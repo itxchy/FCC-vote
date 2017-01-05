@@ -30,7 +30,6 @@ export const reduceAllPollsData = (state, action) => {
   return newState
 }
 
-
 // Root Reducer Slice
 export default function allPolls (state = null, action) {
   switch (action.type) {
