@@ -52,7 +52,7 @@ export const reduceSetCurrentUser = (state, action) => {
   const newState = {}
   console.log('action.user', action.user)
   let authenticationStatus = false
-  if (action.user && !isEmpty(action.user)) {
+  if (action.user && !action.user.errors && !isEmpty(action.user)) {
     authenticationStatus = true
   }
   Object.assign(newState, state, {
@@ -62,8 +62,14 @@ export const reduceSetCurrentUser = (state, action) => {
   return newState
 }
 
+// Pre-Mount State
+const initialState = {
+  isAuthenticated: null,
+  user: null
+}
+
 // Root Reducer Slice
-export default function user (state = {}, action) {
+export default function user (state = initialState, action) {
   switch (action.type) {
     case SET_CURRENT_USER:
       return reduceSetCurrentUser(state, action)

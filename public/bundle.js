@@ -33884,7 +33884,7 @@
 	  var newState = {};
 	  console.log('action.user', action.user);
 	  var authenticationStatus = false;
-	  if (action.user && !(0, _isEmpty2.default)(action.user)) {
+	  if (action.user && !action.user.errors && !(0, _isEmpty2.default)(action.user)) {
 	    authenticationStatus = true;
 	  }
 	  Object.assign(newState, state, {
@@ -33894,9 +33894,15 @@
 	  return newState;
 	};
 	
+	// Pre-Mount State
+	var initialState = {
+	  isAuthenticated: null,
+	  user: null
+	};
+	
 	// Root Reducer Slice
 	function user() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
 	  var action = arguments[1];
 	
 	  switch (action.type) {
