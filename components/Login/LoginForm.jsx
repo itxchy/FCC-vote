@@ -14,6 +14,8 @@ const LoginForm = React.createClass({
     return {
       identifier: '',
       password: '',
+      // TODO: make errors object explicit with null values 
+      // initially
       errors: '',
       isLoading: false
     }
@@ -27,24 +29,17 @@ const LoginForm = React.createClass({
     return isValid
   },
 
-  onLoggedIn () {
-    this.setState({ isLoading: false })
-    console.log('logged in!', this.props.user)
-    this.context.router.push('/')
-  },
-
-  onLoginError () {
-    this.setState({ isLoading: false })
-    console.log('login error!')
-  },
-
   onSubmit (event) {
     event.preventDefault()
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true })
       this.props.dispatchLogin(this.state)
+      // TODO: redirect to the home page on successful login
+      // may need react-redux-router to trigger redirect in
+      // thunk action creator after successful login
     } else {
       console.log('login credentials invalid', this.state.errors)
+      // TODO: handle invalid login credentials
     }
   },
 
