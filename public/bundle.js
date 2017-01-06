@@ -33849,26 +33849,37 @@
 	    user: user
 	  };
 	}
+	/**
+	 * Attempts to authenticate a user on the server, and then
+	 * dispatches setCurrentUser with either an authenticated
+	 * user object, or errors object depending on the login result.
+	 * 
+	 * The response from /api/auth will be:
+	 * res.data.errors
+	 * or 
+	 * res.data.token
+	 */
 	function login(data) {
 	  return function (dispatch) {
 	    _axios2.default.post('/api/auth', data).then(function (res) {
-	      console.log('redux: res.data:', res.data);
+	      // handle unsuccessful login   
 	      if (res.data.errors) {
-	        console.log('login failed!:', res.data.errors);
+	        // res.data will contain { errors: { form: 'Invalid Credentials' } }
 	        return dispatch(setCurrentUser(res.data));
 	      }
+	      // build token for successful login
 	      var token = res.data.token ? res.data.token : null;
 	      if (token) {
-	        console.log('login success! decoding token...');
 	        localStorage.setItem('jwtToken', token);
 	        (0, _setAuthorizationToken2.default)(token);
 	        var _user = _jsonwebtoken2.default.decode(token);
 	        return dispatch(setCurrentUser(_user));
 	      }
-	      console.error('no errors or token returned:', res);
+	      // handle server error
+	      console.error('no errors or token offered from \'/api/auth\' :', res);
 	      return dispatch(setCurrentUser({ errors: { server: 'no errors or token returned' } }));
 	    }).catch(function (err) {
-	      console.error('login error: ', err);
+	      console.error('caught error from \'/api/auth\' : ', err);
 	      return dispatch(setCurrentUser({ errors: { server: 'error caught, bad response' } }));
 	    });
 	  };
