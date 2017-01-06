@@ -7,7 +7,6 @@ import { logout } from '../redux/modules/auth'
 const NavBar = React.createClass({
   propTypes: {
     user: object,
-    isAuthenticated: bool,
     logout: func
   },
   getInitialState () {
@@ -23,6 +22,7 @@ const NavBar = React.createClass({
     this.setState({ isMounted: true })
   },
   render () {
+    let username = this.props.user.user ? this.props.user.user.username : null
     let showAuthenticatedNav = (
       <div className='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>
         <ul className='nav navbar-nav'>
@@ -30,7 +30,7 @@ const NavBar = React.createClass({
           <li><Link to='/create'>Create a Poll</Link></li>
         </ul>
         <ul className='nav navbar-nav navbar-right'>
-          <li><p className='navbar-text'>Welcome back, {this.props.user.username}!</p></li>
+          <li><p className='navbar-text'>Welcome back, {username}!</p></li>
           <li><a href='#' onClick={this.logout}>Logout</a></li>
         </ul>
       </div>
@@ -44,7 +44,6 @@ const NavBar = React.createClass({
         </ul>
       </div>
     )
-
     return (
       <nav className='navbar navbar-default'>
         <div className='container-fluid'>
@@ -58,7 +57,7 @@ const NavBar = React.createClass({
             <Link to='/' className='navbar-brand'>Vote.</Link>
           </div>
 
-          {this.state.isMounted && this.props.isAuthenticated ? showAuthenticatedNav : showGuestNav}
+          {this.state.isMounted && this.props.user.isAuthenticated ? showAuthenticatedNav : showGuestNav}
 
         </div>
       </nav>
@@ -68,8 +67,7 @@ const NavBar = React.createClass({
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user,
-    isAuthenticated: state.isAuthenticated
+    user: state.user
   }
 }
 

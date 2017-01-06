@@ -4,19 +4,19 @@ import TextFieldGroup from '../common/TextFieldGroup'
 import validateInput from '../../routes/shared/loginValidation'
 const { func, object, bool } = React.PropTypes
 import { login } from '../../redux/modules/auth'
-import { loading } from '../../redux/modules/isLoading'
 
 const LoginForm = React.createClass({
   propTypes: {
     dispatchLogin: func.isRequired,
     dispatchIsLoading: func.isRequired,
-    isLoading: bool.isRequired
+    user: object
   },
   getInitialState () {
     return {
       identifier: '',
       password: '',
-      errors: ''
+      errors: '',
+      isLoading: false
     }
   },
 
@@ -28,22 +28,24 @@ const LoginForm = React.createClass({
     return isValid
   },
 
+  onLoggedIn () {
+    this.setState({ isLoading: false })
+    console.log('logged in!', this.props.user)
+    this.conext.router.push('/')
+  },
+
+  onLoginError () {
+    this.setState({ isLoading: false })
+    console.log('login error!')
+  },
+
   onSubmit (event) {
     event.preventDefault()
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true })
       this.props.dispatchLogin(this.state)
-        .then(response => {
-          this.setState({ isLoading: false })
-          console.log('logged in!', response)
-          this.context.router.push('/')
-        })
-        .catch(error => {
-          console.log('error logging in: ', error)
-          this.setState({
-            isLoading: false
-          })
-        })
+    } else {
+      console.log('login credentials invalid', this.state.errors)
     }
   },
 
@@ -53,6 +55,9 @@ const LoginForm = React.createClass({
 
   render () {
     const { errors, identifier, password, isLoading } = this.state
+    if (this.props.user.isAuthenticated) {
+      this.onLoggedIn()
+    }
     return (
       <form onSubmit={this.onSubmit}>
         <h1>Login</h1>
@@ -89,11 +94,9 @@ LoginForm.contextTypes = {
   router: object.isRequired
 }
 
-// TODO add blank mapStateToProps or figure out how to ommit it
-
 const mapStateToProps = (state) => {
   return {
-    isLoading: state.isLoading.isLoading
+    user: state.user
   }
 }
 
@@ -101,9 +104,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dispatchLogin (credentials) {
       dispatch(login(credentials))
-    },
-    dispatchIsLoading (bool) {
-      dispatch(loading(bool))
     }
   }
 }

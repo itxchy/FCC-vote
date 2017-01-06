@@ -9,6 +9,6 @@ export default combineReducers({
   flashMessages,
   newPoll,
   user,
-  allPolls,
-  isLoading
+  allPolls//,
+  //isLoading
 })

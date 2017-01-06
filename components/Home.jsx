@@ -65,12 +65,10 @@ const Home = React.createClass({
   render () {
     this.getRecentPolls()
     let showPolls = null
-    console.log('this.props.allPolls', this.props.allPolls)
     if (isEmpty(this.props.allPolls)) {
       showPolls = this.handleEmptyAllPollsObject()
     } else {
       showPolls = this.populatedCards()
-      console.log('populatedCards:', showPolls)
     }
     return (
       <div>

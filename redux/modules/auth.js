@@ -11,20 +11,28 @@ export const SET_CURRENT_USER = 'setCurrentUser'
 // Action Creators
 export function setCurrentUser (user) {
   return {
-    type: SET_CURRENT_USER, 
+    type: SET_CURRENT_USER,
     user
   }
 }
-
 export function login (data) {
   return dispatch => {
     axios.post('/api/auth', data)
       .then(res => {
+        console.log('redux: login Action response:', res)
+        console.log('redux: res.errors:', res.errors)
+        if (res.errors) {
+          return dispatch(setCurrentUser(res.errors))
+        }
         const token = res.data.token
         localStorage.setItem('jwtToken', token)
         setAuthorizationToken(token)
         const user = jwt.decode(token)
         return dispatch(setCurrentUser(user))
+      })
+      .catch(err => {
+        console.log('login error: ', err)
+        return dispatch(setCurrentUser({  }))
       })
   }
 }

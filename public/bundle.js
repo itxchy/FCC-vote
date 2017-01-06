@@ -28274,8 +28274,8 @@
 	  flashMessages: _flashMessage2.default,
 	  newPoll: _createNewPoll2.default,
 	  user: _auth2.default,
-	  allPolls: _getAllPolls2.default,
-	  isLoading: _isLoading2.default
+	  allPolls: _getAllPolls2.default //,
+	  //isLoading
 	});
 
 /***/ },
@@ -33849,15 +33849,22 @@
 	    user: user
 	  };
 	}
-	
 	function login(data) {
 	  return function (dispatch) {
 	    _axios2.default.post('/api/auth', data).then(function (res) {
+	      console.log('redux: login Action response:', res);
+	      console.log('redux: res.errors:', res.errors);
+	      if (res.errors) {
+	        return dispatch(setCurrentUser(res.errors));
+	      }
 	      var token = res.data.token;
 	      localStorage.setItem('jwtToken', token);
 	      (0, _setAuthorizationToken2.default)(token);
 	      var user = _jsonwebtoken2.default.decode(token);
 	      return dispatch(setCurrentUser(user));
+	    }).catch(function (err) {
+	      console.log('login error: ', err);
+	      return dispatch(setCurrentUser({}));
 	    });
 	  };
 	}
@@ -65685,45 +65692,36 @@
 /* 643 */
 /***/ function(module, exports) {
 
-	'use strict';
+	// // Action
+	// export const IS_LOADING = 'IS_LOADING'
 	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.loading = loading;
-	exports.default = isLoading;
-	// Action
-	var IS_LOADING = exports.IS_LOADING = 'IS_LOADING';
+	// // Action Creator
+	// export function loading (bool) {
+	//   return { type: IS_LOADING, isLoading: bool }
+	// }
 	
-	// Action Creator
-	function loading(bool) {
-	  return { type: IS_LOADING, isLoading: bool };
-	}
+	// // Reducer
+	// const reduceIsLoading = (state, action) => {
+	//   const newState = {}
+	//   Object.assign(newState, state, { isLoading: action.isLoading })
+	//   return newState
+	// }
 	
-	// Reducer
-	var reduceIsLoading = function reduceIsLoading(state, action) {
-	  var newState = {};
-	  Object.assign(newState, state, { isLoading: action.isLoading });
-	  return newState;
-	};
+	// // State Slice
+	// const defaultState = {
+	//   isLoading: false
+	// }
 	
-	// State Slice
-	var defaultState = {
-	  isLoading: false
-	};
-	
-	// Reducer Slice
-	function isLoading() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
-	  var action = arguments[1];
-	
-	  switch (action.type) {
-	    case IS_LOADING:
-	      return reduceIsLoading(state, action);
-	    default:
-	      return state;
-	  }
-	}
+	// // Reducer Slice
+	// export default function isLoading (state = defaultState, action) {
+	//   switch (action.type) {
+	//     case IS_LOADING:
+	//       return reduceIsLoading(state, action)
+	//     default:
+	//       return state
+	//   }
+	// }
+	"use strict";
 
 /***/ },
 /* 644 */
@@ -66460,7 +66458,6 @@
 	
 	  propTypes: {
 	    user: object,
-	    isAuthenticated: bool,
 	    logout: func
 	  },
 	  getInitialState: function getInitialState() {
@@ -66476,6 +66473,7 @@
 	    this.setState({ isMounted: true });
 	  },
 	  render: function render() {
+	    var username = this.props.user.user ? this.props.user.user.username : null;
 	    var showAuthenticatedNav = _react2.default.createElement(
 	      'div',
 	      { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
@@ -66511,7 +66509,7 @@
 	            'p',
 	            { className: 'navbar-text' },
 	            'Welcome back, ',
-	            this.props.user.username,
+	            username,
 	            '!'
 	          )
 	        ),
@@ -66553,7 +66551,6 @@
 	        )
 	      )
 	    );
-	
 	    return _react2.default.createElement(
 	      'nav',
 	      { className: 'navbar navbar-default' },
@@ -66581,7 +66578,7 @@
 	            'Vote.'
 	          )
 	        ),
-	        this.state.isMounted && this.props.isAuthenticated ? showAuthenticatedNav : showGuestNav
+	        this.state.isMounted && this.props.user.isAuthenticated ? showAuthenticatedNav : showGuestNav
 	      )
 	    );
 	  }
@@ -66589,8 +66586,7 @@
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    user: state.user,
-	    isAuthenticated: state.isAuthenticated
+	    user: state.user
 	  };
 	};
 	
@@ -66897,12 +66893,10 @@
 	  render: function render() {
 	    this.getRecentPolls();
 	    var showPolls = null;
-	    console.log('this.props.allPolls', this.props.allPolls);
 	    if ((0, _isEmpty2.default)(this.props.allPolls)) {
 	      showPolls = this.handleEmptyAllPollsObject();
 	    } else {
 	      showPolls = this.populatedCards();
-	      console.log('populatedCards:', showPolls);
 	    }
 	    return _react2.default.createElement(
 	      'div',
@@ -90490,8 +90484,6 @@
 	
 	var _auth = __webpack_require__(420);
 	
-	var _isLoading = __webpack_require__(643);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -90508,13 +90500,14 @@
 	  propTypes: {
 	    dispatchLogin: func.isRequired,
 	    dispatchIsLoading: func.isRequired,
-	    isLoading: bool.isRequired
+	    user: object
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
 	      identifier: '',
 	      password: '',
-	      errors: ''
+	      errors: '',
+	      isLoading: false
 	    };
 	  },
 	  isValid: function isValid() {
@@ -90528,22 +90521,22 @@
 	    }
 	    return isValid;
 	  },
+	  onLoggedIn: function onLoggedIn() {
+	    this.setState({ isLoading: false });
+	    console.log('logged in!', this.props.user);
+	    this.conext.router.push('/');
+	  },
+	  onLoginError: function onLoginError() {
+	    this.setState({ isLoading: false });
+	    console.log('login error!');
+	  },
 	  onSubmit: function onSubmit(event) {
-	    var _this = this;
-	
 	    event.preventDefault();
 	    if (this.isValid()) {
 	      this.setState({ errors: {}, isLoading: true });
-	      this.props.dispatchLogin(this.state).then(function (response) {
-	        _this.setState({ isLoading: false });
-	        console.log('logged in!', response);
-	        _this.context.router.push('/');
-	      }).catch(function (error) {
-	        console.log('error logging in: ', error);
-	        _this.setState({
-	          isLoading: false
-	        });
-	      });
+	      this.props.dispatchLogin(this.state);
+	    } else {
+	      console.log('login credentials invalid', this.state.errors);
 	    }
 	  },
 	  onChange: function onChange(event) {
@@ -90556,6 +90549,9 @@
 	    var password = _state.password;
 	    var isLoading = _state.isLoading;
 	
+	    if (this.props.user.isAuthenticated) {
+	      this.onLoggedIn();
+	    }
 	    return _react2.default.createElement(
 	      'form',
 	      { onSubmit: this.onSubmit },
@@ -90601,11 +90597,9 @@
 	  router: object.isRequired
 	};
 	
-	// TODO add blank mapStateToProps or figure out how to ommit it
-	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    isLoading: state.isLoading.isLoading
+	    user: state.user
 	  };
 	};
 	
@@ -90613,9 +90607,6 @@
 	  return {
 	    dispatchLogin: function dispatchLogin(credentials) {
 	      dispatch((0, _auth.login)(credentials));
-	    },
-	    dispatchIsLoading: function dispatchIsLoading(bool) {
-	      dispatch((0, _isLoading.loading)(bool));
 	    }
 	  };
 	};
