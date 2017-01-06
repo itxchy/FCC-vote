@@ -8,7 +8,6 @@ import { login } from '../../redux/modules/auth'
 const LoginForm = React.createClass({
   propTypes: {
     dispatchLogin: func.isRequired,
-    dispatchIsLoading: func.isRequired,
     user: object
   },
   getInitialState () {
@@ -31,7 +30,7 @@ const LoginForm = React.createClass({
   onLoggedIn () {
     this.setState({ isLoading: false })
     console.log('logged in!', this.props.user)
-    this.conext.router.push('/')
+    this.context.router.push('/')
   },
 
   onLoginError () {

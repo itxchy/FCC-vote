@@ -7,7 +7,7 @@ import { logout } from '../redux/modules/auth'
 const NavBar = React.createClass({
   propTypes: {
     user: object,
-    logout: func
+    dispatchLogout: func.isRequired
   },
   getInitialState () {
     return {
@@ -16,7 +16,7 @@ const NavBar = React.createClass({
   },
   logout (event) {
     event.preventDefault()
-    this.props.logout()
+    this.props.dispatchLogout()
   },
   componentDidMount () {
     this.setState({ isMounted: true })

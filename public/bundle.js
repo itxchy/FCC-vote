@@ -66458,7 +66458,7 @@
 	
 	  propTypes: {
 	    user: object,
-	    logout: func
+	    dispatchLogout: func.isRequired
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
@@ -66467,7 +66467,7 @@
 	  },
 	  logout: function logout(event) {
 	    event.preventDefault();
-	    this.props.logout();
+	    this.props.dispatchLogout();
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.setState({ isMounted: true });
@@ -90499,7 +90499,6 @@
 	
 	  propTypes: {
 	    dispatchLogin: func.isRequired,
-	    dispatchIsLoading: func.isRequired,
 	    user: object
 	  },
 	  getInitialState: function getInitialState() {
@@ -90524,7 +90523,7 @@
 	  onLoggedIn: function onLoggedIn() {
 	    this.setState({ isLoading: false });
 	    console.log('logged in!', this.props.user);
-	    this.conext.router.push('/');
+	    this.context.router.push('/');
 	  },
 	  onLoginError: function onLoginError() {
 	    this.setState({ isLoading: false });
