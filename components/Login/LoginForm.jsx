@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import TextFieldGroup from '../common/TextFieldGroup'
 import validateInput from '../../routes/shared/loginValidation'
-const { func, object, bool } = React.PropTypes
+const { func, object } = React.PropTypes
 import { login } from '../../redux/modules/auth'
 
 const LoginForm = React.createClass({
@@ -52,11 +52,15 @@ const LoginForm = React.createClass({
     this.setState({ [event.target.name]: event.target.value })
   },
 
-  render () {
-    const { errors, identifier, password, isLoading } = this.state
+  componentWillMount () {
     if (this.props.user.isAuthenticated) {
       this.onLoggedIn()
     }
+  },
+
+  render () {
+    const { errors, identifier, password, isLoading } = this.state
+
     return (
       <form onSubmit={this.onSubmit}>
         <h1>Login</h1>

@@ -13,7 +13,7 @@
     "server": "NODE_ENV=server nodemon server.js",
     "remotedev": "remotedev --hostname=localhost --port=8000",
     "mongo": "mongod --port 27017 --dbpath=./data",
-    "all": "xfce4-terminal -H -e \"npm run remotedev\" & xfce4-terminal -H -e \"npm run tdd\" & xfce4-terminal -H -e \"npm run server\" & xfce4-terminal -H -e \"npm run watch\" & xfce4-terminal -H -e \"mongod --port 27017 --dbpath=./data\""
+    "all": "xfce4-terminal -H -e \"npm run tdd\" & xfce4-terminal -H -e \"npm run server\" & xfce4-terminal -H -e \"npm run watch\" & xfce4-terminal -H -e \"mongod --port 27017 --dbpath=./data\""
   },
   "author": "Matt Trifilo",
   "license": "ISC",

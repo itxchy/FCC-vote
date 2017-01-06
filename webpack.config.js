@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
+// const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 const validate = require('webpack-validator')
 
 const config = {
@@ -67,12 +67,12 @@ const config = {
       jQuery: 'jquery',
       'window.jQuery': 'jquery'
     })
-    ,
+/*    ,
     new BrowserSyncPlugin({
       host: 'localhost',
       port: 3000,
       server: { baseDir: [''] }
-    })
+    })*/
   ]
 }
 

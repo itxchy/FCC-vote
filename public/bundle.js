@@ -90491,7 +90491,6 @@
 	var _React$PropTypes = _react2.default.PropTypes;
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
-	var bool = _React$PropTypes.bool;
 	
 	
 	var LoginForm = _react2.default.createClass({
@@ -90541,6 +90540,11 @@
 	  onChange: function onChange(event) {
 	    this.setState(_defineProperty({}, event.target.name, event.target.value));
 	  },
+	  componentWillMount: function componentWillMount() {
+	    if (this.props.user.isAuthenticated) {
+	      this.onLoggedIn();
+	    }
+	  },
 	  render: function render() {
 	    var _state = this.state;
 	    var errors = _state.errors;
@@ -90548,9 +90552,7 @@
 	    var password = _state.password;
 	    var isLoading = _state.isLoading;
 	
-	    if (this.props.user.isAuthenticated) {
-	      this.onLoggedIn();
-	    }
+	
 	    return _react2.default.createElement(
 	      'form',
 	      { onSubmit: this.onSubmit },
