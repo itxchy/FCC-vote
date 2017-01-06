@@ -33852,19 +33852,24 @@
 	function login(data) {
 	  return function (dispatch) {
 	    _axios2.default.post('/api/auth', data).then(function (res) {
-	      console.log('redux: login Action response:', res);
-	      console.log('redux: res.errors:', res.errors);
-	      if (res.errors) {
-	        return dispatch(setCurrentUser(res.errors));
+	      console.log('redux: res.data:', res.data);
+	      if (res.data.errors) {
+	        console.log('login failed!:', res.data.errors);
+	        return dispatch(setCurrentUser(res.data));
 	      }
-	      var token = res.data.token;
-	      localStorage.setItem('jwtToken', token);
-	      (0, _setAuthorizationToken2.default)(token);
-	      var user = _jsonwebtoken2.default.decode(token);
-	      return dispatch(setCurrentUser(user));
+	      var token = res.data.token ? res.data.token : null;
+	      if (token) {
+	        console.log('login success! decoding token...');
+	        localStorage.setItem('jwtToken', token);
+	        (0, _setAuthorizationToken2.default)(token);
+	        var _user = _jsonwebtoken2.default.decode(token);
+	        return dispatch(setCurrentUser(_user));
+	      }
+	      console.error('no errors or token returned:', res);
+	      return dispatch(setCurrentUser({ errors: { server: 'no errors or token returned' } }));
 	    }).catch(function (err) {
-	      console.log('login error: ', err);
-	      return dispatch(setCurrentUser({}));
+	      console.error('login error: ', err);
+	      return dispatch(setCurrentUser({ errors: { server: 'error caught, bad response' } }));
 	    });
 	  };
 	}
@@ -90506,7 +90511,10 @@
 	      password: '',
 	      // TODO: make errors object explicit with null values 
 	      // initially
-	      errors: '',
+	      errors: {
+	        identifier: null,
+	        passwords: null
+	      },
 	      isLoading: false
 	    };
 	  },
@@ -90529,9 +90537,6 @@
 	      // TODO: redirect to the home page on successful login
 	      // may need react-redux-router to trigger redirect in
 	      // thunk action creator after successful login
-	    } else {
-	      console.log('login credentials invalid', this.state.errors);
-	      // TODO: handle invalid login credentials
 	    }
 	  },
 	  onChange: function onChange(event) {

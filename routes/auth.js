@@ -34,13 +34,13 @@ router.post('/', (req, res) => {
         return res.json({ token })
       } else {
         console.log('express: passwords do not match')
-        return res.status(401).json({
+        return res.status(202).json({
           errors: { form: 'Invalid Credentials' }
         })
       }
     } else {
       console.log('express: no user object')
-      return res.status(401).json({
+      return res.status(202).json({
         errors: { form: 'Invalid Credentials' }
       })
     }

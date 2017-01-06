@@ -19,20 +19,25 @@ export function login (data) {
   return dispatch => {
     axios.post('/api/auth', data)
       .then(res => {
-        console.log('redux: login Action response:', res)
-        console.log('redux: res.errors:', res.errors)
-        if (res.errors) {
-          return dispatch(setCurrentUser(res.errors))
+        console.log('redux: res.data:', res.data)      
+        if (res.data.errors) {
+          console.log('login failed!:', res.data.errors)
+          return dispatch(setCurrentUser(res.data))
         }
-        const token = res.data.token
-        localStorage.setItem('jwtToken', token)
-        setAuthorizationToken(token)
-        const user = jwt.decode(token)
-        return dispatch(setCurrentUser(user))
+        const token = res.data.token ? res.data.token : null
+        if (token) {
+          console.log('login success! decoding token...')
+          localStorage.setItem('jwtToken', token)
+          setAuthorizationToken(token)
+          const user = jwt.decode(token)
+          return dispatch(setCurrentUser(user))
+        }
+        console.error('no errors or token returned:', res)
+        return dispatch(setCurrentUser({ errors: { server: 'no errors or token returned' } }))
       })
       .catch(err => {
-        console.log('login error: ', err)
-        return dispatch(setCurrentUser({  }))
+        console.error('login error: ', err)
+        return dispatch(setCurrentUser({ errors: { server: 'error caught, bad response'} }))
       })
   }
 }

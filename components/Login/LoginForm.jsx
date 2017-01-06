@@ -16,7 +16,10 @@ const LoginForm = React.createClass({
       password: '',
       // TODO: make errors object explicit with null values 
       // initially
-      errors: '',
+      errors: {
+        identifier: null,
+        passwords: null
+      },
       isLoading: false
     }
   },
@@ -37,9 +40,6 @@ const LoginForm = React.createClass({
       // TODO: redirect to the home page on successful login
       // may need react-redux-router to trigger redirect in
       // thunk action creator after successful login
-    } else {
-      console.log('login credentials invalid', this.state.errors)
-      // TODO: handle invalid login credentials
     }
   },
 
