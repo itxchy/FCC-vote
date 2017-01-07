@@ -2,13 +2,17 @@ import React from 'react'
 import { connect } from 'react-redux'
 import TextFieldGroup from '../common/TextFieldGroup'
 import validateInput from '../../routes/shared/loginValidation'
-const { func, object } = React.PropTypes
+const { func, object, bool, shape } = React.PropTypes
 import { login } from '../../redux/modules/auth'
 
 const LoginForm = React.createClass({
   propTypes: {
     dispatchLogin: func.isRequired,
-    user: object
+    user: shape({
+      isAuthenticated: bool,
+      user: object,
+      userLoading: bool
+    })
   },
   getInitialState () {
     return {

@@ -90518,6 +90518,8 @@
 	var _React$PropTypes = _react2.default.PropTypes;
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
+	var bool = _React$PropTypes.bool;
+	var shape = _React$PropTypes.shape;
 	
 	
 	var LoginForm = _react2.default.createClass({
@@ -90525,7 +90527,11 @@
 	
 	  propTypes: {
 	    dispatchLogin: func.isRequired,
-	    user: object
+	    user: shape({
+	      isAuthenticated: bool,
+	      user: object,
+	      userLoading: bool
+	    })
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
