@@ -48,8 +48,17 @@ export const reduceResetNewPoll = (state, action) => {
   return newState
 }
 
+const initialState = {
+  newPollTitle: '',
+  titleEditable: true,
+  newPollOptions: [
+    '',
+    ''
+  ]
+}
+
 // Root Reducer Slice
-export default function newPoll (state = {}, action) {
+export default function newPoll (state = initialState, action) {
   switch (action.type) {
     case SET_NEW_POLL_TITLE:
       return reduceNewPollTitle(state, action)

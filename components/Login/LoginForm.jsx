@@ -51,6 +51,15 @@ const LoginForm = React.createClass({
 
   componentWillReceiveProps (nextProps) {
     console.log('NEXT PROPS:', nextProps)
+    if (nextProps.user.isAuthenticated) {
+      this.context.router.push('/')
+    }
+  },
+
+  componentWillMount () {
+    if (this.props.user.isAuthenticated) {
+      this.context.router.push('/')
+    }
   },
 
   render () {

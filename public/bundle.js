@@ -33780,9 +33780,15 @@
 	  return newState;
 	};
 	
+	var initialState = {
+	  newPollTitle: '',
+	  titleEditable: true,
+	  newPollOptions: ['', '']
+	};
+	
 	// Root Reducer Slice
 	function newPoll() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
 	  var action = arguments[1];
 	
 	  switch (action.type) {
@@ -87094,7 +87100,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var _React$PropTypes = _react2.default.PropTypes;
-	var array = _React$PropTypes.array;
+	var object = _React$PropTypes.object;
 	var func = _React$PropTypes.func;
 	
 	
@@ -87102,32 +87108,33 @@
 	  displayName: 'PendingPollOptions',
 	
 	  propTypes: {
-	    newPollOptions: array.isRequired,
+	    newPoll: object.isRequired,
 	    dispatchUpdateOption: func.isRequired
 	  },
 	  editOption: function editOption(event) {
-	    var updatedOptions = this.props.newPollOptions.slice();
+	    var updatedOptions = this.props.newPoll.newPollOptions;
 	    updatedOptions[event.target.name] = event.target.value;
 	    this.props.dispatchUpdateOption(updatedOptions);
 	  },
 	  addAnotherOption: function addAnotherOption() {
-	    var updatedNewOptions = this.props.newPollOptions.slice();
+	    console.log('addAnotherOption prop:', this.props.newPoll.newPollOptions);
+	    var updatedNewOptions = this.props.newPoll.newPollOptions;
 	    updatedNewOptions.push('');
 	    this.props.dispatchUpdateOption(updatedNewOptions);
 	  },
 	  deleteOption: function deleteOption(index) {
-	    if (this.props.newPollOptions.length === 2) {
+	    if (this.props.newPoll.newPollOptions.length === 2) {
 	      console.log('Two or more options required!');
 	      return;
 	    }
-	    var updatedDeleteOptions = this.props.newPollOptions.slice();
+	    var updatedDeleteOptions = this.props.newPoll.newPollOptions;
 	    updatedDeleteOptions.splice(index, 1);
 	    this.props.dispatchUpdateOption(updatedDeleteOptions);
 	  },
 	  render: function render() {
 	    var _this = this;
 	
-	    var options = this.props.newPollOptions.map(function (option, index) {
+	    var options = this.props.newPoll.newPollOptions.map(function (option, index) {
 	      return _react2.default.createElement(
 	        'div',
 	        { key: index },
@@ -87172,8 +87179,9 @@
 	});
 	
 	var mapStateToProps = function mapStateToProps(state) {
+	  console.log('state should contain newPollOptions', state);
 	  return {
-	    newPollOptions: state.newPollOptions
+	    newPoll: state.newPoll
 	  };
 	};
 	
@@ -87184,13 +87192,10 @@
 	    }
 	  };
 	};
-	
-	var connected = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(PendingPollOptions);
-	
 	// This exports the component itself for testing
 	var DisconnectedPendingPollOptions = exports.DisconnectedPendingPollOptions = PendingPollOptions;
 	
-	exports.default = connected;
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(PendingPollOptions);
 
 /***/ },
 /* 688 */
@@ -90570,6 +90575,14 @@
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	    console.log('NEXT PROPS:', nextProps);
+	    if (nextProps.user.isAuthenticated) {
+	      this.context.router.push('/');
+	    }
+	  },
+	  componentWillMount: function componentWillMount() {
+	    if (this.props.user.isAuthenticated) {
+	      this.context.router.push('/');
+	    }
 	  },
 	  render: function render() {
 	    var _state = this.state;
