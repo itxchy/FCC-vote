@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-const { object, bool, func } = React.PropTypes
+const { object, func } = React.PropTypes
 import { Link } from 'react-router'
 import { logout } from '../redux/modules/auth'
 

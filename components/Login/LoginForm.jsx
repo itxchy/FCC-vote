@@ -14,8 +14,6 @@ const LoginForm = React.createClass({
     return {
       identifier: '',
       password: '',
-      // TODO: make errors object explicit with null values 
-      // initially
       errors: {
         identifier: null,
         passwords: null
@@ -47,10 +45,8 @@ const LoginForm = React.createClass({
     this.setState({ [event.target.name]: event.target.value })
   },
 
-  componentWillMount () {
-    if (this.props.user.isAuthenticated) {
-      this.onLoggedIn()
-    }
+  componentWillReceiveProps (nextProps) {
+    console.log('NEXT PROPS:', nextProps)
   },
 
   render () {

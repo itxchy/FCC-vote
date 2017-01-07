@@ -28264,18 +28264,13 @@
 	
 	var _getAllPolls2 = _interopRequireDefault(_getAllPolls);
 	
-	var _isLoading = __webpack_require__(643);
-	
-	var _isLoading2 = _interopRequireDefault(_isLoading);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = (0, _redux.combineReducers)({
 	  flashMessages: _flashMessage2.default,
 	  newPoll: _createNewPoll2.default,
 	  user: _auth2.default,
-	  allPolls: _getAllPolls2.default //,
-	  //isLoading
+	  allPolls: _getAllPolls2.default
 	});
 
 /***/ },
@@ -33813,8 +33808,9 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.reduceSetCurrentUser = exports.SET_CURRENT_USER = undefined;
+	exports.reduceUserLoading = exports.reduceSetCurrentUser = exports.USER_LOADING = exports.SET_CURRENT_USER = undefined;
 	exports.setCurrentUser = setCurrentUser;
+	exports.userLoading = userLoading;
 	exports.login = login;
 	exports.logout = logout;
 	exports.default = user;
@@ -33837,10 +33833,11 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// Action
+	// Actions
 	/* global localStorage */
 	
 	var SET_CURRENT_USER = exports.SET_CURRENT_USER = 'setCurrentUser';
+	var USER_LOADING = exports.USER_LOADING = 'USER_LOADING';
 	
 	// Action Creators
 	function setCurrentUser(user) {
@@ -33849,36 +33846,29 @@
 	    user: user
 	  };
 	}
+	function userLoading(bool) {
+	  return {
+	    type: USER_LOADING,
+	    userLoading: bool
+	  };
+	}
 	/**
 	 * Attempts to authenticate a user on the server, and then
 	 * dispatches setCurrentUser with either an authenticated
 	 * user object, or errors object depending on the login result.
-	 * 
+	 *
 	 * The response from /api/auth will be:
 	 * res.data.errors
-	 * or 
+	 * or
 	 * res.data.token
 	 */
 	function login(data) {
 	  return function (dispatch) {
+	    dispatch(userLoading(true));
 	    _axios2.default.post('/api/auth', data).then(function (res) {
-	      // handle unsuccessful login   
-	      if (res.data.errors) {
-	        // res.data will contain { errors: { form: 'Invalid Credentials' } }
-	        return dispatch(setCurrentUser(res.data));
-	      }
-	      // build token for successful login
-	      var token = res.data.token ? res.data.token : null;
-	      if (token) {
-	        localStorage.setItem('jwtToken', token);
-	        (0, _setAuthorizationToken2.default)(token);
-	        var _user = _jsonwebtoken2.default.decode(token);
-	        return dispatch(setCurrentUser(_user));
-	      }
-	      // handle server error
-	      console.error('no errors or token offered from \'/api/auth\' :', res);
-	      return dispatch(setCurrentUser({ errors: { server: 'no errors or token returned' } }));
+	      return handleLoginResponse(res, dispatch);
 	    }).catch(function (err) {
+	      dispatch(userLoading(false));
 	      console.error('caught error from \'/api/auth\' : ', err);
 	      return dispatch(setCurrentUser({ errors: { server: 'error caught, bad response' } }));
 	    });
@@ -33890,7 +33880,7 @@
 	  return { type: SET_CURRENT_USER, user: {} };
 	}
 	
-	// Reducer
+	// Reducers
 	var reduceSetCurrentUser = exports.reduceSetCurrentUser = function reduceSetCurrentUser(state, action) {
 	  var newState = {};
 	  console.log('action.user', action.user);
@@ -33905,10 +33895,18 @@
 	  return newState;
 	};
 	
+	var reduceUserLoading = exports.reduceUserLoading = function reduceUserLoading(state, action) {
+	  var newState = {};
+	  console.log('reduceUserLoading -> action.userLoading:', action.userLoading);
+	  Object.assign(newState, state, { userLoading: action.userLoading });
+	  return newState;
+	};
+	
 	// Pre-Mount State
 	var initialState = {
 	  isAuthenticated: null,
-	  user: null
+	  user: null,
+	  userLoading: false
 	};
 	
 	// Root Reducer Slice
@@ -33919,10 +33917,52 @@
 	  switch (action.type) {
 	    case SET_CURRENT_USER:
 	      return reduceSetCurrentUser(state, action);
+	    case USER_LOADING:
+	      return reduceUserLoading(state, action);
 	    default:
 	      return state;
 	  }
 	}
+	
+	function handleLoginResponse(res, dispatch) {
+	  // handle unsuccessful login
+	  if (res.data.errors) {
+	    dispatch(userLoading(false));
+	    // res.data will contain { errors: { form: 'Invalid Credentials' } }
+	    return dispatch(setCurrentUser(res.data));
+	  }
+	  // handle token on successful login
+	  var user = prepareUserFromToken(res);
+	  if (user) {
+	    dispatch(setCurrentUser(user));
+	    return dispatch(userLoading(false));
+	  }
+	  // handle server error
+	  dispatch(userLoading(false));
+	  console.error('no errors or token offered from \'/api/auth\' :', res);
+	  return dispatch(setCurrentUser({ errors: { server: 'no errors or token returned' } }));
+	}
+	
+	function prepareUserFromToken(res) {
+	  var token = res.data.token ? res.data.token : null;
+	  if (token) {
+	    localStorage.setItem('jwtToken', token);
+	    (0, _setAuthorizationToken2.default)(token);
+	    var _user = _jsonwebtoken2.default.decode(token);
+	    return _user;
+	  } else {
+	    return null;
+	  }
+	}
+	
+	// const token = res.data.token ? res.data.token : null
+	// if (token) {
+	//   localStorage.setItem('jwtToken', token)
+	//   setAuthorizationToken(token)
+	//   const user = jwt.decode(token)
+	//   dispatch(setCurrentUser(user))
+	//   return dispatch(userLoading(false))
+	// }
 
 /***/ },
 /* 421 */
@@ -65711,41 +65751,7 @@
 	}
 
 /***/ },
-/* 643 */
-/***/ function(module, exports) {
-
-	// // Action
-	// export const IS_LOADING = 'IS_LOADING'
-	
-	// // Action Creator
-	// export function loading (bool) {
-	//   return { type: IS_LOADING, isLoading: bool }
-	// }
-	
-	// // Reducer
-	// const reduceIsLoading = (state, action) => {
-	//   const newState = {}
-	//   Object.assign(newState, state, { isLoading: action.isLoading })
-	//   return newState
-	// }
-	
-	// // State Slice
-	// const defaultState = {
-	//   isLoading: false
-	// }
-	
-	// // Reducer Slice
-	// export default function isLoading (state = defaultState, action) {
-	//   switch (action.type) {
-	//     case IS_LOADING:
-	//       return reduceIsLoading(state, action)
-	//     default:
-	//       return state
-	//   }
-	// }
-	"use strict";
-
-/***/ },
+/* 643 */,
 /* 644 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -66471,7 +66477,6 @@
 	
 	var _React$PropTypes = _react2.default.PropTypes;
 	var object = _React$PropTypes.object;
-	var bool = _React$PropTypes.bool;
 	var func = _React$PropTypes.func;
 	
 	
@@ -90526,8 +90531,6 @@
 	    return {
 	      identifier: '',
 	      password: '',
-	      // TODO: make errors object explicit with null values 
-	      // initially
 	      errors: {
 	        identifier: null,
 	        passwords: null
@@ -90559,10 +90562,8 @@
 	  onChange: function onChange(event) {
 	    this.setState(_defineProperty({}, event.target.name, event.target.value));
 	  },
-	  componentWillMount: function componentWillMount() {
-	    if (this.props.user.isAuthenticated) {
-	      this.onLoggedIn();
-	    }
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    console.log('NEXT PROPS:', nextProps);
 	  },
 	  render: function render() {
 	    var _state = this.state;
