@@ -33894,7 +33894,6 @@
 	  });
 	  return newState;
 	};
-	
 	var reduceUserLoading = exports.reduceUserLoading = function reduceUserLoading(state, action) {
 	  var newState = {};
 	  console.log('reduceUserLoading -> action.userLoading:', action.userLoading);
@@ -33924,6 +33923,7 @@
 	  }
 	}
 	
+	// Helper Functions
 	function handleLoginResponse(res, dispatch) {
 	  // handle unsuccessful login
 	  if (res.data.errors) {

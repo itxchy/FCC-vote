@@ -64,7 +64,6 @@ export const reduceSetCurrentUser = (state, action) => {
   })
   return newState
 }
-
 export const reduceUserLoading = (state, action) => {
   const newState = {}
   console.log('reduceUserLoading -> action.userLoading:', action.userLoading)
@@ -91,6 +90,7 @@ export default function user (state = initialState, action) {
   }
 }
 
+// Helper Functions
 function handleLoginResponse (res, dispatch) {
   // handle unsuccessful login
   if (res.data.errors) {
