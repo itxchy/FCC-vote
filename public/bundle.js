@@ -67128,7 +67128,6 @@
 	});
 	exports.submitNewPoll = submitNewPoll;
 	exports.getUserPolls = getUserPolls;
-	exports.submitVote = submitVote;
 	exports.userSignupRequest = userSignupRequest;
 	exports.isUserExists = isUserExists;
 	
@@ -67144,12 +67143,7 @@
 	function getUserPolls(user) {
 	  return _axios2.default.get('/api/polls/' + user);
 	}
-	function submitVote(id, vote) {
-	  return function (dispatch) {
-	    _axios2.default.put('/api/polls/' + id, vote);
-	  };
-	  // dispatch getAllPolls
-	}
+	
 	function userSignupRequest(userData) {
 	  return _axios2.default.post('/api/users', userData);
 	}
