@@ -31,9 +31,6 @@ const PollCard = React.createClass({
 
       // ***** TODO: fix action creater submitVote, move .then statement to redux *****
       this.props.dispatchSubmitVote(pollID, vote)
-      .then(res => {
-        this.setState({ updatedTotalVotes: res.data.poll.totalVotes })
-      })
     } else {
       console.log('no poll option selected!')
     }

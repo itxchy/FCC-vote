@@ -2,6 +2,7 @@ import axios from 'axios'
 
 // action
 const SUBMIT_VOTE = 'SUBMIT_VOTE'
+const GET_POLL_RESULTS = 'REFRESH_POLL_RESULTS'
 
 // action creator
 
@@ -13,7 +14,11 @@ export function submitVote (id, vote) {
   return dispatch => {
     axios.put(`/api/polls/${id}`, vote)
       .then(res => {
-        dispatch(pollUpdate(id))
+        // new poll results should be returned
+        dispatch(getPollResults(id))
       })
   }
+}
+export function refreshPollResults(id) {
+
 }

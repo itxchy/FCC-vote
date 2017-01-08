@@ -67016,8 +67016,6 @@
 	    this.setState({ selectedOption: event.target.value });
 	  },
 	  onPollSubmit: function onPollSubmit(event) {
-	    var _this = this;
-	
 	    event.preventDefault();
 	    var pollID = this.props.id;
 	    var selectedOption = this.state.selectedOption;
@@ -67026,15 +67024,13 @@
 	      var vote = { selectedOption: selectedOption, voter: voter };
 	
 	      // ***** TODO: fix action creater submitVote, move .then statement to redux *****
-	      this.props.dispatchSubmitVote(pollID, vote).then(function (res) {
-	        _this.setState({ updatedTotalVotes: res.data.poll.totalVotes });
-	      });
+	      this.props.dispatchSubmitVote(pollID, vote);
 	    } else {
 	      console.log('no poll option selected!');
 	    }
 	  },
 	  render: function render() {
-	    var _this2 = this;
+	    var _this = this;
 	
 	    var options = this.props.options.map(function (option, index) {
 	      var id = 'gridRadios' + index;
@@ -67048,7 +67044,7 @@
 	          _react2.default.createElement('input', {
 	            className: 'form-check-input radio-option',
 	            type: 'radio',
-	            onChange: _this2.onOptionChange,
+	            onChange: _this.onOptionChange,
 	            name: 'gridRadios',
 	            id: id,
 	            value: value

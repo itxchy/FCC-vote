@@ -80,7 +80,10 @@ router.put('/:id', (req, res) => {
   }
 
   addNewVoteToPoll(req, res)
-
+  /**
+   * Adds a new unique vote to the relevent poll document in MongoDB. Duplicate voters are rejected.
+   * Returns the updated poll document from MongoDB, along with the new totalVotes value
+   */
   async function addNewVoteToPoll (req, res) {
     try {
       // check if voter has already voted
@@ -100,7 +103,11 @@ router.put('/:id', (req, res) => {
         return res.status(500).json({ error: 'Failed to update total votes tally', details: updatedTotalVotes.error })
       }
       console.log('updatedTotalVotes.doc', updatedTotalVotes.doc)
-      return res.json({ success: 'new vote and new total votes tally saved', poll: updatedTotalVotes.doc })
+      return res.json({ 
+        success: 'new vote and new total votes tally saved', 
+        poll: updatedPoll.doc, 
+        totalVotes: updatedTotalVotes.doc 
+      })
     } catch (error) {
       console.error('caught ERROR', error)
       return res.status(500).json({ error: 'Failed to add new vote to the current poll\'s document' })
