@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-const { object, func } = React.PropTypes
 import { updateOption } from '../../redux/modules/createNewPoll'
+const { object, func } = React.PropTypes
 
 const PendingPollOptions = React.createClass({
   propTypes: {
