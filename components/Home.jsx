@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import PollCard from './common/PollCard'
 import ResultsCard from './common/ResultsCard'
 import { getAllPolls } from '../redux/modules/getAllPolls'
-const { func, object } = React.PropTypes
+const { func, object, array } = React.PropTypes
 import { dupeVoterCheck } from '../routes/lib/pollsLib'
 import isEmpty from 'lodash/isEmpty'
 
@@ -11,7 +11,7 @@ const Home = React.createClass({
   propTypes: {
     dispatchGetAllPolls: func,
     user: object,
-    allPolls: object
+    allPolls: array
   },
   getRecentPolls () {
     if (this.props.allPolls === null) {
@@ -19,7 +19,10 @@ const Home = React.createClass({
     }
   },
   populatedCards () {
-    return this.props.allPolls.allPolls.map(poll => {
+    console.log('all polls in populatedCards()', this.props.allPolls)
+    return this.props.allPolls.map(poll => {
+      console.log('user object', this.props.user)
+      console.log('dupeVoterCheck args; poll:', poll, '\n this.props.user.username:', this.props.user.username)
       const dupeVoter = dupeVoterCheck(poll, this.props.user.username)
       const { title, options, totalVotes, _id } = poll
       if (dupeVoter) {
@@ -61,13 +64,15 @@ const Home = React.createClass({
         </div>
       )
     }
+    console.log('this.props.allPolls', this.props.allPolls)
   },
   render () {
     this.getRecentPolls()
     let showPolls = null
-    if (isEmpty(this.props.allPolls)) {
+    if (this.props.allPolls === null || isEmpty(this.props.allPolls)) {
       showPolls = this.handleEmptyAllPollsObject()
     } else {
+      console.log('this.props.allPolls inside render, should NOT be null', this.props.allPolls)
       showPolls = this.populatedCards()
     }
     return (
@@ -83,8 +88,8 @@ const Home = React.createClass({
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user,
-    allPolls: state.allPolls
+    user: state.user.user,
+    allPolls: state.allPolls.allPolls
   }
 }
 

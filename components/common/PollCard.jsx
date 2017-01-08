@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { submitVote } from '../../redux/apiCalls'
+import { submitVote } from '../../redux/modules/submitVote'
 const { string, array, number, object, func } = React.PropTypes
 
 const PollCard = React.createClass({

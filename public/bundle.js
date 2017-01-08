@@ -66852,6 +66852,7 @@
 	var _React$PropTypes = _react2.default.PropTypes;
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
+	var array = _React$PropTypes.array;
 	
 	
 	var Home = _react2.default.createClass({
@@ -66860,7 +66861,7 @@
 	  propTypes: {
 	    dispatchGetAllPolls: func,
 	    user: object,
-	    allPolls: object
+	    allPolls: array
 	  },
 	  getRecentPolls: function getRecentPolls() {
 	    if (this.props.allPolls === null) {
@@ -66870,7 +66871,10 @@
 	  populatedCards: function populatedCards() {
 	    var _this = this;
 	
-	    return this.props.allPolls.allPolls.map(function (poll) {
+	    console.log('all polls in populatedCards()', this.props.allPolls);
+	    return this.props.allPolls.map(function (poll) {
+	      console.log('user object', _this.props.user);
+	      console.log('dupeVoterCheck args; poll:', poll, '\n this.props.user.username:', _this.props.user.username);
 	      var dupeVoter = (0, _pollsLib.dupeVoterCheck)(poll, _this.props.user.username);
 	      var title = poll.title;
 	      var options = poll.options;
@@ -66924,13 +66928,15 @@
 	        )
 	      );
 	    }
+	    console.log('this.props.allPolls', this.props.allPolls);
 	  },
 	  render: function render() {
 	    this.getRecentPolls();
 	    var showPolls = null;
-	    if ((0, _isEmpty2.default)(this.props.allPolls)) {
+	    if (this.props.allPolls === null || (0, _isEmpty2.default)(this.props.allPolls)) {
 	      showPolls = this.handleEmptyAllPollsObject();
 	    } else {
+	      console.log('this.props.allPolls inside render, should NOT be null', this.props.allPolls);
 	      showPolls = this.populatedCards();
 	    }
 	    return _react2.default.createElement(
@@ -66952,8 +66958,8 @@
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    user: state.user,
-	    allPolls: state.allPolls
+	    user: state.user.user,
+	    allPolls: state.allPolls.allPolls
 	  };
 	};
 	
@@ -66983,7 +66989,7 @@
 	
 	var _reactRedux = __webpack_require__(643);
 	
-	var _apiCalls = __webpack_require__(658);
+	var _submitVote = __webpack_require__(776);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -67106,7 +67112,7 @@
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    dispatchSubmitVote: function dispatchSubmitVote(id, vote) {
-	      dispatch((0, _apiCalls.submitVote)(id, vote));
+	      dispatch((0, _submitVote.submitVote)(id, vote));
 	    }
 	  };
 	};
@@ -90770,6 +90776,57 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 762 */,
+/* 763 */,
+/* 764 */,
+/* 765 */,
+/* 766 */,
+/* 767 */,
+/* 768 */,
+/* 769 */,
+/* 770 */,
+/* 771 */,
+/* 772 */,
+/* 773 */,
+/* 774 */,
+/* 775 */,
+/* 776 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.submitVote = submitVote;
+	
+	var _axios = __webpack_require__(421);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// action
+	var SUBMIT_VOTE = 'SUBMIT_VOTE';
+	var SHOW_UPDATED_POLL_RESULTS = 'SHOW_UPDATED_POLL_RESULTS';
+	
+	// action creator
+	
+	/** TODO:
+	 * After a new vote is submitted, the poll on the client page
+	 * should show the results, including the the new vote
+	 */
+	function submitVote(id, vote) {
+	  return function (dispatch) {
+	    _axios2.default.put('/api/polls/' + id, vote).then(function (res) {
+	      // new poll results should be returned
+	      console.log('new poll results, and totalVotes should be in the response:', res);
+	      // dispatch(showUpdatedPollResults(...results))
+	    });
+	  };
+	}
 
 /***/ }
 /******/ ]);

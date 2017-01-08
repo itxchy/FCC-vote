@@ -2,12 +2,12 @@ import axios from 'axios'
 
 // action
 const SUBMIT_VOTE = 'SUBMIT_VOTE'
-const GET_POLL_RESULTS = 'REFRESH_POLL_RESULTS'
+const SHOW_UPDATED_POLL_RESULTS = 'SHOW_UPDATED_POLL_RESULTS'
 
 // action creator
 
 /** TODO:
- * After a new vote is submitted, the poll on the client page 
+ * After a new vote is submitted, the poll on the client page
  * should show the results, including the the new vote
  */
 export function submitVote (id, vote) {
@@ -15,10 +15,8 @@ export function submitVote (id, vote) {
     axios.put(`/api/polls/${id}`, vote)
       .then(res => {
         // new poll results should be returned
-        dispatch(getPollResults(id))
+        console.log('new poll results, and totalVotes should be in the response:', res)
+        // dispatch(showUpdatedPollResults(...results))
       })
   }
-}
-export function refreshPollResults(id) {
-
 }
