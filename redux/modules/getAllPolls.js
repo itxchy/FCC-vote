@@ -30,8 +30,12 @@ export const reduceAllPollsData = (state, action) => {
   return newState
 }
 
+const initialState = {
+  allPolls: null
+}
+
 // Root Reducer Slice
-export default function allPolls (state = null, action) {
+export default function allPolls (state = initialState, action) {
   switch (action.type) {
     case ALL_POLLS_DATA:
       return reduceAllPollsData(state, action)

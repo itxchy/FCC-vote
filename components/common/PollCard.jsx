@@ -28,6 +28,8 @@ const PollCard = React.createClass({
     const voter = this.props.user.username || null
     if (selectedOption !== null) {
       const vote = { selectedOption, voter }
+
+      // ***** TODO: fix action creater submitVote, move .then statement to redux *****
       this.props.dispatchSubmitVote(pollID, vote)
       .then(res => {
         this.setState({ updatedTotalVotes: res.data.poll.totalVotes })

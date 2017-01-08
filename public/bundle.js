@@ -33907,7 +33907,6 @@
 	  return newState;
 	};
 	
-	// Pre-Mount State
 	var initialState = {
 	  isAuthenticated: null,
 	  user: null,
@@ -65743,9 +65742,13 @@
 	  return newState;
 	};
 	
+	var initialState = {
+	  allPolls: null
+	};
+	
 	// Root Reducer Slice
 	function allPolls() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
 	  var action = arguments[1];
 	
 	  switch (action.type) {
@@ -67021,6 +67024,8 @@
 	    var voter = this.props.user.username || null;
 	    if (selectedOption !== null) {
 	      var vote = { selectedOption: selectedOption, voter: voter };
+	
+	      // ***** TODO: fix action creater submitVote, move .then statement to redux *****
 	      this.props.dispatchSubmitVote(pollID, vote).then(function (res) {
 	        _this.setState({ updatedTotalVotes: res.data.poll.totalVotes });
 	      });

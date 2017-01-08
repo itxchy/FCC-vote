@@ -71,7 +71,6 @@ export const reduceUserLoading = (state, action) => {
   return newState
 }
 
-// Pre-Mount State
 const initialState = {
   isAuthenticated: null,
   user: null,
