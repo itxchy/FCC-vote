@@ -10,7 +10,7 @@ const PollCard = React.createClass({
     totalVotes: number,
     id: string,
     user: object,
-    dispatchSubmitVote: func
+    dispatchSubmitVote: func.isRequired
   },
   getInitialState () {
     return {
@@ -74,18 +74,4 @@ const PollCard = React.createClass({
   }
 })
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.user
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    dispatchSubmitVote (id, vote) {
-      dispatch(submitVote(id, vote))
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PollCard)
+export default PollCard

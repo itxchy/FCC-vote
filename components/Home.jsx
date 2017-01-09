@@ -10,6 +10,7 @@ import isEmpty from 'lodash/isEmpty'
 const Home = React.createClass({
   propTypes: {
     dispatchGetAllPolls: func,
+    dispatchSubmitVote: func,
     user: object,
     allPolls: array
   },
@@ -19,7 +20,7 @@ const Home = React.createClass({
     }
   },
   populatedCards () {
-    console.log('all polls in populatedCards()', this.props.allPolls)
+    // console.log('all polls in populatedCards()', this.props.allPolls)
     return this.props.allPolls.map(poll => {
       // TODO: debug why certain voted polls don't show results initially
       // console.log('user object', this.props.user)
@@ -39,6 +40,8 @@ const Home = React.createClass({
       }
       return (
         <PollCard
+          dispatchSubmitVote={this.props.dispatchSubmitVote}
+          user={this.props.user}
           key={_id}
           title={title}
           options={options}
@@ -65,7 +68,7 @@ const Home = React.createClass({
         </div>
       )
     }
-    console.log('this.props.allPolls', this.props.allPolls)
+    // console.log('this.props.allPolls', this.props.allPolls)
   },
   render () {
     this.getRecentPolls()
@@ -73,7 +76,7 @@ const Home = React.createClass({
     if (this.props.allPolls === null || isEmpty(this.props.allPolls)) {
       showPolls = this.handleEmptyAllPollsObject()
     } else {
-      console.log('this.props.allPolls inside render, should NOT be null', this.props.allPolls)
+      // console.log('this.props.allPolls inside render, should NOT be null', this.props.allPolls)
       showPolls = this.populatedCards()
     }
     return (
@@ -98,6 +101,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dispatchGetAllPolls () {
       dispatch(getAllPolls())
+    },
+    dispatchSubmitVote (id, vote) {
+      dispatch(submitVote(id, vote))
     }
   }
 }

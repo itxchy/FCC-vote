@@ -33889,7 +33889,7 @@
 	// Reducers
 	var reduceSetCurrentUser = exports.reduceSetCurrentUser = function reduceSetCurrentUser(state, action) {
 	  var newState = {};
-	  console.log('action.user', action.user);
+	  // console.log('action.user', action.user)
 	  var authenticationStatus = false;
 	  if (action.user && !action.user.errors && !(0, _isEmpty2.default)(action.user)) {
 	    authenticationStatus = true;
@@ -66860,6 +66860,7 @@
 	
 	  propTypes: {
 	    dispatchGetAllPolls: func,
+	    dispatchSubmitVote: func,
 	    user: object,
 	    allPolls: array
 	  },
@@ -66871,7 +66872,7 @@
 	  populatedCards: function populatedCards() {
 	    var _this = this;
 	
-	    console.log('all polls in populatedCards()', this.props.allPolls);
+	    // console.log('all polls in populatedCards()', this.props.allPolls)
 	    return this.props.allPolls.map(function (poll) {
 	      // TODO: debug why certain voted polls don't show results initially
 	      // console.log('user object', this.props.user)
@@ -66892,6 +66893,8 @@
 	        });
 	      }
 	      return _react2.default.createElement(_PollCard2.default, {
+	        dispatchSubmitVote: _this.props.dispatchSubmitVote,
+	        user: _this.props.user,
 	        key: _id,
 	        title: title,
 	        options: options,
@@ -66929,7 +66932,7 @@
 	        )
 	      );
 	    }
-	    console.log('this.props.allPolls', this.props.allPolls);
+	    // console.log('this.props.allPolls', this.props.allPolls)
 	  },
 	  render: function render() {
 	    this.getRecentPolls();
@@ -66937,7 +66940,7 @@
 	    if (this.props.allPolls === null || (0, _isEmpty2.default)(this.props.allPolls)) {
 	      showPolls = this.handleEmptyAllPollsObject();
 	    } else {
-	      console.log('this.props.allPolls inside render, should NOT be null', this.props.allPolls);
+	      // console.log('this.props.allPolls inside render, should NOT be null', this.props.allPolls)
 	      showPolls = this.populatedCards();
 	    }
 	    return _react2.default.createElement(
@@ -66968,6 +66971,9 @@
 	  return {
 	    dispatchGetAllPolls: function dispatchGetAllPolls() {
 	      dispatch((0, _getAllPolls.getAllPolls)());
+	    },
+	    dispatchSubmitVote: function dispatchSubmitVote(id, vote) {
+	      dispatch(submitVote(id, vote));
 	    }
 	  };
 	};
@@ -67011,7 +67017,7 @@
 	    totalVotes: number,
 	    id: string,
 	    user: object,
-	    dispatchSubmitVote: func
+	    dispatchSubmitVote: func.isRequired
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
@@ -67102,21 +67108,7 @@
 	  }
 	});
 	
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    user: state.user
-	  };
-	};
-	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    dispatchSubmitVote: function dispatchSubmitVote(id, vote) {
-	      dispatch((0, _submitVote.submitVote)(id, vote));
-	    }
-	  };
-	};
-	
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(PollCard);
+	exports.default = PollCard;
 
 /***/ },
 /* 658 */
@@ -67150,6 +67142,7 @@
 	    _axios2.default.put('/api/polls/' + id, vote).then(function (res) {
 	      // new poll results should be returned, or dupe
 	      // vote error
+	      console.log('New, unique vote successful in submitVote!');
 	      console.log('new poll results, and totalVotes should be in the response:', res);
 	      // dispatch(showUpdatedPollResults(...results))
 	    }).catch(function (err) {
@@ -67286,7 +67279,7 @@
 	  },
 	  render: function render() {
 	    var chart = _reactFauxDom2.default.createElement('div');
-	    console.log('data:', this.props.results);
+	    // console.log('data:', this.props.results)
 	    var data = this.props.results;
 	    var width = 300;
 	    var height = 300;
@@ -67312,7 +67305,7 @@
 	      return height / data.length - 8;
 	    }).attr('font-family', 'sans-serif').attr('font-size', 18);
 	
-	    console.log('faux element:', chart);
+	    // console.log('faux element:', chart)
 	    return chart.toReact();
 	  }
 	});

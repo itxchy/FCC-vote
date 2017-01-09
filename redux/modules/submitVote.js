@@ -16,6 +16,7 @@ export function submitVote (id, vote) {
       .then(res => {
         // new poll results should be returned, or dupe
         // vote error
+        console.log('New, unique vote successful in submitVote!')
         console.log('new poll results, and totalVotes should be in the response:', res)
         // dispatch(showUpdatedPollResults(...results))
       })

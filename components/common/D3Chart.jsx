@@ -10,7 +10,7 @@ const D3Chart = React.createClass({
   },
   render () {
     let chart = ReactFauxDom.createElement('div')
-    console.log('data:', this.props.results)
+    // console.log('data:', this.props.results)
     let data = this.props.results
     const width = 300
     const height = 300
@@ -45,7 +45,7 @@ const D3Chart = React.createClass({
       .attr('font-family', 'sans-serif')
       .attr('font-size', 18)
 
-    console.log('faux element:', chart)
+    // console.log('faux element:', chart)
     return chart.toReact()
   }
 })
