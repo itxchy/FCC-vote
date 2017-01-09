@@ -21,15 +21,13 @@ const PollCard = React.createClass({
   onOptionChange (event) {
     this.setState({ selectedOption: event.target.value })
   },
-  onPollSubmit (event) {
+  onVoteSubmit (event) {
     event.preventDefault()
     const pollID = this.props.id
     let selectedOption = this.state.selectedOption
     const voter = this.props.user.username || null
     if (selectedOption !== null) {
       const vote = { selectedOption, voter }
-
-      // ***** TODO: fix action creater submitVote, move .then statement to redux *****
       this.props.dispatchSubmitVote(pollID, vote)
     } else {
       console.log('no poll option selected!')
@@ -57,7 +55,7 @@ const PollCard = React.createClass({
     })
     return (
       <div className='col-sm-4'>
-        <form onSubmit={this.onPollSubmit}>
+        <form onSubmit={this.onVoteSubmit}>
           <h2>{this.props.title}</h2>
           <fieldset className='form-group row'>
             <div className='col-sm-10'>

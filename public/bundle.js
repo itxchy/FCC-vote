@@ -60,7 +60,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(761);
+	__webpack_require__(762);
 	
 	_reactDom2.default.render(_react2.default.createElement(_ClientApp2.default, null), document.getElementById('app'));
 
@@ -66386,15 +66386,15 @@
 	
 	var _CreateAPoll2 = _interopRequireDefault(_CreateAPoll);
 	
-	var _Signup = __webpack_require__(754);
+	var _Signup = __webpack_require__(755);
 	
 	var _Signup2 = _interopRequireDefault(_Signup);
 	
-	var _LoginPage = __webpack_require__(757);
+	var _LoginPage = __webpack_require__(758);
 	
 	var _LoginPage2 = _interopRequireDefault(_LoginPage);
 	
-	var _MyPollsPage = __webpack_require__(760);
+	var _MyPollsPage = __webpack_require__(761);
 	
 	var _MyPollsPage2 = _interopRequireDefault(_MyPollsPage);
 	
@@ -66989,7 +66989,7 @@
 	
 	var _reactRedux = __webpack_require__(643);
 	
-	var _submitVote = __webpack_require__(776);
+	var _submitVote = __webpack_require__(658);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -67021,15 +67021,13 @@
 	  onOptionChange: function onOptionChange(event) {
 	    this.setState({ selectedOption: event.target.value });
 	  },
-	  onPollSubmit: function onPollSubmit(event) {
+	  onVoteSubmit: function onVoteSubmit(event) {
 	    event.preventDefault();
 	    var pollID = this.props.id;
 	    var selectedOption = this.state.selectedOption;
 	    var voter = this.props.user.username || null;
 	    if (selectedOption !== null) {
 	      var vote = { selectedOption: selectedOption, voter: voter };
-	
-	      // ***** TODO: fix action creater submitVote, move .then statement to redux *****
 	      this.props.dispatchSubmitVote(pollID, vote);
 	    } else {
 	      console.log('no poll option selected!');
@@ -67064,7 +67062,7 @@
 	      { className: 'col-sm-4' },
 	      _react2.default.createElement(
 	        'form',
-	        { onSubmit: this.onPollSubmit },
+	        { onSubmit: this.onVoteSubmit },
 	        _react2.default.createElement(
 	          'h2',
 	          null,
@@ -67128,10 +67126,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.submitNewPoll = submitNewPoll;
-	exports.getUserPolls = getUserPolls;
-	exports.userSignupRequest = userSignupRequest;
-	exports.isUserExists = isUserExists;
+	exports.submitVote = submitVote;
 	
 	var _axios = __webpack_require__(421);
 	
@@ -67139,18 +67134,24 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function submitNewPoll(newPoll) {
-	  return _axios2.default.post('/api/polls', newPoll);
-	}
-	function getUserPolls(user) {
-	  return _axios2.default.get('/api/polls/' + user);
-	}
+	// action
+	var SUBMIT_VOTE = 'SUBMIT_VOTE';
+	var SHOW_UPDATED_POLL_RESULTS = 'SHOW_UPDATED_POLL_RESULTS';
 	
-	function userSignupRequest(userData) {
-	  return _axios2.default.post('/api/users', userData);
-	}
-	function isUserExists(identifier) {
-	  return _axios2.default.get('/api/users/' + identifier);
+	// action creator
+	
+	/** TODO:
+	 * After a new vote is submitted, the poll on the client page
+	 * should show the results, including the the new vote
+	 */
+	function submitVote(id, vote) {
+	  return function (dispatch) {
+	    _axios2.default.put('/api/polls/' + id, vote).then(function (res) {
+	      // new poll results should be returned
+	      console.log('new poll results, and totalVotes should be in the response:', res);
+	      // dispatch(showUpdatedPollResults(...results))
+	    });
+	  };
 	}
 
 /***/ },
@@ -87220,7 +87221,7 @@
 	
 	var _createNewPoll = __webpack_require__(419);
 	
-	var _apiCalls = __webpack_require__(658);
+	var _apiCalls = __webpack_require__(754);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -90135,6 +90136,40 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.submitNewPoll = submitNewPoll;
+	exports.getUserPolls = getUserPolls;
+	exports.userSignupRequest = userSignupRequest;
+	exports.isUserExists = isUserExists;
+	
+	var _axios = __webpack_require__(421);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function submitNewPoll(newPoll) {
+	  return _axios2.default.post('/api/polls', newPoll);
+	}
+	function getUserPolls(user) {
+	  return _axios2.default.get('/api/polls/' + user);
+	}
+	
+	function userSignupRequest(userData) {
+	  return _axios2.default.post('/api/users', userData);
+	}
+	function isUserExists(identifier) {
+	  return _axios2.default.get('/api/users/' + identifier);
+	}
+
+/***/ },
+/* 755 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
 	var _react = __webpack_require__(1);
 	
@@ -90142,15 +90177,15 @@
 	
 	var _reactRedux = __webpack_require__(643);
 	
-	var _signupValidation = __webpack_require__(755);
+	var _signupValidation = __webpack_require__(756);
 	
 	var _signupValidation2 = _interopRequireDefault(_signupValidation);
 	
-	var _TextFieldGroup = __webpack_require__(756);
+	var _TextFieldGroup = __webpack_require__(757);
 	
 	var _TextFieldGroup2 = _interopRequireDefault(_TextFieldGroup);
 	
-	var _apiCalls = __webpack_require__(658);
+	var _apiCalls = __webpack_require__(754);
 	
 	var _flashMessage = __webpack_require__(260);
 	
@@ -90333,7 +90368,7 @@
 	exports.default = (0, _reactRedux.connect)(mapDispatchToProps)(Signup);
 
 /***/ },
-/* 755 */
+/* 756 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -90383,7 +90418,7 @@
 	module.exports = validateInput;
 
 /***/ },
-/* 756 */
+/* 757 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -90457,7 +90492,7 @@
 	exports.default = TextFieldGroup;
 
 /***/ },
-/* 757 */
+/* 758 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -90470,7 +90505,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _LoginForm = __webpack_require__(758);
+	var _LoginForm = __webpack_require__(759);
 	
 	var _LoginForm2 = _interopRequireDefault(_LoginForm);
 	
@@ -90491,7 +90526,7 @@
 	exports.default = LoginPage;
 
 /***/ },
-/* 758 */
+/* 759 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -90506,11 +90541,11 @@
 	
 	var _reactRedux = __webpack_require__(643);
 	
-	var _TextFieldGroup = __webpack_require__(756);
+	var _TextFieldGroup = __webpack_require__(757);
 	
 	var _TextFieldGroup2 = _interopRequireDefault(_TextFieldGroup);
 	
-	var _loginValidation = __webpack_require__(759);
+	var _loginValidation = __webpack_require__(760);
 	
 	var _loginValidation2 = _interopRequireDefault(_loginValidation);
 	
@@ -90654,7 +90689,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LoginForm);
 
 /***/ },
-/* 759 */
+/* 760 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -90682,7 +90717,7 @@
 	module.exports = validateInput;
 
 /***/ },
-/* 760 */
+/* 761 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -90701,7 +90736,7 @@
 	
 	var _isEmpty2 = _interopRequireDefault(_isEmpty);
 	
-	var _apiCalls = __webpack_require__(658);
+	var _apiCalls = __webpack_require__(754);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -90772,61 +90807,10 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MyPollsPage);
 
 /***/ },
-/* 761 */
+/* 762 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 762 */,
-/* 763 */,
-/* 764 */,
-/* 765 */,
-/* 766 */,
-/* 767 */,
-/* 768 */,
-/* 769 */,
-/* 770 */,
-/* 771 */,
-/* 772 */,
-/* 773 */,
-/* 774 */,
-/* 775 */,
-/* 776 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.submitVote = submitVote;
-	
-	var _axios = __webpack_require__(421);
-	
-	var _axios2 = _interopRequireDefault(_axios);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	// action
-	var SUBMIT_VOTE = 'SUBMIT_VOTE';
-	var SHOW_UPDATED_POLL_RESULTS = 'SHOW_UPDATED_POLL_RESULTS';
-	
-	// action creator
-	
-	/** TODO:
-	 * After a new vote is submitted, the poll on the client page
-	 * should show the results, including the the new vote
-	 */
-	function submitVote(id, vote) {
-	  return function (dispatch) {
-	    _axios2.default.put('/api/polls/' + id, vote).then(function (res) {
-	      // new poll results should be returned
-	      console.log('new poll results, and totalVotes should be in the response:', res);
-	      // dispatch(showUpdatedPollResults(...results))
-	    });
-	  };
-	}
 
 /***/ }
 /******/ ]);
