@@ -28264,13 +28264,18 @@
 	
 	var _getAllPolls2 = _interopRequireDefault(_getAllPolls);
 	
+	var _submitVote = __webpack_require__(677);
+	
+	var _submitVote2 = _interopRequireDefault(_submitVote);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = (0, _redux.combineReducers)({
 	  flashMessages: _flashMessage2.default,
 	  newPoll: _createNewPoll2.default,
 	  user: _auth2.default,
-	  allPolls: _getAllPolls2.default
+	  allPolls: _getAllPolls2.default,
+	  handleNewVote: _submitVote2.default
 	});
 
 /***/ },
@@ -66835,15 +66840,15 @@
 	
 	var _PollCard2 = _interopRequireDefault(_PollCard);
 	
-	var _ResultsCard = __webpack_require__(659);
+	var _ResultsCard = __webpack_require__(658);
 	
 	var _ResultsCard2 = _interopRequireDefault(_ResultsCard);
 	
 	var _getAllPolls = __webpack_require__(642);
 	
-	var _submitVote = __webpack_require__(658);
+	var _submitVote = __webpack_require__(677);
 	
-	var _pollsLib = __webpack_require__(678);
+	var _pollsLib = __webpack_require__(680);
 	
 	var _isEmpty = __webpack_require__(641);
 	
@@ -66864,7 +66869,8 @@
 	    dispatchGetAllPolls: func,
 	    dispatchSubmitVote: func,
 	    user: object,
-	    allPolls: array
+	    allPolls: array,
+	    updatedPollResults: object
 	  },
 	  getRecentPolls: function getRecentPolls() {
 	    if (this.props.allPolls === null) {
@@ -66966,7 +66972,8 @@
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    user: state.user.user,
-	    allPolls: state.allPolls.allPolls
+	    allPolls: state.allPolls.allPolls,
+	    updatedPollResults: state.results.updatedResults
 	  };
 	};
 	
@@ -67118,85 +67125,12 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.submitVote = submitVote;
-	
-	var _axios = __webpack_require__(421);
-	
-	var _axios2 = _interopRequireDefault(_axios);
-	
-	var _has = __webpack_require__(679);
-	
-	var _has2 = _interopRequireDefault(_has);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	// Action
-	var SUBMIT_VOTE = 'SUBMIT_VOTE';
-	var UPDATED_POLL_RESULTS = 'UPDATED_POLL_RESULTS';
-	
-	// Action Creator
-	
-	/** TODO:
-	 * After a new vote is submitted, the poll on the client page
-	 * should show the results, including the the new vote
-	 */
-	
-	/**
-	 * @param id = string,
-	 * @param vote = object {selectedOption, voter}
-	 *
-	 * Dispatches a new vote request to the the database.
-	 *
-	 * If the voter already voted on the current poll,
-	 * {dupeVoter: true} is returned.
-	 * If the vote is unique, the new, updated poll object
-	 * is returned. Otherwise, a server error object is returned.
-	 */
-	function submitVote(id, vote) {
-	  return function (dispatch) {
-	    _axios2.default.put('/api/polls/' + id, vote).then(function (res) {
-	      console.log('New, unique vote successful in submitVote!', res);
-	      var results = res.data.totalVotes;
-	      dispatch(updatedPollResults(results));
-	    }).catch(function (err) {
-	      if ((0, _has2.default)(err.response.data, 'dupeVoter') && err.response.data.dupeVoter === true) {
-	        console.log('dupeVoter detected!:', err.response.data.dupeVoter);
-	      }
-	      if ((0, _has2.default)(err.response.data, 'error')) {
-	        console.log('submitVote server error:', err.response.data.error);
-	      }
-	    });
-	  };
-	}
-	function updatedPollResults(results) {
-	  return { type: UPDATED_POLL_RESULTS, results: results };
-	}
-	
-	// Reducer
-	
-	function reduceUpdatedPollResults(state, action) {
-	  var newState = {};
-	  Object.assign(newState, state, { updatedResults: action.results });
-	  return newState;
-	}
-	
-	// Root Reducer Slice
-
-/***/ },
-/* 659 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _D3Chart = __webpack_require__(660);
+	var _D3Chart = __webpack_require__(659);
 	
 	var _D3Chart2 = _interopRequireDefault(_D3Chart);
 	
@@ -67265,7 +67199,7 @@
 	exports.default = ResultsCard;
 
 /***/ },
-/* 660 */
+/* 659 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67278,11 +67212,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _d = __webpack_require__(661);
+	var _d = __webpack_require__(660);
 	
 	var d3 = _interopRequireWildcard(_d);
 	
-	var _reactFauxDom = __webpack_require__(662);
+	var _reactFauxDom = __webpack_require__(661);
 	
 	var _reactFauxDom2 = _interopRequireDefault(_reactFauxDom);
 	
@@ -67338,7 +67272,7 @@
 	exports.default = D3Chart;
 
 /***/ },
-/* 661 */
+/* 660 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org Version 4.4.0. Copyright 2016 Mike Bostock.
@@ -83737,13 +83671,13 @@
 
 
 /***/ },
-/* 662 */
+/* 661 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Element = __webpack_require__(663)
-	var Window = __webpack_require__(675)
-	var core = __webpack_require__(676)
-	var anim = __webpack_require__(677)
+	var Element = __webpack_require__(662)
+	var Window = __webpack_require__(674)
+	var core = __webpack_require__(675)
+	var anim = __webpack_require__(676)
 	
 	var ReactFauxDOM = {
 	  Element: Element,
@@ -83771,18 +83705,18 @@
 
 
 /***/ },
-/* 663 */
+/* 662 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1)
-	var styleAttr = __webpack_require__(664)
-	var querySelectorAll = __webpack_require__(665)
-	var camelCase = __webpack_require__(669)
-	var isString = __webpack_require__(670)
-	var isUndefined = __webpack_require__(671)
-	var assign = __webpack_require__(672)
-	var mapValues = __webpack_require__(673)
-	var styleCamelCase = __webpack_require__(674)
+	var styleAttr = __webpack_require__(663)
+	var querySelectorAll = __webpack_require__(664)
+	var camelCase = __webpack_require__(668)
+	var isString = __webpack_require__(669)
+	var isUndefined = __webpack_require__(670)
+	var assign = __webpack_require__(671)
+	var mapValues = __webpack_require__(672)
+	var styleCamelCase = __webpack_require__(673)
 	
 	function Element (nodeName, parentNode) {
 	  this.nodeName = nodeName
@@ -84134,7 +84068,7 @@
 
 
 /***/ },
-/* 664 */
+/* 663 */
 /***/ function(module, exports) {
 
 	
@@ -84246,13 +84180,13 @@
 	module.exports.normalize = normalize;
 
 /***/ },
-/* 665 */
+/* 664 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(666);
+	module.exports = __webpack_require__(665);
 
 /***/ },
-/* 666 */
+/* 665 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -84261,8 +84195,8 @@
 	 * @author yiminghe@gmail.com
 	 */
 	
-	var util = __webpack_require__(667);
-	var parser = __webpack_require__(668);
+	var util = __webpack_require__(666);
+	var parser = __webpack_require__(667);
 	
 	var EXPANDO_SELECTOR_KEY = '_ks_data_selector_id_',
 	  caches = {},
@@ -84955,7 +84889,7 @@
 	 */
 
 /***/ },
-/* 667 */
+/* 666 */
 /***/ function(module, exports) {
 
 	/**
@@ -85306,7 +85240,7 @@
 	};
 
 /***/ },
-/* 668 */
+/* 667 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -86515,7 +86449,7 @@
 	}
 
 /***/ },
-/* 669 */
+/* 668 */
 /***/ function(module, exports) {
 
 	var hyphenExpression = /\-+([a-z])/gi
@@ -86538,7 +86472,7 @@
 
 
 /***/ },
-/* 670 */
+/* 669 */
 /***/ function(module, exports) {
 
 	function isString (value) {
@@ -86549,7 +86483,7 @@
 
 
 /***/ },
-/* 671 */
+/* 670 */
 /***/ function(module, exports) {
 
 	function isUndefined (value) {
@@ -86560,7 +86494,7 @@
 
 
 /***/ },
-/* 672 */
+/* 671 */
 /***/ function(module, exports) {
 
 	function assign (dest) {
@@ -86582,7 +86516,7 @@
 
 
 /***/ },
-/* 673 */
+/* 672 */
 /***/ function(module, exports) {
 
 	function mapValues (source, fn) {
@@ -86601,10 +86535,10 @@
 
 
 /***/ },
-/* 674 */
+/* 673 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var camelCase = __webpack_require__(669)
+	var camelCase = __webpack_require__(668)
 	
 	function styleCamelCase (name) {
 	  var camel = camelCase(name)
@@ -86627,7 +86561,7 @@
 
 
 /***/ },
-/* 675 */
+/* 674 */
 /***/ function(module, exports) {
 
 	var Window = {
@@ -86642,11 +86576,11 @@
 
 
 /***/ },
-/* 676 */
+/* 675 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Element = __webpack_require__(663)
-	var mapValues = __webpack_require__(673)
+	var Element = __webpack_require__(662)
+	var mapValues = __webpack_require__(672)
 	
 	var mixin = {
 	  componentWillMount: function () {
@@ -86670,7 +86604,7 @@
 
 
 /***/ },
-/* 677 */
+/* 676 */
 /***/ function(module, exports) {
 
 	var anim = {
@@ -86702,12 +86636,164 @@
 
 
 /***/ },
-/* 678 */
+/* 677 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var has = __webpack_require__(679);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.submitVote = submitVote;
+	exports.default = handleNewVote;
+	
+	var _axios = __webpack_require__(421);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	var _has = __webpack_require__(678);
+	
+	var _has2 = _interopRequireDefault(_has);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// Action
+	var UPDATED_POLL_RESULTS = 'UPDATED_POLL_RESULTS';
+	
+	// Action Creators
+	/** TODO:
+	 * After a new vote is submitted, the poll on the client page
+	 * should show the results, including the the new vote
+	 */
+	
+	/**
+	 * @param id = string,
+	 * @param vote = object {selectedOption, voter}
+	 *
+	 * Dispatches a new vote request to the the database.
+	 *
+	 * If the voter already voted on the current poll,
+	 * {dupeVoter: true} is returned.
+	 * If the vote is unique, the new, updated poll object
+	 * is returned. Otherwise, a server error object is returned.
+	 */
+	function submitVote(id, vote) {
+	  return function (dispatch) {
+	    _axios2.default.put('/api/polls/' + id, vote).then(function (res) {
+	      console.log('New, unique vote successful in submitVote!', res);
+	      var results = res.data.totalVotes;
+	      dispatch(updatedPollResults(results));
+	    }).catch(function (err) {
+	      if ((0, _has2.default)(err.response.data, 'dupeVoter') && err.response.data.dupeVoter === true) {
+	        console.log('dupeVoter detected!:', err.response.data.dupeVoter);
+	      }
+	      if ((0, _has2.default)(err.response.data, 'error')) {
+	        console.log('submitVote server error:', err.response.data.error);
+	      }
+	    });
+	  };
+	}
+	function updatedPollResults(results) {
+	  return { type: UPDATED_POLL_RESULTS, results: results };
+	}
+	
+	// Reducer
+	function reduceUpdatedPollResults(state, action) {
+	  var newState = {};
+	  Object.assign(newState, state, { updatedResults: action.results });
+	  return newState;
+	}
+	
+	var initialState = {
+	  updatedResults: null
+	};
+	
+	// Root Reducer Slice
+	function handleNewVote() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case UPDATED_POLL_RESULTS:
+	      return reduceUpdatedPollResults(state, action);
+	    default:
+	      return state;
+	  }
+	}
+
+/***/ },
+/* 678 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var baseHas = __webpack_require__(679),
+	    hasPath = __webpack_require__(367);
+	
+	/**
+	 * Checks if `path` is a direct property of `object`.
+	 *
+	 * @static
+	 * @since 0.1.0
+	 * @memberOf _
+	 * @category Object
+	 * @param {Object} object The object to query.
+	 * @param {Array|string} path The path to check.
+	 * @returns {boolean} Returns `true` if `path` exists, else `false`.
+	 * @example
+	 *
+	 * var object = { 'a': { 'b': 2 } };
+	 * var other = _.create({ 'a': _.create({ 'b': 2 }) });
+	 *
+	 * _.has(object, 'a');
+	 * // => true
+	 *
+	 * _.has(object, 'a.b');
+	 * // => true
+	 *
+	 * _.has(object, ['a', 'b']);
+	 * // => true
+	 *
+	 * _.has(other, 'a');
+	 * // => false
+	 */
+	function has(object, path) {
+	  return object != null && hasPath(object, path, baseHas);
+	}
+	
+	module.exports = has;
+
+
+/***/ },
+/* 679 */
+/***/ function(module, exports) {
+
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+	
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+	
+	/**
+	 * The base implementation of `_.has` without support for deep paths.
+	 *
+	 * @private
+	 * @param {Object} [object] The object to query.
+	 * @param {Array|string} key The key to check.
+	 * @returns {boolean} Returns `true` if `key` exists, else `false`.
+	 */
+	function baseHas(object, key) {
+	  return object != null && hasOwnProperty.call(object, key);
+	}
+	
+	module.exports = baseHas;
+
+
+/***/ },
+/* 680 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var has = __webpack_require__(678);
 	var isEmpty = __webpack_require__(641);
 	var flatten = __webpack_require__(681);
 	/**
@@ -86771,72 +86857,6 @@
 	};
 	
 	module.exports = { getVoterIdentity: getVoterIdentity, dupeVoterCheck: dupeVoterCheck, tallyVoteTotal: tallyVoteTotal };
-
-/***/ },
-/* 679 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var baseHas = __webpack_require__(680),
-	    hasPath = __webpack_require__(367);
-	
-	/**
-	 * Checks if `path` is a direct property of `object`.
-	 *
-	 * @static
-	 * @since 0.1.0
-	 * @memberOf _
-	 * @category Object
-	 * @param {Object} object The object to query.
-	 * @param {Array|string} path The path to check.
-	 * @returns {boolean} Returns `true` if `path` exists, else `false`.
-	 * @example
-	 *
-	 * var object = { 'a': { 'b': 2 } };
-	 * var other = _.create({ 'a': _.create({ 'b': 2 }) });
-	 *
-	 * _.has(object, 'a');
-	 * // => true
-	 *
-	 * _.has(object, 'a.b');
-	 * // => true
-	 *
-	 * _.has(object, ['a', 'b']);
-	 * // => true
-	 *
-	 * _.has(other, 'a');
-	 * // => false
-	 */
-	function has(object, path) {
-	  return object != null && hasPath(object, path, baseHas);
-	}
-	
-	module.exports = has;
-
-
-/***/ },
-/* 680 */
-/***/ function(module, exports) {
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-	
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-	
-	/**
-	 * The base implementation of `_.has` without support for deep paths.
-	 *
-	 * @private
-	 * @param {Object} [object] The object to query.
-	 * @param {Array|string} key The key to check.
-	 * @returns {boolean} Returns `true` if `key` exists, else `false`.
-	 */
-	function baseHas(object, key) {
-	  return object != null && hasOwnProperty.call(object, key);
-	}
-	
-	module.exports = baseHas;
-
 
 /***/ },
 /* 681 */

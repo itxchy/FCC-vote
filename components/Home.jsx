@@ -13,7 +13,8 @@ const Home = React.createClass({
     dispatchGetAllPolls: func,
     dispatchSubmitVote: func,
     user: object,
-    allPolls: array
+    allPolls: array,
+    updatedPollResults: object
   },
   getRecentPolls () {
     if (this.props.allPolls === null) {
@@ -95,7 +96,8 @@ const Home = React.createClass({
 const mapStateToProps = (state) => {
   return {
     user: state.user.user,
-    allPolls: state.allPolls.allPolls
+    allPolls: state.allPolls.allPolls,
+    updatedPollResults: state.results.updatedResults
   }
 }
 

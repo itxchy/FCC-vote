@@ -2,11 +2,9 @@ import axios from 'axios'
 import has from 'lodash/has'
 
 // Action
-const SUBMIT_VOTE = 'SUBMIT_VOTE'
 const UPDATED_POLL_RESULTS = 'UPDATED_POLL_RESULTS'
 
-// Action Creator
-
+// Action Creators
 /** TODO:
  * After a new vote is submitted, the poll on the client page
  * should show the results, including the the new vote
@@ -46,11 +44,22 @@ function updatedPollResults (results) {
 }
 
 // Reducer
-
 function reduceUpdatedPollResults (state, action) {
   const newState = {}
   Object.assign(newState, state, { updatedResults: action.results })
   return newState
 }
 
+const initialState = {
+  updatedResults: null
+}
+
 // Root Reducer Slice
+export default function handleNewVote (state = initialState, action) {
+  switch (action.type) {
+    case UPDATED_POLL_RESULTS:
+      return reduceUpdatedPollResults(state, action)
+    default:
+      return state
+  }
+}
