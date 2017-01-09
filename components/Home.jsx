@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import PollCard from './common/PollCard'
 import ResultsCard from './common/ResultsCard'
 import { getAllPolls } from '../redux/modules/getAllPolls'
-import { submitVote } from '../redux/modules/submitVote'
+import { submitVote, resetUpdatedPollResults } from '../redux/modules/submitVote'
 const { func, object, array } = React.PropTypes
 import { dupeVoterCheck } from '../routes/lib/pollsLib'
 import isEmpty from 'lodash/isEmpty'
@@ -12,6 +12,7 @@ const Home = React.createClass({
   propTypes: {
     dispatchGetAllPolls: func,
     dispatchSubmitVote: func,
+    dispatchResetUpdatedPollResults: func,
     user: object,
     allPolls: array,
     updatedPollResults: object
@@ -22,7 +23,6 @@ const Home = React.createClass({
     }
   },
   populatedCards () {
-    // console.log('all polls in populatedCards()', this.props.allPolls)
     return this.props.allPolls.map(poll => {
       // TODO: debug why certain voted polls don't show results initially
       // console.log('user object', this.props.user)
@@ -71,7 +71,15 @@ const Home = React.createClass({
         </div>
       )
     }
-    // console.log('this.props.allPolls', this.props.allPolls)
+  },
+  componentWillReceiveProps (nextProps) {
+    // If a new vote was accepted, the relevent poll card should be 
+    // flipped to a results card including the newest vote.
+    // For now, all polls will be refreshed.
+    if (nextProps.updatedPollResults !== null) {
+      this.props.dispatchGetAllPolls()
+      this.props.dispatchResetUpdatedPollResults()
+    }
   },
   render () {
     this.getRecentPolls()
@@ -79,7 +87,6 @@ const Home = React.createClass({
     if (this.props.allPolls === null || isEmpty(this.props.allPolls)) {
       showPolls = this.handleEmptyAllPollsObject()
     } else {
-      // console.log('this.props.allPolls inside render, should NOT be null', this.props.allPolls)
       showPolls = this.populatedCards()
     }
     return (
@@ -97,7 +104,7 @@ const mapStateToProps = (state) => {
   return {
     user: state.user.user,
     allPolls: state.allPolls.allPolls,
-    updatedPollResults: state.results.updatedResults
+    updatedPollResults: state.newVote.updatedResults
   }
 }
 
@@ -108,6 +115,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     dispatchSubmitVote (id, vote) {
       dispatch(submitVote(id, vote))
+    },
+    dispatchResetUpdatedPollResults () {
+      dispatch(resetUpdatedPollResults())
     }
   }
 }

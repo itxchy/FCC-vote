@@ -28275,7 +28275,7 @@
 	  newPoll: _createNewPoll2.default,
 	  user: _auth2.default,
 	  allPolls: _getAllPolls2.default,
-	  handleNewVote: _submitVote2.default
+	  newVote: _submitVote2.default
 	});
 
 /***/ },
@@ -66868,6 +66868,7 @@
 	  propTypes: {
 	    dispatchGetAllPolls: func,
 	    dispatchSubmitVote: func,
+	    dispatchResetUpdatedPollResults: func,
 	    user: object,
 	    allPolls: array,
 	    updatedPollResults: object
@@ -66880,7 +66881,6 @@
 	  populatedCards: function populatedCards() {
 	    var _this = this;
 	
-	    // console.log('all polls in populatedCards()', this.props.allPolls)
 	    return this.props.allPolls.map(function (poll) {
 	      // TODO: debug why certain voted polls don't show results initially
 	      // console.log('user object', this.props.user)
@@ -66941,7 +66941,15 @@
 	        )
 	      );
 	    }
-	    // console.log('this.props.allPolls', this.props.allPolls)
+	  },
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    // If a new vote was accepted, the relevent poll card should be 
+	    // flipped to a results card including the newest vote.
+	    // For now, all polls will be refreshed.
+	    if (nextProps.updatedPollResults !== null) {
+	      this.props.dispatchGetAllPolls();
+	      this.props.dispatchResetUpdatedPollResults();
+	    }
 	  },
 	  render: function render() {
 	    this.getRecentPolls();
@@ -66949,7 +66957,6 @@
 	    if (this.props.allPolls === null || (0, _isEmpty2.default)(this.props.allPolls)) {
 	      showPolls = this.handleEmptyAllPollsObject();
 	    } else {
-	      // console.log('this.props.allPolls inside render, should NOT be null', this.props.allPolls)
 	      showPolls = this.populatedCards();
 	    }
 	    return _react2.default.createElement(
@@ -66973,7 +66980,7 @@
 	  return {
 	    user: state.user.user,
 	    allPolls: state.allPolls.allPolls,
-	    updatedPollResults: state.results.updatedResults
+	    updatedPollResults: state.newVote.updatedResults
 	  };
 	};
 	
@@ -66984,6 +66991,9 @@
 	    },
 	    dispatchSubmitVote: function dispatchSubmitVote(id, vote) {
 	      dispatch((0, _submitVote.submitVote)(id, vote));
+	    },
+	    dispatchResetUpdatedPollResults: function dispatchResetUpdatedPollResults() {
+	      dispatch((0, _submitVote.resetUpdatedPollResults)());
 	    }
 	  };
 	};
@@ -86645,7 +86655,8 @@
 	  value: true
 	});
 	exports.submitVote = submitVote;
-	exports.default = handleNewVote;
+	exports.resetUpdatedPollResults = resetUpdatedPollResults;
+	exports.default = newVote;
 	
 	var _axios = __webpack_require__(421);
 	
@@ -86659,6 +86670,7 @@
 	
 	// Action
 	var UPDATED_POLL_RESULTS = 'UPDATED_POLL_RESULTS';
+	var RESET_UPDATED_POLL_RESULTS = 'RESET_UPDATED_POLL_RESULTS';
 	
 	// Action Creators
 	/** TODO:
@@ -86696,9 +86708,17 @@
 	function updatedPollResults(results) {
 	  return { type: UPDATED_POLL_RESULTS, results: results };
 	}
+	function resetUpdatedPollResults() {
+	  return { type: RESET_UPDATED_POLL_RESULTS, results: null };
+	}
 	
-	// Reducer
+	// Reducers
 	function reduceUpdatedPollResults(state, action) {
+	  var newState = {};
+	  Object.assign(newState, state, { updatedResults: action.results });
+	  return newState;
+	}
+	function reduceResetUpdatedPollResults(state, action) {
 	  var newState = {};
 	  Object.assign(newState, state, { updatedResults: action.results });
 	  return newState;
@@ -86709,13 +86729,15 @@
 	};
 	
 	// Root Reducer Slice
-	function handleNewVote() {
+	function newVote() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
 	  var action = arguments[1];
 	
 	  switch (action.type) {
 	    case UPDATED_POLL_RESULTS:
 	      return reduceUpdatedPollResults(state, action);
+	    case RESET_UPDATED_POLL_RESULTS:
+	      return reduceResetUpdatedPollResults(state, action);
 	    default:
 	      return state;
 	  }
