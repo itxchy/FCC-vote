@@ -1,4 +1,5 @@
 import axios from 'axios'
+import has from 'lodash/has'
 
 // action
 const SUBMIT_VOTE = 'SUBMIT_VOTE'
@@ -23,6 +24,15 @@ export function submitVote (id, vote) {
       .catch(err => {
         console.log('error caught in submitVote action creator')
         console.log('err.response.data:', err.response.data)
+
+        if (has(err.response.data, 'dupeVoter') && err.response.data.dupeVoter === true) {
+          console.log('dupeVoter detected!:', err.response.data.dupeVoter)
+        }
+
+        if (has(err.response.data, 'error')) {
+          console.log('submitVote server error:', err.response.data.error)
+          console.log('details:', err.response.data.details)
+        }
       })
   }
 }

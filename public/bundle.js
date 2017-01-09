@@ -33902,7 +33902,7 @@
 	};
 	var reduceUserLoading = exports.reduceUserLoading = function reduceUserLoading(state, action) {
 	  var newState = {};
-	  console.log('reduceUserLoading -> action.userLoading:', action.userLoading);
+	  // console.log('reduceUserLoading -> action.userLoading:', action.userLoading)
 	  Object.assign(newState, state, { userLoading: action.userLoading });
 	  return newState;
 	};
@@ -67124,6 +67124,10 @@
 	
 	var _axios2 = _interopRequireDefault(_axios);
 	
+	var _has = __webpack_require__(679);
+	
+	var _has2 = _interopRequireDefault(_has);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// action
@@ -67147,6 +67151,15 @@
 	    }).catch(function (err) {
 	      console.log('error caught in submitVote action creator');
 	      console.log('err.response.data:', err.response.data);
+	
+	      if ((0, _has2.default)(err.response.data, 'dupeVoter') && err.response.data.dupeVoter === true) {
+	        console.log('dupeVoter detected!:', err.response.data.dupeVoter);
+	      }
+	
+	      if ((0, _has2.default)(err.response.data, 'error')) {
+	        console.log('submitVote server error:', err.response.data.error);
+	        console.log('details:', err.response.data.details);
+	      }
 	    });
 	  };
 	}

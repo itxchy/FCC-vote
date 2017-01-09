@@ -66,7 +66,7 @@ export const reduceSetCurrentUser = (state, action) => {
 }
 export const reduceUserLoading = (state, action) => {
   const newState = {}
-  console.log('reduceUserLoading -> action.userLoading:', action.userLoading)
+  // console.log('reduceUserLoading -> action.userLoading:', action.userLoading)
   Object.assign(newState, state, { userLoading: action.userLoading })
   return newState
 }

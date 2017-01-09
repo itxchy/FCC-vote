@@ -89,24 +89,33 @@ router.put('/:id', (req, res) => {
       // check if voter has already voted
       let dupeCheck = await checkVoterUniqueness(pollID, voter)
       if (dupeCheck) {
-        return res.status(400).json({ 'bad request': 'user or IP can only vote once per poll' })
+        return res.status(400).json({ 
+          'bad request': 'user or IP can only vote once per poll',
+          dupeVoter: true
+        })
       }
       // add new vote to current poll
       let updatedPoll = { updated: false, totalVotes: null, doc: null }
       updatedPoll = await updateDocumentWithNewVote(selectedOption, pollID, voter)
       if (!updatedPoll.updated) {
-        return res.status(500).json({ error: 'Failed to update poll with a valid new vote', 'details': updatedPoll.error })
+        return res.status(500).json({
+          error: 'Failed to update poll with a valid new vote', 
+          details: updatedPoll.error
+        })
       }
       // add new vote total to poll
       let updatedTotalVotes = await updateDocumentVotesTotal(pollID, updatedPoll.totalVotes)
       if (!updatedTotalVotes.updated) {
-        return res.status(500).json({ error: 'Failed to update total votes tally', details: updatedTotalVotes.error })
+        return res.status(500).json({
+          error: 'Failed to update total votes tally',
+          details: updatedTotalVotes.error })
       }
       console.log('updatedTotalVotes.doc', updatedTotalVotes.doc)
       return res.json({ 
         success: 'new vote and new total votes tally saved', 
         poll: updatedPoll.doc, 
-        totalVotes: updatedTotalVotes.doc 
+        totalVotes: updatedTotalVotes.doc,
+        dupeVote: false
       })
     } catch (error) {
       console.error('caught ERROR', error)
