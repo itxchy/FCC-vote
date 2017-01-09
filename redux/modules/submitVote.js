@@ -1,11 +1,11 @@
 import axios from 'axios'
 import has from 'lodash/has'
 
-// action
+// Action
 const SUBMIT_VOTE = 'SUBMIT_VOTE'
-const UPDATED_POLL_RESULTS = 'SHOW_UPDATED_POLL_RESULTS'
+const UPDATED_POLL_RESULTS = 'UPDATED_POLL_RESULTS'
 
-// action creator
+// Action Creator
 
 /** TODO:
  * After a new vote is submitted, the poll on the client page
@@ -28,7 +28,8 @@ export function submitVote (id, vote) {
     axios.put(`/api/polls/${id}`, vote)
       .then(res => {
         console.log('New, unique vote successful in submitVote!', res)
-        // dispatch(updatedPollResults(...results))
+        const results = res.data.totalVotes
+        dispatch(updatedPollResults(results))
       })
       .catch(err => {
         if (has(err.response.data, 'dupeVoter') && err.response.data.dupeVoter === true) {
@@ -40,4 +41,16 @@ export function submitVote (id, vote) {
       })
   }
 }
+function updatedPollResults (results) {
+  return { type: UPDATED_POLL_RESULTS, results }
+}
 
+// Reducer
+
+function reduceUpdatedPollResults (state, action) {
+  const newState = {}
+  Object.assign(newState, state, { updatedResults: action.results })
+  return newState
+}
+
+// Root Reducer Slice

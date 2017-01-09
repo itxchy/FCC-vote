@@ -67130,11 +67130,11 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// action
+	// Action
 	var SUBMIT_VOTE = 'SUBMIT_VOTE';
-	var UPDATED_POLL_RESULTS = 'SHOW_UPDATED_POLL_RESULTS';
+	var UPDATED_POLL_RESULTS = 'UPDATED_POLL_RESULTS';
 	
-	// action creator
+	// Action Creator
 	
 	/** TODO:
 	 * After a new vote is submitted, the poll on the client page
@@ -67156,7 +67156,8 @@
 	  return function (dispatch) {
 	    _axios2.default.put('/api/polls/' + id, vote).then(function (res) {
 	      console.log('New, unique vote successful in submitVote!', res);
-	      // dispatch(updatedPollResults(...results))
+	      var results = res.data.totalVotes;
+	      dispatch(updatedPollResults(results));
 	    }).catch(function (err) {
 	      if ((0, _has2.default)(err.response.data, 'dupeVoter') && err.response.data.dupeVoter === true) {
 	        console.log('dupeVoter detected!:', err.response.data.dupeVoter);
@@ -67167,6 +67168,19 @@
 	    });
 	  };
 	}
+	function updatedPollResults(results) {
+	  return { type: UPDATED_POLL_RESULTS, results: results };
+	}
+	
+	// Reducer
+	
+	function reduceUpdatedPollResults(state, action) {
+	  var newState = {};
+	  Object.assign(newState, state, { updatedResults: action.results });
+	  return newState;
+	}
+	
+	// Root Reducer Slice
 
 /***/ },
 /* 659 */
