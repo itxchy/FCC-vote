@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import PollCard from './common/PollCard'
 import ResultsCard from './common/ResultsCard'
 import { getAllPolls } from '../redux/modules/getAllPolls'
+import { submitVote } from '../redux/modules/submitVote'
 const { func, object, array } = React.PropTypes
 import { dupeVoterCheck } from '../routes/lib/pollsLib'
 import isEmpty from 'lodash/isEmpty'
@@ -30,6 +31,7 @@ const Home = React.createClass({
       if (dupeVoter) {
         return (
           <ResultsCard
+            user={this.props.user}
             key={_id}
             title={title}
             options={options}

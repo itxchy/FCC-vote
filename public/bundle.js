@@ -66841,6 +66841,8 @@
 	
 	var _getAllPolls = __webpack_require__(642);
 	
+	var _submitVote = __webpack_require__(658);
+	
 	var _pollsLib = __webpack_require__(678);
 	
 	var _isEmpty = __webpack_require__(641);
@@ -66885,6 +66887,7 @@
 	
 	      if (dupeVoter) {
 	        return _react2.default.createElement(_ResultsCard2.default, {
+	          user: _this.props.user,
 	          key: _id,
 	          title: title,
 	          options: options,
@@ -66973,7 +66976,7 @@
 	      dispatch((0, _getAllPolls.getAllPolls)());
 	    },
 	    dispatchSubmitVote: function dispatchSubmitVote(id, vote) {
-	      dispatch(submitVote(id, vote));
+	      dispatch((0, _submitVote.submitVote)(id, vote));
 	    }
 	  };
 	};
@@ -66993,10 +66996,6 @@
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRedux = __webpack_require__(643);
-	
-	var _submitVote = __webpack_require__(658);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -67166,8 +67165,6 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(643);
-	
 	var _D3Chart = __webpack_require__(660);
 	
 	var _D3Chart2 = _interopRequireDefault(_D3Chart);
@@ -67198,7 +67195,10 @@
 	  render: function render() {
 	    var d3Component = null;
 	    if (!(0, _isEmpty2.default)(this.props.options)) {
-	      d3Component = _react2.default.createElement(_D3Chart2.default, { results: this.props.options, pollId: this.props.id });
+	      d3Component = _react2.default.createElement(_D3Chart2.default, {
+	        results: this.props.options,
+	        pollId: this.props.id
+	      });
 	    }
 	    return _react2.default.createElement(
 	      'div',
@@ -67231,13 +67231,7 @@
 	  }
 	});
 	
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    user: state.user
-	  };
-	};
-	
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ResultsCard);
+	exports.default = ResultsCard;
 
 /***/ },
 /* 660 */

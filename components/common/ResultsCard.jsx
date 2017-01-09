@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 const { string, array, number, object } = React.PropTypes
 import D3Chart from './D3Chart'
 import isEmpty from 'lodash/isEmpty'
@@ -15,7 +14,12 @@ const ResultsCard = React.createClass({
   render () {
     let d3Component = null
     if (!isEmpty(this.props.options)) {
-      d3Component = <D3Chart results={this.props.options} pollId={this.props.id} />
+      d3Component = (
+        <D3Chart
+          results={this.props.options}
+          pollId={this.props.id}
+          />
+      )
     }
     return (
       <div className='col-sm-4'>
@@ -33,10 +37,4 @@ const ResultsCard = React.createClass({
   }
 })
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.user
-  }
-}
-
-export default connect(mapStateToProps)(ResultsCard)
+export default ResultsCard
