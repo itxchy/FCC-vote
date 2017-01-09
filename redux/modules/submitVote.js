@@ -14,9 +14,14 @@ export function submitVote (id, vote) {
   return dispatch => {
     axios.put(`/api/polls/${id}`, vote)
       .then(res => {
-        // new poll results should be returned
+        // new poll results should be returned, or dupe
+        // vote error
         console.log('new poll results, and totalVotes should be in the response:', res)
         // dispatch(showUpdatedPollResults(...results))
+      })
+      .catch(err => {
+        console.log('error caught in submitVote action creator')
+        console.log('err.response.data:', err.response.data)
       })
   }
 }

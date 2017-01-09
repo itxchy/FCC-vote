@@ -66873,8 +66873,9 @@
 	
 	    console.log('all polls in populatedCards()', this.props.allPolls);
 	    return this.props.allPolls.map(function (poll) {
-	      console.log('user object', _this.props.user);
-	      console.log('dupeVoterCheck args; poll:', poll, '\n this.props.user.username:', _this.props.user.username);
+	      // TODO: debug why certain voted polls don't show results initially
+	      // console.log('user object', this.props.user)
+	      // console.log('dupeVoterCheck args; poll:', poll, '\n this.props.user.username:', this.props.user.username)
 	      var dupeVoter = (0, _pollsLib.dupeVoterCheck)(poll, _this.props.user.username);
 	      var title = poll.title;
 	      var options = poll.options;
@@ -67147,9 +67148,13 @@
 	function submitVote(id, vote) {
 	  return function (dispatch) {
 	    _axios2.default.put('/api/polls/' + id, vote).then(function (res) {
-	      // new poll results should be returned
+	      // new poll results should be returned, or dupe
+	      // vote error
 	      console.log('new poll results, and totalVotes should be in the response:', res);
 	      // dispatch(showUpdatedPollResults(...results))
+	    }).catch(function (err) {
+	      console.log('error caught in submitVote action creator');
+	      console.log('err.response.data:', err.response.data);
 	    });
 	  };
 	}

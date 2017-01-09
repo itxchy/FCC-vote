@@ -21,8 +21,9 @@ const Home = React.createClass({
   populatedCards () {
     console.log('all polls in populatedCards()', this.props.allPolls)
     return this.props.allPolls.map(poll => {
-      console.log('user object', this.props.user)
-      console.log('dupeVoterCheck args; poll:', poll, '\n this.props.user.username:', this.props.user.username)
+      // TODO: debug why certain voted polls don't show results initially
+      // console.log('user object', this.props.user)
+      // console.log('dupeVoterCheck args; poll:', poll, '\n this.props.user.username:', this.props.user.username)
       const dupeVoter = dupeVoterCheck(poll, this.props.user.username)
       const { title, options, totalVotes, _id } = poll
       if (dupeVoter) {
