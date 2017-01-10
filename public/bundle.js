@@ -66943,7 +66943,7 @@
 	    }
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    // If a new vote was accepted, the relevent poll card should be 
+	    // If a new vote was accepted, the relevent poll card should be
 	    // flipped to a results card including the newest vote.
 	    // For now, all polls will be refreshed.
 	    if (nextProps.updatedPollResults !== null) {
@@ -90203,8 +90203,6 @@
 	});
 	exports.submitNewPoll = submitNewPoll;
 	exports.getUserPolls = getUserPolls;
-	exports.userSignupRequest = userSignupRequest;
-	exports.isUserExists = isUserExists;
 	
 	var _axios = __webpack_require__(421);
 	
@@ -90217,13 +90215,6 @@
 	}
 	function getUserPolls(user) {
 	  return _axios2.default.get('/api/polls/' + user);
-	}
-	
-	function userSignupRequest(userData) {
-	  return _axios2.default.post('/api/users', userData);
-	}
-	function isUserExists(identifier) {
-	  return _axios2.default.get('/api/users/' + identifier);
 	}
 
 /***/ },
@@ -90250,9 +90241,11 @@
 	
 	var _TextFieldGroup2 = _interopRequireDefault(_TextFieldGroup);
 	
-	var _apiCalls = __webpack_require__(754);
+	var _userSignupRequest = __webpack_require__(777);
 	
 	var _flashMessage = __webpack_require__(260);
+	
+	var _isUserExists = __webpack_require__(778);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -90334,8 +90327,9 @@
 	
 	    if (this.isValid()) {
 	      this.setState({ errors: {}, isLoading: true });
-	
-	      this.props.dispatchUserSignupRequest(this.state).then(function (response) {
+	      this.props.dispatchUserSignupRequest(this.state)
+	      // TODO: then is not going to work here
+	      .then(function (response) {
 	        _this2.props.dispatchAddFlashMessage({
 	          type: 'success',
 	          text: 'Signup successful!'
@@ -90416,21 +90410,27 @@
 	  router: object.isRequired
 	};
 	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    user: state.user
+	  };
+	};
+	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    dispatchUserSignupRequest: function dispatchUserSignupRequest(state) {
-	      dispatch((0, _apiCalls.userSignupRequest)(state));
+	      dispatch((0, _userSignupRequest.userSignupRequest)(state));
 	    },
 	    dispatchAddFlashMessage: function dispatchAddFlashMessage(messageObj) {
 	      dispatch((0, _flashMessage.addFlashMessage)(messageObj));
 	    },
 	    dispatchIsUserExists: function dispatchIsUserExists(val) {
-	      dispatch((0, _apiCalls.isUserExists)(val));
+	      dispatch((0, _isUserExists.isUserExists)(val));
 	    }
 	  };
 	};
 	
-	exports.default = (0, _reactRedux.connect)(mapDispatchToProps)(Signup);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Signup);
 
 /***/ },
 /* 756 */
@@ -90876,6 +90876,71 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 763 */,
+/* 764 */,
+/* 765 */,
+/* 766 */,
+/* 767 */,
+/* 768 */,
+/* 769 */,
+/* 770 */,
+/* 771 */,
+/* 772 */,
+/* 773 */,
+/* 774 */,
+/* 775 */,
+/* 776 */,
+/* 777 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.userSignupRequest = userSignupRequest;
+	
+	var _axios = __webpack_require__(421);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// import { addFlashMessage } from './addFlashMessage'
+	
+	// action
+	
+	// action creator
+	function userSignupRequest(userData) {
+	  return function (dispatch) {
+	    return _axios2.default.post('/api/users', userData);
+	  };
+	}
+
+/***/ },
+/* 778 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.isUserExists = isUserExists;
+	
+	var _axios = __webpack_require__(421);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function isUserExists(identifier) {
+	  return function (dispatch) {
+	    return _axios2.default.get('/api/users/' + identifier);
+	  };
+	}
 
 /***/ }
 /******/ ]);

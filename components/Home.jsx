@@ -73,7 +73,7 @@ const Home = React.createClass({
     }
   },
   componentWillReceiveProps (nextProps) {
-    // If a new vote was accepted, the relevent poll card should be 
+    // If a new vote was accepted, the relevent poll card should be
     // flipped to a results card including the newest vote.
     // For now, all polls will be refreshed.
     if (nextProps.updatedPollResults !== null) {

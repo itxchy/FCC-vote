@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 import validateInput from '../../routes/shared/signupValidation'
 import TextFieldGroup from '../common/TextFieldGroup'
 const { func, object } = React.PropTypes
-import { userSignupRequest, isUserExists } from '../../redux/apiCalls'
+import { userSignupRequest } from '../../redux/modules/userSignupRequest'
 import { addFlashMessage } from '../../redux/modules/flashMessage'
+import { isUserExists } from '../../redux/modules/isUserExists'
 
 const Signup = React.createClass({
   propTypes: {
@@ -71,8 +72,8 @@ const Signup = React.createClass({
 
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true })
-
       this.props.dispatchUserSignupRequest(this.state)
+      // TODO: then is not going to work here
         .then(response => {
           this.props.dispatchAddFlashMessage({
             type: 'success',
@@ -150,6 +151,12 @@ Signup.contextTypes = {
   router: object.isRequired
 }
 
+const mapStateToProps = (state) => {
+  return {
+    user: state.user
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchUserSignupRequest (state) {
@@ -164,4 +171,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapDispatchToProps)(Signup)
+export default connect(mapStateToProps, mapDispatchToProps)(Signup)
