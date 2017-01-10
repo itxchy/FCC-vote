@@ -4,7 +4,7 @@ import axios from 'axios'
 const DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS'
 
 // Action Creators
-function dupeUserCheck(errors, invalid) {
+function dupeUserCheckResults (errors, invalid) {
   return { type: DUPE_USER_CHECK_RESULTS, errors, invalid }
 }
 export function isUserExists (identifier, field, validationErrors) {
@@ -21,8 +21,8 @@ export function isUserExists (identifier, field, validationErrors) {
           invalid = false
         }
         let newErrors = {}
-        Object.assign(newErrors, validationsErrors, errors)
-        dispatch(dupeUserCheck( newErrors, invalid ))
+        Object.assign(newErrors, validationErrors, errors)
+        dispatch(dupeUserCheckResults(newErrors, invalid))
       })
   }
 }
@@ -30,9 +30,9 @@ export function isUserExists (identifier, field, validationErrors) {
 // Reducer
 function reduceDupeUserCheck (state, action) {
   const newState = {}
-  Object.assign(newState, state, { 
-    errors: action.errors, 
-    invalid: action.invalid 
+  Object.assign(newState, state, {
+    errors: action.errors,
+    invalid: action.invalid
   })
 }
 

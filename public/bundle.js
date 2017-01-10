@@ -90946,7 +90946,7 @@
 	var DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS';
 	
 	// Action Creators
-	function dupeUserCheck(errors, invalid) {
+	function dupeUserCheckResults(errors, invalid) {
 	  return { type: DUPE_USER_CHECK_RESULTS, errors: errors, invalid: invalid };
 	}
 	function isUserExists(identifier, field, validationErrors) {
@@ -90962,8 +90962,8 @@
 	        invalid = false;
 	      }
 	      var newErrors = {};
-	      Object.assign(newErrors, validationsErrors, errors);
-	      dispatch(dupeUserCheck(newErrors, invalid));
+	      Object.assign(newErrors, validationErrors, errors);
+	      dispatch(dupeUserCheckResults(newErrors, invalid));
 	    });
 	  };
 	}
