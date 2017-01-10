@@ -1,7 +1,28 @@
 import axios from 'axios'
 
-export function isUserExists (identifier) {
+// action
+const DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS'
+
+// action creators
+function dupeUserCheckResults(errors, invalid) {
+  return { type: DUPE_USER_CHECK_RESULTS, errors, invalid }
+}
+export function isUserExists (identifier, field, validationErrors) {
   return dispatch => {
-    return axios.get(`/api/users/${identifier}`)
+    axios.get(`/api/users/${identifier}`)
+      .then(res => {
+        let invalid
+        let errors = {}
+        if (res.data.user) {
+          errors[field] = 'A user exists with this ' + field
+          invalid = true
+        } else {
+          errors[field] = ''
+          invalid = false
+        }
+        let newErrors = {}
+        Object.assign(newErrors, validationsErrors, errors)
+        // dispatch(actionCreator( newErrors, invalid ))
+      })
   }
 }

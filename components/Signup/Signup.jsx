@@ -50,7 +50,7 @@ const Signup = React.createClass({
     const field = event.target.name
     const val = event.target.value
     if (val !== '') {
-      this.props.dispatchIsUserExists(val).then(res => {
+      this.props.dispatchIsUserExists(val, field, this.state.errors).then(res => {
         // if a user is found, pass an error message
         let errors = this.state.errors
         let invalid

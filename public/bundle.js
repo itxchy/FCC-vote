@@ -90304,7 +90304,7 @@
 	    var field = event.target.name;
 	    var val = event.target.value;
 	    if (val !== '') {
-	      this.props.dispatchIsUserExists(val).then(function (res) {
+	      this.props.dispatchIsUserExists(val, field, this.state.errors).then(function (res) {
 	        // if a user is found, pass an error message
 	        var errors = _this.state.errors;
 	        var invalid = void 0;
@@ -90936,9 +90936,29 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function isUserExists(identifier) {
+	// action
+	var DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS';
+	
+	// action creators
+	function dupeUserCheckResults(errors, invalid) {
+	  return { type: DUPE_USER_CHECK_RESULTS, errors: errors, invalid: invalid };
+	}
+	function isUserExists(identifier, field, validationErrors) {
 	  return function (dispatch) {
-	    return _axios2.default.get('/api/users/' + identifier);
+	    _axios2.default.get('/api/users/' + identifier).then(function (res) {
+	      var invalid = void 0;
+	      var errors = {};
+	      if (res.data.user) {
+	        errors[field] = 'A user exists with this ' + field;
+	        invalid = true;
+	      } else {
+	        errors[field] = '';
+	        invalid = false;
+	      }
+	      var newErrors = {};
+	      Object.assign(newErrors, validationsErrors, errors);
+	      // dispatch(actionCreator( newErrors, invalid ))
+	    });
 	  };
 	}
 
