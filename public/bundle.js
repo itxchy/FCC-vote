@@ -28268,6 +28268,10 @@
 	
 	var _submitVote2 = _interopRequireDefault(_submitVote);
 	
+	var _isUserExists = __webpack_require__(778);
+	
+	var _isUserExists2 = _interopRequireDefault(_isUserExists);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = (0, _redux.combineReducers)({
@@ -28275,7 +28279,8 @@
 	  newPoll: _createNewPoll2.default,
 	  user: _auth2.default,
 	  allPolls: _getAllPolls2.default,
-	  newVote: _submitVote2.default
+	  newVote: _submitVote2.default,
+	  dupeUserCheck: _isUserExists2.default
 	});
 
 /***/ },
@@ -90929,6 +90934,7 @@
 	  value: true
 	});
 	exports.isUserExists = isUserExists;
+	exports.default = dupeUserCheck;
 	
 	var _axios = __webpack_require__(421);
 	
@@ -90936,11 +90942,11 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// action
+	// Action
 	var DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS';
 	
-	// action creators
-	function dupeUserCheckResults(errors, invalid) {
+	// Action Creators
+	function dupeUserCheck(errors, invalid) {
 	  return { type: DUPE_USER_CHECK_RESULTS, errors: errors, invalid: invalid };
 	}
 	function isUserExists(identifier, field, validationErrors) {
@@ -90957,9 +90963,36 @@
 	      }
 	      var newErrors = {};
 	      Object.assign(newErrors, validationsErrors, errors);
-	      // dispatch(actionCreator( newErrors, invalid ))
+	      dispatch(dupeUserCheck(newErrors, invalid));
 	    });
 	  };
+	}
+	
+	// Reducer
+	function reduceDupeUserCheck(state, action) {
+	  var newState = {};
+	  Object.assign(newState, state, {
+	    errors: action.errors,
+	    invalid: action.invalid
+	  });
+	}
+	
+	var initialState = {
+	  errors: {},
+	  invalid: false
+	};
+	
+	// Root Reducer Slice
+	function dupeUserCheck() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case DUPE_USER_CHECK_RESULTS:
+	      return reduceDupeUserCheck(state, action);
+	    default:
+	      return state;
+	  }
 	}
 
 /***/ }
