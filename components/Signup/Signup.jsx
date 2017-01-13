@@ -88,6 +88,7 @@ const Signup = React.createClass({
   },
 
   render () {
+    // TODO move errors from component state to redux state.
     const { errors } = this.state
     return (
       <div className='row'>
@@ -153,7 +154,9 @@ Signup.contextTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user,
+    signupErrors: state.signupErrors,
+    invalid: state.invalid
   }
 }
 
