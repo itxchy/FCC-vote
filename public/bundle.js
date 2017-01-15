@@ -65973,6 +65973,11 @@
 	      var newErrors = {};
 	      Object.assign(newErrors, validationErrors, errors);
 	      dispatch(dupeUserCheckResults(newErrors, invalid));
+	    }).catch(function (err) {
+	      var invalid = true;
+	      var error = 'username/email lookup failed';
+	      dispatch(dupeUserCheckResults(error, invalid));
+	      console.error('dupe user check failed!', err.response.data);
 	    });
 	  };
 	}
@@ -90378,6 +90383,7 @@
 	    var field = event.target.name;
 	    var val = event.target.value;
 	    if (val !== '') {
+	      // ******* TODO: move .then function to redux *******
 	      this.props.dispatchIsUserExists(val, field, this.state.errors).then(function (res) {
 	        // if a user is found, pass an error message
 	        var errors = _this.state.errors;
@@ -90488,7 +90494,7 @@
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    user: state.user,
-	    signupErrors: state.signupErrors,
+	    errors: state.signupErrors,
 	    invalid: state.invalid
 	  };
 	};

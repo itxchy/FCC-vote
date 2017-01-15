@@ -24,6 +24,12 @@ export function isUserExists (identifier, field, validationErrors) {
         Object.assign(newErrors, validationErrors, errors)
         dispatch(dupeUserCheckResults(newErrors, invalid))
       })
+      .catch(err => {
+        const invalid = true
+        const error = 'username/email lookup failed'
+        dispatch(dupeUserCheckResults(error, invalid))
+        console.error('dupe user check failed!', err.response.data)
+      })
   }
 }
 

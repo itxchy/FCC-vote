@@ -29,28 +29,6 @@ function validateInput (data, otherValidations) {
       console.error('ERROR: user validation promise rejected', err)
       return Promise.reject(err)
     })
-
-  /* User.query({
-    where: { email: data.email },
-    orWhere: { username: data.username }
-  })
-  .fetch()
-  .then(user => {
-    if (user) {
-      if (user.get('username') === data.username) {
-        errors.username = 'This username isn\'t available.'
-      }
-      if (user.get('email') === data.email) {
-        errors.email = 'A user is already registered to this email.'
-      }
-    }
-
-    return {
-      errors,
-      isValid: isEmpty(errors)
-    }
-  })
-  .catch(err => console.error('duplicate user check error', err)) */
 }
 
 /**
@@ -70,18 +48,8 @@ router.get('/:identifier', (req, res) => {
   })
   .catch(err => {
     console.log('find user promise rejection')
-    res.status(400).json({ 'user lookup error': err })
+    res.status(400).json({ 'user lookup error': err, error: err })
   })
-  /*  User.query({
-    select: ['username', 'email'],
-    where: { email: req.params.identifier },
-    orWhere: { username: req.params.identifier }
-  })
-  .fetch()
-  .then(user => {
-    res.json({user})
-  })
-  .catch(err => console.error('user lookup error', err)) */
 })
 
 /**
@@ -107,11 +75,6 @@ router.post('/', (req, res) => {
         .catch(err => {
           res.status(500).json({ 'save user error': err })
         })
-        /* User.forge({
-          username, email, password_digest
-        }, { hasTimestamps: true }).save()
-          .then(user => res.json({success: true}))
-          .catch(err => res.status(500).json({error: err})) */
       } else {
         res.status(400).json({ 'user input validation error': results.errors })
       }

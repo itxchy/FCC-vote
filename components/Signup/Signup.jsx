@@ -50,6 +50,7 @@ const Signup = React.createClass({
     const field = event.target.name
     const val = event.target.value
     if (val !== '') {
+      // ******* TODO: move .then function to redux *******
       this.props.dispatchIsUserExists(val, field, this.state.errors).then(res => {
         // if a user is found, pass an error message
         let errors = this.state.errors
@@ -155,7 +156,7 @@ Signup.contextTypes = {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
-    signupErrors: state.signupErrors,
+    errors: state.signupErrors,
     invalid: state.invalid
   }
 }
