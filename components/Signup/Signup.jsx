@@ -11,7 +11,8 @@ const Signup = React.createClass({
   propTypes: {
     dispatchUserSignupRequest: func.isRequired,
     dispatchAddFlashMessage: func.isRequired,
-    dispatchIsUserExists: func.isRequired
+    dispatchIsUserExists: func.isRequired,
+    errors: object
   },
 
   getInitialState () {
@@ -20,19 +21,13 @@ const Signup = React.createClass({
       email: '',
       password: '',
       passwordConfirmation: '',
-      errors: {},
+      // errors: {},
       isLoading: false,
       invalid: false
     }
   },
 
   onChange (event) {
-    /**
-     * instead of setting state with {username: event.target.value},
-     * using [event.target.name] will allow this function to be reused
-     * by other form fields with onChange events. Thank you Rem Zolotykh
-     * for sharing this method.
-     */
     this.setState({[event.target.name]: event.target.value})
   },
 
@@ -47,24 +42,13 @@ const Signup = React.createClass({
   },
 
   checkUserExists (event) {
+    // TODO: make sure isUserExists isn't dispatched a second time
+    // with the name identifier error in redux
     const field = event.target.name
     const val = event.target.value
+    console.log('checkUserExists event data:', '\nfield:', field, '\nval', val)
     if (val !== '') {
-      // ******* TODO: move .then function to redux *******
-      this.props.dispatchIsUserExists(val, field, this.state.errors).then(res => {
-        // if a user is found, pass an error message
-        let errors = this.state.errors
-        let invalid
-        if (res.data.user) {
-          errors[field] = 'A user exists with this ' + field
-          invalid = true
-        } else {
-          errors[field] = ''
-          invalid = false
-        }
-
-        this.setState({errors, invalid})
-      })
+      this.props.dispatchIsUserExists(val, field, this.props.errors)
     }
   },
 
@@ -90,7 +74,7 @@ const Signup = React.createClass({
 
   render () {
     // TODO move errors from component state to redux state.
-    const { errors } = this.state
+    const { errors } = this.props
     return (
       <div className='row'>
         <h1 className='text-center'>Sign up to make some polls!</h1>
@@ -156,7 +140,10 @@ Signup.contextTypes = {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
-    errors: state.signupErrors,
+    errors: {
+      username: state.dupeUserCheck.errors.username,
+      email: state.dupeUserCheck.errors.email
+    },
     invalid: state.invalid
   }
 }
@@ -169,8 +156,8 @@ const mapDispatchToProps = (dispatch) => {
     dispatchAddFlashMessage (messageObj) {
       dispatch(addFlashMessage(messageObj))
     },
-    dispatchIsUserExists (val) {
-      dispatch(isUserExists(val))
+    dispatchIsUserExists (val, field, validationErrors) {
+      dispatch(isUserExists(val, field, validationErrors))
     }
   }
 }

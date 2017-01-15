@@ -65958,25 +65958,22 @@
 	function dupeUserCheckResults(errors, invalid) {
 	  return { type: DUPE_USER_CHECK_RESULTS, errors: errors, invalid: invalid };
 	}
+	
 	function isUserExists(identifier, field, validationErrors) {
 	  return function (dispatch) {
 	    _axios2.default.get('/api/users/' + identifier).then(function (res) {
-	      var invalid = void 0;
-	      var errors = {};
-	      if (res.data.user) {
-	        errors[field] = 'A user exists with this ' + field;
-	        invalid = true;
-	      } else {
-	        errors[field] = '';
-	        invalid = false;
-	      }
-	      var newErrors = {};
-	      Object.assign(newErrors, validationErrors, errors);
+	      var _checkUserInResponse = checkUserInResponse(res, field);
+	
+	      var invalid = _checkUserInResponse.invalid;
+	      var errors = _checkUserInResponse.errors;
+	
+	      var newErrors = Object.assign({}, validationErrors, errors);
 	      dispatch(dupeUserCheckResults(newErrors, invalid));
 	    }).catch(function (err) {
 	      var invalid = true;
-	      var error = 'username/email lookup failed';
-	      dispatch(dupeUserCheckResults(error, invalid));
+	      var errors = { server: 'username/email lookup failed' };
+	      var newErrors = Object.assign({}, validationErrors, errors);
+	      dispatch(dupeUserCheckResults(newErrors, invalid));
 	      console.error('dupe user check failed!', err.response.data);
 	    });
 	  };
@@ -65989,6 +65986,7 @@
 	    errors: action.errors,
 	    invalid: action.invalid
 	  });
+	  return newState;
 	}
 	
 	var initialState = {
@@ -66007,6 +66005,25 @@
 	    default:
 	      return state;
 	  }
+	}
+	
+	// Lib
+	
+	function checkUserInResponse(res, field) {
+	  console.log('isUserExists response:', res, 'field:', field);
+	  var invalid = void 0;
+	  var errors = {};
+	  if (res.data.user) {
+	    errors[field] = 'A user exists with this ' + field;
+	    invalid = true;
+	  } else {
+	    errors[field] = null;
+	    invalid = false;
+	  }
+	  return {
+	    errors: errors,
+	    invalid: invalid
+	  };
 	}
 
 /***/ },
@@ -90341,7 +90358,8 @@
 	  propTypes: {
 	    dispatchUserSignupRequest: func.isRequired,
 	    dispatchAddFlashMessage: func.isRequired,
-	    dispatchIsUserExists: func.isRequired
+	    dispatchIsUserExists: func.isRequired,
+	    errors: object
 	  },
 	
 	  getInitialState: function getInitialState() {
@@ -90350,18 +90368,12 @@
 	      email: '',
 	      password: '',
 	      passwordConfirmation: '',
-	      errors: {},
+	      // errors: {},
 	      isLoading: false,
 	      invalid: false
 	    };
 	  },
 	  onChange: function onChange(event) {
-	    /**
-	     * instead of setting state with {username: event.target.value},
-	     * using [event.target.name] will allow this function to be reused
-	     * by other form fields with onChange events. Thank you Rem Zolotykh
-	     * for sharing this method.
-	     */
 	    this.setState(_defineProperty({}, event.target.name, event.target.value));
 	  },
 	  isValid: function isValid() {
@@ -90378,30 +90390,17 @@
 	    return isValid;
 	  },
 	  checkUserExists: function checkUserExists(event) {
-	    var _this = this;
-	
+	    // TODO: make sure isUserExists isn't dispatched a second time
+	    // with the name identifier error in redux
 	    var field = event.target.name;
 	    var val = event.target.value;
+	    console.log('checkUserExists event data:', '\nfield:', field, '\nval', val);
 	    if (val !== '') {
-	      // ******* TODO: move .then function to redux *******
-	      this.props.dispatchIsUserExists(val, field, this.state.errors).then(function (res) {
-	        // if a user is found, pass an error message
-	        var errors = _this.state.errors;
-	        var invalid = void 0;
-	        if (res.data.user) {
-	          errors[field] = 'A user exists with this ' + field;
-	          invalid = true;
-	        } else {
-	          errors[field] = '';
-	          invalid = false;
-	        }
-	
-	        _this.setState({ errors: errors, invalid: invalid });
-	      });
+	      this.props.dispatchIsUserExists(val, field, this.props.errors);
 	    }
 	  },
 	  onSubmit: function onSubmit(event) {
-	    var _this2 = this;
+	    var _this = this;
 	
 	    event.preventDefault();
 	
@@ -90410,19 +90409,19 @@
 	      this.props.dispatchUserSignupRequest(this.state)
 	      // TODO: then is not going to work here
 	      .then(function (response) {
-	        _this2.props.dispatchAddFlashMessage({
+	        _this.props.dispatchAddFlashMessage({
 	          type: 'success',
 	          text: 'Signup successful!'
 	        });
-	        _this2.context.router.push('/');
+	        _this.context.router.push('/');
 	      }).catch(function (error) {
-	        _this2.setState({ errors: error.response.data, isLoading: false });
+	        _this.setState({ errors: error.response.data, isLoading: false });
 	      });
 	    }
 	  },
 	  render: function render() {
 	    // TODO move errors from component state to redux state.
-	    var errors = this.state.errors;
+	    var errors = this.props.errors;
 	
 	    return _react2.default.createElement(
 	      'div',
@@ -90494,7 +90493,10 @@
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    user: state.user,
-	    errors: state.signupErrors,
+	    errors: {
+	      username: state.dupeUserCheck.errors.username,
+	      email: state.dupeUserCheck.errors.email
+	    },
 	    invalid: state.invalid
 	  };
 	};
@@ -90507,8 +90509,8 @@
 	    dispatchAddFlashMessage: function dispatchAddFlashMessage(messageObj) {
 	      dispatch((0, _flashMessage.addFlashMessage)(messageObj));
 	    },
-	    dispatchIsUserExists: function dispatchIsUserExists(val) {
-	      dispatch((0, _isUserExists.isUserExists)(val));
+	    dispatchIsUserExists: function dispatchIsUserExists(val, field, validationErrors) {
+	      dispatch((0, _isUserExists.isUserExists)(val, field, validationErrors));
 	    }
 	  };
 	};
