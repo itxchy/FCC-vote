@@ -42,7 +42,7 @@ const initialState = {
 }
 
 // Root Reducer Slice
-export default function dupeUserCheck (state = initialState, action) {
+export default function clientFormValidation (state = initialState, action) {
   switch (action.type) {
     case DUPE_USER_CHECK_RESULTS:
       return reduceDupeUserCheck(state, action)

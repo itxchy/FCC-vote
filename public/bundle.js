@@ -28268,9 +28268,9 @@
 	
 	var _submitVote2 = _interopRequireDefault(_submitVote);
 	
-	var _isUserExists = __webpack_require__(646);
+	var _clientFormValidation = __webpack_require__(779);
 	
-	var _isUserExists2 = _interopRequireDefault(_isUserExists);
+	var _clientFormValidation2 = _interopRequireDefault(_clientFormValidation);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -28280,7 +28280,7 @@
 	  user: _auth2.default,
 	  allPolls: _getAllPolls2.default,
 	  newVote: _submitVote2.default,
-	  dupeUserCheck: _isUserExists2.default
+	  clientFormValidation: _clientFormValidation2.default
 	});
 
 /***/ },
@@ -65934,99 +65934,7 @@
 
 
 /***/ },
-/* 646 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.isUserExists = isUserExists;
-	exports.default = dupeUserCheck;
-	
-	var _axios = __webpack_require__(421);
-	
-	var _axios2 = _interopRequireDefault(_axios);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	// Action
-	var DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS';
-	
-	// Action Creators
-	function dupeUserCheckResults(errors, invalid) {
-	  return { type: DUPE_USER_CHECK_RESULTS, errors: errors, invalid: invalid };
-	}
-	
-	function isUserExists(identifier, field, validationErrors) {
-	  return function (dispatch) {
-	    _axios2.default.get('/api/users/' + identifier).then(function (res) {
-	      var _checkUserInResponse = checkUserInResponse(res, field);
-	
-	      var invalid = _checkUserInResponse.invalid;
-	      var errors = _checkUserInResponse.errors;
-	
-	      var newErrors = Object.assign({}, validationErrors, errors);
-	      dispatch(dupeUserCheckResults(newErrors, invalid));
-	    }).catch(function (err) {
-	      var invalid = true;
-	      var errors = { server: 'username/email lookup failed' };
-	      var newErrors = Object.assign({}, validationErrors, errors);
-	      dispatch(dupeUserCheckResults(newErrors, invalid));
-	      console.error('dupe user check failed!', err.response.data);
-	    });
-	  };
-	}
-	
-	// Reducer
-	function reduceDupeUserCheck(state, action) {
-	  var newState = {};
-	  Object.assign(newState, state, {
-	    errors: action.errors,
-	    invalid: action.invalid
-	  });
-	  return newState;
-	}
-	
-	var initialState = {
-	  errors: {},
-	  invalid: false
-	};
-	
-	// Root Reducer Slice
-	function dupeUserCheck() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
-	  var action = arguments[1];
-	
-	  switch (action.type) {
-	    case DUPE_USER_CHECK_RESULTS:
-	      return reduceDupeUserCheck(state, action);
-	    default:
-	      return state;
-	  }
-	}
-	
-	// Lib
-	
-	function checkUserInResponse(res, field) {
-	  console.log('isUserExists response:', res, 'field:', field);
-	  var invalid = void 0;
-	  var errors = {};
-	  if (res.data.user) {
-	    errors[field] = 'A user exists with this ' + field;
-	    invalid = true;
-	  } else {
-	    errors[field] = null;
-	    invalid = false;
-	  }
-	  return {
-	    errors: errors,
-	    invalid: invalid
-	  };
-	}
-
-/***/ },
+/* 646 */,
 /* 647 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -90341,7 +90249,7 @@
 	
 	var _flashMessage = __webpack_require__(260);
 	
-	var _isUserExists = __webpack_require__(646);
+	var _clientFormValidation = __webpack_require__(779);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -90358,7 +90266,7 @@
 	  propTypes: {
 	    dispatchUserSignupRequest: func.isRequired,
 	    dispatchAddFlashMessage: func.isRequired,
-	    dispatchIsUserExists: func.isRequired,
+	    dispatchClientFormValidation: func.isRequired,
 	    errors: object
 	  },
 	
@@ -90388,13 +90296,13 @@
 	    return isValid;
 	  },
 	  checkUserExists: function checkUserExists(event) {
-	    // TODO: make sure isUserExists isn't dispatched a second time
+	    // TODO: make sure clientFormValidation isn't dispatched a second time
 	    // with the name identifier error in redux
 	    var field = event.target.name;
 	    var val = event.target.value;
 	    console.log('checkUserExists event data:', '\nfield:', field, '\nval', val);
 	    if (val !== '') {
-	      this.props.dispatchIsUserExists(val, field, this.props.errors);
+	      this.props.dispatchClientFormValidation(val, field, this.props.errors);
 	    }
 	  },
 	  onSubmit: function onSubmit(event) {
@@ -90494,8 +90402,8 @@
 	  return {
 	    user: state.user,
 	    errors: {
-	      username: state.dupeUserCheck.errors.username,
-	      email: state.dupeUserCheck.errors.email
+	      username: state.clientFormValidation.errors.username,
+	      email: state.clientFormValidation.errors.email
 	    },
 	    invalid: state.invalid
 	  };
@@ -90509,8 +90417,8 @@
 	    dispatchAddFlashMessage: function dispatchAddFlashMessage(messageObj) {
 	      dispatch((0, _flashMessage.addFlashMessage)(messageObj));
 	    },
-	    dispatchIsUserExists: function dispatchIsUserExists(val, field, validationErrors) {
-	      dispatch((0, _isUserExists.isUserExists)(val, field, validationErrors));
+	    dispatchClientFormValidation: function dispatchClientFormValidation(val, field, validationErrors) {
+	      dispatch((0, _clientFormValidation.clientFormValidation)(val, field, validationErrors));
 	    }
 	  };
 	};
@@ -90989,6 +90897,113 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 765 */,
+/* 766 */,
+/* 767 */,
+/* 768 */,
+/* 769 */,
+/* 770 */,
+/* 771 */,
+/* 772 */,
+/* 773 */,
+/* 774 */,
+/* 775 */,
+/* 776 */,
+/* 777 */,
+/* 778 */,
+/* 779 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.isUserExists = isUserExists;
+	exports.default = clientFormValidation;
+	
+	var _axios = __webpack_require__(421);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// Action
+	var DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS';
+	
+	// Action Creators
+	function dupeUserCheckResults(errors, invalid) {
+	  return { type: DUPE_USER_CHECK_RESULTS, errors: errors, invalid: invalid };
+	}
+	
+	function isUserExists(identifier, field, validationErrors) {
+	  return function (dispatch) {
+	    _axios2.default.get('/api/users/' + identifier).then(function (res) {
+	      var _checkUserInResponse = checkUserInResponse(res, field);
+	
+	      var invalid = _checkUserInResponse.invalid;
+	      var errors = _checkUserInResponse.errors;
+	
+	      var newErrors = Object.assign({}, validationErrors, errors);
+	      dispatch(dupeUserCheckResults(newErrors, invalid));
+	    }).catch(function (err) {
+	      var invalid = true;
+	      var errors = { server: 'username/email lookup failed' };
+	      var newErrors = Object.assign({}, validationErrors, errors);
+	      dispatch(dupeUserCheckResults(newErrors, invalid));
+	      console.error('dupe user check failed!', err.response.data);
+	    });
+	  };
+	}
+	
+	// Reducer
+	function reduceDupeUserCheck(state, action) {
+	  var newState = {};
+	  Object.assign(newState, state, {
+	    errors: action.errors,
+	    invalid: action.invalid
+	  });
+	  return newState;
+	}
+	
+	var initialState = {
+	  errors: {},
+	  invalid: false
+	};
+	
+	// Root Reducer Slice
+	function clientFormValidation() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case DUPE_USER_CHECK_RESULTS:
+	      return reduceDupeUserCheck(state, action);
+	    default:
+	      return state;
+	  }
+	}
+	
+	// Lib
+	
+	function checkUserInResponse(res, field) {
+	  console.log('isUserExists response:', res, 'field:', field);
+	  var invalid = void 0;
+	  var errors = {};
+	  if (res.data.user) {
+	    errors[field] = 'A user exists with this ' + field;
+	    invalid = true;
+	  } else {
+	    errors[field] = null;
+	    invalid = false;
+	  }
+	  return {
+	    errors: errors,
+	    invalid: invalid
+	  };
+	}
 
 /***/ }
 /******/ ]);

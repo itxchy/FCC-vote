@@ -5,13 +5,13 @@ import TextFieldGroup from '../common/TextFieldGroup'
 const { func, object } = React.PropTypes
 import { userSignupRequest } from '../../redux/modules/userSignupRequest'
 import { addFlashMessage } from '../../redux/modules/flashMessage'
-import { isUserExists } from '../../redux/modules/isUserExists'
+import { clientFormValidation } from '../../redux/modules/clientFormValidation'
 
 const Signup = React.createClass({
   propTypes: {
     dispatchUserSignupRequest: func.isRequired,
     dispatchAddFlashMessage: func.isRequired,
-    dispatchIsUserExists: func.isRequired,
+    dispatchClientFormValidation: func.isRequired,
     errors: object
   },
 
@@ -40,13 +40,13 @@ const Signup = React.createClass({
   },
 
   checkUserExists (event) {
-    // TODO: make sure isUserExists isn't dispatched a second time
+    // TODO: make sure clientFormValidation isn't dispatched a second time
     // with the name identifier error in redux
     const field = event.target.name
     const val = event.target.value
     console.log('checkUserExists event data:', '\nfield:', field, '\nval', val)
     if (val !== '') {
-      this.props.dispatchIsUserExists(val, field, this.props.errors)
+      this.props.dispatchClientFormValidation(val, field, this.props.errors)
     }
   },
 
@@ -141,8 +141,8 @@ const mapStateToProps = (state) => {
   return {
     user: state.user,
     errors: {
-      username: state.dupeUserCheck.errors.username,
-      email: state.dupeUserCheck.errors.email
+      username: state.clientFormValidation.errors.username,
+      email: state.clientFormValidation.errors.email
     },
     invalid: state.invalid
   }
@@ -156,8 +156,8 @@ const mapDispatchToProps = (dispatch) => {
     dispatchAddFlashMessage (messageObj) {
       dispatch(addFlashMessage(messageObj))
     },
-    dispatchIsUserExists (val, field, validationErrors) {
-      dispatch(isUserExists(val, field, validationErrors))
+    dispatchClientFormValidation (val, field, validationErrors) {
+      dispatch(clientFormValidation(val, field, validationErrors))
     }
   }
 }

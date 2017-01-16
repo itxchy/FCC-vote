@@ -4,7 +4,7 @@ import newPoll from './modules/createNewPoll'
 import user from './modules/auth'
 import allPolls from './modules/getAllPolls'
 import newVote from './modules/submitVote'
-import dupeUserCheck from './modules/isUserExists'
+import clientFormValidation from './modules/clientFormValidation'
 
 export default combineReducers({
   flashMessages,
@@ -12,5 +12,5 @@ export default combineReducers({
   user,
   allPolls,
   newVote,
-  dupeUserCheck
+  clientFormValidation
 })
