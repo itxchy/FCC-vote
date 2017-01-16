@@ -33,11 +33,9 @@ const Signup = React.createClass({
 
   isValid () {
     const { errors, isValid } = validateInput(this.state)
-
     if (!isValid) {
       this.setState({ errors: errors })
     }
-
     return isValid
   },
 
@@ -74,6 +72,8 @@ const Signup = React.createClass({
 
   render () {
     // TODO move errors from component state to redux state.
+    // TODO validate sameness of password field onBlur of confirm password
+    // TODO validate username to ensure it's not an email
     const { errors } = this.props
     return (
       <div className='row'>
@@ -85,7 +85,7 @@ const Signup = React.createClass({
             <TextFieldGroup
               value={this.state.username}
               onChange={this.onChange}
-              checkUserExists={this.checkUserExists}
+              onBlur={this.checkUserExists}
               type='text'
               field='username'
               label='Username'
@@ -95,7 +95,7 @@ const Signup = React.createClass({
             <TextFieldGroup
               value={this.state.email}
               onChange={this.onChange}
-              checkUserExists={this.checkUserExists}
+              onBlur={this.checkUserExists}
               type='text'
               field='email'
               label='Email'

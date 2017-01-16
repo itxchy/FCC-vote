@@ -90382,11 +90382,9 @@
 	    var errors = _validateInput.errors;
 	    var isValid = _validateInput.isValid;
 	
-	
 	    if (!isValid) {
 	      this.setState({ errors: errors });
 	    }
-	
 	    return isValid;
 	  },
 	  checkUserExists: function checkUserExists(event) {
@@ -90421,6 +90419,8 @@
 	  },
 	  render: function render() {
 	    // TODO move errors from component state to redux state.
+	    // TODO validate sameness of password field onBlur of confirm password
+	    // TODO validate username to ensure it's not an email
 	    var errors = this.props.errors;
 	
 	    return _react2.default.createElement(
@@ -90440,7 +90440,7 @@
 	          _react2.default.createElement(_TextFieldGroup2.default, {
 	            value: this.state.username,
 	            onChange: this.onChange,
-	            checkUserExists: this.checkUserExists,
+	            onBlur: this.checkUserExists,
 	            type: 'text',
 	            field: 'username',
 	            label: 'Username',
@@ -90449,7 +90449,7 @@
 	          _react2.default.createElement(_TextFieldGroup2.default, {
 	            value: this.state.email,
 	            onChange: this.onChange,
-	            checkUserExists: this.checkUserExists,
+	            onBlur: this.checkUserExists,
 	            type: 'text',
 	            field: 'email',
 	            label: 'Email',
@@ -90599,7 +90599,7 @@
 	  var error = _ref.error;
 	  var type = _ref.type;
 	  var onChange = _ref.onChange;
-	  var checkUserExists = _ref.checkUserExists;
+	  var onBlur = _ref.onBlur;
 	
 	  return _react2.default.createElement(
 	    'div',
@@ -90612,7 +90612,7 @@
 	    _react2.default.createElement('input', {
 	      value: value,
 	      onChange: onChange,
-	      onBlur: checkUserExists,
+	      onBlur: onBlur,
 	      type: type,
 	      name: field,
 	      className: 'form-control'
@@ -90632,7 +90632,7 @@
 	  error: string,
 	  type: string.isRequired,
 	  onChange: func.isRequired,
-	  checkUserExists: func
+	  onBlur: func
 	};
 	
 	TextFieldGroup.defaultProps = {
