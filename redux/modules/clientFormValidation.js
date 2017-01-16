@@ -2,6 +2,7 @@ import axios from 'axios'
 
 // Action
 const DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS'
+const SET_FORM_ERRORS = 'SET_FORM_ERRORS'
 
 // Action Creators
 function dupeUserCheckResults (errors, invalid) {
@@ -26,14 +27,22 @@ export function dupeUserCheck (identifier, field, validationErrors) {
   }
 }
 
+export function newFormErrors (currentErrors, newErrors) {
+  const updatedErrors = Object.assign({}, currentErrors, newErrors)
+  return { type: SET_FORM_ERRORS, errors: updatedErrors }
+}
+
 // Reducer
 function reduceDupeUserCheck (state, action) {
-  const newState = {}
-  Object.assign(newState, state, {
+  return Object.assign({}, state, {
     errors: action.errors,
     invalid: action.invalid
   })
-  return newState
+}
+function reduceSetFormErrors (state, action) {
+  return Object.assign({}, state, {
+    errors: action.errors
+  })
 }
 
 const initialState = {
@@ -46,6 +55,8 @@ export default function clientFormValidation (state = initialState, action) {
   switch (action.type) {
     case DUPE_USER_CHECK_RESULTS:
       return reduceDupeUserCheck(state, action)
+    case SET_FORM_ERRORS:
+      return reduceSetFormErrors(state, action)
     default:
       return state
   }

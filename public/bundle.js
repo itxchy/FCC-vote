@@ -90276,7 +90276,6 @@
 	      email: '',
 	      password: '',
 	      passwordConfirmation: '',
-	      // errors: {},
 	      isLoading: false,
 	      invalid: false
 	    };
@@ -90291,7 +90290,8 @@
 	    var isValid = _validateInput.isValid;
 	
 	    if (!isValid) {
-	      this.setState({ errors: errors });
+	      // this.setState({ errors: errors })
+	      this.props.newFormErrors(this.props.errors, errors);
 	    }
 	    return isValid;
 	  },
@@ -90922,6 +90922,7 @@
 	  value: true
 	});
 	exports.dupeUserCheck = dupeUserCheck;
+	exports.newFormErrors = newFormErrors;
 	exports.default = clientFormValidation;
 	
 	var _axios = __webpack_require__(421);
@@ -90932,6 +90933,7 @@
 	
 	// Action
 	var DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS';
+	var SET_FORM_ERRORS = 'SET_FORM_ERRORS';
 	
 	// Action Creators
 	function dupeUserCheckResults(errors, invalid) {
@@ -90958,14 +90960,22 @@
 	  };
 	}
 	
+	function newFormErrors(currentErrors, newErrors) {
+	  var updatedErrors = Object.assign({}, currentErrors, newErrors);
+	  return { type: SET_FORM_ERRORS, errors: updatedErrors };
+	}
+	
 	// Reducer
 	function reduceDupeUserCheck(state, action) {
-	  var newState = {};
-	  Object.assign(newState, state, {
+	  return Object.assign({}, state, {
 	    errors: action.errors,
 	    invalid: action.invalid
 	  });
-	  return newState;
+	}
+	function reduceSetFormErrors(state, action) {
+	  return Object.assign({}, state, {
+	    errors: action.errors
+	  });
 	}
 	
 	var initialState = {
@@ -90981,6 +90991,8 @@
 	  switch (action.type) {
 	    case DUPE_USER_CHECK_RESULTS:
 	      return reduceDupeUserCheck(state, action);
+	    case SET_FORM_ERRORS:
+	      return reduceSetFormErrors(state, action);
 	    default:
 	      return state;
 	  }

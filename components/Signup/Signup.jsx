@@ -5,7 +5,7 @@ import TextFieldGroup from '../common/TextFieldGroup'
 const { func, object } = React.PropTypes
 import { userSignupRequest } from '../../redux/modules/userSignupRequest'
 import { addFlashMessage } from '../../redux/modules/flashMessage'
-import { dupeUserCheck } from '../../redux/modules/clientFormValidation'
+import { dupeUserCheck, newFormErrors } from '../../redux/modules/clientFormValidation'
 
 const Signup = React.createClass({
   propTypes: {
@@ -21,7 +21,6 @@ const Signup = React.createClass({
       email: '',
       password: '',
       passwordConfirmation: '',
-      // errors: {},
       isLoading: false,
       invalid: false
     }
@@ -34,7 +33,8 @@ const Signup = React.createClass({
   isValid () {
     const { errors, isValid } = validateInput(this.state)
     if (!isValid) {
-      this.setState({ errors: errors })
+      // this.setState({ errors: errors })
+      this.props.newFormErrors(this.props.errors, errors)
     }
     return isValid
   },
