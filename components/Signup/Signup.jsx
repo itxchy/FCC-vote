@@ -55,6 +55,24 @@ const Signup = React.createClass({
     }
   },
 
+  ensurePasswordsMatch (event) {
+    console.log('state password:', this.state.password)
+    console.log('state passwordconf:', this.state.passwordConfirmation)
+    if (this.state.password !== this.state.passwordConfirmation) {
+      console.log('passwords do not match')
+      return this.props.dispatchNewFormErrors(this.props.errors, {
+        passwordConfirmation: 'passwords don\'t match'
+      })
+    }
+    if (this.props.errors.passwordConfirmation) {
+      return this.props.dispatchNewFormErrors(this.props.errors, {
+        password: null,
+        passwordConfirmation: null
+      })
+    }
+    return
+  },
+
   onSubmit (event) {
     event.preventDefault()
 
@@ -121,6 +139,7 @@ const Signup = React.createClass({
             <TextFieldGroup
               value={this.state.passwordConfirmation}
               onChange={this.onChange}
+              onBlur={this.ensurePasswordsMatch}
               type='password'
               field='passwordConfirmation'
               label='Confirm Password'
@@ -149,7 +168,9 @@ const mapStateToProps = (state) => {
     user: state.user,
     errors: {
       username: state.clientFormValidation.errors.username,
-      email: state.clientFormValidation.errors.email
+      email: state.clientFormValidation.errors.email,
+      password: state.clientFormValidation.errors.password,
+      passwordConfirmation: state.clientFormValidation.errors.passwordConfirmation
     },
     invalid: state.invalid
   }
