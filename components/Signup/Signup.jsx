@@ -12,6 +12,7 @@ const Signup = React.createClass({
     dispatchUserSignupRequest: func.isRequired,
     dispatchAddFlashMessage: func.isRequired,
     dispatchDupeUserCheck: func.isRequired,
+    dispatchNewFormErrors: func.isRequired,
     errors: object
   },
 
@@ -34,18 +35,18 @@ const Signup = React.createClass({
     const { errors, isValid } = validateInput(this.state)
     if (!isValid) {
       // this.setState({ errors: errors })
-      this.props.newFormErrors(this.props.errors, errors)
+      this.props.dispatchNewFormErrors(this.props.errors, errors)
     }
     return isValid
   },
 
   checkUserExists (event) {
-    // TODO: make sure clientFormValidation isn't dispatched a second time
+    // +TODO: make sure clientFormValidation isn't dispatched a second time
     // with the name identifier error in redux
     const field = event.target.name
     const val = event.target.value
     console.log('checkUserExists event data:', '\nfield:', field, '\nval', val)
-    if (val !== '') {
+    if (val !== '' && val !== this.props.errors.username) {
       this.props.dispatchDupeUserCheck(val, field, this.props.errors)
     }
   },
@@ -54,7 +55,8 @@ const Signup = React.createClass({
     event.preventDefault()
 
     if (this.isValid()) {
-      this.setState({ errors: {}, isLoading: true })
+      this.props.dispatchNewFormErrors(this.props.errors, {})
+      this.setState({ isLoading: true })
       this.props.dispatchUserSignupRequest(this.state)
       // TODO: then is not going to work here
         .then(response => {
@@ -65,7 +67,8 @@ const Signup = React.createClass({
           this.context.router.push('/')
         })
         .catch(error => {
-          this.setState({ errors: error.response.data, isLoading: false })
+          this.props.dispatchNewFormErrors(this.props.errors, error.response.data)
+          this.setState({ isLoading: false })
         })
     }
   },
@@ -158,6 +161,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     dispatchDupeUserCheck (val, field, validationErrors) {
       dispatch(dupeUserCheck(val, field, validationErrors))
+    },
+    dispatchNewFormErrors (currentErrors, newErrors) {
+      dispatch(newFormErrors(currentErrors, newErrors))
     }
   }
 }

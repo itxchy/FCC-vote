@@ -90267,6 +90267,7 @@
 	    dispatchUserSignupRequest: func.isRequired,
 	    dispatchAddFlashMessage: func.isRequired,
 	    dispatchDupeUserCheck: func.isRequired,
+	    dispatchNewFormErrors: func.isRequired,
 	    errors: object
 	  },
 	
@@ -90291,17 +90292,17 @@
 	
 	    if (!isValid) {
 	      // this.setState({ errors: errors })
-	      this.props.newFormErrors(this.props.errors, errors);
+	      this.props.dispatchNewFormErrors(this.props.errors, errors);
 	    }
 	    return isValid;
 	  },
 	  checkUserExists: function checkUserExists(event) {
-	    // TODO: make sure clientFormValidation isn't dispatched a second time
+	    // +TODO: make sure clientFormValidation isn't dispatched a second time
 	    // with the name identifier error in redux
 	    var field = event.target.name;
 	    var val = event.target.value;
 	    console.log('checkUserExists event data:', '\nfield:', field, '\nval', val);
-	    if (val !== '') {
+	    if (val !== '' && val !== this.props.errors.username) {
 	      this.props.dispatchDupeUserCheck(val, field, this.props.errors);
 	    }
 	  },
@@ -90311,7 +90312,8 @@
 	    event.preventDefault();
 	
 	    if (this.isValid()) {
-	      this.setState({ errors: {}, isLoading: true });
+	      this.props.dispatchNewFormErrors(this.props.errors, {});
+	      this.setState({ isLoading: true });
 	      this.props.dispatchUserSignupRequest(this.state)
 	      // TODO: then is not going to work here
 	      .then(function (response) {
@@ -90321,7 +90323,8 @@
 	        });
 	        _this.context.router.push('/');
 	      }).catch(function (error) {
-	        _this.setState({ errors: error.response.data, isLoading: false });
+	        _this.props.dispatchNewFormErrors(_this.props.errors, error.response.data);
+	        _this.setState({ isLoading: false });
 	      });
 	    }
 	  },
@@ -90419,6 +90422,9 @@
 	    },
 	    dispatchDupeUserCheck: function dispatchDupeUserCheck(val, field, validationErrors) {
 	      dispatch((0, _clientFormValidation.dupeUserCheck)(val, field, validationErrors));
+	    },
+	    dispatchNewFormErrors: function dispatchNewFormErrors(currentErrors, newErrors) {
+	      dispatch((0, _clientFormValidation.newFormErrors)(currentErrors, newErrors));
 	    }
 	  };
 	};
@@ -90978,12 +90984,11 @@
 	  });
 	}
 	
+	// Root Reducer Slice
 	var initialState = {
 	  errors: {},
 	  invalid: false
 	};
-	
-	// Root Reducer Slice
 	function clientFormValidation() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
 	  var action = arguments[1];

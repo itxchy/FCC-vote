@@ -45,12 +45,11 @@ function reduceSetFormErrors (state, action) {
   })
 }
 
+// Root Reducer Slice
 const initialState = {
   errors: {},
   invalid: false
 }
-
-// Root Reducer Slice
 export default function clientFormValidation (state = initialState, action) {
   switch (action.type) {
     case DUPE_USER_CHECK_RESULTS:
