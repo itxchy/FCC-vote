@@ -90302,7 +90302,7 @@
 	    var val = event.target.value;
 	    console.log('checkUserExists event data:', '\nfield:', field, '\nval', val);
 	    if (val !== '') {
-	      this.props.dispatchClientFormValidation(val, field, this.props.errors);
+	      this.props.dispatchDupeUserCheck(val, field, this.props.errors);
 	    }
 	  },
 	  onSubmit: function onSubmit(event) {
@@ -90417,8 +90417,8 @@
 	    dispatchAddFlashMessage: function dispatchAddFlashMessage(messageObj) {
 	      dispatch((0, _flashMessage.addFlashMessage)(messageObj));
 	    },
-	    dispatchClientFormValidation: function dispatchClientFormValidation(val, field, validationErrors) {
-	      dispatch((0, _clientFormValidation.clientFormValidation)(val, field, validationErrors));
+	    dispatchDupeUserCheck: function dispatchDupeUserCheck(val, field, validationErrors) {
+	      dispatch((0, _clientFormValidation.dupeUserCheck)(val, field, validationErrors));
 	    }
 	  };
 	};
@@ -90921,7 +90921,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.isUserExists = isUserExists;
+	exports.dupeUserCheck = dupeUserCheck;
 	exports.default = clientFormValidation;
 	
 	var _axios = __webpack_require__(421);
@@ -90938,7 +90938,7 @@
 	  return { type: DUPE_USER_CHECK_RESULTS, errors: errors, invalid: invalid };
 	}
 	
-	function isUserExists(identifier, field, validationErrors) {
+	function dupeUserCheck(identifier, field, validationErrors) {
 	  return function (dispatch) {
 	    _axios2.default.get('/api/users/' + identifier).then(function (res) {
 	      var _checkUserInResponse = checkUserInResponse(res, field);
@@ -90986,7 +90986,7 @@
 	  }
 	}
 	
-	// Lib
+	// Lib **************************************************************
 	
 	function checkUserInResponse(res, field) {
 	  console.log('isUserExists response:', res, 'field:', field);

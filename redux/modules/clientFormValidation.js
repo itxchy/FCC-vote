@@ -8,7 +8,7 @@ function dupeUserCheckResults (errors, invalid) {
   return { type: DUPE_USER_CHECK_RESULTS, errors, invalid }
 }
 
-export function isUserExists (identifier, field, validationErrors) {
+export function dupeUserCheck (identifier, field, validationErrors) {
   return dispatch => {
     axios.get(`/api/users/${identifier}`)
       .then(res => {
@@ -51,7 +51,7 @@ export default function clientFormValidation (state = initialState, action) {
   }
 }
 
-// Lib
+// Lib **************************************************************
 
 function checkUserInResponse (res, field) {
   console.log('isUserExists response:', res, 'field:', field)

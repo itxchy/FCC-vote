@@ -5,7 +5,7 @@ import TextFieldGroup from '../common/TextFieldGroup'
 const { func, object } = React.PropTypes
 import { userSignupRequest } from '../../redux/modules/userSignupRequest'
 import { addFlashMessage } from '../../redux/modules/flashMessage'
-import { clientFormValidation } from '../../redux/modules/clientFormValidation'
+import { dupeUserCheck } from '../../redux/modules/clientFormValidation'
 
 const Signup = React.createClass({
   propTypes: {
@@ -46,7 +46,7 @@ const Signup = React.createClass({
     const val = event.target.value
     console.log('checkUserExists event data:', '\nfield:', field, '\nval', val)
     if (val !== '') {
-      this.props.dispatchClientFormValidation(val, field, this.props.errors)
+      this.props.dispatchDupeUserCheck(val, field, this.props.errors)
     }
   },
 
@@ -156,8 +156,8 @@ const mapDispatchToProps = (dispatch) => {
     dispatchAddFlashMessage (messageObj) {
       dispatch(addFlashMessage(messageObj))
     },
-    dispatchClientFormValidation (val, field, validationErrors) {
-      dispatch(clientFormValidation(val, field, validationErrors))
+    dispatchDupeUserCheck (val, field, validationErrors) {
+      dispatch(dupeUserCheck(val, field, validationErrors))
     }
   }
 }
