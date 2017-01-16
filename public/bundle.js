@@ -90291,19 +90291,21 @@
 	    var isValid = _validateInput.isValid;
 	
 	    if (!isValid) {
-	      // this.setState({ errors: errors })
 	      this.props.dispatchNewFormErrors(this.props.errors, errors);
 	    }
 	    return isValid;
 	  },
-	  checkUserExists: function checkUserExists(event) {
+	  ensureUserExists: function ensureUserExists(event) {
 	    // +TODO: make sure clientFormValidation isn't dispatched a second time
 	    // with the name identifier error in redux
 	    var field = event.target.name;
 	    var val = event.target.value;
-	    console.log('checkUserExists event data:', '\nfield:', field, '\nval', val);
+	    console.log('ensureUserExists event data:', '\nfield:', field, '\nval', val);
 	    if (val !== '' && val !== this.props.errors.username) {
 	      this.props.dispatchDupeUserCheck(val, field, this.props.errors);
+	    }
+	    if (val === '') {
+	      this.props.dispatchNewFormErrors(this.props.errors, _defineProperty({}, field, 'A valid ' + [field] + ' is required'));
 	    }
 	  },
 	  onSubmit: function onSubmit(event) {
@@ -90351,7 +90353,7 @@
 	          _react2.default.createElement(_TextFieldGroup2.default, {
 	            value: this.state.username,
 	            onChange: this.onChange,
-	            onBlur: this.checkUserExists,
+	            onBlur: this.ensureUserExists,
 	            type: 'text',
 	            field: 'username',
 	            label: 'Username',
@@ -90360,7 +90362,7 @@
 	          _react2.default.createElement(_TextFieldGroup2.default, {
 	            value: this.state.email,
 	            onChange: this.onChange,
-	            onBlur: this.checkUserExists,
+	            onBlur: this.ensureUserExists,
 	            type: 'text',
 	            field: 'email',
 	            label: 'Email',
