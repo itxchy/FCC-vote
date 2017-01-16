@@ -90266,7 +90266,7 @@
 	  propTypes: {
 	    dispatchUserSignupRequest: func.isRequired,
 	    dispatchAddFlashMessage: func.isRequired,
-	    dispatchClientFormValidation: func.isRequired,
+	    dispatchDupeUserCheck: func.isRequired,
 	    errors: object
 	  },
 	
