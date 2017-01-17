@@ -21,25 +21,19 @@ router.post('/', (req, res) => {
   .exec()
   .then(user => {
     user = user[0]
-    console.log('express: user object:', user)
     if (!isEmpty(user)) {
-      console.log('express: user exists:', user)
       if (bcrypt.compareSync(password, user.passwordDigest)) {
-        console.log('express: passwords match:', user.passwordDigest)
         const token = jwt.sign({
           id: user._id,
           username: user.username
         }, config.jwtSecret)
-        console.log('express: token returned:', { token })
         return res.json({ token })
       } else {
-        console.log('express: passwords do not match')
         return res.status(202).json({
           errors: { form: 'Invalid Credentials' }
         })
       }
     } else {
-      console.log('express: no user object')
       return res.status(202).json({
         errors: { form: 'Invalid Credentials' }
       })
@@ -49,32 +43,6 @@ router.post('/', (req, res) => {
     console.log('ERROR: promise rejected', err)
     return res.status(500).json({ 'error querying database for user login': err })
   })
-
-  /* User.query({
-    where: { username: identifier },
-    orWhere: { email: identifier }
-  })
-  .fetch()
-  .then(user => {
-    if (user) {
-      if (bcrypt.compareSync(password, user.get('password_digest'))) {
-        const token = jwt.sign({
-          id: user.get('id'),
-          username: user.get('username')
-        }, config.jwtSecret)
-        res.json({ token })
-      } else {
-        res.status(401).json({
-          errors: { form: 'Invalid Credentials' }
-        })
-      }
-    } else {
-      res.status(401).json({
-        errors: { form: 'Invalid Credentials' }
-      })
-    }
-  })
-  .catch(err => console.error('authentication error', err)) */
 })
 
 module.exports = router
