@@ -28366,9 +28366,13 @@
 	  return state;
 	};
 	
+	var initialState = {
+	  flashMessages: []
+	};
+	
 	// Root Reducer Slice
 	function flashMessages() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
 	  var action = arguments[1];
 	
 	  switch (action.type) {
@@ -66963,7 +66967,7 @@
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    flashMessages: state.flashMessages
+	    flashMessages: state.flashMessages.flashMessages
 	  };
 	};
 	
@@ -67034,6 +67038,12 @@
 	  }
 	});
 	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    flashMessages: state.flashMessages.flashMessages
+	  };
+	};
+	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    dispatchDeleteFlashMessage: function dispatchDeleteFlashMessage(id) {
@@ -67042,7 +67052,7 @@
 	  };
 	};
 	
-	exports.default = (0, _reactRedux.connect)(mapDispatchToProps)(FlashMessage);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(FlashMessage);
 
 /***/ },
 /* 659 */
@@ -90708,13 +90718,14 @@
 	  return function (dispatch) {
 	    dispatch(signupLoading(true));
 	    return _axios2.default.post('/api/users', userData).then(function (res) {
+	      console.log('signup success!', res);
 	      dispatch((0, _flashMessage.addFlashMessage)({
 	        type: 'success',
 	        text: 'Signup successful!'
 	      }));
 	      dispatch(signupLoading(false));
 	    }).catch(function (err) {
-	      console.log('signup error:', err.response);
+	      console.log('signup error:', err);
 	      dispatch((0, _flashMessage.addFlashMessage)({
 	        type: 'error',
 	        text: 'Signup failed.'

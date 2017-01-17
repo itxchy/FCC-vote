@@ -21,7 +21,7 @@ const FlashMessagesList = React.createClass({
 
 const mapStateToProps = (state) => {
   return {
-    flashMessages: state.flashMessages
+    flashMessages: state.flashMessages.flashMessages
   }
 }
 

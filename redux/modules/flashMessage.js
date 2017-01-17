@@ -50,8 +50,12 @@ export const reduceDeleteFlashMessage = (state, action) => {
   return state
 }
 
+const initialState = {
+  flashMessages: []
+}
+
 // Root Reducer Slice
-export default function flashMessages (state = [], action) {
+export default function flashMessages (state = initialState, action) {
   switch (action.type) {
     case ADD_FLASH_MESSAGE:
       return reduceAddFlashMessage(state, action)

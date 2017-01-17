@@ -27,6 +27,12 @@ const FlashMessage = React.createClass({
   }
 })
 
+const mapStateToProps = (state) => {
+  return {
+    flashMessages: state.flashMessages.flashMessages
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchDeleteFlashMessage (id) {
@@ -35,4 +41,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapDispatchToProps)(FlashMessage)
+export default connect(mapStateToProps, mapDispatchToProps)(FlashMessage)

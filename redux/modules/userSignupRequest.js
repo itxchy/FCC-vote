@@ -13,6 +13,7 @@ export function signupRequest (userData) {
     dispatch(signupLoading(true))
     return axios.post('/api/users', userData)
       .then(res => {
+        console.log('signup success!', res)
         dispatch(addFlashMessage({
           type: 'success',
           text: 'Signup successful!'
@@ -20,7 +21,7 @@ export function signupRequest (userData) {
         dispatch(signupLoading(false))
       })
       .catch(err => {
-        console.log('signup error:', err.response)
+        console.log('signup error:', err)
         dispatch(addFlashMessage({
           type: 'error',
           text: 'Signup failed.'
