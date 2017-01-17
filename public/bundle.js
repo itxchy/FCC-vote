@@ -90366,6 +90366,7 @@
 	var _React$PropTypes = _react2.default.PropTypes;
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
+	var bool = _React$PropTypes.bool;
 	
 	
 	var Signup = _react2.default.createClass({
@@ -90377,7 +90378,8 @@
 	    dispatchDupeUserCheck: func.isRequired,
 	    dispatchNewFormErrors: func.isRequired,
 	    dispatchSignupLoading: func.isRequired,
-	    errors: object
+	    errors: object,
+	    signupLoading: bool.isRequired
 	  },
 	
 	  getInitialState: function getInitialState() {
@@ -90386,7 +90388,6 @@
 	      email: '',
 	      password: '',
 	      passwordConfirmation: '',
-	      isLoading: false,
 	      invalid: false
 	    };
 	  },
@@ -90438,7 +90439,6 @@
 	
 	    if (this.isValid()) {
 	      this.props.dispatchNewFormErrors(this.props.errors, {});
-	      this.setState({ isLoading: true });
 	      this.props.dispatchUserSignupRequest(this.state);
 	      // TODO: set isLoading to false from Redux. May need
 	      // to transfer loading state to redux.
@@ -90502,7 +90502,7 @@
 	            { className: 'form-group' },
 	            _react2.default.createElement(
 	              'button',
-	              { disabled: this.state.isLoading || this.state.invalid, className: 'btn btn-primary btn-lg' },
+	              { disabled: this.props.signupLoading || this.state.invalid, className: 'btn btn-primary btn-lg' },
 	              'Sign up'
 	            )
 	          )
@@ -90525,7 +90525,8 @@
 	      password: state.clientFormValidation.errors.password,
 	      passwordConfirmation: state.clientFormValidation.errors.passwordConfirmation
 	    },
-	    invalid: state.invalid
+	    invalid: state.invalid,
+	    signupLoading: state.userSignupRequest.signupLoading
 	  };
 	};
 	

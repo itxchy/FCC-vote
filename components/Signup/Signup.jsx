@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import validateInput from '../../routes/shared/signupValidation'
 import TextFieldGroup from '../common/TextFieldGroup'
-const { func, object } = React.PropTypes
+const { func, object, bool } = React.PropTypes
 import { signupRequest, signupLoading } from '../../redux/modules/userSignupRequest'
 import { addFlashMessage } from '../../redux/modules/flashMessage'
 import { dupeUserCheck, newFormErrors } from '../../redux/modules/clientFormValidation'
@@ -14,7 +14,8 @@ const Signup = React.createClass({
     dispatchDupeUserCheck: func.isRequired,
     dispatchNewFormErrors: func.isRequired,
     dispatchSignupLoading: func.isRequired,
-    errors: object
+    errors: object,
+    signupLoading: bool.isRequired
   },
 
   getInitialState () {
@@ -23,7 +24,6 @@ const Signup = React.createClass({
       email: '',
       password: '',
       passwordConfirmation: '',
-      isLoading: false,
       invalid: false
     }
   },
@@ -78,7 +78,6 @@ const Signup = React.createClass({
 
     if (this.isValid()) {
       this.props.dispatchNewFormErrors(this.props.errors, {})
-      this.setState({ isLoading: true })
       this.props.dispatchUserSignupRequest(this.state)
       // TODO: set isLoading to false from Redux. May need
       // to transfer loading state to redux.
@@ -135,7 +134,7 @@ const Signup = React.createClass({
             />
 
             <div className='form-group'>
-              <button disabled={this.state.isLoading || this.state.invalid} className='btn btn-primary btn-lg'>
+              <button disabled={this.props.signupLoading || this.state.invalid} className='btn btn-primary btn-lg'>
                 Sign up
               </button>
             </div>
@@ -160,7 +159,8 @@ const mapStateToProps = (state) => {
       password: state.clientFormValidation.errors.password,
       passwordConfirmation: state.clientFormValidation.errors.passwordConfirmation
     },
-    invalid: state.invalid
+    invalid: state.invalid,
+    signupLoading: state.userSignupRequest.signupLoading
   }
 }
 
