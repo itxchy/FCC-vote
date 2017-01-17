@@ -28276,6 +28276,10 @@
 	
 	var _userSignupRequest2 = _interopRequireDefault(_userSignupRequest);
 	
+	var _getUserPolls = __webpack_require__(779);
+	
+	var _getUserPolls2 = _interopRequireDefault(_getUserPolls);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = (0, _redux.combineReducers)({
@@ -28285,7 +28289,8 @@
 	  allPolls: _getAllPolls2.default,
 	  newVote: _submitVote2.default,
 	  clientFormValidation: _clientFormValidation2.default,
-	  userSignupRequest: _userSignupRequest2.default
+	  userSignupRequest: _userSignupRequest2.default,
+	  userPolls: _getUserPolls2.default
 	});
 
 /***/ },
@@ -91001,44 +91006,35 @@
 	
 	var _isEmpty2 = _interopRequireDefault(_isEmpty);
 	
-	var _apiCalls = __webpack_require__(756);
+	var _getUserPolls = __webpack_require__(779);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var _React$PropTypes = _react2.default.PropTypes;
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
+	var array = _React$PropTypes.array;
 	
 	
 	var MyPollsPage = _react2.default.createClass({
 	  displayName: 'MyPollsPage',
 	
 	  propTypes: {
-	    dispatchGetUserPolls: func,
-	    user: object
+	    dispatchGetUserPolls: func.isRequired,
+	    user: object.isRequired,
+	    userPolls: array
 	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      myPolls: {}
-	    };
-	  },
-	  getMyPolls: function getMyPolls() {
-	    var _this = this;
-	
-	    var username = this.props.user.username;
-	
-	    if (username && (0, _isEmpty2.default)(this.state.myPolls)) {
-	      this.props.dispatchGetUserPolls(username).then(function (res) {
-	        if (res.data.length > 0) {
-	          _this.setState({ myPolls: res.data });
-	        } else {
-	          _this.setState({ myPolls: { polls: null } });
-	        }
-	      });
+	  getUserPolls: function getUserPolls() {
+	    if (this.props.user.user) {
+	      var username = this.props.user.user.username;
+	      console.log(this.props.userPolls);
+	      if (username && (0, _isEmpty2.default)(this.props.userPolls)) {
+	        this.props.dispatchGetUserPolls(username);
+	      }
 	    }
 	  },
 	  render: function render() {
-	    this.getMyPolls();
+	    this.getUserPolls();
 	    return _react2.default.createElement(
 	      'div',
 	      null,
@@ -91048,7 +91044,7 @@
 	        _react2.default.createElement(
 	          'code',
 	          null,
-	          JSON.stringify(this.state.myPolls, null, 4)
+	          JSON.stringify(this.props.userPolls, null, 4)
 	        )
 	      )
 	    );
@@ -91057,14 +91053,15 @@
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    user: state.user
+	    user: state.user,
+	    userPolls: state.userPolls.userPolls
 	  };
 	};
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    dispatchGetUserPolls: function dispatchGetUserPolls(username) {
-	      dispatch((0, _apiCalls.getUserPolls)(username));
+	      dispatch((0, _getUserPolls.getUserPolls)(username));
 	    }
 	  };
 	};
@@ -91076,6 +91073,79 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 765 */,
+/* 766 */,
+/* 767 */,
+/* 768 */,
+/* 769 */,
+/* 770 */,
+/* 771 */,
+/* 772 */,
+/* 773 */,
+/* 774 */,
+/* 775 */,
+/* 776 */,
+/* 777 */,
+/* 778 */,
+/* 779 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getUserPolls = getUserPolls;
+	exports.default = userPolls;
+	
+	var _axios = __webpack_require__(421);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// Action
+	var USER_POLLS_DATA = 'USER_POLLS_DATA';
+	
+	// Action Creators
+	function setUserPollsData(userPolls) {
+	  return { type: USER_POLLS_DATA, userPolls: userPolls };
+	}
+	function getUserPolls(username) {
+	  return function (dispatch) {
+	    _axios2.default.get('/api/polls/' + username).then(function (res) {
+	      console.log('getUserPolls results for', username, 'are:', res);
+	      if (res.data.length > 0) {
+	        dispatch(setUserPollsData(res.data));
+	      } else {
+	        dispatch(setUserPollsData({ polls: null }));
+	      }
+	    });
+	  };
+	}
+	
+	// Reducer
+	function reduceUserPollsData(state, action) {
+	  return Object.assign({}, state, { userPolls: action.userPolls });
+	}
+	
+	// Root Reducer
+	var initialState = {
+	  userPolls: null
+	};
+	function userPolls() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case USER_POLLS_DATA:
+	      return reduceUserPollsData(state, action);
+	    default:
+	      return state;
+	  }
+	}
 
 /***/ }
 /******/ ]);

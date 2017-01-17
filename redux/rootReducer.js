@@ -6,6 +6,7 @@ import allPolls from './modules/getAllPolls'
 import newVote from './modules/submitVote'
 import clientFormValidation from './modules/clientFormValidation'
 import userSignupRequest from './modules/userSignupRequest'
+import userPolls from './modules/getUserPolls'
 
 export default combineReducers({
   flashMessages,
@@ -14,5 +15,6 @@ export default combineReducers({
   allPolls,
   newVote,
   clientFormValidation,
-  userSignupRequest
+  userSignupRequest,
+  userPolls
 })

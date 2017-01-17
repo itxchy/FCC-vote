@@ -1,37 +1,29 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import isEmpty from 'lodash/isEmpty'
-const { func, object } = React.PropTypes
-import { getUserPolls } from '../../redux/apiCalls'
+const { func, object, array } = React.PropTypes
+import { getUserPolls } from '../../redux/modules/getUserPolls'
 
 const MyPollsPage = React.createClass({
   propTypes: {
-    dispatchGetUserPolls: func,
-    user: object
+    dispatchGetUserPolls: func.isRequired,
+    user: object.isRequired,
+    userPolls: array
   },
-  getInitialState () {
-    return {
-      myPolls: {}
-    }
-  },
-  getMyPolls () {
-    const username = this.props.user.username
-
-    if (username && isEmpty(this.state.myPolls)) {
-      this.props.dispatchGetUserPolls(username).then(res => {
-        if (res.data.length > 0) {
-          this.setState({ myPolls: res.data })
-        } else {
-          this.setState({ myPolls: { polls: null } })
-        }
-      })
+  getUserPolls () {
+    if (this.props.user.user) {
+      const username = this.props.user.user.username
+      console.log(this.props.userPolls)
+      if (username && isEmpty(this.props.userPolls)) {
+        this.props.dispatchGetUserPolls(username)
+      }
     }
   },
   render () {
-    this.getMyPolls()
+    this.getUserPolls()
     return (
       <div>
-        <pre><code>{JSON.stringify(this.state.myPolls, null, 4)}</code></pre>
+        <pre><code>{JSON.stringify(this.props.userPolls, null, 4)}</code></pre>
       </div>
     )
   }
@@ -39,7 +31,8 @@ const MyPollsPage = React.createClass({
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user,
+    userPolls: state.userPolls.userPolls
   }
 }
 
