@@ -28268,9 +28268,13 @@
 	
 	var _submitVote2 = _interopRequireDefault(_submitVote);
 	
-	var _clientFormValidation = __webpack_require__(779);
+	var _clientFormValidation = __webpack_require__(646);
 	
 	var _clientFormValidation2 = _interopRequireDefault(_clientFormValidation);
+	
+	var _userSignupRequest = __webpack_require__(759);
+	
+	var _userSignupRequest2 = _interopRequireDefault(_userSignupRequest);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -28280,7 +28284,8 @@
 	  user: _auth2.default,
 	  allPolls: _getAllPolls2.default,
 	  newVote: _submitVote2.default,
-	  clientFormValidation: _clientFormValidation2.default
+	  clientFormValidation: _clientFormValidation2.default,
+	  userSignupRequest: _userSignupRequest2.default
 	});
 
 /***/ },
@@ -33938,7 +33943,7 @@
 	  }
 	}
 	
-	// Helper Functions
+	// Lib ******************************************************
 	function handleLoginResponse(res, dispatch) {
 	  // handle unsuccessful login
 	  if (res.data.errors) {
@@ -65934,7 +65939,110 @@
 
 
 /***/ },
-/* 646 */,
+/* 646 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.dupeUserCheck = dupeUserCheck;
+	exports.newFormErrors = newFormErrors;
+	exports.default = clientFormValidation;
+	
+	var _axios = __webpack_require__(421);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// Action
+	var DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS';
+	var SET_FORM_ERRORS = 'SET_FORM_ERRORS';
+	
+	// Action Creators
+	function dupeUserCheckResults(errors, invalid) {
+	  return { type: DUPE_USER_CHECK_RESULTS, errors: errors, invalid: invalid };
+	}
+	
+	function dupeUserCheck(identifier, field, validationErrors) {
+	  return function (dispatch) {
+	    _axios2.default.get('/api/users/' + identifier).then(function (res) {
+	      var _checkUserInResponse = checkUserInResponse(res, field);
+	
+	      var invalid = _checkUserInResponse.invalid;
+	      var errors = _checkUserInResponse.errors;
+	
+	      var newErrors = Object.assign({}, validationErrors, errors);
+	      dispatch(dupeUserCheckResults(newErrors, invalid));
+	    }).catch(function (err) {
+	      var invalid = true;
+	      var errors = { server: 'username/email lookup failed' };
+	      var newErrors = Object.assign({}, validationErrors, errors);
+	      dispatch(dupeUserCheckResults(newErrors, invalid));
+	      console.error('dupe user check failed!', err.response.data);
+	    });
+	  };
+	}
+	
+	function newFormErrors(currentErrors, newErrors) {
+	  var updatedErrors = Object.assign({}, currentErrors, newErrors);
+	  return { type: SET_FORM_ERRORS, errors: updatedErrors };
+	}
+	
+	// Reducer
+	function reduceDupeUserCheck(state, action) {
+	  return Object.assign({}, state, {
+	    errors: action.errors,
+	    invalid: action.invalid
+	  });
+	}
+	function reduceSetFormErrors(state, action) {
+	  return Object.assign({}, state, {
+	    errors: action.errors
+	  });
+	}
+	
+	// Root Reducer Slice
+	var initialState = {
+	  errors: {},
+	  invalid: false
+	};
+	function clientFormValidation() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case DUPE_USER_CHECK_RESULTS:
+	      return reduceDupeUserCheck(state, action);
+	    case SET_FORM_ERRORS:
+	      return reduceSetFormErrors(state, action);
+	    default:
+	      return state;
+	  }
+	}
+	
+	// Lib **************************************************************
+	
+	function checkUserInResponse(res, field) {
+	  console.log('isUserExists response:', res, 'field:', field);
+	  var invalid = void 0;
+	  var errors = {};
+	  if (res.data.user) {
+	    errors[field] = 'A user exists with this ' + field;
+	    invalid = true;
+	  } else {
+	    errors[field] = null;
+	    invalid = false;
+	  }
+	  return {
+	    errors: errors,
+	    invalid: invalid
+	  };
+	}
+
+/***/ },
 /* 647 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -90249,7 +90357,7 @@
 	
 	var _flashMessage = __webpack_require__(260);
 	
-	var _clientFormValidation = __webpack_require__(779);
+	var _clientFormValidation = __webpack_require__(646);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -90268,6 +90376,7 @@
 	    dispatchAddFlashMessage: func.isRequired,
 	    dispatchDupeUserCheck: func.isRequired,
 	    dispatchNewFormErrors: func.isRequired,
+	    dispatchSignupLoading: func.isRequired,
 	    errors: object
 	  },
 	
@@ -90296,12 +90405,14 @@
 	    return isValid;
 	  },
 	  ensureUserExists: function ensureUserExists(event) {
-	    // +TODO: make sure clientFormValidation isn't dispatched a second time
+	    // TODO: make sure clientFormValidation isn't dispatched a second time
 	    // with the name identifier error in redux
 	    var field = event.target.name;
 	    var val = event.target.value;
 	    console.log('ensureUserExists event data:', '\nfield:', field, '\nval', val);
 	    if (val !== '' && val !== this.props.errors.username) {
+	      console.log('current errors.username:', this.props.errors.username);
+	      console.log('dispatchDupeUserCheck...', val);
 	      this.props.dispatchDupeUserCheck(val, field, this.props.errors);
 	    }
 	    if (val === '') {
@@ -90309,10 +90420,7 @@
 	    }
 	  },
 	  ensurePasswordsMatch: function ensurePasswordsMatch(event) {
-	    console.log('state password:', this.state.password);
-	    console.log('state passwordconf:', this.state.passwordConfirmation);
 	    if (this.state.password !== this.state.passwordConfirmation) {
-	      console.log('passwords do not match');
 	      return this.props.dispatchNewFormErrors(this.props.errors, {
 	        passwordConfirmation: 'passwords don\'t match'
 	      });
@@ -90326,30 +90434,17 @@
 	    return;
 	  },
 	  onSubmit: function onSubmit(event) {
-	    var _this = this;
-	
 	    event.preventDefault();
 	
 	    if (this.isValid()) {
 	      this.props.dispatchNewFormErrors(this.props.errors, {});
 	      this.setState({ isLoading: true });
-	      this.props.dispatchUserSignupRequest(this.state)
-	      // TODO: then is not going to work here
-	      .then(function (response) {
-	        _this.props.dispatchAddFlashMessage({
-	          type: 'success',
-	          text: 'Signup successful!'
-	        });
-	        _this.context.router.push('/');
-	      }).catch(function (error) {
-	        _this.props.dispatchNewFormErrors(_this.props.errors, error.response.data);
-	        _this.setState({ isLoading: false });
-	      });
+	      this.props.dispatchUserSignupRequest(this.state);
+	      // TODO: set isLoading to false from Redux. May need
+	      // to transfer loading state to redux.
 	    }
 	  },
 	  render: function render() {
-	    // TODO move errors from component state to redux state.
-	    // TODO validate sameness of password field onBlur of confirm password
 	    // TODO validate username to ensure it's not an email
 	    var errors = this.props.errors;
 	
@@ -90437,7 +90532,7 @@
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    dispatchUserSignupRequest: function dispatchUserSignupRequest(state) {
-	      dispatch((0, _userSignupRequest.userSignupRequest)(state));
+	      dispatch((0, _userSignupRequest.signupRequest)(state));
 	    },
 	    dispatchAddFlashMessage: function dispatchAddFlashMessage(messageObj) {
 	      dispatch((0, _flashMessage.addFlashMessage)(messageObj));
@@ -90447,6 +90542,9 @@
 	    },
 	    dispatchNewFormErrors: function dispatchNewFormErrors(currentErrors, newErrors) {
 	      dispatch((0, _clientFormValidation.newFormErrors)(currentErrors, newErrors));
+	    },
+	    dispatchSignupLoading: function dispatchSignupLoading(bool) {
+	      dispatch((0, _userSignupRequest.signupLoading)(bool));
 	    }
 	  };
 	};
@@ -90586,23 +90684,64 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.userSignupRequest = userSignupRequest;
+	exports.signupLoading = signupLoading;
+	exports.signupRequest = signupRequest;
+	exports.default = userSignupRequest;
 	
 	var _axios = __webpack_require__(421);
 	
 	var _axios2 = _interopRequireDefault(_axios);
 	
+	var _flashMessage = __webpack_require__(260);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// import { addFlashMessage } from './addFlashMessage'
-	
 	// action
+	var SIGNUP_LOADING = 'SIGNUP_LOADING';
 	
 	// action creator
-	function userSignupRequest(userData) {
+	function signupLoading(bool) {
+	  return { type: SIGNUP_LOADING, signupLoading: bool };
+	}
+	function signupRequest(userData) {
 	  return function (dispatch) {
-	    return _axios2.default.post('/api/users', userData);
+	    dispatch(signupLoading(true));
+	    return _axios2.default.post('/api/users', userData).then(function (res) {
+	      dispatch((0, _flashMessage.addFlashMessage)({
+	        type: 'success',
+	        text: 'Signup successful!'
+	      }));
+	      dispatch(signupLoading(false));
+	    }).catch(function (err) {
+	      console.log('signup error:', err.response);
+	      dispatch((0, _flashMessage.addFlashMessage)({
+	        type: 'error',
+	        text: 'Signup failed.'
+	      }));
+	      dispatch(signupLoading(false));
+	    });
 	  };
+	}
+	
+	// reducer
+	function reduceSignupLoading(state, action) {
+	  return Object.assign({}, state, { signupLoading: action.signupLoading });
+	}
+	
+	// root reducer slice
+	var initialState = {
+	  signupLoading: false
+	};
+	function userSignupRequest() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case SIGNUP_LOADING:
+	      return reduceSignupLoading(state, action);
+	    default:
+	      return state;
+	  }
 	}
 
 /***/ },
@@ -90925,124 +91064,6 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 765 */,
-/* 766 */,
-/* 767 */,
-/* 768 */,
-/* 769 */,
-/* 770 */,
-/* 771 */,
-/* 772 */,
-/* 773 */,
-/* 774 */,
-/* 775 */,
-/* 776 */,
-/* 777 */,
-/* 778 */,
-/* 779 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.dupeUserCheck = dupeUserCheck;
-	exports.newFormErrors = newFormErrors;
-	exports.default = clientFormValidation;
-	
-	var _axios = __webpack_require__(421);
-	
-	var _axios2 = _interopRequireDefault(_axios);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	// Action
-	var DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS';
-	var SET_FORM_ERRORS = 'SET_FORM_ERRORS';
-	
-	// Action Creators
-	function dupeUserCheckResults(errors, invalid) {
-	  return { type: DUPE_USER_CHECK_RESULTS, errors: errors, invalid: invalid };
-	}
-	
-	function dupeUserCheck(identifier, field, validationErrors) {
-	  return function (dispatch) {
-	    _axios2.default.get('/api/users/' + identifier).then(function (res) {
-	      var _checkUserInResponse = checkUserInResponse(res, field);
-	
-	      var invalid = _checkUserInResponse.invalid;
-	      var errors = _checkUserInResponse.errors;
-	
-	      var newErrors = Object.assign({}, validationErrors, errors);
-	      dispatch(dupeUserCheckResults(newErrors, invalid));
-	    }).catch(function (err) {
-	      var invalid = true;
-	      var errors = { server: 'username/email lookup failed' };
-	      var newErrors = Object.assign({}, validationErrors, errors);
-	      dispatch(dupeUserCheckResults(newErrors, invalid));
-	      console.error('dupe user check failed!', err.response.data);
-	    });
-	  };
-	}
-	
-	function newFormErrors(currentErrors, newErrors) {
-	  var updatedErrors = Object.assign({}, currentErrors, newErrors);
-	  return { type: SET_FORM_ERRORS, errors: updatedErrors };
-	}
-	
-	// Reducer
-	function reduceDupeUserCheck(state, action) {
-	  return Object.assign({}, state, {
-	    errors: action.errors,
-	    invalid: action.invalid
-	  });
-	}
-	function reduceSetFormErrors(state, action) {
-	  return Object.assign({}, state, {
-	    errors: action.errors
-	  });
-	}
-	
-	// Root Reducer Slice
-	var initialState = {
-	  errors: {},
-	  invalid: false
-	};
-	function clientFormValidation() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
-	  var action = arguments[1];
-	
-	  switch (action.type) {
-	    case DUPE_USER_CHECK_RESULTS:
-	      return reduceDupeUserCheck(state, action);
-	    case SET_FORM_ERRORS:
-	      return reduceSetFormErrors(state, action);
-	    default:
-	      return state;
-	  }
-	}
-	
-	// Lib **************************************************************
-	
-	function checkUserInResponse(res, field) {
-	  console.log('isUserExists response:', res, 'field:', field);
-	  var invalid = void 0;
-	  var errors = {};
-	  if (res.data.user) {
-	    errors[field] = 'A user exists with this ' + field;
-	    invalid = true;
-	  } else {
-	    errors[field] = null;
-	    invalid = false;
-	  }
-	  return {
-	    errors: errors,
-	    invalid: invalid
-	  };
-	}
 
 /***/ }
 /******/ ]);

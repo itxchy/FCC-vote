@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import validateInput from '../../routes/shared/signupValidation'
 import TextFieldGroup from '../common/TextFieldGroup'
 const { func, object } = React.PropTypes
-import { userSignupRequest } from '../../redux/modules/userSignupRequest'
+import { signupRequest, signupLoading } from '../../redux/modules/userSignupRequest'
 import { addFlashMessage } from '../../redux/modules/flashMessage'
 import { dupeUserCheck, newFormErrors } from '../../redux/modules/clientFormValidation'
 
@@ -13,6 +13,7 @@ const Signup = React.createClass({
     dispatchAddFlashMessage: func.isRequired,
     dispatchDupeUserCheck: func.isRequired,
     dispatchNewFormErrors: func.isRequired,
+    dispatchSignupLoading: func.isRequired,
     errors: object
   },
 
@@ -40,12 +41,14 @@ const Signup = React.createClass({
   },
 
   ensureUserExists (event) {
-    // +TODO: make sure clientFormValidation isn't dispatched a second time
+    // TODO: make sure clientFormValidation isn't dispatched a second time
     // with the name identifier error in redux
     const field = event.target.name
     const val = event.target.value
     console.log('ensureUserExists event data:', '\nfield:', field, '\nval', val)
     if (val !== '' && val !== this.props.errors.username) {
+      console.log('current errors.username:', this.props.errors.username)
+      console.log('dispatchDupeUserCheck...', val)
       this.props.dispatchDupeUserCheck(val, field, this.props.errors)
     }
     if (val === '') {
@@ -56,10 +59,7 @@ const Signup = React.createClass({
   },
 
   ensurePasswordsMatch (event) {
-    console.log('state password:', this.state.password)
-    console.log('state passwordconf:', this.state.passwordConfirmation)
     if (this.state.password !== this.state.passwordConfirmation) {
-      console.log('passwords do not match')
       return this.props.dispatchNewFormErrors(this.props.errors, {
         passwordConfirmation: 'passwords don\'t match'
       })
@@ -80,24 +80,12 @@ const Signup = React.createClass({
       this.props.dispatchNewFormErrors(this.props.errors, {})
       this.setState({ isLoading: true })
       this.props.dispatchUserSignupRequest(this.state)
-      // TODO: then is not going to work here
-        .then(response => {
-          this.props.dispatchAddFlashMessage({
-            type: 'success',
-            text: 'Signup successful!'
-          })
-          this.context.router.push('/')
-        })
-        .catch(error => {
-          this.props.dispatchNewFormErrors(this.props.errors, error.response.data)
-          this.setState({ isLoading: false })
-        })
+      // TODO: set isLoading to false from Redux. May need
+      // to transfer loading state to redux.
     }
   },
 
   render () {
-    // TODO move errors from component state to redux state.
-    // TODO validate sameness of password field onBlur of confirm password
     // TODO validate username to ensure it's not an email
     const { errors } = this.props
     return (
@@ -179,7 +167,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchUserSignupRequest (state) {
-      dispatch(userSignupRequest(state))
+      dispatch(signupRequest(state))
     },
     dispatchAddFlashMessage (messageObj) {
       dispatch(addFlashMessage(messageObj))
@@ -189,6 +177,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     dispatchNewFormErrors (currentErrors, newErrors) {
       dispatch(newFormErrors(currentErrors, newErrors))
+    },
+    dispatchSignupLoading (bool) {
+      dispatch(signupLoading(bool))
     }
   }
 }

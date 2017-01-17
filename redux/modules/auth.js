@@ -89,7 +89,7 @@ export default function user (state = initialState, action) {
   }
 }
 
-// Helper Functions
+// Lib ******************************************************
 function handleLoginResponse (res, dispatch) {
   // handle unsuccessful login
   if (res.data.errors) {
