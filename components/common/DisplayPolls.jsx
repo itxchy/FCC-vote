@@ -49,7 +49,16 @@ const DisplayPolls = React.createClass({
     }
   },
   render () {
-    if (this.props.polls === null || isEmpty(this.props.polls)) {
+    console.log('displayPolls this.props.polls', this.props.polls)
+    if (this.props.polls) {
+      // const emptyPolls = this.props.polls.polls ? true : false
+      console.log('emptyPolls.polls:', this.props.polls.polls)
+      if (this.props.polls.polls === null) {
+        console.log('returning EmptyPolls')
+        return <EmptyPolls polls={false} />
+      }
+    }
+    if (!this.props.polls || isEmpty(this.props.polls)) {
       return <EmptyPolls polls={this.props.polls} />
     }
     const populatedCards = this.populateCards()

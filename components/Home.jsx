@@ -1,13 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-// import PollCard from './common/PollCard'
-// import ResultsCard from './common/ResultsCard'
 import DisplayPolls from './common/DisplayPolls'
 import { getAllPolls } from '../redux/modules/getAllPolls'
 import { submitVote, resetUpdatedPollResults } from '../redux/modules/submitVote'
 const { func, object, array } = React.PropTypes
-// import { dupeVoterCheck } from '../routes/lib/pollsLib'
-// import isEmpty from 'lodash/isEmpty'
 
 const Home = React.createClass({
   propTypes: {
@@ -18,59 +14,6 @@ const Home = React.createClass({
     allPolls: array,
     updatedPollResults: object
   },
-  getRecentPolls () {
-    if (this.props.allPolls === null) {
-      this.props.dispatchGetAllPolls()
-    }
-  },
-  // populatedCards () {
-  //   return this.props.allPolls.map(poll => {
-  //     let currentUser = this.props.user ? this.props.user.username : null
-  //     const dupeVoter = dupeVoterCheck(poll, currentUser)
-  //     const { title, options, totalVotes, _id } = poll
-  //     if (dupeVoter) {
-  //       return (
-  //         <ResultsCard
-  //           user={this.props.user}
-  //           key={_id}
-  //           title={title}
-  //           options={options}
-  //           totalVotes={totalVotes}
-  //           id={_id}
-  //         />
-  //       )
-  //     }
-  //     return (
-  //       <PollCard
-  //         dispatchSubmitVote={this.props.dispatchSubmitVote}
-  //         user={this.props.user}
-  //         key={_id}
-  //         title={title}
-  //         options={options}
-  //         totalVotes={totalVotes}
-  //         id={_id}
-  //       />
-  //     )
-  //   })
-  // },
-  // handleEmptyAllPollsObject () {
-  //   this.getRecentPolls()
-  //   if (this.props.allPolls === null) {
-  //     return (
-  //       <div className='text-center'>
-  //         <h3>loading...</h3>
-  //       </div>
-  //     )
-  //   }
-  //   if (this.props.allPolls === false) {
-  //     return (
-  //       <div className='text-center'>
-  //         <h3>No polls have been submitted yet :(</h3>
-  //         <p>Why not create one?</p>
-  //       </div>
-  //     )
-  //   }
-  // },
   componentWillReceiveProps (nextProps) {
     // If a new vote was accepted, the relevent poll card should be
     // flipped to a results card including the newest vote.
@@ -81,13 +24,6 @@ const Home = React.createClass({
     }
   },
   render () {
-    // this.getRecentPolls()
-    // let showPolls = null
-    // if (this.props.allPolls === null || isEmpty(this.props.allPolls)) {
-    //   showPolls = this.handleEmptyAllPollsObject()
-    // } else {
-    //   showPolls = this.populatedCards()
-    // }
     return (
       <div>
         <h1 className='view-title text-center'>Latest Polls</h1>

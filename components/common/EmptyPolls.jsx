@@ -1,5 +1,5 @@
 import React from 'react'
-const { array } = React.PropTypes
+const { bool } = React.PropTypes
 
 const EmptyPolls = ({polls}) => {
   if (polls === null) {
@@ -25,7 +25,7 @@ const EmptyPolls = ({polls}) => {
 }
 
 EmptyPolls.propTypes = {
-  polls: array
+  polls: bool
 }
 
 export default EmptyPolls

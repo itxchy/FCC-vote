@@ -67269,14 +67269,10 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var _React$PropTypes = _react2.default.PropTypes;
-	// import PollCard from './common/PollCard'
-	// import ResultsCard from './common/ResultsCard'
-	
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
 	var array = _React$PropTypes.array;
-	// import { dupeVoterCheck } from '../routes/lib/pollsLib'
-	// import isEmpty from 'lodash/isEmpty'
+	
 	
 	var Home = _react2.default.createClass({
 	  displayName: 'Home',
@@ -67289,60 +67285,6 @@
 	    allPolls: array,
 	    updatedPollResults: object
 	  },
-	  getRecentPolls: function getRecentPolls() {
-	    if (this.props.allPolls === null) {
-	      this.props.dispatchGetAllPolls();
-	    }
-	  },
-	
-	  // populatedCards () {
-	  //   return this.props.allPolls.map(poll => {
-	  //     let currentUser = this.props.user ? this.props.user.username : null
-	  //     const dupeVoter = dupeVoterCheck(poll, currentUser)
-	  //     const { title, options, totalVotes, _id } = poll
-	  //     if (dupeVoter) {
-	  //       return (
-	  //         <ResultsCard
-	  //           user={this.props.user}
-	  //           key={_id}
-	  //           title={title}
-	  //           options={options}
-	  //           totalVotes={totalVotes}
-	  //           id={_id}
-	  //         />
-	  //       )
-	  //     }
-	  //     return (
-	  //       <PollCard
-	  //         dispatchSubmitVote={this.props.dispatchSubmitVote}
-	  //         user={this.props.user}
-	  //         key={_id}
-	  //         title={title}
-	  //         options={options}
-	  //         totalVotes={totalVotes}
-	  //         id={_id}
-	  //       />
-	  //     )
-	  //   })
-	  // },
-	  // handleEmptyAllPollsObject () {
-	  //   this.getRecentPolls()
-	  //   if (this.props.allPolls === null) {
-	  //     return (
-	  //       <div className='text-center'>
-	  //         <h3>loading...</h3>
-	  //       </div>
-	  //     )
-	  //   }
-	  //   if (this.props.allPolls === false) {
-	  //     return (
-	  //       <div className='text-center'>
-	  //         <h3>No polls have been submitted yet :(</h3>
-	  //         <p>Why not create one?</p>
-	  //       </div>
-	  //     )
-	  //   }
-	  // },
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	    // If a new vote was accepted, the relevent poll card should be
 	    // flipped to a results card including the newest vote.
@@ -67353,13 +67295,6 @@
 	    }
 	  },
 	  render: function render() {
-	    // this.getRecentPolls()
-	    // let showPolls = null
-	    // if (this.props.allPolls === null || isEmpty(this.props.allPolls)) {
-	    //   showPolls = this.handleEmptyAllPollsObject()
-	    // } else {
-	    //   showPolls = this.populatedCards()
-	    // }
 	    return _react2.default.createElement(
 	      'div',
 	      null,
@@ -91051,7 +90986,13 @@
 	
 	var _isEmpty2 = _interopRequireDefault(_isEmpty);
 	
+	var _DisplayPolls = __webpack_require__(780);
+	
+	var _DisplayPolls2 = _interopRequireDefault(_DisplayPolls);
+	
 	var _getUserPolls = __webpack_require__(648);
+	
+	var _submitVote = __webpack_require__(643);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -91066,32 +91007,41 @@
 	
 	  propTypes: {
 	    dispatchGetUserPolls: func.isRequired,
+	    dispatchSubmitVote: func.isRequired,
+	    updatedPollResults: object,
 	    user: object.isRequired,
 	    userPolls: array
 	  },
 	  getUserPolls: function getUserPolls() {
 	    if (this.props.user.user) {
 	      var username = this.props.user.user.username;
-	      console.log(this.props.userPolls);
 	      if (username && (0, _isEmpty2.default)(this.props.userPolls)) {
 	        this.props.dispatchGetUserPolls(username);
 	      }
 	    }
 	  },
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    // If a new vote was accepted, the relevent poll card should be
+	    // flipped to a results card including the newest vote.
+	    // For now, all polls will be refreshed.
+	    if (nextProps.updatedPollResults !== null || nextProps.user !== this.props.user) {
+	      this.props.dispatchGetUserPolls();
+	      this.props.dispatchResetUpdatedPollResults();
+	    }
+	  },
 	  render: function render() {
-	    this.getUserPolls();
+	    // this.getUserPolls()
+	    var polls = this.props.userPolls ? this.props.userPolls : null;
+	    // empty = { polls: null }
 	    return _react2.default.createElement(
 	      'div',
 	      null,
-	      _react2.default.createElement(
-	        'pre',
-	        null,
-	        _react2.default.createElement(
-	          'code',
-	          null,
-	          JSON.stringify(this.props.userPolls, null, 4)
-	        )
-	      )
+	      _react2.default.createElement(_DisplayPolls2.default, {
+	        polls: polls,
+	        user: this.props.user,
+	        dispatchSubmitVote: this.props.dispatchSubmitVote,
+	        getPolls: this.getUserPolls
+	      })
 	    );
 	  }
 	});
@@ -91099,7 +91049,8 @@
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    user: state.user,
-	    userPolls: state.userPolls.userPolls
+	    userPolls: state.userPolls.userPolls,
+	    updatedPollResults: state.newVote.updatedResults
 	  };
 	};
 	
@@ -91107,6 +91058,12 @@
 	  return {
 	    dispatchGetUserPolls: function dispatchGetUserPolls(username) {
 	      dispatch((0, _getUserPolls.getUserPolls)(username));
+	    },
+	    dispatchSubmitVote: function dispatchSubmitVote(id, vote) {
+	      dispatch((0, _submitVote.submitVote)(id, vote));
+	    },
+	    dispatchResetUpdatedPollResults: function dispatchResetUpdatedPollResults() {
+	      dispatch((0, _submitVote.resetUpdatedPollResults)());
 	    }
 	  };
 	};
@@ -91220,7 +91177,16 @@
 	    }
 	  },
 	  render: function render() {
-	    if (this.props.polls === null || (0, _isEmpty2.default)(this.props.polls)) {
+	    console.log('displayPolls this.props.polls', this.props.polls);
+	    if (this.props.polls) {
+	      // const emptyPolls = this.props.polls.polls ? true : false
+	      console.log('emptyPolls.polls:', this.props.polls.polls);
+	      if (this.props.polls.polls === null) {
+	        console.log('returning EmptyPolls');
+	        return _react2.default.createElement(_EmptyPolls2.default, { polls: false });
+	      }
+	    }
+	    if (!this.props.polls || (0, _isEmpty2.default)(this.props.polls)) {
 	      return _react2.default.createElement(_EmptyPolls2.default, { polls: this.props.polls });
 	    }
 	    var populatedCards = this.populateCards();
@@ -91250,7 +91216,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var array = _react2.default.PropTypes.array;
+	var bool = _react2.default.PropTypes.bool;
 	
 	
 	var EmptyPolls = function EmptyPolls(_ref) {
@@ -91305,7 +91271,7 @@
 	};
 	
 	EmptyPolls.propTypes = {
-	  polls: array
+	  polls: bool
 	};
 	
 	exports.default = EmptyPolls;
