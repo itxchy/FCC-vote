@@ -1,9 +1,9 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import ResultsCard from './ResultsCard'
 import PollCard from './PollCard'
 import EmptyPolls from './EmptyPolls'
 import { dupeVoterCheck } from '../../routes/lib/pollsLib'
+import isEmpty from 'lodash/isEmpty'
 const { func, array, object } = React.PropTypes
 
 const DisplayPolls = React.createClass({
@@ -49,12 +49,12 @@ const DisplayPolls = React.createClass({
     }
   },
   render () {
-    if (this.props.polls === null || this.props.polls === false) {
+    if (this.props.polls === null || isEmpty(this.props.polls)) {
       return <EmptyPolls polls={this.props.polls} />
     }
     const populatedCards = this.populateCards()
     return (
-      <div className='row'>
+      <div>
         {populatedCards}
       </div>
     )

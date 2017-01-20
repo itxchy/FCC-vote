@@ -1,5 +1,5 @@
 import React from 'react'
-const { array } from React.PropTypes
+const { array } = React.PropTypes
 
 const EmptyPolls = ({polls}) => {
   if (polls === null) {
@@ -12,7 +12,7 @@ const EmptyPolls = ({polls}) => {
   if (polls === false) {
     <div className='text-center'>
       <h3>No polls have been submitted yet :(</h3>
-      <p>Why not create one?</p>        
+      <p>Why not create one?</p>
     </div>
   }
   return (
