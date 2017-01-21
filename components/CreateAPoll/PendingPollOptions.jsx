@@ -42,7 +42,6 @@ const PendingPollOptions = React.createClass({
           />
           <a
             className='btn btn-danger delete-button'
-            href='#'
             onClick={() => this.deleteOption(index)}
             aria-label='Delete'
           >
@@ -54,7 +53,7 @@ const PendingPollOptions = React.createClass({
     return (
       <div className='form-group options-container'>
         {options}
-        <a href='#'>
+        <a>
           <p className='add-another-option' onClick={this.addAnotherOption}>
             <i className='fa fa-plus-circle' aria-hidden='true' /> Add another option
           </p>

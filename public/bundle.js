@@ -87598,7 +87598,6 @@
 	          'a',
 	          {
 	            className: 'btn btn-danger delete-button',
-	            href: '#',
 	            onClick: function onClick() {
 	              return _this.deleteOption(index);
 	            },
@@ -87614,7 +87613,7 @@
 	      options,
 	      _react2.default.createElement(
 	        'a',
-	        { href: '#' },
+	        null,
 	        _react2.default.createElement(
 	          'p',
 	          { className: 'add-another-option', onClick: this.addAnotherOption },
@@ -91294,6 +91293,12 @@
 	
 	  propTypes: {
 	    routeParams: object
+	  },
+	  getPoll: function getPoll() {
+	    // TODO get individual poll object using poll id
+	  },
+	  componentWillMount: function componentWillMount() {
+	    this.getPoll();
 	  },
 	  render: function render() {
 	    return _react2.default.createElement(

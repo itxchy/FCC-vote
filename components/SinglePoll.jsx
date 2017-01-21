@@ -5,6 +5,12 @@ const SinglePoll = React.createClass({
   propTypes: {
     routeParams: object
   },
+  getPoll () {
+    // TODO get individual poll object using poll id
+  },
+  componentWillMount () {
+    this.getPoll()
+  },
   render () {
     return (
       <div>
