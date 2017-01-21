@@ -60,7 +60,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(767);
+	__webpack_require__(768);
 	
 	_reactDom2.default.render(_react2.default.createElement(_ClientApp2.default, null), document.getElementById('app'));
 
@@ -66819,7 +66819,7 @@
 	
 	var _MyPollsPage2 = _interopRequireDefault(_MyPollsPage);
 	
-	var _SinglePoll = __webpack_require__(782);
+	var _SinglePoll = __webpack_require__(767);
 	
 	var _SinglePoll2 = _interopRequireDefault(_SinglePoll);
 	
@@ -66830,11 +66830,11 @@
 	    _reactRouter.Route,
 	    { path: '/', component: _Layout2.default },
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'create', component: _CreateAPoll2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'mypolls', component: _MyPollsPage2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _Signup2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _LoginPage2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'v/:id', component: _SinglePoll2.default })
+	    _react2.default.createElement(_reactRouter.Route, { path: '/create', component: _CreateAPoll2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/mypolls', component: _MyPollsPage2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _Signup2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _LoginPage2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/v/:id', component: _SinglePoll2.default })
 	  );
 	};
 	
@@ -91260,26 +91260,6 @@
 
 /***/ },
 /* 767 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 768 */,
-/* 769 */,
-/* 770 */,
-/* 771 */,
-/* 772 */,
-/* 773 */,
-/* 774 */,
-/* 775 */,
-/* 776 */,
-/* 777 */,
-/* 778 */,
-/* 779 */,
-/* 780 */,
-/* 781 */,
-/* 782 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -91294,8 +91274,15 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	var object = _react2.default.PropTypes.object;
+	
+	
 	var SinglePoll = _react2.default.createClass({
 	  displayName: 'SinglePoll',
+	
+	  propTypes: {
+	    routeParams: object
+	  },
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
@@ -91303,13 +91290,20 @@
 	      _react2.default.createElement(
 	        'h1',
 	        null,
-	        'SinglePoll!'
+	        'SinglePoll! ',
+	        this.props.routeParams.id
 	      )
 	    );
 	  }
 	});
 	
 	exports.default = SinglePoll;
+
+/***/ },
+/* 768 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
 
 /***/ }
 /******/ ]);
