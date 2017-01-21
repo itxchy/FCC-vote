@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 const { string, array, number, object } = React.PropTypes
 import D3Chart from './D3Chart'
 import isEmpty from 'lodash/isEmpty'
@@ -23,7 +24,7 @@ const ResultsCard = React.createClass({
     }
     return (
       <div className='col-sm-4'>
-        <h2>{this.props.title}</h2>
+        <h2><Link to={`/v/${this.props.id}`}>{this.props.title}</Link></h2>
         <div className='col-sm-10'>
           <div className='row'>
             {d3Component || 'loading results...'}

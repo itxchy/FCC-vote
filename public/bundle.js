@@ -67471,6 +67471,8 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _reactRouter = __webpack_require__(173);
+	
 	var _D3Chart = __webpack_require__(665);
 	
 	var _D3Chart2 = _interopRequireDefault(_D3Chart);
@@ -67512,7 +67514,11 @@
 	      _react2.default.createElement(
 	        'h2',
 	        null,
-	        this.props.title
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/v/' + this.props.id },
+	          this.props.title
+	        )
 	      ),
 	      _react2.default.createElement(
 	        'div',
@@ -86990,6 +86996,8 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _reactRouter = __webpack_require__(173);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var _React$PropTypes = _react2.default.PropTypes;
@@ -87065,7 +87073,11 @@
 	        _react2.default.createElement(
 	          'h2',
 	          null,
-	          this.props.title
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            { to: '/v/' + this.props.id },
+	            this.props.title
+	          )
 	        ),
 	        _react2.default.createElement(
 	          'fieldset',

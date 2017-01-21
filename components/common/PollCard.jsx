@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 const { string, array, number, object, func } = React.PropTypes
 
 const PollCard = React.createClass({
@@ -54,7 +55,7 @@ const PollCard = React.createClass({
     return (
       <div className='col-sm-4'>
         <form onSubmit={this.onVoteSubmit}>
-          <h2>{this.props.title}</h2>
+          <h2><Link to={`/v/${this.props.id}`}>{this.props.title}</Link></h2>
           <fieldset className='form-group row'>
             <div className='col-sm-10'>
               {options}
