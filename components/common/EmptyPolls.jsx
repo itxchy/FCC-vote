@@ -2,6 +2,7 @@ import React from 'react'
 const { bool } = React.PropTypes
 
 const EmptyPolls = ({polls}) => {
+  console.log('EmptyPolls polls:', polls)
   if (polls === null) {
     return (
       <div className='text-center'>
@@ -10,10 +11,12 @@ const EmptyPolls = ({polls}) => {
     )
   }
   if (polls === false) {
-    <div className='text-center'>
-      <h3>No polls have been submitted yet :(</h3>
-      <p>Why not create one?</p>
-    </div>
+    return (
+      <div className='text-center'>
+        <h3>No polls have been submitted yet :(</h3>
+        <p>Why not create one?</p>
+      </div>
+    )
   }
   return (
     <div className='text-center'>

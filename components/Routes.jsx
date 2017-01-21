@@ -6,6 +6,7 @@ import CreateAPoll from './CreateAPoll/CreateAPoll'
 import Signup from './Signup/Signup'
 import LoginPage from './Login/LoginPage'
 import MyPollsPage from './MyPolls/MyPollsPage'
+import SinglePoll from './SinglePoll'
 
 export const Routes = () => (
   <Route path='/' component={Layout}>
@@ -14,6 +15,7 @@ export const Routes = () => (
     <Route path='mypolls' component={MyPollsPage} />
     <Route path='signup' component={Signup} />
     <Route path='login' component={LoginPage} />
+    <Route path='v/:id' component={SinglePoll} />
   </Route>
 )
 

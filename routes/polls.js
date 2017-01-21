@@ -142,7 +142,7 @@ router.get('/', (req, res) => {
  */
 router.get('/:user', (req, res) => {
   Poll.find({ owner: req.params.user })
-    .select('_id title options total_votes owner')
+    .select('_id title options totalVotes owner')
     .exec()
     .then(polls => {
       return res.json(polls)

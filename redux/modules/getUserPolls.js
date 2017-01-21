@@ -15,7 +15,7 @@ export function getUserPolls (username) {
         if (res.data.length > 0) {
           dispatch(setUserPollsData(res.data))
         } else {
-          dispatch(setUserPollsData({ polls: null }))
+          dispatch(setUserPollsData([{ polls: null }]))
         }
       })
   }

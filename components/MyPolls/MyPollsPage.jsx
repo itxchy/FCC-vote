@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import isEmpty from 'lodash/isEmpty'
 import DisplayPolls from '../common/DisplayPolls'
 const { func, object, array } = React.PropTypes
 import { getUserPolls } from '../../redux/modules/getUserPolls'
@@ -10,6 +9,7 @@ const MyPollsPage = React.createClass({
   propTypes: {
     dispatchGetUserPolls: func.isRequired,
     dispatchSubmitVote: func.isRequired,
+    dispatchResetUpdatedPollResults: func.isRequired,
     updatedPollResults: object,
     user: object.isRequired,
     userPolls: array
@@ -17,7 +17,7 @@ const MyPollsPage = React.createClass({
   getUserPolls () {
     if (this.props.user.user) {
       const username = this.props.user.user.username
-      if (username && isEmpty(this.props.userPolls)) {
+      if (username) {
         this.props.dispatchGetUserPolls(username)
       }
     }
@@ -32,14 +32,12 @@ const MyPollsPage = React.createClass({
     }
   },
   render () {
-    // this.getUserPolls()
     const polls = this.props.userPolls ? this.props.userPolls : null
-    // empty = { polls: null }
     return (
       <div>
         <DisplayPolls
           polls={polls}
-          user={this.props.user}
+          user={this.props.user.user}
           dispatchSubmitVote={this.props.dispatchSubmitVote}
           getPolls={this.getUserPolls}
         />

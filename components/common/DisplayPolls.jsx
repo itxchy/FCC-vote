@@ -4,6 +4,7 @@ import PollCard from './PollCard'
 import EmptyPolls from './EmptyPolls'
 import { dupeVoterCheck } from '../../routes/lib/pollsLib'
 import isEmpty from 'lodash/isEmpty'
+import has from 'lodash/has'
 const { func, array, object } = React.PropTypes
 
 const DisplayPolls = React.createClass({
@@ -16,7 +17,9 @@ const DisplayPolls = React.createClass({
   populateCards () {
     return this.props.polls.map(poll => {
       const currentUser = this.props.user ? this.props.user.username : null
+      console.log('DisplayPolls currentUser', currentUser)
       const dupeVoter = dupeVoterCheck(poll, currentUser)
+      console.log('dupeVoter result:', dupeVoter)
       const { title, options, totalVotes, _id } = poll
       if (dupeVoter) {
         return (
@@ -44,22 +47,17 @@ const DisplayPolls = React.createClass({
     })
   },
   componentWillMount () {
-    if (this.props.polls === null) {
-      this.props.getPolls()
-    }
+    this.props.getPolls()
   },
   render () {
-    console.log('displayPolls this.props.polls', this.props.polls)
-    if (this.props.polls) {
-      // const emptyPolls = this.props.polls.polls ? true : false
-      console.log('emptyPolls.polls:', this.props.polls.polls)
-      if (this.props.polls.polls === null) {
-        console.log('returning EmptyPolls')
-        return <EmptyPolls polls={false} />
-      }
-    }
+    // if the polls haven't loaded yet, show a loading dialog
     if (!this.props.polls || isEmpty(this.props.polls)) {
       return <EmptyPolls polls={this.props.polls} />
+    }
+    // if no polls are returned, tell the user they have no polls
+    if (has(this.props.polls[0], 'polls') && this.props.polls[0].polls === null) {
+      console.log('returning EmptyPolls')
+      return <EmptyPolls polls={false} />
     }
     const populatedCards = this.populateCards()
     return (
