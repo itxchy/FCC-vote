@@ -150,4 +150,17 @@ router.get('/:user', (req, res) => {
     .catch(err => res.status(500).json({ 'error retrieving current user\'s polls': err }))
 })
 
+/**
+ * Retrieves a single poll based on poll ID
+ */
+router.get('/id/:id', (req, res) => {
+  Poll.find({ _id: req.params.id })
+    .select('_id title options totalVotes owner')
+    .exec()
+    .then(poll => {
+      return res.json(poll)
+    })
+    .catch(err => res.status(500).json({ 'error retrieveing single poll': err }))
+})
+
 module.exports = router

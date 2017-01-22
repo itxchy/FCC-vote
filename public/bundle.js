@@ -60,7 +60,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(768);
+	__webpack_require__(769);
 	
 	_reactDom2.default.render(_react2.default.createElement(_ClientApp2.default, null), document.getElementById('app'));
 
@@ -28280,6 +28280,10 @@
 	
 	var _getUserPolls2 = _interopRequireDefault(_getUserPolls);
 	
+	var _getSinglePoll = __webpack_require__(768);
+	
+	var _getSinglePoll2 = _interopRequireDefault(_getSinglePoll);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = (0, _redux.combineReducers)({
@@ -28290,7 +28294,8 @@
 	  newVote: _submitVote2.default,
 	  clientFormValidation: _clientFormValidation2.default,
 	  userSignupRequest: _userSignupRequest2.default,
-	  userPolls: _getUserPolls2.default
+	  userPolls: _getUserPolls2.default,
+	  singlePoll: _getSinglePoll2.default
 	});
 
 /***/ },
@@ -91283,19 +91288,28 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _reactRedux = __webpack_require__(649);
+	
+	var _getSinglePoll = __webpack_require__(768);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var object = _react2.default.PropTypes.object;
+	var _React$PropTypes = _react2.default.PropTypes;
+	var object = _React$PropTypes.object;
+	var func = _React$PropTypes.func;
 	
 	
 	var SinglePoll = _react2.default.createClass({
 	  displayName: 'SinglePoll',
 	
 	  propTypes: {
-	    routeParams: object
+	    routeParams: object,
+	    singlePoll: object,
+	    dispatchGetSinglePoll: func
 	  },
 	  getPoll: function getPoll() {
 	    // TODO get individual poll object using poll id
+	    this.props.dispatchGetSinglePoll(this.props.routeParams.id);
 	  },
 	  componentWillMount: function componentWillMount() {
 	    this.getPoll();
@@ -91307,17 +91321,86 @@
 	      _react2.default.createElement(
 	        'h1',
 	        null,
-	        'SinglePoll! ',
-	        this.props.routeParams.id
+	        'SinglePoll!'
 	      )
 	    );
 	  }
 	});
 	
-	exports.default = SinglePoll;
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    singlePoll: state.singlePoll
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchGetSinglePoll: function dispatchGetSinglePoll(id) {
+	      dispatch((0, _getSinglePoll.getSinglePoll)(id));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SinglePoll);
 
 /***/ },
 /* 768 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getSinglePoll = getSinglePoll;
+	exports.default = singlePoll;
+	
+	var _axios = __webpack_require__(421);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// Action
+	var SINGLE_POLL_DATA = 'SINGLE_POLL_DATA';
+	
+	// Action Creators
+	function setSinglePollData(poll) {
+	  return { type: SINGLE_POLL_DATA, singlePoll: poll };
+	}
+	
+	function getSinglePoll(id) {
+	  return function (dispatch) {
+	    _axios2.default.get('/api/polls/id/' + id).then(function (res) {
+	      console.log('getSinglePoll results', res.data);
+	      dispatch(setSinglePollData(res.data));
+	    });
+	  };
+	}
+	
+	// Reducer
+	function reduceSinglePollsData(state, action) {
+	  return Object.assign({}, state, { singlePoll: action.singlePoll });
+	}
+	
+	// Root Reducer
+	var initialState = {
+	  singlePoll: null
+	};
+	function singlePoll() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case SINGLE_POLL_DATA:
+	      return reduceSinglePollsData(state, action);
+	    default:
+	      return state;
+	  }
+	}
+
+/***/ },
+/* 769 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
