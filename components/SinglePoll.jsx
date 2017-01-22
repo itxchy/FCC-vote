@@ -14,7 +14,6 @@ const SinglePoll = React.createClass({
     dispatchSubmitVote: func
   },
   getPoll () {
-    // TODO get individual poll object using poll id
     this.props.dispatchGetSinglePoll(this.props.routeParams.id)
   },
   componentWillMount () {

@@ -67443,10 +67443,6 @@
 	
 	var _has2 = _interopRequireDefault(_has);
 	
-	var _classnames = __webpack_require__(662);
-	
-	var _classnames2 = _interopRequireDefault(_classnames);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var _React$PropTypes = _react2.default.PropTypes;
@@ -67467,12 +67463,10 @@
 	  populateCards: function populateCards() {
 	    var _this = this;
 	
-	    var singlePoll = this.props.polls.length === 1 ? true : false;
+	    var singlePoll = this.props.polls.length === 1;
 	    return this.props.polls.map(function (poll) {
 	      var currentUser = _this.props.user ? _this.props.user.username : null;
-	      console.log('DisplayPolls currentUser', currentUser);
 	      var dupeVoter = (0, _pollsLib.dupeVoterCheck)(poll, currentUser);
-	      console.log('dupeVoter result:', dupeVoter);
 	      var title = poll.title;
 	      var options = poll.options;
 	      var totalVotes = poll.totalVotes;
@@ -67490,7 +67484,7 @@
 	        });
 	      }
 	      return _react2.default.createElement(_PollCard2.default, {
-	        className: (0, _classnames2.default)({ 'center-div-horizontally': singlePoll }),
+	        singlePoll: singlePoll,
 	        dispatchSubmitVote: _this.props.dispatchSubmitVote,
 	        user: _this.props.user,
 	        key: _id,
@@ -67511,7 +67505,6 @@
 	    }
 	    // if no polls are returned, tell the user they have no polls
 	    if ((0, _has2.default)(this.props.polls[0], 'polls') && this.props.polls[0].polls === null) {
-	      console.log('returning EmptyPolls');
 	      return _react2.default.createElement(_EmptyPolls2.default, { polls: false });
 	    }
 	    var populatedCards = this.populateCards();
@@ -87072,6 +87065,10 @@
 	
 	var _reactRouter = __webpack_require__(173);
 	
+	var _classnames = __webpack_require__(662);
+	
+	var _classnames2 = _interopRequireDefault(_classnames);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var _React$PropTypes = _react2.default.PropTypes;
@@ -87080,6 +87077,7 @@
 	var number = _React$PropTypes.number;
 	var object = _React$PropTypes.object;
 	var func = _React$PropTypes.func;
+	var bool = _React$PropTypes.bool;
 	
 	
 	var PollCard = _react2.default.createClass({
@@ -87091,7 +87089,8 @@
 	    totalVotes: number,
 	    id: string,
 	    user: object,
-	    dispatchSubmitVote: func.isRequired
+	    dispatchSubmitVote: func.isRequired,
+	    singlePoll: bool
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
@@ -87140,7 +87139,7 @@
 	    });
 	    return _react2.default.createElement(
 	      'div',
-	      { className: 'col-sm-4' },
+	      { className: (0, _classnames2.default)('col-sm-4', { 'center-div-horizontally': this.props.singlePoll }) },
 	      _react2.default.createElement(
 	        'form',
 	        { onSubmit: this.onVoteSubmit },
@@ -91386,7 +91385,6 @@
 	    dispatchSubmitVote: func
 	  },
 	  getPoll: function getPoll() {
-	    // TODO get individual poll object using poll id
 	    this.props.dispatchGetSinglePoll(this.props.routeParams.id);
 	  },
 	  componentWillMount: function componentWillMount() {

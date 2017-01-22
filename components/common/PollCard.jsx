@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
-const { string, array, number, object, func } = React.PropTypes
+import classnames from 'classnames'
+const { string, array, number, object, func, bool } = React.PropTypes
 
 const PollCard = React.createClass({
   propTypes: {
@@ -9,7 +10,8 @@ const PollCard = React.createClass({
     totalVotes: number,
     id: string,
     user: object,
-    dispatchSubmitVote: func.isRequired
+    dispatchSubmitVote: func.isRequired,
+    singlePoll: bool
   },
   getInitialState () {
     return {
@@ -53,7 +55,7 @@ const PollCard = React.createClass({
       )
     })
     return (
-      <div className='col-sm-4'>
+      <div className={classnames('col-sm-4', { 'center-div-horizontally': this.props.singlePoll })}>
         <form onSubmit={this.onVoteSubmit}>
           <h2><Link to={`/v/${this.props.id}`}>{this.props.title}</Link></h2>
           <fieldset className='form-group row'>
