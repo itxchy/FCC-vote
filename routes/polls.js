@@ -158,6 +158,7 @@ router.get('/id/:id', (req, res) => {
     .select('_id title options totalVotes owner')
     .exec()
     .then(poll => {
+      console.log('mongo returned this poll:', poll)
       return res.json(poll)
     })
     .catch(err => res.status(500).json({ 'error retrieveing single poll': err }))

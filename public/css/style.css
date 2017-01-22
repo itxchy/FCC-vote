@@ -8413,16 +8413,16 @@ input[type="checkbox"] .styled:checked + label::after,
 input[type="radio"] .styled:checked + label::after {
   color: #fff; }
 
-.test {
-  background: lime;
-  margin: 2rem; }
-
 .fine {
   font-family: noto; }
 
 .view-title {
   color: teal;
   font-size: 4em; }
+
+.center-div-horizontally {
+  margin: 0 auto;
+  float: none; }
 
 .new-poll-title-container {
   margin: 3rem auto;

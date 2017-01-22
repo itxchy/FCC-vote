@@ -1,13 +1,17 @@
 import React from 'react'
-const { object, func } = React.PropTypes
+const { object, func, array } = React.PropTypes
 import { connect } from 'react-redux'
 import { getSinglePoll } from '../redux/modules/getSinglePoll'
+import { submitVote } from '../redux/modules/submitVote'
+import DisplayPolls from './common/DisplayPolls'
 
 const SinglePoll = React.createClass({
   propTypes: {
     routeParams: object,
-    singlePoll: object,
-    dispatchGetSinglePoll: func
+    singlePoll: array,
+    user: object,
+    dispatchGetSinglePoll: func,
+    dispatchSubmitVote: func
   },
   getPoll () {
     // TODO get individual poll object using poll id
@@ -18,8 +22,16 @@ const SinglePoll = React.createClass({
   },
   render () {
     return (
-      <div>
-        <h1>SinglePoll!</h1>
+      <div className='center-div-horizontally'>
+        <h1 className='view-title text-center'>SinglePoll!</h1>
+        <div className='center-div-horizontally'>
+          <DisplayPolls
+            polls={this.props.singlePoll}
+            user={this.props.user}
+            dispatchSubmitVote={this.props.dispatchSubmitVote}
+            getPolls={this.getPoll}
+          />
+        </div>
       </div>
     )
   }
@@ -27,7 +39,8 @@ const SinglePoll = React.createClass({
 
 const mapStateToProps = (state) => {
   return {
-    singlePoll: state.singlePoll
+    singlePoll: state.singlePoll.singlePoll,
+    user: state.user.user
   }
 }
 
@@ -35,6 +48,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dispatchGetSinglePoll (id) {
       dispatch(getSinglePoll(id))
+    },
+    dispatchSubmitVote (id, vote) {
+      dispatch(submitVote(id, vote))
     }
   }
 }

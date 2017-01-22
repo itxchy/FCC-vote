@@ -1,8 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router'
-const { string, array, number, object } = React.PropTypes
+const { string, array, number, object, bool } = React.PropTypes
 import D3Chart from './D3Chart'
 import isEmpty from 'lodash/isEmpty'
+import classnames from 'classnames'
 
 const ResultsCard = React.createClass({
   propTypes: {
@@ -10,7 +11,8 @@ const ResultsCard = React.createClass({
     options: array,
     totalVotes: number,
     id: string,
-    user: object
+    user: object,
+    singlePoll: bool
   },
   render () {
     let d3Component = null
@@ -23,7 +25,7 @@ const ResultsCard = React.createClass({
       )
     }
     return (
-      <div className='col-sm-4'>
+      <div className={classnames('col-sm-4', { 'center-div-horizontally': this.props.singlePoll })}>
         <h2><Link to={`/v/${this.props.id}`}>{this.props.title}</Link></h2>
         <div className='col-sm-10'>
           <div className='row'>

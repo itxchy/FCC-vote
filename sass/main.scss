@@ -5,11 +5,6 @@ $fa-font-path: "font-awesome/fonts";
 @import "font-awesome/scss/font-awesome";
 @import "awesome-bootstrap-checkbox/awesome-bootstrap-checkbox";
 
-.test {
-  background: lime;
-  margin: 2rem;
-}
-
 .fine {
   font-family: noto;
 }
@@ -17,6 +12,11 @@ $fa-font-path: "font-awesome/fonts";
 .view-title {
   color: teal;
   font-size: 4em;
+}
+
+.center-div-horizontally {
+  margin: 0 auto;
+  float: none;
 }
 
 @import "createAPoll";
