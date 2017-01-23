@@ -87460,20 +87460,23 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var CreateAPoll = function CreateAPoll() {
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    _react2.default.createElement(
-	      'h1',
-	      { className: 'view-title text-center' },
-	      'Create a New Poll'
-	    ),
-	    _react2.default.createElement(_NewPollTitle2.default, null),
-	    _react2.default.createElement(_PendingPollOptions2.default, null),
-	    _react2.default.createElement(_SaveOrReset2.default, null)
-	  );
-	};
+	var CreateAPoll = _react2.default.createClass({
+	  displayName: 'CreateAPoll',
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(
+	        'h1',
+	        { className: 'view-title text-center' },
+	        'Create a New Poll'
+	      ),
+	      _react2.default.createElement(_NewPollTitle2.default, null),
+	      _react2.default.createElement(_PendingPollOptions2.default, null),
+	      _react2.default.createElement(_SaveOrReset2.default, null)
+	    );
+	  }
+	});
 	
 	exports.default = CreateAPoll;
 
@@ -91461,7 +91464,10 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.getPollData = getPollData;
 	exports.setEditedPoll = setEditedPoll;
+	exports.setPollTitle = setPollTitle;
+	exports.setPollOptions = setPollOptions;
 	exports.default = editPoll;
 	
 	var _axios = __webpack_require__(421);
@@ -91472,29 +91478,65 @@
 	
 	// Action
 	var POLL_EDITED = 'POLL_EDITED';
+	var ACTIVE_POLL_DATA = 'ACTIVE_POLL_DATA';
+	var SET_POLL_TITLE = 'SET_POLL_TITLE';
+	var SET_POLL_OPTIONS = 'SET_POLL_OPTIONS';
 	
 	// Action Creators
+	function getPollData(id) {
+	  return function (dispatch) {
+	    _axios2.default.get('/api/polls/id/' + id).then(function (res) {
+	      console.log('editPoll.js: getPollData response:', res);
+	      // dispatch setNewTile
+	      // dispatch setPollOptions
+	      dispatch(activePollData(res.data));
+	    });
+	  };
+	}
 	function setEditedPoll(id, pollData) {
 	  return function (dispatch) {
 	    _axios2.default.put('/api/polls/edit/' + id, pollData).then(function (res) {
 	      var editedPoll = res.data.updatedDoc;
 	      dispatch(pollEdited(editedPoll));
+	      // dispatch reset setNewTitle
+	      // dispatch dispatch setPollOptions
 	    }).catch(function (err) {
 	      console.log('edit poll error', err.response.data);
 	    });
 	  };
 	}
+	function setPollTitle(pollTitle) {
+	  return { type: SET_POLL_TITLE, newPollTitle: newPollTitle };
+	}
+	function setPollOptions(pollOptions) {
+	  return { type: SET_POLL_OPTIONS, newPollOptions: newPollOptions };
+	}
 	function pollEdited(editedPoll) {
 	  return { type: POLL_EDITED, editedPoll: editedPoll };
 	}
+	function activePollData(activePoll) {
+	  return { type: ACTIVE_POLL_DATA, activePollData: activePoll };
+	}
 	
-	// Reducer
+	// Reducers
 	function reducePollEdited(state, action) {
 	  return Object.assign({}, state, { editedPoll: action.editedPoll });
+	}
+	function reduceActivePollData(state, action) {
+	  return Object.assign({}, state, { activePollData: action.activePollData });
+	}
+	function reduceSetPollTitle(state, action) {
+	  return Object.assign({}, state, { newPollTitle: action.pollTitle });
+	}
+	function reduceSetPollOptions(state, action) {
+	  return Object.assign({}, state, { newPollOptions: action.pollOptions });
 	}
 	
 	// Root Reducer Slice
 	var initialState = {
+	  newPollTitle: '',
+	  titleEditable: true,
+	  newPollOptions: ['', ''],
 	  editedPoll: null
 	};
 	function editPoll() {
@@ -91504,6 +91546,12 @@
 	  switch (action.type) {
 	    case POLL_EDITED:
 	      return reducePollEdited(state, action);
+	    case ACTIVE_POLL_DATA:
+	      return reduceActivePollData(state, action);
+	    case SET_POLL_TITLE:
+	      return reduceSetPollTitle(state, action);
+	    case SET_POLL_OPTIONS:
+	      return reduceSetPollOptions(state, action);
 	    default:
 	      return state;
 	  }
