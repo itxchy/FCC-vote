@@ -1,9 +1,6 @@
 import React from 'react'
-import { connect } from 'react-redux'
 const { string, func, array, object } = React.PropTypes
 import validateCreateAPollInput from '../../routes/shared/createAPollValidation'
-import { resetNewPoll } from '../../redux/modules/createNewPoll'
-import { submitNewPoll } from '../../redux/apiCalls.js'
 
 const SaveOrReset = React.createClass({
   propTypes: {
@@ -37,12 +34,6 @@ const SaveOrReset = React.createClass({
         owner: this.props.user.username
       }
       this.props.dispatchSubmitNewPoll(newPoll)
-        .then(response => {
-          console.log('Success!!:', response)
-        })
-        .catch(err => {
-          console.error('Poll could not be saved', err)
-        })
     }
   },
   resetButtonHandler () {
@@ -68,27 +59,4 @@ const SaveOrReset = React.createClass({
   }
 })
 
-const mapStateToProps = (state) => {
-  return {
-    newPollTitle: state.newPollTitle,
-    newPollOptions: state.newPollOptions,
-    user: state.user
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    dispatchResetNewPoll () {
-      dispatch(resetNewPoll())
-    },
-    dispatchSubmitNewPoll (newPoll) {
-      dispatch(submitNewPoll(newPoll))
-    }
-  }
-}
-
-let connected = connect(mapStateToProps, mapDispatchToProps)(SaveOrReset)
-
-export const DisconnectedSaveOrReset = SaveOrReset
-
-export default connected
+export default SaveOrReset

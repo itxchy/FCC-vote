@@ -1,3 +1,6 @@
+import axios from 'axios'
+import { addFlashMessage } from './flashMessage'
+
 // Actions
 export const SET_NEW_POLL_TITLE = 'setNewPollTitle'
 export const SET_TITLE_EDITABLE = 'setTitleEditable'
@@ -16,6 +19,20 @@ export function updateOption (updatedOptions) {
 }
 export function resetNewPoll () {
   return { type: RESET_NEW_POLL }
+}
+export function submitNewPoll (newPoll) {
+  return dispatch => {
+    axios.post('/api/polls', newPoll)
+      .then(res => {
+        console.log('newPoll submitted successfully!', res)
+        dispatch(resetNewPoll())
+        dispatch(addFlashMessage({ type: 'success', text: 'Poll saved!' }))
+      })
+      .catch(err => {
+        console.error('newPoll could not be saved', err)
+        dispatch(addFlashMessage({ type: 'error', text: 'Something went wrong. Poll coudn\'t be saved.' }))
+      })
+  }
 }
 
 // Reducers

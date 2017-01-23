@@ -3,7 +3,7 @@ import isEmpty from 'lodash/isEmpty'
 
 function validateCreateAPollInput (data) {
   let errors = {}
-
+  console.log('validateCreateAPollInput data:', data)
   if (Validator.isEmpty(data.newPollTitle)) {
     errors.newPollTitle = 'A title is required'
   }

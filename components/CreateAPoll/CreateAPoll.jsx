@@ -3,8 +3,14 @@ import NewPollTitle from './NewPollTitle'
 import PendingPollOptions from './PendingPollOptions'
 import SaveOrReset from './SaveOrReset'
 import { connect } from 'react-redux'
-import { updateOption, setNewPollTitle, setTitleEditable } from '../../redux/modules/createNewPoll'
-const { object, func, string, bool } = React.PropTypes
+import {
+  updateOption,
+  setNewPollTitle,
+  setTitleEditable,
+  submitNewPoll,
+  resetNewPoll
+} from '../../redux/modules/createNewPoll'
+const { object, func, string, bool, array } = React.PropTypes
 
 const CreateAPoll = React.createClass({
   propTypes: {
@@ -13,7 +19,11 @@ const CreateAPoll = React.createClass({
     newPollTitle: string,
     titleEditable: bool,
     dispatchSetNewPollTitle: func,
-    dispatchSetTitleEditable: func
+    dispatchSetTitleEditable: func,
+    newPollOptions: array,
+    dispatchSubmitNewPoll: func,
+    dispatchResetNewPoll: func,
+    user: object
   },
   render () {
     return (
@@ -29,7 +39,13 @@ const CreateAPoll = React.createClass({
           poll={this.props.poll}
           dispatchUpdateOption={this.props.dispatchUpdateOption}
         />
-        <SaveOrReset />
+        <SaveOrReset
+          newPollTitle={this.props.newPollTitle}
+          newPollOptions={this.props.newPollOptions}
+          dispatchResetNewPoll={this.props.dispatchResetNewPoll}
+          dispatchSubmitNewPoll={this.props.dispatchSubmitNewPoll}
+          user={this.props.user}
+        />
       </div>
     )
   }
@@ -39,7 +55,9 @@ const mapStateToProps = (state) => {
   return {
     poll: state.newPoll,
     newPollTitle: state.newPoll.newPollTitle,
-    titleEditable: state.newPoll.titleEditable
+    titleEditable: state.newPoll.titleEditable,
+    newPollOptions: state.newPoll.newPollOptions,
+    user: state.user
   }
 }
 
@@ -53,6 +71,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     dispatchSetTitleEditable (bool) {
       dispatch(setTitleEditable(bool))
+    },
+    dispatchResetNewPoll (newPoll) {
+      dispatch(resetNewPoll())
+    },
+    dispatchSubmitNewPoll (newPoll) {
+      dispatch(submitNewPoll(newPoll))
     }
   }
 }

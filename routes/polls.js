@@ -2,7 +2,7 @@ const express = require('express')
 const isEmpty = require('lodash/isEmpty')
 const Poll = require('../models/Poll')
 const authenticate = require('../server/middleware/authenticate')
-const commonValidations = require('./shared/createAPollValidation')
+const commonValidations = require('./shared/createAPollValidation').default
 const { getVoterIdentity } = require('./lib/pollsLib')
 const { checkVoterUniqueness, updateDocumentWithNewVote, updateDocumentVotesTotal } = require('./lib/pollsDb')
 let router = express.Router()
@@ -13,6 +13,8 @@ function validateNewPoll (res, data, commonValidations) {
     newPollTitle: data.title,
     newPollOptions: data.options
   }
+  console.log('polls.js commonValidations:', commonValidations)
+
   let { errors } = commonValidations(validatorData)
 
   // Checks if a poll of the same title exists already

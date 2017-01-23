@@ -28,7 +28,11 @@ const EditPoll = React.createClass({
 
 const mapStateToProps = (state) => {
   return {
-    poll: state.editPoll
+    poll: state.editPoll,
+    newPollTitle: state.editPoll.newPollTitle,
+    titleEditable: state.editPoll.titleEditable,
+    newPollOptions: state.editPoll.newPollOptions,
+    user: state.user
   }
 }
 
