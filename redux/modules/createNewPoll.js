@@ -65,7 +65,7 @@ export default function newPoll (state = initialState, action) {
     case SET_TITLE_EDITABLE:
       return reduceTitleEditableState(state, action)
     case UPDATE_OPTION:
-      return reduceTitleEditableState(state, action)
+      return reduceOptionUpdate(state, action)
     case RESET_NEW_POLL:
       return reduceResetNewPoll(state, action)
     default:

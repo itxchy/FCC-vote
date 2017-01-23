@@ -33831,7 +33831,7 @@
 	    case SET_TITLE_EDITABLE:
 	      return reduceTitleEditableState(state, action);
 	    case UPDATE_OPTION:
-	      return reduceTitleEditableState(state, action);
+	      return reduceOptionUpdate(state, action);
 	    case RESET_NEW_POLL:
 	      return reduceResetNewPoll(state, action);
 	    default:
@@ -87467,6 +87467,8 @@
 	var _React$PropTypes = _react2.default.PropTypes;
 	var object = _React$PropTypes.object;
 	var func = _React$PropTypes.func;
+	var string = _React$PropTypes.string;
+	var bool = _React$PropTypes.bool;
 	
 	
 	var CreateAPoll = _react2.default.createClass({
@@ -87474,7 +87476,11 @@
 	
 	  propTypes: {
 	    poll: object,
-	    dispatchUpdateOption: func
+	    dispatchUpdateOption: func,
+	    newPollTitle: string,
+	    titleEditable: bool,
+	    dispatchSetNewPollTitle: func,
+	    dispatchSetTitleEditable: func
 	  },
 	  render: function render() {
 	    return _react2.default.createElement(
@@ -87485,10 +87491,15 @@
 	        { className: 'view-title text-center' },
 	        'Create a New Poll'
 	      ),
-	      _react2.default.createElement(_NewPollTitle2.default, null),
+	      _react2.default.createElement(_NewPollTitle2.default, {
+	        newPollTitle: this.props.newPollTitle,
+	        titleEditable: this.props.titleEditable,
+	        dispatchSetNewPollTitle: this.props.dispatchSetNewPollTitle,
+	        dispatchSetTitleEditable: this.props.dispatchSetTitleEditable
+	      }),
 	      _react2.default.createElement(_PendingPollOptions2.default, {
 	        poll: this.props.poll,
-	        dispatchUpdateOptions: this.props.dispatchUpdateOption
+	        dispatchUpdateOption: this.props.dispatchUpdateOption
 	      }),
 	      _react2.default.createElement(_SaveOrReset2.default, null)
 	    );
@@ -87497,7 +87508,9 @@
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    poll: state.newPoll
+	    poll: state.newPoll,
+	    newPollTitle: state.newPoll.newPollTitle,
+	    titleEditable: state.newPoll.titleEditable
 	  };
 	};
 	
@@ -87505,6 +87518,12 @@
 	  return {
 	    dispatchUpdateOption: function dispatchUpdateOption(newOptions) {
 	      dispatch((0, _createNewPoll.updateOption)(newOptions));
+	    },
+	    dispatchSetNewPollTitle: function dispatchSetNewPollTitle(pollTitle) {
+	      dispatch((0, _createNewPoll.setNewPollTitle)(pollTitle));
+	    },
+	    dispatchSetTitleEditable: function dispatchSetTitleEditable(bool) {
+	      dispatch((0, _createNewPoll.setTitleEditable)(bool));
 	    }
 	  };
 	};
@@ -87520,15 +87539,10 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.DisconnectedNewPollTitle = undefined;
 	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRedux = __webpack_require__(650);
-	
-	var _createNewPoll = __webpack_require__(419);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -87570,7 +87584,7 @@
 	      ),
 	      _react2.default.createElement(
 	        'a',
-	        { href: '#' },
+	        null,
 	        _react2.default.createElement('i', {
 	          className: 'fa fa-pencil-square-o edit-icon',
 	          'aria-hidden': 'true',
@@ -87590,7 +87604,7 @@
 	      }),
 	      _react2.default.createElement(
 	        'a',
-	        { href: '#' },
+	        null,
 	        _react2.default.createElement('i', {
 	          className: 'fa fa-floppy-o save-icon',
 	          'aria-hidden': 'true',
@@ -87607,30 +87621,7 @@
 	  }
 	});
 	
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    newPollTitle: state.newPoll.newPollTitle,
-	    titleEditable: state.newPoll.titleEditable
-	  };
-	};
-	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    dispatchSetNewPollTitle: function dispatchSetNewPollTitle(pollTitle) {
-	      dispatch((0, _createNewPoll.setNewPollTitle)(pollTitle));
-	    },
-	    dispatchSetTitleEditable: function dispatchSetTitleEditable(bool) {
-	      dispatch((0, _createNewPoll.setTitleEditable)(bool));
-	    }
-	  };
-	};
-	
-	var connected = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(NewPollTitle);
-	
-	// This exports the component itself for testing
-	var DisconnectedNewPollTitle = exports.DisconnectedNewPollTitle = NewPollTitle;
-	
-	exports.default = connected;
+	exports.default = NewPollTitle;
 
 /***/ },
 /* 692 */

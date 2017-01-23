@@ -1,6 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { setNewPollTitle, setTitleEditable } from '../../redux/modules/createNewPoll'
 const { string, func, bool } = React.PropTypes
 
 const NewPollTitle = React.createClass({
@@ -26,7 +24,7 @@ const NewPollTitle = React.createClass({
     let savedPollTitle = (
       <div className='new-poll-title-container'>
         <h2 className='text-center saved-title'>{this.props.newPollTitle}</h2>
-        <a href='#'>
+        <a>
           <i
             className='fa fa-pencil-square-o edit-icon'
             aria-hidden='true'
@@ -44,7 +42,7 @@ const NewPollTitle = React.createClass({
           placeholder='New Poll Title'
           className='text-center form-control new-poll-title-textarea'
         />
-        <a href='#'>
+        <a>
           <i
             className='fa fa-floppy-o save-icon'
             aria-hidden='true'
@@ -64,27 +62,4 @@ const NewPollTitle = React.createClass({
   }
 })
 
-const mapStateToProps = (state) => {
-  return {
-    newPollTitle: state.newPoll.newPollTitle,
-    titleEditable: state.newPoll.titleEditable
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    dispatchSetNewPollTitle (pollTitle) {
-      dispatch(setNewPollTitle(pollTitle))
-    },
-    dispatchSetTitleEditable (bool) {
-      dispatch(setTitleEditable(bool))
-    }
-  }
-}
-
-let connected = connect(mapStateToProps, mapDispatchToProps)(NewPollTitle)
-
-// This exports the component itself for testing
-export const DisconnectedNewPollTitle = NewPollTitle
-
-export default connected
+export default NewPollTitle
