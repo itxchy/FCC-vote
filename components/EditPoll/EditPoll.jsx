@@ -3,11 +3,13 @@ import NewPollTitle from './NewPollTitle'
 import PendingPollOptions from './PendingPollOptions'
 import SaveOrReset from './SaveOrReset'
 import { connect } from 'react-redux'
-const { object } = React.PropTypes
+import { setPollOptions } from '../../redux/modules/editPoll'
+const { object, func } = React.PropTypes
 
 const EditPoll = React.createClass({
   propTypes: {
-    poll: object
+    poll: object,
+    dispatchUpdateOption: func
   },
   render () {
     return (

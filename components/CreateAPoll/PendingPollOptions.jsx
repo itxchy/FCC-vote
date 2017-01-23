@@ -1,35 +1,33 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { updateOption } from '../../redux/modules/createNewPoll'
 const { object, func } = React.PropTypes
 
 const PendingPollOptions = React.createClass({
   propTypes: {
-    newPoll: object.isRequired,
+    poll: object.isRequired,
     dispatchUpdateOption: func.isRequired
   },
   editOption (event) {
-    let updatedOptions = this.props.newPoll.newPollOptions
+    let updatedOptions = this.props.poll.newPollOptions
     updatedOptions[event.target.name] = event.target.value
     this.props.dispatchUpdateOption(updatedOptions)
   },
   addAnotherOption () {
-    console.log('addAnotherOption prop:', this.props.newPoll.newPollOptions)
-    let updatedNewOptions = this.props.newPoll.newPollOptions
+    console.log('addAnotherOption prop:', this.props.poll.newPollOptions)
+    let updatedNewOptions = this.props.poll.newPollOptions
     updatedNewOptions.push('')
     this.props.dispatchUpdateOption(updatedNewOptions)
   },
   deleteOption (index) {
-    if (this.props.newPoll.newPollOptions.length === 2) {
+    if (this.props.poll.newPollOptions.length === 2) {
       console.log('Two or more options required!')
       return
     }
-    let updatedDeleteOptions = this.props.newPoll.newPollOptions
+    let updatedDeleteOptions = this.props.poll.newPollOptions
     updatedDeleteOptions.splice(index, 1)
     this.props.dispatchUpdateOption(updatedDeleteOptions)
   },
   render () {
-    let options = this.props.newPoll.newPollOptions.map((option, index) => {
+    let options = this.props.poll.newPollOptions.map((option, index) => {
       return (
         <div key={index}>
           <input
@@ -63,21 +61,4 @@ const PendingPollOptions = React.createClass({
   }
 })
 
-const mapStateToProps = (state) => {
-  console.log('state should contain newPollOptions', state)
-  return {
-    newPoll: state.newPoll
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    dispatchUpdateOption (newOptions) {
-      dispatch(updateOption(newOptions))
-    }
-  }
-}
-// This exports the component itself for testing
-export const DisconnectedPendingPollOptions = PendingPollOptions
-
-export default connect(mapStateToProps, mapDispatchToProps)(PendingPollOptions)
+export default PendingPollOptions

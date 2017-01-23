@@ -32,10 +32,10 @@ export function setEditedPoll (id, pollData) {
       })
   }
 }
-export function setPollTitle (pollTitle) {
+export function setPollTitle (newPollTitle) {
   return { type: SET_POLL_TITLE, newPollTitle }
 }
-export function setPollOptions (pollOptions) {
+export function setPollOptions (newPollOptions) {
   return { type: SET_POLL_OPTIONS, newPollOptions }
 }
 function pollEdited (editedPoll) {

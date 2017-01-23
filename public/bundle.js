@@ -87458,10 +87458,24 @@
 	
 	var _SaveOrReset2 = _interopRequireDefault(_SaveOrReset);
 	
+	var _reactRedux = __webpack_require__(650);
+	
+	var _createNewPoll = __webpack_require__(419);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
+	var object = _React$PropTypes.object;
+	var func = _React$PropTypes.func;
+	
 	
 	var CreateAPoll = _react2.default.createClass({
 	  displayName: 'CreateAPoll',
+	
+	  propTypes: {
+	    poll: object,
+	    dispatchUpdateOption: func
+	  },
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
@@ -87472,13 +87486,30 @@
 	        'Create a New Poll'
 	      ),
 	      _react2.default.createElement(_NewPollTitle2.default, null),
-	      _react2.default.createElement(_PendingPollOptions2.default, null),
+	      _react2.default.createElement(_PendingPollOptions2.default, {
+	        poll: this.props.poll,
+	        dispatchUpdateOptions: this.props.dispatchUpdateOption
+	      }),
 	      _react2.default.createElement(_SaveOrReset2.default, null)
 	    );
 	  }
 	});
 	
-	exports.default = CreateAPoll;
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    poll: state.newPoll
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchUpdateOption: function dispatchUpdateOption(newOptions) {
+	      dispatch((0, _createNewPoll.updateOption)(newOptions));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CreateAPoll);
 
 /***/ },
 /* 691 */
@@ -87610,15 +87641,10 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.DisconnectedPendingPollOptions = undefined;
 	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRedux = __webpack_require__(650);
-	
-	var _createNewPoll = __webpack_require__(419);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -87631,33 +87657,33 @@
 	  displayName: 'PendingPollOptions',
 	
 	  propTypes: {
-	    newPoll: object.isRequired,
+	    poll: object.isRequired,
 	    dispatchUpdateOption: func.isRequired
 	  },
 	  editOption: function editOption(event) {
-	    var updatedOptions = this.props.newPoll.newPollOptions;
+	    var updatedOptions = this.props.poll.newPollOptions;
 	    updatedOptions[event.target.name] = event.target.value;
 	    this.props.dispatchUpdateOption(updatedOptions);
 	  },
 	  addAnotherOption: function addAnotherOption() {
-	    console.log('addAnotherOption prop:', this.props.newPoll.newPollOptions);
-	    var updatedNewOptions = this.props.newPoll.newPollOptions;
+	    console.log('addAnotherOption prop:', this.props.poll.newPollOptions);
+	    var updatedNewOptions = this.props.poll.newPollOptions;
 	    updatedNewOptions.push('');
 	    this.props.dispatchUpdateOption(updatedNewOptions);
 	  },
 	  deleteOption: function deleteOption(index) {
-	    if (this.props.newPoll.newPollOptions.length === 2) {
+	    if (this.props.poll.newPollOptions.length === 2) {
 	      console.log('Two or more options required!');
 	      return;
 	    }
-	    var updatedDeleteOptions = this.props.newPoll.newPollOptions;
+	    var updatedDeleteOptions = this.props.poll.newPollOptions;
 	    updatedDeleteOptions.splice(index, 1);
 	    this.props.dispatchUpdateOption(updatedDeleteOptions);
 	  },
 	  render: function render() {
 	    var _this = this;
 	
-	    var options = this.props.newPoll.newPollOptions.map(function (option, index) {
+	    var options = this.props.poll.newPollOptions.map(function (option, index) {
 	      return _react2.default.createElement(
 	        'div',
 	        { key: index },
@@ -87700,24 +87726,7 @@
 	  }
 	});
 	
-	var mapStateToProps = function mapStateToProps(state) {
-	  console.log('state should contain newPollOptions', state);
-	  return {
-	    newPoll: state.newPoll
-	  };
-	};
-	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    dispatchUpdateOption: function dispatchUpdateOption(newOptions) {
-	      dispatch((0, _createNewPoll.updateOption)(newOptions));
-	    }
-	  };
-	};
-	// This exports the component itself for testing
-	var DisconnectedPendingPollOptions = exports.DisconnectedPendingPollOptions = PendingPollOptions;
-	
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(PendingPollOptions);
+	exports.default = PendingPollOptions;
 
 /***/ },
 /* 693 */
@@ -91505,10 +91514,10 @@
 	    });
 	  };
 	}
-	function setPollTitle(pollTitle) {
+	function setPollTitle(newPollTitle) {
 	  return { type: SET_POLL_TITLE, newPollTitle: newPollTitle };
 	}
-	function setPollOptions(pollOptions) {
+	function setPollOptions(newPollOptions) {
 	  return { type: SET_POLL_OPTIONS, newPollOptions: newPollOptions };
 	}
 	function pollEdited(editedPoll) {
