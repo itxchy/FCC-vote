@@ -63,4 +63,30 @@ const updateDocumentVotesTotal = function (pollID, totalVotes) {
   })
 }
 
+const updatePollDocumentOnEdit = function (pollID, pollData) {
+  const { title, options, owner } = pollData
+  const totalVotes = 0
+  const formattedOptions = options.map(option => {
+    return {
+      option,
+      votes: []
+    }
+  })
+  return Poll.findOneAndUpdate(
+    { _id: pollID },
+    { $set: { 
+      title, 
+      options: formattedOptions,
+      totalVotes: 0
+      } 
+    }
+  )
+  .then(updatedDoc => {
+    return { updatedDoc }
+  })
+  .catch(error => {
+    return { error }
+  })
+}
+
 module.exports = { checkVoterUniqueness, updateDocumentWithNewVote, updateDocumentVotesTotal }

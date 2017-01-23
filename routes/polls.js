@@ -7,13 +7,13 @@ const { getVoterIdentity } = require('./lib/pollsLib')
 const { checkVoterUniqueness, updateDocumentWithNewVote, updateDocumentVotesTotal } = require('./lib/pollsDb')
 let router = express.Router()
 
-function validateNewPoll (res, data, otherValidations) {
+function validateNewPoll (res, data, commonValidations) {
   // Ugly hack to rename keys so they can be validated by createAPollValidation
   const validatorData = {
     newPollTitle: data.title,
     newPollOptions: data.options
   }
-  let { errors } = otherValidations(validatorData)
+  let { errors } = commonValidations(validatorData)
 
   // Checks if a poll of the same title exists already
   // Each poll title must be unique
@@ -29,6 +29,15 @@ function validateNewPoll (res, data, otherValidations) {
       }
     })
     .catch(err => res.status(500).json({ 'duplicate poll check error': err }))
+}
+
+function validateUpdatedPoll (res, data, commonValidations) {
+  const validatorData = {
+    newPollTitle: data.title,
+    newPollOptions: data.options
+  }
+  let { errors, isValid } = commonValidations(validatorData)
+  return { errors, isValid }
 }
 
 /**
@@ -64,6 +73,33 @@ router.post('/', authenticate, (req, res) => {
     }
   })
   .catch(err => res.status(500).json({ 'Poll validation promise rejected': err }))
+})
+
+/**
+ *  Edits a poll
+ */
+
+router.put('/edit/:id', authenticate, (req, res) => {
+  const validate = validateUpdatedPoll(res, req.body, commonValidations)
+  if (!validate.isValid) {
+    return res.status(400).json({ 'bad request': 'bad data for poll edit', errors: validate.errors })
+  }
+  const pollID = req.params.id
+
+  applyPollEdits(req, res)
+  async function applyPollEdits (req, res) {
+    try {
+      let updatedPoll = await updatePollDocumentOnEdit(pollID, req.data)
+      if (updatedPoll.updatedDoc) {
+        return res.json(updatedPoll.updatedDoc)
+      }
+      if (updatedPoll.error) {
+        return res.status(500).json('poll edit failed in database operation': updatedPoll.error)
+      }
+    } catch (error) {
+      return res.status(500).json('poll edit failed': error)
+    }
+  }
 })
 
 /**
