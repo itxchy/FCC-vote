@@ -28284,6 +28284,10 @@
 	
 	var _getSinglePoll2 = _interopRequireDefault(_getSinglePoll);
 	
+	var _editPoll = __webpack_require__(784);
+	
+	var _editPoll2 = _interopRequireDefault(_editPoll);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = (0, _redux.combineReducers)({
@@ -28295,7 +28299,8 @@
 	  clientFormValidation: _clientFormValidation2.default,
 	  userSignupRequest: _userSignupRequest2.default,
 	  userPolls: _getUserPolls2.default,
-	  singlePoll: _getSinglePoll2.default
+	  singlePoll: _getSinglePoll2.default,
+	  editPoll: _editPoll2.default
 	});
 
 /***/ },
@@ -65816,11 +65821,6 @@
 	var RESET_UPDATED_POLL_RESULTS = 'RESET_UPDATED_POLL_RESULTS';
 	
 	// Action Creators
-	/** TODO:
-	 * After a new vote is submitted, the poll on the client page
-	 * should show the results, including the the new vote
-	 */
-	
 	/**
 	 * @param id = string,
 	 * @param vote = object {selectedOption, voter}
@@ -65843,7 +65843,7 @@
 	        console.log('dupeVoter detected!:', err.response.data.dupeVoter);
 	      }
 	      if ((0, _has2.default)(err.response.data, 'error')) {
-	        console.log('submitVote server error:', err.response.data.error);
+	        console.error('submitVote server error:', err.response.data.error);
 	      }
 	    });
 	  };
@@ -65870,7 +65870,6 @@
 	var initialState = {
 	  updatedResults: null
 	};
-	
 	// Root Reducer Slice
 	function newVote() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
@@ -91438,6 +91437,77 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 770 */,
+/* 771 */,
+/* 772 */,
+/* 773 */,
+/* 774 */,
+/* 775 */,
+/* 776 */,
+/* 777 */,
+/* 778 */,
+/* 779 */,
+/* 780 */,
+/* 781 */,
+/* 782 */,
+/* 783 */,
+/* 784 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.setEditedPoll = setEditedPoll;
+	exports.default = editPoll;
+	
+	var _axios = __webpack_require__(421);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// Action
+	var POLL_EDITED = 'POLL_EDITED';
+	
+	// Action Creators
+	function setEditedPoll(id, pollData) {
+	  return function (dispatch) {
+	    _axios2.default.put('/api/polls/edit/' + id, pollData).then(function (res) {
+	      var editedPoll = res.data.updatedDoc;
+	      dispatch(pollEdited(editedPoll));
+	    }).catch(function (err) {
+	      console.log('edit poll error', err.response.data);
+	    });
+	  };
+	}
+	function pollEdited(editedPoll) {
+	  return { type: POLL_EDITED, editedPoll: editedPoll };
+	}
+	
+	// Reducer
+	function reducePollEdited(state, action) {
+	  return Object.assign({}, state, { editedPoll: action.editedPoll });
+	}
+	
+	// Root Reducer Slice
+	var initialState = {
+	  editedPoll: null
+	};
+	function editPoll() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case POLL_EDITED:
+	      return reducePollEdited(state, action);
+	    default:
+	      return state;
+	  }
+	}
 
 /***/ }
 /******/ ]);

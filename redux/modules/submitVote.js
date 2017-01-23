@@ -6,11 +6,6 @@ const UPDATED_POLL_RESULTS = 'UPDATED_POLL_RESULTS'
 const RESET_UPDATED_POLL_RESULTS = 'RESET_UPDATED_POLL_RESULTS'
 
 // Action Creators
-/** TODO:
- * After a new vote is submitted, the poll on the client page
- * should show the results, including the the new vote
- */
-
 /**
  * @param id = string,
  * @param vote = object {selectedOption, voter}
@@ -35,7 +30,7 @@ export function submitVote (id, vote) {
           console.log('dupeVoter detected!:', err.response.data.dupeVoter)
         }
         if (has(err.response.data, 'error')) {
-          console.log('submitVote server error:', err.response.data.error)
+          console.error('submitVote server error:', err.response.data.error)
         }
       })
   }
@@ -62,7 +57,6 @@ function reduceResetUpdatedPollResults (state, action) {
 const initialState = {
   updatedResults: null
 }
-
 // Root Reducer Slice
 export default function newVote (state = initialState, action) {
   switch (action.type) {

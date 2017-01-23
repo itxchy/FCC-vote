@@ -8,6 +8,7 @@ import clientFormValidation from './modules/clientFormValidation'
 import userSignupRequest from './modules/userSignupRequest'
 import userPolls from './modules/getUserPolls'
 import singlePoll from './modules/getSinglePoll'
+import editPoll from './modules/editPoll'
 
 export default combineReducers({
   flashMessages,
@@ -18,5 +19,6 @@ export default combineReducers({
   clientFormValidation,
   userSignupRequest,
   userPolls,
-  singlePoll
+  singlePoll,
+  editPoll
 })

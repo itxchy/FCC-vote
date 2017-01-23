@@ -78,9 +78,9 @@ router.post('/', authenticate, (req, res) => {
 /**
  *  Edits a poll
  */
-
 router.put('/edit/:id', authenticate, (req, res) => {
   const validate = validateUpdatedPoll(res, req.body, commonValidations)
+  console.log('edit: poll validated:', validate)
   if (!validate.isValid) {
     return res.status(400).json({ 'bad request': 'bad data for poll edit', errors: validate.errors })
   }
@@ -90,6 +90,7 @@ router.put('/edit/:id', authenticate, (req, res) => {
   async function applyPollEdits (req, res) {
     try {
       let updatedPoll = await updatePollDocumentOnEdit(pollID, req.data)
+      console.log('edit: updatedPoll:', updatedPoll)
       if (updatedPoll.updatedDoc) {
         return res.json(updatedPoll.updatedDoc)
       }
