@@ -4,7 +4,11 @@ const Poll = require('../models/Poll')
 const authenticate = require('../server/middleware/authenticate')
 const commonValidations = require('./shared/createAPollValidation').default
 const { getVoterIdentity } = require('./lib/pollsLib')
-const { checkVoterUniqueness, updateDocumentWithNewVote, updateDocumentVotesTotal } = require('./lib/pollsDb')
+const { 
+  checkVoterUniqueness, 
+  updateDocumentWithNewVote, 
+  updateDocumentVotesTotal,
+  updatePollDocumentOnEdit } = require('./lib/pollsDb')
 let router = express.Router()
 
 function validateNewPoll (res, data, commonValidations) {
@@ -87,11 +91,12 @@ router.put('/edit/:id', authenticate, (req, res) => {
     return res.status(400).json({ 'bad request': 'bad data for poll edit', errors: validate.errors })
   }
   const pollID = req.params.id
-
+  console.log('pollID:', pollID)
+  console.log('req.body', res.body)
   applyPollEdits(req, res)
   async function applyPollEdits (req, res) {
     try {
-      let updatedPoll = await updatePollDocumentOnEdit(pollID, req.data)
+      let updatedPoll = await updatePollDocumentOnEdit(req.params.id, req.body)
       console.log('edit: updatedPoll:', updatedPoll)
       if (updatedPoll.updatedDoc) {
         return res.json(updatedPoll.updatedDoc)
@@ -100,7 +105,8 @@ router.put('/edit/:id', authenticate, (req, res) => {
         return res.status(500).json('poll edit failed in database operation': updatedPoll.error)
       }
     } catch (error) {
-      return res.status(500).json('poll edit failed': error)
+      console.error(error)
+      return res.status(500).json({'poll edit failed': error})
     }
   }
 })

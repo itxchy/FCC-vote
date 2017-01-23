@@ -21,11 +21,12 @@ const CreateAPoll = React.createClass({
     dispatchSetNewPollTitle: func,
     dispatchSetTitleEditable: func,
     newPollOptions: array,
-    dispatchSubmitNewPoll: func,
+    dispatchSubmitPoll: func,
     dispatchResetNewPoll: func,
     user: object
   },
   render () {
+    const newPoll = true
     return (
       <div>
         <h1 className='view-title text-center'>Create a New Poll</h1>
@@ -43,8 +44,11 @@ const CreateAPoll = React.createClass({
           newPollTitle={this.props.newPollTitle}
           newPollOptions={this.props.newPollOptions}
           dispatchResetNewPoll={this.props.dispatchResetNewPoll}
-          dispatchSubmitNewPoll={this.props.dispatchSubmitNewPoll}
+          dispatchSubmitPoll={this.props.dispatchSubmitPoll}
           user={this.props.user}
+          poll={this.props.poll}
+          newPoll={newPoll}
+          pollID={null}
         />
       </div>
     )
@@ -75,7 +79,7 @@ const mapDispatchToProps = (dispatch) => {
     dispatchResetNewPoll (newPoll) {
       dispatch(resetNewPoll())
     },
-    dispatchSubmitNewPoll (newPoll) {
+    dispatchSubmitPoll (newPoll) {
       dispatch(submitNewPoll(newPoll))
     }
   }

@@ -1,5 +1,5 @@
 import React from 'react'
-const { string, func, array, object } = React.PropTypes
+const { string, func, array, object, bool } = React.PropTypes
 import validateCreateAPollInput from '../../routes/shared/createAPollValidation'
 
 const SaveOrReset = React.createClass({
@@ -7,8 +7,11 @@ const SaveOrReset = React.createClass({
     newPollTitle: string,
     newPollOptions: array,
     dispatchResetNewPoll: func,
-    dispatchSubmitNewPoll: func.isRequired,
-    user: object.isRequired
+    dispatchSubmitPoll: func.isRequired,
+    user: object.isRequired,
+    poll: object,
+    newPoll: bool.isRequired,
+    pollID: string
   },
   getInitialState () {
     return {
@@ -33,7 +36,9 @@ const SaveOrReset = React.createClass({
         options: this.props.newPollOptions,
         owner: this.props.user.username
       }
-      this.props.dispatchSubmitNewPoll(newPoll)
+      this.props.newPoll
+        ? this.props.dispatchSubmitPoll(newPoll)
+        : this.props.dispatchSubmitPoll(this.props.pollID, newPoll)
     }
   },
   resetButtonHandler () {

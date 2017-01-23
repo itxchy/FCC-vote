@@ -33762,7 +33762,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.reduceResetNewPoll = exports.reduceOptionUpdate = exports.reduceTitleEditableState = exports.reduceNewPollTitle = exports.RESET_NEW_POLL = exports.UPDATE_OPTION = exports.SET_TITLE_EDITABLE = exports.SET_NEW_POLL_TITLE = undefined;
+	exports.reduceResetNewPoll = exports.reduceOptionUpdate = exports.reduceTitleEditableState = exports.reduceNewPollTitle = exports.RESET_NEW_POLL = exports.UPDATE_OPTION = exports.SET_NEW_TITLE_EDITABLE = exports.SET_NEW_POLL_TITLE = undefined;
 	exports.setNewPollTitle = setNewPollTitle;
 	exports.setTitleEditable = setTitleEditable;
 	exports.updateOption = updateOption;
@@ -33780,7 +33780,7 @@
 	
 	// Actions
 	var SET_NEW_POLL_TITLE = exports.SET_NEW_POLL_TITLE = 'setNewPollTitle';
-	var SET_TITLE_EDITABLE = exports.SET_TITLE_EDITABLE = 'setTitleEditable';
+	var SET_NEW_TITLE_EDITABLE = exports.SET_NEW_TITLE_EDITABLE = 'setTitleEditable';
 	var UPDATE_OPTION = exports.UPDATE_OPTION = 'updateOption';
 	var RESET_NEW_POLL = exports.RESET_NEW_POLL = 'resetNewPoll';
 	
@@ -33789,7 +33789,7 @@
 	  return { type: SET_NEW_POLL_TITLE, value: pollTitle };
 	}
 	function setTitleEditable(bool) {
-	  return { type: SET_TITLE_EDITABLE, value: bool };
+	  return { type: SET_NEW_TITLE_EDITABLE, value: bool };
 	}
 	function updateOption(updatedOptions) {
 	  return { type: UPDATE_OPTION, value: updatedOptions };
@@ -33851,7 +33851,7 @@
 	  switch (action.type) {
 	    case SET_NEW_POLL_TITLE:
 	      return reduceNewPollTitle(state, action);
-	    case SET_TITLE_EDITABLE:
+	    case SET_NEW_TITLE_EDITABLE:
 	      return reduceTitleEditableState(state, action);
 	    case UPDATE_OPTION:
 	      return reduceOptionUpdate(state, action);
@@ -66890,6 +66890,10 @@
 	
 	var _CreateAPoll2 = _interopRequireDefault(_CreateAPoll);
 	
+	var _EditPoll = __webpack_require__(785);
+	
+	var _EditPoll2 = _interopRequireDefault(_EditPoll);
+	
 	var _Signup = __webpack_require__(761);
 	
 	var _Signup2 = _interopRequireDefault(_Signup);
@@ -66914,6 +66918,7 @@
 	    { path: '/', component: _Layout2.default },
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: '/create', component: _CreateAPoll2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/edit/:id', component: _EditPoll2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: '/mypolls', component: _MyPollsPage2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _Signup2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _LoginPage2.default }),
@@ -87506,11 +87511,12 @@
 	    dispatchSetNewPollTitle: func,
 	    dispatchSetTitleEditable: func,
 	    newPollOptions: array,
-	    dispatchSubmitNewPoll: func,
+	    dispatchSubmitPoll: func,
 	    dispatchResetNewPoll: func,
 	    user: object
 	  },
 	  render: function render() {
+	    var newPoll = true;
 	    return _react2.default.createElement(
 	      'div',
 	      null,
@@ -87533,8 +87539,11 @@
 	        newPollTitle: this.props.newPollTitle,
 	        newPollOptions: this.props.newPollOptions,
 	        dispatchResetNewPoll: this.props.dispatchResetNewPoll,
-	        dispatchSubmitNewPoll: this.props.dispatchSubmitNewPoll,
-	        user: this.props.user
+	        dispatchSubmitPoll: this.props.dispatchSubmitPoll,
+	        user: this.props.user,
+	        poll: this.props.poll,
+	        newPoll: newPoll,
+	        pollID: null
 	      })
 	    );
 	  }
@@ -87564,7 +87573,7 @@
 	    dispatchResetNewPoll: function dispatchResetNewPoll(newPoll) {
 	      dispatch((0, _createNewPoll.resetNewPoll)());
 	    },
-	    dispatchSubmitNewPoll: function dispatchSubmitNewPoll(newPoll) {
+	    dispatchSubmitPoll: function dispatchSubmitPoll(newPoll) {
 	      dispatch((0, _createNewPoll.submitNewPoll)(newPoll));
 	    }
 	  };
@@ -87786,6 +87795,7 @@
 	var func = _React$PropTypes.func;
 	var array = _React$PropTypes.array;
 	var object = _React$PropTypes.object;
+	var bool = _React$PropTypes.bool;
 	
 	
 	var SaveOrReset = _react2.default.createClass({
@@ -87795,8 +87805,11 @@
 	    newPollTitle: string,
 	    newPollOptions: array,
 	    dispatchResetNewPoll: func,
-	    dispatchSubmitNewPoll: func.isRequired,
-	    user: object.isRequired
+	    dispatchSubmitPoll: func.isRequired,
+	    user: object.isRequired,
+	    poll: object,
+	    newPoll: bool.isRequired,
+	    pollID: string
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
@@ -87826,7 +87839,7 @@
 	        options: this.props.newPollOptions,
 	        owner: this.props.user.username
 	      };
-	      this.props.dispatchSubmitNewPoll(newPoll);
+	      this.props.newPoll ? this.props.dispatchSubmitPoll(newPoll) : this.props.dispatchSubmitPoll(this.props.pollID, newPoll);
 	    }
 	  },
 	  resetButtonHandler: function resetButtonHandler() {
@@ -91452,6 +91465,8 @@
 	exports.setEditedPoll = setEditedPoll;
 	exports.setPollTitle = setPollTitle;
 	exports.setPollOptions = setPollOptions;
+	exports.setTitleEditable = setTitleEditable;
+	exports.resetPoll = resetPoll;
 	exports.default = editPoll;
 	
 	var _axios = __webpack_require__(421);
@@ -91465,23 +91480,33 @@
 	var ACTIVE_POLL_DATA = 'ACTIVE_POLL_DATA';
 	var SET_POLL_TITLE = 'SET_POLL_TITLE';
 	var SET_POLL_OPTIONS = 'SET_POLL_OPTIONS';
+	var SET_TITLE_EDITABLE = 'SET_TITLE_EDITABLE';
+	var RESET_POLL = 'RESET_POLL';
 	
 	// Action Creators
 	function getPollData(id) {
 	  return function (dispatch) {
 	    _axios2.default.get('/api/polls/id/' + id).then(function (res) {
-	      console.log('editPoll.js: getPollData response:', res);
-	      // dispatch setNewTile
-	      // dispatch setPollOptions
-	      dispatch(activePollData(res.data));
+	      console.log('editPoll.js: getPollData response:', res.data[0]);
+	      var poll = res.data[0];
+	      var options = poll.options.map(function (option) {
+	        return option.option;
+	      });
+	      console.log('poll.title:', poll.title);
+	      console.log('options', options);
+	      dispatch(setPollTitle(poll.title));
+	      dispatch(setPollOptions(options));
+	      dispatch(activePollData(res.data[0]));
 	    });
 	  };
 	}
 	function setEditedPoll(id, pollData) {
+	  console.log('setEditedPoll pollData', pollData);
 	  return function (dispatch) {
 	    _axios2.default.put('/api/polls/edit/' + id, pollData).then(function (res) {
 	      var editedPoll = res.data.updatedDoc;
 	      dispatch(pollEdited(editedPoll));
+	      console.log('poll edited successfully!!', editedPoll);
 	      // dispatch reset setNewTitle
 	      // dispatch dispatch setPollOptions
 	    }).catch(function (err) {
@@ -91489,11 +91514,18 @@
 	    });
 	  };
 	}
-	function setPollTitle(newPollTitle) {
-	  return { type: SET_POLL_TITLE, newPollTitle: newPollTitle };
+	function setPollTitle(pollTitle) {
+	  return { type: SET_POLL_TITLE, pollTitle: pollTitle };
 	}
-	function setPollOptions(newPollOptions) {
-	  return { type: SET_POLL_OPTIONS, newPollOptions: newPollOptions };
+	function setPollOptions(pollOptions) {
+	  console.log('setting poll options:', pollOptions);
+	  return { type: SET_POLL_OPTIONS, pollOptions: pollOptions };
+	}
+	function setTitleEditable(bool) {
+	  return { type: SET_TITLE_EDITABLE, titleEditable: bool };
+	}
+	function resetPoll() {
+	  return { type: RESET_POLL };
 	}
 	function pollEdited(editedPoll) {
 	  return { type: POLL_EDITED, editedPoll: editedPoll };
@@ -91515,13 +91547,23 @@
 	function reduceSetPollOptions(state, action) {
 	  return Object.assign({}, state, { newPollOptions: action.pollOptions });
 	}
+	function reduceResetPoll(state, action) {
+	  return Object.assign({}, state, {
+	    newPollTitle: '',
+	    titleEditable: true,
+	    newPollOptions: ['', ''],
+	    editedPoll: null,
+	    activePollData: null
+	  });
+	}
 	
 	// Root Reducer Slice
 	var initialState = {
 	  newPollTitle: '',
 	  titleEditable: true,
 	  newPollOptions: ['', ''],
-	  editedPoll: null
+	  editedPoll: null,
+	  activePollData: null
 	};
 	function editPoll() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
@@ -91536,10 +91578,142 @@
 	      return reduceSetPollTitle(state, action);
 	    case SET_POLL_OPTIONS:
 	      return reduceSetPollOptions(state, action);
+	    case RESET_POLL:
+	      return reduceResetPoll(state, action);
 	    default:
 	      return state;
 	  }
 	}
+
+/***/ },
+/* 785 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _NewPollTitle = __webpack_require__(691);
+	
+	var _NewPollTitle2 = _interopRequireDefault(_NewPollTitle);
+	
+	var _PendingPollOptions = __webpack_require__(692);
+	
+	var _PendingPollOptions2 = _interopRequireDefault(_PendingPollOptions);
+	
+	var _SaveOrReset = __webpack_require__(693);
+	
+	var _SaveOrReset2 = _interopRequireDefault(_SaveOrReset);
+	
+	var _reactRedux = __webpack_require__(650);
+	
+	var _editPoll = __webpack_require__(784);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
+	var object = _React$PropTypes.object;
+	var func = _React$PropTypes.func;
+	var bool = _React$PropTypes.bool;
+	var string = _React$PropTypes.string;
+	var array = _React$PropTypes.array;
+	
+	
+	var EditPoll = _react2.default.createClass({
+	  displayName: 'EditPoll',
+	
+	  propTypes: {
+	    poll: object,
+	    newPollTitle: string,
+	    newPollOptions: array,
+	    titleEditable: bool,
+	    dispatchUpdateOption: func,
+	    dispatchResetNewPoll: func,
+	    dispatchSubmitPoll: func,
+	    dispatchSetNewPollTitle: func,
+	    dispatchSetTitleEditable: func,
+	    dispatchGetPollData: func,
+	    user: object,
+	    routeParams: object.isRequired
+	  },
+	  componentWillMount: function componentWillMount() {
+	    this.props.dispatchGetPollData(this.props.routeParams.id);
+	  },
+	  render: function render() {
+	    var newPoll = false;
+	    console.log('EditPoll.jsx pollID:', this.props.routeParams.id);
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(
+	        'h1',
+	        { className: 'view-title text-center' },
+	        'Edit'
+	      ),
+	      _react2.default.createElement(_NewPollTitle2.default, {
+	        newPollTitle: this.props.newPollTitle,
+	        titleEditable: this.props.titleEditable,
+	        dispatchSetNewPollTitle: this.props.dispatchSetNewPollTitle,
+	        dispatchSetTitleEditable: this.props.dispatchSetTitleEditable
+	      }),
+	      _react2.default.createElement(_PendingPollOptions2.default, {
+	        poll: this.props.poll,
+	        dispatchUpdateOption: this.props.dispatchUpdateOption
+	      }),
+	      _react2.default.createElement(_SaveOrReset2.default, {
+	        newPollTitle: this.props.newPollTitle,
+	        newPollOptions: this.props.newPollOptions,
+	        dispatchResetNewPoll: this.props.dispatchResetNewPoll,
+	        dispatchSubmitPoll: this.props.dispatchSubmitPoll,
+	        user: this.props.user,
+	        poll: this.props.poll,
+	        newPoll: newPoll,
+	        pollID: this.props.routeParams.id
+	      })
+	    );
+	  }
+	});
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    poll: state.editPoll,
+	    newPollTitle: state.editPoll.newPollTitle,
+	    newPollOptions: state.editPoll.newPollOptions,
+	    titleEditable: state.editPoll.titleEditable,
+	    user: state.user
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchUpdateOption: function dispatchUpdateOption(newOptions) {
+	      dispatch((0, _editPoll.setPollOptions)(newOptions));
+	    },
+	    dispatchSetNewPollTitle: function dispatchSetNewPollTitle(pollTitle) {
+	      dispatch((0, _editPoll.setPollTitle)(pollTitle));
+	    },
+	    dispatchSetTitleEditable: function dispatchSetTitleEditable(bool) {
+	      dispatch((0, _editPoll.setTitleEditable)(bool));
+	    },
+	    dispatchResetNewPoll: function dispatchResetNewPoll(newPoll) {
+	      dispatch((0, _editPoll.resetPoll)());
+	    },
+	    dispatchSubmitPoll: function dispatchSubmitPoll(id, pollData) {
+	      dispatch((0, _editPoll.setEditedPoll)(id, pollData));
+	    },
+	    dispatchGetPollData: function dispatchGetPollData(id) {
+	      dispatch((0, _editPoll.getPollData)(id));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(EditPoll);
 
 /***/ }
 /******/ ]);

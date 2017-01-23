@@ -89,4 +89,4 @@ const updatePollDocumentOnEdit = function (pollID, pollData) {
   })
 }
 
-module.exports = { checkVoterUniqueness, updateDocumentWithNewVote, updateDocumentVotesTotal }
+module.exports = { checkVoterUniqueness, updateDocumentWithNewVote, updateDocumentVotesTotal, updatePollDocumentOnEdit }
