@@ -67697,6 +67697,10 @@
 	
 	var _reactRouter = __webpack_require__(173);
 	
+	var _OwnerControlButtons = __webpack_require__(785);
+	
+	var _OwnerControlButtons2 = _interopRequireDefault(_OwnerControlButtons);
+	
 	var _D3Chart = __webpack_require__(667);
 	
 	var _D3Chart2 = _interopRequireDefault(_D3Chart);
@@ -67751,6 +67755,11 @@
 	          this.props.title
 	        )
 	      ),
+	      _react2.default.createElement(_OwnerControlButtons2.default, {
+	        owner: this.props.owner,
+	        user: this.props.user,
+	        results: true
+	      }),
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'col-sm-10' },
@@ -87239,6 +87248,10 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
+	var _OwnerControlButtons = __webpack_require__(785);
+	
+	var _OwnerControlButtons2 = _interopRequireDefault(_OwnerControlButtons);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var _React$PropTypes = _react2.default.PropTypes;
@@ -87323,6 +87336,11 @@
 	            this.props.title
 	          )
 	        ),
+	        _react2.default.createElement(_OwnerControlButtons2.default, {
+	          owner: this.props.owner,
+	          user: this.props.user,
+	          results: false
+	        }),
 	        _react2.default.createElement(
 	          'fieldset',
 	          { className: 'form-group row' },
@@ -91714,6 +91732,91 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 771 */,
+/* 772 */,
+/* 773 */,
+/* 774 */,
+/* 775 */,
+/* 776 */,
+/* 777 */,
+/* 778 */,
+/* 779 */,
+/* 780 */,
+/* 781 */,
+/* 782 */,
+/* 783 */,
+/* 784 */,
+/* 785 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var _React$PropTypes = _react2.default.PropTypes;
+	var string = _React$PropTypes.string;
+	var object = _React$PropTypes.object;
+	var bool = _React$PropTypes.bool;
+	
+	
+	var OwnerControlButtons = _react2.default.createClass({
+	  displayName: 'OwnerControlButtons',
+	
+	  propTypes: {
+	    owner: string,
+	    user: object,
+	    results: bool
+	  },
+	  render: function render() {
+	    var resultsControlButtons = _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(
+	        'a',
+	        null,
+	        _react2.default.createElement('i', { className: 'fa fa-cog poll-edit-buttons poll-results-settings-button', 'aria-hidden': 'true' })
+	      ),
+	      _react2.default.createElement(
+	        'a',
+	        null,
+	        _react2.default.createElement('i', { className: 'fa fa-trash-o poll-edit-buttons poll-results-delete-button', 'aria-hidden': 'true' })
+	      )
+	    );
+	    var pollCardControlButtons = _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(
+	        'a',
+	        null,
+	        _react2.default.createElement('i', { className: 'fa fa-cog poll-edit-buttons poll-card-settings-button', 'aria-hidden': 'true' })
+	      ),
+	      _react2.default.createElement(
+	        'a',
+	        null,
+	        _react2.default.createElement('i', { className: 'fa fa-trash-o poll-edit-buttons poll-card-delete-button', 'aria-hidden': 'true' })
+	      )
+	    );
+	    var controlButtons = this.props.results ? resultsControlButtons : pollCardControlButtons;
+	    var pollOwner = this.props.owner === this.props.user.username;
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      pollOwner ? controlButtons : null
+	    );
+	  }
+	});
+	
+	exports.default = OwnerControlButtons;
 
 /***/ }
 /******/ ]);

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 import classnames from 'classnames'
+import OwnerControlButtons from './OwnerControlButtons'
 const { string, array, number, object, func, bool } = React.PropTypes
 
 const PollCard = React.createClass({
@@ -59,6 +60,11 @@ const PollCard = React.createClass({
       <div className={classnames('col-sm-4', { 'center-div-horizontally': this.props.singlePoll })}>
         <form onSubmit={this.onVoteSubmit}>
           <h2><Link to={`/v/${this.props.id}`}>{this.props.title}</Link></h2>
+          <OwnerControlButtons
+            owner={this.props.owner}
+            user={this.props.user}
+            results={false}
+          />
           <fieldset className='form-group row'>
             <div className='col-sm-10'>
               {options}

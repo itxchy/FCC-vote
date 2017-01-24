@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 const { string, array, number, object, bool } = React.PropTypes
+import OwnerControlButtons from './OwnerControlButtons'
 import D3Chart from './D3Chart'
 import isEmpty from 'lodash/isEmpty'
 import classnames from 'classnames'
@@ -22,12 +23,17 @@ const ResultsCard = React.createClass({
         <D3Chart
           results={this.props.options}
           pollId={this.props.id}
-          />
+        />
       )
     }
     return (
       <div className={classnames('col-sm-4', { 'center-div-horizontally': this.props.singlePoll })}>
         <h2><Link to={`/v/${this.props.id}`}>{this.props.title}</Link></h2>
+        <OwnerControlButtons
+          owner={this.props.owner}
+          user={this.props.user}
+          results
+        />
         <div className='col-sm-10'>
           <div className='row'>
             {d3Component || 'loading results...'}
