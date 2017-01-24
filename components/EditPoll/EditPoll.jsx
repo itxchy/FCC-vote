@@ -33,7 +33,6 @@ const EditPoll = React.createClass({
   },
   render () {
     const newPoll = false
-    console.log('EditPoll.jsx pollID:', this.props.routeParams.id)
     return (
       <div>
         <h1 className='view-title text-center'>Edit</h1>
