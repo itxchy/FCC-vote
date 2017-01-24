@@ -17,7 +17,6 @@ function validateNewPoll (res, data, commonValidations) {
     newPollTitle: data.title,
     newPollOptions: data.options
   }
-  console.log('polls.js commonValidations:', commonValidations)
 
   let { errors } = commonValidations(validatorData)
 
@@ -86,14 +85,13 @@ router.post('/', authenticate, (req, res) => {
  */
 router.put('/edit/:id', authenticate, (req, res) => {
   const validate = validateUpdatedPoll(res, req.body, commonValidations)
-  console.log('edit: poll validated:', validate)
   if (!validate.isValid) {
     return res.status(400).json({ 'bad request': 'bad data for poll edit', errors: validate.errors })
   }
   const pollID = req.params.id
-  console.log('pollID:', pollID)
-  console.log('req.body', res.body)
+
   applyPollEdits(req, res)
+
   async function applyPollEdits (req, res) {
     try {
       let updatedPoll = await updatePollDocumentOnEdit(req.params.id, req.body)
