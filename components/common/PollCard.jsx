@@ -11,7 +11,8 @@ const PollCard = React.createClass({
     id: string,
     user: object,
     dispatchSubmitVote: func.isRequired,
-    singlePoll: bool
+    singlePoll: bool,
+    owner: string
   },
   getInitialState () {
     return {
@@ -64,6 +65,7 @@ const PollCard = React.createClass({
             </div>
           </fieldset>
           <p>Total votes cast: {this.state.updatedTotalVotes || this.props.totalVotes}</p>
+          <p>Poll Owner: {this.props.owner}</p>
           <div className='form-group row'>
             <div className='offset-sm-2 col-sm-10'>
               <button type='submit' className='btn btn-primary'>Vote</button>

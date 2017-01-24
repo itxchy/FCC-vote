@@ -19,7 +19,7 @@ const DisplayPolls = React.createClass({
     return this.props.polls.map(poll => {
       const currentUser = this.props.user ? this.props.user.username : null
       const dupeVoter = dupeVoterCheck(poll, currentUser)
-      const { title, options, totalVotes, _id } = poll
+      const { title, options, totalVotes, _id, owner } = poll
       if (dupeVoter) {
         return (
           <ResultsCard
@@ -30,6 +30,7 @@ const DisplayPolls = React.createClass({
             options={options}
             totalVotes={totalVotes}
             id={_id}
+            owner={owner}
           />
         )
       }
@@ -43,6 +44,7 @@ const DisplayPolls = React.createClass({
           options={options}
           totalVotes={totalVotes}
           id={_id}
+          owner={owner}
         />
       )
     })

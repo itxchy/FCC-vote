@@ -2,7 +2,6 @@ import React from 'react'
 const { bool } = React.PropTypes
 
 const EmptyPolls = ({polls}) => {
-  console.log('EmptyPolls polls:', polls)
   if (polls === null) {
     return (
       <div className='text-center'>

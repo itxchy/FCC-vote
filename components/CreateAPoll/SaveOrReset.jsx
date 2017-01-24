@@ -34,7 +34,7 @@ const SaveOrReset = React.createClass({
       const newPoll = {
         title: this.props.newPollTitle,
         options: this.props.newPollOptions,
-        owner: this.props.user.username
+        owner: this.props.user.user.username
       }
       this.props.newPoll
         ? this.props.dispatchSubmitPoll(newPoll)

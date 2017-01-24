@@ -67631,6 +67631,7 @@
 	      var options = poll.options;
 	      var totalVotes = poll.totalVotes;
 	      var _id = poll._id;
+	      var owner = poll.owner;
 	
 	      if (dupeVoter) {
 	        return _react2.default.createElement(_ResultsCard2.default, {
@@ -67640,7 +67641,8 @@
 	          title: title,
 	          options: options,
 	          totalVotes: totalVotes,
-	          id: _id
+	          id: _id,
+	          owner: owner
 	        });
 	      }
 	      return _react2.default.createElement(_PollCard2.default, {
@@ -67651,7 +67653,8 @@
 	        title: title,
 	        options: options,
 	        totalVotes: totalVotes,
-	        id: _id
+	        id: _id,
+	        owner: owner
 	      });
 	    });
 	  },
@@ -67725,7 +67728,8 @@
 	    totalVotes: number,
 	    id: string,
 	    user: object,
-	    singlePoll: bool
+	    singlePoll: bool,
+	    owner: string.isRequired
 	  },
 	  render: function render() {
 	    var d3Component = null;
@@ -67761,8 +67765,14 @@
 	          _react2.default.createElement(
 	            'p',
 	            null,
-	            'Total votes: ',
+	            'Total Votes: ',
 	            this.props.totalVotes
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Poll Owner: ',
+	            this.props.owner
 	          )
 	        )
 	      )
@@ -87250,7 +87260,8 @@
 	    id: string,
 	    user: object,
 	    dispatchSubmitVote: func.isRequired,
-	    singlePoll: bool
+	    singlePoll: bool,
+	    owner: string
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
@@ -87328,6 +87339,12 @@
 	          this.state.updatedTotalVotes || this.props.totalVotes
 	        ),
 	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'Poll Owner: ',
+	          this.props.owner
+	        ),
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'form-group row' },
 	          _react2.default.createElement(
@@ -87369,7 +87386,6 @@
 	var EmptyPolls = function EmptyPolls(_ref) {
 	  var polls = _ref.polls;
 	
-	  console.log('EmptyPolls polls:', polls);
 	  if (polls === null) {
 	    return _react2.default.createElement(
 	      'div',
@@ -87970,7 +87986,7 @@
 	      var newPoll = {
 	        title: this.props.newPollTitle,
 	        options: this.props.newPollOptions,
-	        owner: this.props.user.username
+	        owner: this.props.user.user.username
 	      };
 	      this.props.newPoll ? this.props.dispatchSubmitPoll(newPoll) : this.props.dispatchSubmitPoll(this.props.pollID, newPoll);
 	    }

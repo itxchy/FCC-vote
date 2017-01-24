@@ -12,7 +12,8 @@ const ResultsCard = React.createClass({
     totalVotes: number,
     id: string,
     user: object,
-    singlePoll: bool
+    singlePoll: bool,
+    owner: string.isRequired
   },
   render () {
     let d3Component = null
@@ -32,7 +33,8 @@ const ResultsCard = React.createClass({
             {d3Component || 'loading results...'}
           </div>
           <div className='row'>
-            <p>Total votes: {this.props.totalVotes}</p>
+            <p>Total Votes: {this.props.totalVotes}</p>
+            <p>Poll Owner: {this.props.owner}</p>
           </div>
         </div>
       </div>
