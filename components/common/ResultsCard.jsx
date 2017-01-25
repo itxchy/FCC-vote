@@ -30,6 +30,7 @@ const ResultsCard = React.createClass({
       <div className={classnames('col-sm-4', { 'center-div-horizontally': this.props.singlePoll })}>
         <h2><Link to={`/v/${this.props.id}`}>{this.props.title}</Link></h2>
         <OwnerControlButtons
+          id={this.props.id}
           owner={this.props.owner}
           user={this.props.user}
           results

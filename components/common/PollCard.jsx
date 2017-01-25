@@ -61,6 +61,7 @@ const PollCard = React.createClass({
         <form onSubmit={this.onVoteSubmit}>
           <h2><Link to={`/v/${this.props.id}`}>{this.props.title}</Link></h2>
           <OwnerControlButtons
+            id={this.props.id}
             owner={this.props.owner}
             user={this.props.user}
             results={false}
