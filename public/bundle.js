@@ -62,7 +62,7 @@
 	
 	__webpack_require__(786);
 	
-	__webpack_require__(788);
+	__webpack_require__(787);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -67807,6 +67807,10 @@
 	
 	var _reactRouter = __webpack_require__(173);
 	
+	var _DeleteModal = __webpack_require__(788);
+	
+	var _DeleteModal2 = _interopRequireDefault(_DeleteModal);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var _React$PropTypes = _react2.default.PropTypes;
@@ -67824,7 +67828,6 @@
 	    user: object,
 	    results: bool
 	  },
-	  handleDeleteButtonClick: function handleDeleteButtonClick() {},
 	  render: function render() {
 	    var resultsControlButtons = _react2.default.createElement(
 	      'div',
@@ -67837,7 +67840,12 @@
 	      _react2.default.createElement(
 	        'a',
 	        null,
-	        _react2.default.createElement('i', { className: 'fa fa-trash-o poll-edit-buttons poll-results-delete-button', 'aria-hidden': 'true' })
+	        _react2.default.createElement('i', {
+	          className: 'fa fa-trash-o poll-edit-buttons poll-results-delete-button',
+	          'data-toggle': 'modal',
+	          'data-target': '#deleteModal-' + this.props.id,
+	          'aria-hidden': 'true'
+	        })
 	      )
 	    );
 	    var pollCardControlButtons = _react2.default.createElement(
@@ -67854,7 +67862,7 @@
 	        _react2.default.createElement('i', {
 	          className: 'fa fa-trash-o poll-edit-buttons poll-card-delete-button',
 	          'data-toggle': 'modal',
-	          'data-target': '#deleteModal',
+	          'data-target': '#deleteModal-' + this.props.id,
 	          'aria-hidden': 'true'
 	        })
 	      )
@@ -67865,59 +67873,7 @@
 	      'div',
 	      null,
 	      pollOwner ? controlButtons : null,
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'modal fade', id: 'deleteModal', tabIndex: '-1', role: 'dialog', 'aria-labelledby': 'myModalLabel' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'modal-dialog', role: 'document' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'modal-content' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'modal-header' },
-	              _react2.default.createElement(
-	                'button',
-	                { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-label': 'Close' },
-	                _react2.default.createElement(
-	                  'span',
-	                  { 'aria-hidden': 'true' },
-	                  '\xD7'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'h2',
-	                { className: 'modal-title', id: 'myModalLabel' },
-	                'Are you sure?'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'modal-body' },
-	              _react2.default.createElement(
-	                'h4',
-	                null,
-	                'This poll and all of its data will be gone forever.'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'modal-footer' },
-	              _react2.default.createElement(
-	                'button',
-	                { type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
-	                'Cancel'
-	              ),
-	              _react2.default.createElement(
-	                'button',
-	                { type: 'button', className: 'btn btn-danger' },
-	                'Delete'
-	              )
-	            )
-	          )
-	        )
-	      )
+	      _react2.default.createElement(_DeleteModal2.default, { id: this.props.id })
 	    );
 	  }
 	});
@@ -91067,7 +91023,7 @@
 	      })
 	    );
 	    // if the title isn't an empty string, display fields. This prevents a text flash
-	    // after rerender.
+	    // after rerender. Hacky fix for now.
 	    var receivedTitle = this.props.newPollTitle !== '';
 	    return _react2.default.createElement(
 	      'div',
@@ -102121,8 +102077,7 @@
 
 
 /***/ },
-/* 787 */,
-/* 788 */
+/* 787 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(jQuery) {'use strict';
@@ -104300,6 +104255,90 @@
 	  });
 	}(jQuery);
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(786)))
+
+/***/ },
+/* 788 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var string = _react2.default.PropTypes.string;
+	
+	
+	var DeleteModal = _react2.default.createClass({
+	  displayName: 'DeleteModal',
+	
+	  propTypes: {
+	    id: string
+	  },
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'modal fade', id: 'deleteModal-' + this.props.id, tabIndex: '-1', role: 'dialog', 'aria-labelledby': 'myModalLabel' },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'modal-dialog', role: 'document' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'modal-content' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'modal-header' },
+	            _react2.default.createElement(
+	              'button',
+	              { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-label': 'Close' },
+	              _react2.default.createElement(
+	                'span',
+	                { 'aria-hidden': 'true' },
+	                '\xD7'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'h2',
+	              { className: 'modal-title', id: 'myModalLabel' },
+	              'Are you sure?'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'modal-body' },
+	            _react2.default.createElement(
+	              'h4',
+	              null,
+	              'This poll and all of its data will be gone forever.'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'modal-footer' },
+	            _react2.default.createElement(
+	              'button',
+	              { type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
+	              'Cancel'
+	            ),
+	            _react2.default.createElement(
+	              'button',
+	              { type: 'button', className: 'btn btn-danger' },
+	              'Delete'
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	exports.default = DeleteModal;
 
 /***/ }
 /******/ ]);

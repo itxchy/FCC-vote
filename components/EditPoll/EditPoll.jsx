@@ -63,7 +63,7 @@ const EditPoll = React.createClass({
       </div>
     )
     // if the title isn't an empty string, display fields. This prevents a text flash
-    // after rerender.
+    // after rerender. Hacky fix for now.
     const receivedTitle = this.props.newPollTitle !== ''
     return (
       <div>
