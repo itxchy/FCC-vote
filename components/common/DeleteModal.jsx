@@ -1,9 +1,15 @@
 import React from 'react'
-const { string } = React.PropTypes
+import { connect } from 'react-redux'
+import { deletePoll } from '../../redux/modules/deletePoll'
+const { string, func } = React.PropTypes
 
 const DeleteModal = React.createClass({
   propTypes: {
-    id: string
+    id: string,
+    dispatchDeletePoll: func
+  },
+  handleDeleteButtonClick () {
+    this.props.dispatchDeletePoll(this.props.id)
   },
   render () {
     return (
@@ -28,4 +34,12 @@ const DeleteModal = React.createClass({
   }
 })
 
-export default DeleteModal
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchDeletePoll (id) {
+      dispatch(deletePoll(id))
+    }
+  }
+}
+
+export default connect(() => {}, mapDispatchToProps)(DeleteModal)

@@ -104270,16 +104270,26 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _reactRedux = __webpack_require__(651);
+	
+	var _deletePoll = __webpack_require__(789);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var string = _react2.default.PropTypes.string;
+	var _React$PropTypes = _react2.default.PropTypes;
+	var string = _React$PropTypes.string;
+	var func = _React$PropTypes.func;
 	
 	
 	var DeleteModal = _react2.default.createClass({
 	  displayName: 'DeleteModal',
 	
 	  propTypes: {
-	    id: string
+	    id: string,
+	    dispatchDeletePoll: func
+	  },
+	  handleDeleteButtonClick: function handleDeleteButtonClick() {
+	    this.props.dispatchDeletePoll(this.props.id);
 	  },
 	  render: function render() {
 	    return _react2.default.createElement(
@@ -104338,7 +104348,48 @@
 	  }
 	});
 	
-	exports.default = DeleteModal;
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    dispatchDeletePoll: function dispatchDeletePoll(id) {
+	      dispatch((0, _deletePoll.deletePoll)(id));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(function () {}, mapDispatchToProps)(DeleteModal);
+
+/***/ },
+/* 789 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.deletePoll = deletePoll;
+	
+	var _axios = __webpack_require__(420);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	var _flashMessage = __webpack_require__(260);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// Action Creator
+	function deletePoll(id) {
+	  return function (dispatch) {
+	    _axios2.default.delete('/api/polls/delete/' + id).then(function (res) {
+	      console.log('delete response:', res);
+	      // redirect home
+	      dispatch((0, _flashMessage.addFlashMessage)({ type: 'success', text: 'Poll deleted!' }));
+	    }).catch(function (err) {
+	      console.error('error: delete request to /api/polls/delete failed', err);
+	      dispatch((0, _flashMessage.addFlashMessage)({ type: 'error', text: 'Failed to delete poll. That\'s an error.' }));
+	    });
+	  };
+	}
 
 /***/ }
 /******/ ]);
