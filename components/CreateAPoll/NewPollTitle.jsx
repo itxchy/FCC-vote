@@ -6,7 +6,8 @@ const NewPollTitle = React.createClass({
     newPollTitle: string,
     titleEditable: bool,
     dispatchSetNewPollTitle: func,
-    dispatchSetTitleEditable: func
+    dispatchSetTitleEditable: func,
+    editPoll: bool
   },
   handleNewPollTitleChange (event) {
     this.props.dispatchSetNewPollTitle(event.target.value)

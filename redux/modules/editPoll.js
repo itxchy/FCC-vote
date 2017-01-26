@@ -13,13 +13,10 @@ export function getPollData (id) {
   return dispatch => {
     axios.get(`/api/polls/id/${id}`)
       .then(res => {
-        console.log('editPoll.js: getPollData response:', res.data[0])
         const poll = res.data[0]
         const options = poll.options.map(option => {
           return option.option
         })
-        console.log('poll.title:', poll.title)
-        console.log('options', options)
         dispatch(setPollTitle(poll.title))
         dispatch(setPollOptions(options))
         dispatch(activePollData(res.data[0]))
@@ -27,18 +24,17 @@ export function getPollData (id) {
   }
 }
 export function setEditedPoll (id, pollData) {
-  console.log('setEditedPoll pollData', pollData)
   return dispatch => {
     axios.put(`/api/polls/edit/${id}`, pollData)
       .then(res => {
         const editedPoll = res.data.updatedDoc
         dispatch(pollEdited(editedPoll))
-        console.log('poll edited successfully!!', editedPoll)
         // dispatch reset setNewTitle
         // dispatch dispatch setPollOptions
       })
       .catch(err => {
-        console.log('edit poll error', err.response.data)
+        console.error('error: put request to /api/polls/edit failed:', err)
+        // TODO dispatch flash message displaying error
       })
   }
 }
@@ -46,7 +42,6 @@ export function setPollTitle (pollTitle) {
   return { type: SET_POLL_TITLE, pollTitle }
 }
 export function setPollOptions (pollOptions) {
-  console.log('setting poll options:', pollOptions)
   return { type: SET_POLL_OPTIONS, pollOptions }
 }
 export function setTitleEditable (bool) {

@@ -31,9 +31,12 @@ const EditPoll = React.createClass({
   componentWillMount () {
     this.props.dispatchGetPollData(this.props.routeParams.id)
   },
+  componentWillUnmount () {
+    this.props.dispatchResetNewPoll()
+  },
   render () {
     const newPoll = false
-    return (
+    const fields = (
       <div>
         <h1 className='view-title text-center'>Edit</h1>
         <NewPollTitle
@@ -41,6 +44,7 @@ const EditPoll = React.createClass({
           titleEditable={this.props.titleEditable}
           dispatchSetNewPollTitle={this.props.dispatchSetNewPollTitle}
           dispatchSetTitleEditable={this.props.dispatchSetTitleEditable}
+          editPoll
         />
         <PendingPollOptions
           poll={this.props.poll}
@@ -56,6 +60,14 @@ const EditPoll = React.createClass({
           newPoll={newPoll}
           pollID={this.props.routeParams.id}
         />
+      </div>
+    )
+    // if the title isn't an empty string, display fields. This prevents a text flash
+    // after rerender.
+    const receivedTitle = this.props.newPollTitle !== ''
+    return (
+      <div>
+        {receivedTitle ? fields : null}
       </div>
     )
   }

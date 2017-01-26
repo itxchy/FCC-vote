@@ -66298,13 +66298,10 @@
 	function getPollData(id) {
 	  return function (dispatch) {
 	    _axios2.default.get('/api/polls/id/' + id).then(function (res) {
-	      console.log('editPoll.js: getPollData response:', res.data[0]);
 	      var poll = res.data[0];
 	      var options = poll.options.map(function (option) {
 	        return option.option;
 	      });
-	      console.log('poll.title:', poll.title);
-	      console.log('options', options);
 	      dispatch(setPollTitle(poll.title));
 	      dispatch(setPollOptions(options));
 	      dispatch(activePollData(res.data[0]));
@@ -66312,16 +66309,15 @@
 	  };
 	}
 	function setEditedPoll(id, pollData) {
-	  console.log('setEditedPoll pollData', pollData);
 	  return function (dispatch) {
 	    _axios2.default.put('/api/polls/edit/' + id, pollData).then(function (res) {
 	      var editedPoll = res.data.updatedDoc;
 	      dispatch(pollEdited(editedPoll));
-	      console.log('poll edited successfully!!', editedPoll);
 	      // dispatch reset setNewTitle
 	      // dispatch dispatch setPollOptions
 	    }).catch(function (err) {
-	      console.log('edit poll error', err.response.data);
+	      console.error('error: put request to /api/polls/edit failed:', err);
+	      // TODO dispatch flash message displaying error
 	    });
 	  };
 	}
@@ -66329,7 +66325,6 @@
 	  return { type: SET_POLL_TITLE, pollTitle: pollTitle };
 	}
 	function setPollOptions(pollOptions) {
-	  console.log('setting poll options:', pollOptions);
 	  return { type: SET_POLL_OPTIONS, pollOptions: pollOptions };
 	}
 	function setTitleEditable(bool) {
@@ -87853,7 +87848,8 @@
 	    newPollTitle: string,
 	    titleEditable: bool,
 	    dispatchSetNewPollTitle: func,
-	    dispatchSetTitleEditable: func
+	    dispatchSetTitleEditable: func,
+	    editPoll: bool
 	  },
 	  handleNewPollTitleChange: function handleNewPollTitleChange(event) {
 	    this.props.dispatchSetNewPollTitle(event.target.value);
@@ -90972,9 +90968,12 @@
 	  componentWillMount: function componentWillMount() {
 	    this.props.dispatchGetPollData(this.props.routeParams.id);
 	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.props.dispatchResetNewPoll();
+	  },
 	  render: function render() {
 	    var newPoll = false;
-	    return _react2.default.createElement(
+	    var fields = _react2.default.createElement(
 	      'div',
 	      null,
 	      _react2.default.createElement(
@@ -90986,7 +90985,8 @@
 	        newPollTitle: this.props.newPollTitle,
 	        titleEditable: this.props.titleEditable,
 	        dispatchSetNewPollTitle: this.props.dispatchSetNewPollTitle,
-	        dispatchSetTitleEditable: this.props.dispatchSetTitleEditable
+	        dispatchSetTitleEditable: this.props.dispatchSetTitleEditable,
+	        editPoll: true
 	      }),
 	      _react2.default.createElement(_PendingPollOptions2.default, {
 	        poll: this.props.poll,
@@ -91002,6 +91002,14 @@
 	        newPoll: newPoll,
 	        pollID: this.props.routeParams.id
 	      })
+	    );
+	    // if the title isn't an empty string, display fields. This prevents a text flash
+	    // after rerender.
+	    var receivedTitle = this.props.newPollTitle !== '';
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      receivedTitle ? fields : null
 	    );
 	  }
 	});

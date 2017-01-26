@@ -207,4 +207,17 @@ router.get('/id/:id', (req, res) => {
     .catch(err => res.status(500).json({ 'error retrieveing single poll': err }))
 })
 
+/**
+ * Deletes a poll forever based on ID
+ */
+router.delete('/delete/:id', (req, res) => {
+  Poll.findOneAndDelete({ _id: req.params.id })
+    .exec()
+    .then(res => {
+      console.log('This poll has been deleted!:', res)
+      return res.json(poll)
+    })
+    .catch(err => res.status(500).json({'error deleting poll': err}))
+})
+
 module.exports = router
