@@ -8503,4 +8503,7 @@ input[type="radio"] .styled:checked + label::after {
   margin-left: 0;
   margin-bottom: .4rem; }
 
+.poll-card-delete-button {
+  cursor: pointer; }
+
 /*# sourceMappingURL=style.css.map*/
