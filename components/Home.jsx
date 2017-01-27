@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import DisplayPolls from './common/DisplayPolls'
 import { getAllPolls } from '../redux/modules/getAllPolls'
 import { submitVote, resetUpdatedPollResults } from '../redux/modules/submitVote'
-const { func, object, array } = React.PropTypes
+const { func, object, array, string } = React.PropTypes
 
 const Home = React.createClass({
   propTypes: {
@@ -11,6 +11,7 @@ const Home = React.createClass({
     dispatchSubmitVote: func,
     dispatchResetUpdatedPollResults: func,
     user: object,
+    clientIp: string,
     allPolls: array,
     updatedPollResults: object
   },
@@ -30,7 +31,9 @@ const Home = React.createClass({
         <div className='row'>
           <DisplayPolls
             polls={this.props.allPolls}
+            clientIp={this.props.clientIp}
             user={this.props.user}
+            isAuthenticated={this.props.isAuthenticated}
             dispatchSubmitVote={this.props.dispatchSubmitVote}
             getPolls={this.props.dispatchGetAllPolls}
           />
@@ -44,6 +47,7 @@ const mapStateToProps = (state) => {
   return {
     user: state.user.user,
     isAuthenticated: state.user.isAuthenticated,
+    clientIp: state.user.clientIp,
     allPolls: state.allPolls.allPolls,
     updatedPollResults: state.newVote.updatedResults
   }

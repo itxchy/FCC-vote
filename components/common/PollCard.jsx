@@ -28,7 +28,10 @@ const PollCard = React.createClass({
     event.preventDefault()
     const pollID = this.props.id
     let selectedOption = this.state.selectedOption
-    const voter = this.props.user.username || null
+    let voter = null
+    if (this.props.user) {
+      voter = this.props.user.username || null
+    }
     if (selectedOption !== null) {
       const vote = { selectedOption, voter }
       this.props.dispatchSubmitVote(pollID, vote)
@@ -57,9 +60,11 @@ const PollCard = React.createClass({
       )
     })
     return (
-      <div className={classnames('col-sm-4', { 'center-div-horizontally': this.props.singlePoll })}>
-        <form onSubmit={this.onVoteSubmit}>
-          <h2><Link to={`/v/${this.props.id}`}>{this.props.title}</Link></h2>
+      <div className={classnames('col-sm-4 sm-poll-card-container-width', { 'center-div-horizontally': this.props.singlePoll })}>
+        <form className='col-md-10 poll-form' onSubmit={this.onVoteSubmit}>
+          <h2 className='row sm-text-algin-center'>
+            <Link to={`/v/${this.props.id}`}>{this.props.title}</Link>
+          </h2>
           <OwnerControlButtons
             id={this.props.id}
             owner={this.props.owner}
@@ -67,7 +72,7 @@ const PollCard = React.createClass({
             results={false}
           />
           <fieldset className='form-group row'>
-            <div className='col-sm-10'>
+            <div className='col-md-10'>
               {options}
             </div>
           </fieldset>

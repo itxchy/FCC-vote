@@ -67521,6 +67521,7 @@
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
 	var array = _React$PropTypes.array;
+	var string = _React$PropTypes.string;
 	
 	
 	var Home = _react2.default.createClass({
@@ -67531,6 +67532,7 @@
 	    dispatchSubmitVote: func,
 	    dispatchResetUpdatedPollResults: func,
 	    user: object,
+	    clientIp: string,
 	    allPolls: array,
 	    updatedPollResults: object
 	  },
@@ -67557,7 +67559,9 @@
 	        { className: 'row' },
 	        _react2.default.createElement(_DisplayPolls2.default, {
 	          polls: this.props.allPolls,
+	          clientIp: this.props.clientIp,
 	          user: this.props.user,
+	          isAuthenticated: this.props.isAuthenticated,
 	          dispatchSubmitVote: this.props.dispatchSubmitVote,
 	          getPolls: this.props.dispatchGetAllPolls
 	        })
@@ -67570,6 +67574,7 @@
 	  return {
 	    user: state.user.user,
 	    isAuthenticated: state.user.isAuthenticated,
+	    clientIp: state.user.clientIp,
 	    allPolls: state.allPolls.allPolls,
 	    updatedPollResults: state.newVote.updatedResults
 	  };
@@ -67634,6 +67639,7 @@
 	var array = _React$PropTypes.array;
 	var object = _React$PropTypes.object;
 	var bool = _React$PropTypes.bool;
+	var string = _React$PropTypes.string;
 	
 	
 	var DisplayPolls = _react2.default.createClass({
@@ -67642,6 +67648,7 @@
 	  propTypes: {
 	    polls: array,
 	    user: object,
+	    clientIp: string,
 	    isAuthenticated: bool,
 	    dispatchSubmitVote: func,
 	    getPolls: func
@@ -67651,7 +67658,9 @@
 	
 	    var singlePoll = this.props.polls.length === 1;
 	    return this.props.polls.map(function (poll) {
-	      var currentUser = _this.props.user ? _this.props.user.username : null;
+	      // const currentUser = this.props.user ? this.props.user.username : null
+	      var currentUser = _this.props.isAuthenticated && _this.props.user ? _this.props.user.username : _this.props.clientIp;
+	      console.log('DisplayPolls.jsx: currentUser', currentUser);
 	      var dupeVoter = (0, _pollsLib.dupeVoterCheck)(poll, currentUser);
 	      var title = poll.title;
 	      var options = poll.options;
@@ -67689,7 +67698,7 @@
 	  },
 	  render: function render() {
 	    // if the polls haven't loaded yet, show a loading dialog
-	    if (!this.props.polls || (0, _isEmpty2.default)(this.props.polls)) {
+	    if (!this.props.polls || (0, _isEmpty2.default)(this.props.polls || this.props.isAuthenticated === null)) {
 	      return _react2.default.createElement(_EmptyPolls2.default, { polls: this.props.polls });
 	    }
 	    // if no polls are returned, tell the user they have no polls
@@ -67699,7 +67708,7 @@
 	    var populatedCards = this.populateCards();
 	    return _react2.default.createElement(
 	      'div',
-	      null,
+	      { className: 'container' },
 	      populatedCards
 	    );
 	  }
@@ -67771,28 +67780,28 @@
 	    }
 	    return _react2.default.createElement(
 	      'div',
-	      { className: (0, _classnames2.default)('col-sm-4', { 'center-div-horizontally': this.props.singlePoll }) },
-	      _react2.default.createElement(
-	        'h2',
-	        null,
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/v/' + this.props.id },
-	          this.props.title
-	        )
-	      ),
-	      _react2.default.createElement(_OwnerControlButtons2.default, {
-	        id: this.props.id,
-	        owner: this.props.owner,
-	        user: this.props.user,
-	        results: true
-	      }),
+	      { className: (0, _classnames2.default)('col-md-4 sm-result-card-container-width', { 'center-div-horizontally': this.props.singlePoll }) },
 	      _react2.default.createElement(
 	        'div',
-	        { className: 'col-sm-10' },
+	        { className: 'col-md-10' },
+	        _react2.default.createElement(
+	          'h2',
+	          { className: 'row sm-text-algin-center' },
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            { to: '/v/' + this.props.id },
+	            this.props.title
+	          )
+	        ),
+	        _react2.default.createElement(_OwnerControlButtons2.default, {
+	          id: this.props.id,
+	          owner: this.props.owner,
+	          user: this.props.user,
+	          results: true
+	        }),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'row' },
+	          { className: 'row sm-text-algin-center' },
 	          d3Component || 'loading results...'
 	        ),
 	        _react2.default.createElement(
@@ -87551,7 +87560,10 @@
 	    event.preventDefault();
 	    var pollID = this.props.id;
 	    var selectedOption = this.state.selectedOption;
-	    var voter = this.props.user.username || null;
+	    var voter = null;
+	    if (this.props.user) {
+	      voter = this.props.user.username || null;
+	    }
 	    if (selectedOption !== null) {
 	      var vote = { selectedOption: selectedOption, voter: voter };
 	      this.props.dispatchSubmitVote(pollID, vote);
@@ -87585,13 +87597,13 @@
 	    });
 	    return _react2.default.createElement(
 	      'div',
-	      { className: (0, _classnames2.default)('col-sm-4', { 'center-div-horizontally': this.props.singlePoll }) },
+	      { className: (0, _classnames2.default)('col-sm-4 sm-poll-card-container-width', { 'center-div-horizontally': this.props.singlePoll }) },
 	      _react2.default.createElement(
 	        'form',
-	        { onSubmit: this.onVoteSubmit },
+	        { className: 'col-md-10 poll-form', onSubmit: this.onVoteSubmit },
 	        _react2.default.createElement(
 	          'h2',
-	          null,
+	          { className: 'row sm-text-algin-center' },
 	          _react2.default.createElement(
 	            _reactRouter.Link,
 	            { to: '/v/' + this.props.id },
@@ -87609,7 +87621,7 @@
 	          { className: 'form-group row' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'col-sm-10' },
+	            { className: 'col-md-10' },
 	            options
 	          )
 	        ),

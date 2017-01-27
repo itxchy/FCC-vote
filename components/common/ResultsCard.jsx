@@ -27,16 +27,16 @@ const ResultsCard = React.createClass({
       )
     }
     return (
-      <div className={classnames('col-sm-4', { 'center-div-horizontally': this.props.singlePoll })}>
-        <h2><Link to={`/v/${this.props.id}`}>{this.props.title}</Link></h2>
-        <OwnerControlButtons
-          id={this.props.id}
-          owner={this.props.owner}
-          user={this.props.user}
-          results
-        />
-        <div className='col-sm-10'>
-          <div className='row'>
+      <div className={classnames('col-md-4 sm-result-card-container-width', { 'center-div-horizontally': this.props.singlePoll })}>
+        <div className='col-md-10'>
+          <h2 className='row sm-text-algin-center'><Link to={`/v/${this.props.id}`}>{this.props.title}</Link></h2>
+          <OwnerControlButtons
+            id={this.props.id}
+            owner={this.props.owner}
+            user={this.props.user}
+            results
+          />
+          <div className='row sm-text-algin-center'>
             {d3Component || 'loading results...'}
           </div>
           <div className='row'>

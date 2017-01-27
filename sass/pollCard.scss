@@ -1,3 +1,15 @@
 .poll-card-label > input[type="radio"] {
   margin-right: 1rem;
 }
+
+.poll-form {
+  min-width: 300px;
+}
+
+@media (max-width: 991px) {
+  .sm-poll-card-container-width {
+    margin: 0 auto;
+    float: none; 
+    width: 305px;
+  }
+}

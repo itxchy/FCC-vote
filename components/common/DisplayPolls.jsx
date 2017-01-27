@@ -5,12 +5,13 @@ import EmptyPolls from './EmptyPolls'
 import { dupeVoterCheck } from '../../routes/lib/pollsLib'
 import isEmpty from 'lodash/isEmpty'
 import has from 'lodash/has'
-const { func, array, object, bool } = React.PropTypes
+const { func, array, object, bool, string } = React.PropTypes
 
 const DisplayPolls = React.createClass({
   propTypes: {
     polls: array,
     user: object,
+    clientIp: string,
     isAuthenticated: bool,
     dispatchSubmitVote: func,
     getPolls: func
@@ -18,7 +19,11 @@ const DisplayPolls = React.createClass({
   populateCards () {
     const singlePoll = this.props.polls.length === 1
     return this.props.polls.map(poll => {
-      const currentUser = this.props.user ? this.props.user.username : null
+      // const currentUser = this.props.user ? this.props.user.username : null
+      const currentUser = this.props.isAuthenticated && this.props.user
+        ? this.props.user.username
+        : this.props.clientIp
+      console.log('DisplayPolls.jsx: currentUser', currentUser)
       const dupeVoter = dupeVoterCheck(poll, currentUser)
       const { title, options, totalVotes, _id, owner } = poll
       if (dupeVoter) {
@@ -55,7 +60,7 @@ const DisplayPolls = React.createClass({
   },
   render () {
     // if the polls haven't loaded yet, show a loading dialog
-    if (!this.props.polls || isEmpty(this.props.polls)) {
+    if (!this.props.polls || isEmpty(this.props.polls || this.props.isAuthenticated === null)) {
       return <EmptyPolls polls={this.props.polls} />
     }
     // if no polls are returned, tell the user they have no polls
@@ -64,7 +69,7 @@ const DisplayPolls = React.createClass({
     }
     const populatedCards = this.populateCards()
     return (
-      <div>
+      <div className='container'>
         {populatedCards}
       </div>
     )
