@@ -57,11 +57,9 @@ export function logout () {
   return { type: SET_CURRENT_USER, user: {} }
 }
 export function getClientIp () {
-  console.log('auth.js: getClientIp called!')
   return dispatch => {
     axios.get('/api/auth/ip')
       .then(res => {
-        console.log('auth.js: getClientIp response:', res)
         dispatch(setClientIp(res.data.clientIp))
       })
       .catch(err => {

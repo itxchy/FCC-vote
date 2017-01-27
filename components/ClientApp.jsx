@@ -15,7 +15,6 @@ const App = React.createClass({
       setAuthorizationToken(localStorage.jwtToken)
       store.dispatch({type: SET_CURRENT_USER, user: jwt.decode(localStorage.jwtToken)})
     } else {
-      console.log('no token, calling getClientIp')
       store.dispatch(getClientIp())
     }
     return (

@@ -21482,7 +21482,6 @@
 	      (0, _setAuthorizationToken2.default)(localStorage.jwtToken);
 	      _Store2.default.dispatch({ type: _auth.SET_CURRENT_USER, user: _jsonwebtoken2.default.decode(localStorage.jwtToken) });
 	    } else {
-	      console.log('no token, calling getClientIp');
 	      _Store2.default.dispatch((0, _auth.getClientIp)());
 	    }
 	    return _react2.default.createElement(
@@ -35439,10 +35438,8 @@
 	  return { type: SET_CURRENT_USER, user: {} };
 	}
 	function getClientIp() {
-	  console.log('auth.js: getClientIp called!');
 	  return function (dispatch) {
 	    _axios2.default.get('/api/auth/ip').then(function (res) {
-	      console.log('auth.js: getClientIp response:', res);
 	      dispatch(setClientIp(res.data.clientIp));
 	    }).catch(function (err) {
 	      console.error('error retrieving client ip address', err);
