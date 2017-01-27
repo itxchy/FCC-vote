@@ -211,10 +211,11 @@ router.get('/id/:id', (req, res) => {
  * Deletes a poll forever based on ID
  */
 router.delete('/delete/:id', (req, res) => {
-  Poll.findOneAndDelete({ _id: req.params.id })
+  Poll.find({ _id: req.params.id })
+    .remove()
     .exec()
-    .then(res => {
-      console.log('This poll has been deleted!:', res)
+    .then(poll => {
+      console.log('This poll has been deleted!:', poll)
       return res.json(poll)
     })
     .catch(err => res.status(500).json({'error deleting poll': err}))

@@ -25,7 +25,14 @@ const DeleteModal = React.createClass({
             </div>
             <div className='modal-footer'>
               <button type='button' className='btn btn-default' data-dismiss='modal'>Cancel</button>
-              <button type='button' className='btn btn-danger'>Delete</button>
+              <button
+                type='button'
+                className='btn btn-danger'
+                data-dismiss='modal'
+                onClick={this.handleDeleteButtonClick}
+              >
+              Delete
+              </button>
             </div>
           </div>
         </div>
@@ -42,4 +49,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(() => {}, mapDispatchToProps)(DeleteModal)
+export default connect((state) => {}, mapDispatchToProps)(DeleteModal)

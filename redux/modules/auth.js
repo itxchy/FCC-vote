@@ -53,7 +53,6 @@ export function logout () {
 // Reducers
 export const reduceSetCurrentUser = (state, action) => {
   const newState = {}
-  // console.log('action.user', action.user)
   let authenticationStatus = false
   if (action.user && !action.user.errors && !isEmpty(action.user)) {
     authenticationStatus = true

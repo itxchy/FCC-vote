@@ -45,4 +45,13 @@ router.post('/', (req, res) => {
   })
 })
 
+/**
+ * Returns a client's IP address
+ */
+router.get('/ip', (req, res) => {
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
+  console.log('auth.js: IP address returned:', ip)
+  return res.json({ clientIp: ip })
+})
+
 module.exports = router

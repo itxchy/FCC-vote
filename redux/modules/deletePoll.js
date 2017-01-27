@@ -3,6 +3,7 @@ import { addFlashMessage } from './flashMessage'
 
 // Action Creator
 export function deletePoll (id) {
+  console.log('deleting:', id)
   return dispatch => {
     axios.delete(`/api/polls/delete/${id}`)
       .then(res => {

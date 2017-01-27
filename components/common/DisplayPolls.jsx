@@ -5,12 +5,13 @@ import EmptyPolls from './EmptyPolls'
 import { dupeVoterCheck } from '../../routes/lib/pollsLib'
 import isEmpty from 'lodash/isEmpty'
 import has from 'lodash/has'
-const { func, array, object } = React.PropTypes
+const { func, array, object, bool } = React.PropTypes
 
 const DisplayPolls = React.createClass({
   propTypes: {
     polls: array,
     user: object,
+    isAuthenticated: bool,
     dispatchSubmitVote: func,
     getPolls: func
   },

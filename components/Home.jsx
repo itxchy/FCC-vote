@@ -43,6 +43,7 @@ const Home = React.createClass({
 const mapStateToProps = (state) => {
   return {
     user: state.user.user,
+    isAuthenticated: state.user.isAuthenticated,
     allPolls: state.allPolls.allPolls,
     updatedPollResults: state.newVote.updatedResults
   }
