@@ -49,4 +49,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect((state) => {}, mapDispatchToProps)(DeleteModal)
+export default connect((state) => ({ user: state.user }), mapDispatchToProps)(DeleteModal)

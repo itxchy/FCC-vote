@@ -8,6 +8,7 @@ import isEmpty from 'lodash/isEmpty'
 // Actions
 export const SET_CURRENT_USER = 'setCurrentUser'
 export const USER_LOADING = 'USER_LOADING'
+export const SET_CLIENT_IP = 'SET_CLIENT_IP'
 
 // Action Creators
 export function setCurrentUser (user) {
@@ -20,6 +21,12 @@ export function userLoading (bool) {
   return {
     type: USER_LOADING,
     userLoading: bool
+  }
+}
+function setClientIp (clientIp) {
+  return {
+    type: SET_CLIENT_IP,
+    clientIp
   }
 }
 /**
@@ -49,6 +56,19 @@ export function logout () {
   setAuthorizationToken(false)
   return { type: SET_CURRENT_USER, user: {} }
 }
+export function getClientIp () {
+  console.log('auth.js: getClientIp called!')
+  return dispatch => {
+    axios.get('/api/auth/ip')
+      .then(res => {
+        console.log('auth.js: getClientIp response:', res)
+        dispatch(setClientIp(res.data.clientIp))
+      })
+      .catch(err => {
+        console.error('error retrieving client ip address', err)
+      })
+  }
+}
 
 // Reducers
 export const reduceSetCurrentUser = (state, action) => {
@@ -69,11 +89,15 @@ export const reduceUserLoading = (state, action) => {
   Object.assign(newState, state, { userLoading: action.userLoading })
   return newState
 }
+const reduceSetClientIp = (state, action) => {
+  return Object.assign({}, state, { clientIp: action.clientIp })
+}
 
 const initialState = {
   isAuthenticated: null,
   user: null,
-  userLoading: false
+  userLoading: false,
+  clientIp: null
 }
 
 // Root Reducer Slice
@@ -83,6 +107,8 @@ export default function user (state = initialState, action) {
       return reduceSetCurrentUser(state, action)
     case USER_LOADING:
       return reduceUserLoading(state, action)
+    case SET_CLIENT_IP:
+      return reduceSetClientIp(state, action)
     default:
       return state
   }

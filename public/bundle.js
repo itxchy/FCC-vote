@@ -21481,6 +21481,9 @@
 	    if (localStorage.jwtToken) {
 	      (0, _setAuthorizationToken2.default)(localStorage.jwtToken);
 	      _Store2.default.dispatch({ type: _auth.SET_CURRENT_USER, user: _jsonwebtoken2.default.decode(localStorage.jwtToken) });
+	    } else {
+	      console.log('no token, calling getClientIp');
+	      _Store2.default.dispatch((0, _auth.getClientIp)());
 	    }
 	    return _react2.default.createElement(
 	      _reactRedux.Provider,
@@ -35356,11 +35359,12 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.reduceUserLoading = exports.reduceSetCurrentUser = exports.USER_LOADING = exports.SET_CURRENT_USER = undefined;
+	exports.reduceUserLoading = exports.reduceSetCurrentUser = exports.SET_CLIENT_IP = exports.USER_LOADING = exports.SET_CURRENT_USER = undefined;
 	exports.setCurrentUser = setCurrentUser;
 	exports.userLoading = userLoading;
 	exports.login = login;
 	exports.logout = logout;
+	exports.getClientIp = getClientIp;
 	exports.default = user;
 	
 	var _axios = __webpack_require__(420);
@@ -35386,6 +35390,7 @@
 	
 	var SET_CURRENT_USER = exports.SET_CURRENT_USER = 'setCurrentUser';
 	var USER_LOADING = exports.USER_LOADING = 'USER_LOADING';
+	var SET_CLIENT_IP = exports.SET_CLIENT_IP = 'SET_CLIENT_IP';
 	
 	// Action Creators
 	function setCurrentUser(user) {
@@ -35398,6 +35403,12 @@
 	  return {
 	    type: USER_LOADING,
 	    userLoading: bool
+	  };
+	}
+	function setClientIp(clientIp) {
+	  return {
+	    type: SET_CLIENT_IP,
+	    clientIp: clientIp
 	  };
 	}
 	/**
@@ -35427,6 +35438,17 @@
 	  (0, _setAuthorizationToken2.default)(false);
 	  return { type: SET_CURRENT_USER, user: {} };
 	}
+	function getClientIp() {
+	  console.log('auth.js: getClientIp called!');
+	  return function (dispatch) {
+	    _axios2.default.get('/api/auth/ip').then(function (res) {
+	      console.log('auth.js: getClientIp response:', res);
+	      dispatch(setClientIp(res.data.clientIp));
+	    }).catch(function (err) {
+	      console.error('error retrieving client ip address', err);
+	    });
+	  };
+	}
 	
 	// Reducers
 	var reduceSetCurrentUser = exports.reduceSetCurrentUser = function reduceSetCurrentUser(state, action) {
@@ -35447,11 +35469,15 @@
 	  Object.assign(newState, state, { userLoading: action.userLoading });
 	  return newState;
 	};
+	var reduceSetClientIp = function reduceSetClientIp(state, action) {
+	  return Object.assign({}, state, { clientIp: action.clientIp });
+	};
 	
 	var initialState = {
 	  isAuthenticated: null,
 	  user: null,
-	  userLoading: false
+	  userLoading: false,
+	  clientIp: null
 	};
 	
 	// Root Reducer Slice
@@ -35464,6 +35490,8 @@
 	      return reduceSetCurrentUser(state, action);
 	    case USER_LOADING:
 	      return reduceUserLoading(state, action);
+	    case SET_CLIENT_IP:
+	      return reduceSetClientIp(state, action);
 	    default:
 	      return state;
 	  }
@@ -67870,7 +67898,10 @@
 	      )
 	    );
 	    var controlButtons = this.props.results ? resultsControlButtons : pollCardControlButtons;
-	    var pollOwner = this.props.owner === this.props.user.username;
+	    var pollOwner = null;
+	    if (this.props.user) {
+	      pollOwner = this.props.owner === this.props.user.username;
+	    }
 	    return _react2.default.createElement(
 	      'div',
 	      null,
@@ -67987,7 +68018,9 @@
 	  };
 	};
 	
-	exports.default = (0, _reactRedux.connect)(function (state) {}, mapDispatchToProps)(DeleteModal);
+	exports.default = (0, _reactRedux.connect)(function (state) {
+	  return { user: state.user };
+	}, mapDispatchToProps)(DeleteModal);
 
 /***/ },
 /* 669 */

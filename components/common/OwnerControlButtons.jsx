@@ -38,7 +38,10 @@ const OwnerControlButtons = React.createClass({
       </div>
     )
     const controlButtons = this.props.results ? resultsControlButtons : pollCardControlButtons
-    const pollOwner = this.props.owner === this.props.user.username
+    let pollOwner = null
+    if (this.props.user) {
+      pollOwner = this.props.owner === this.props.user.username
+    }
     return (
       <div>
         {pollOwner ? controlButtons : null}
