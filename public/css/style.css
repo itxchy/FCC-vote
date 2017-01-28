@@ -8413,7 +8413,7 @@ input[type="checkbox"] .styled:checked + label::after,
 input[type="radio"] .styled:checked + label::after {
   color: #fff; }
 
-h1, h2, h3, h4, p, a {
+h1, h2, h3, h4, p, a, text {
   font-family: 'Overpass', sans-serif; }
 
 .fine {
@@ -8488,6 +8488,9 @@ h1, h2, h3, h4, p, a {
 .total-votes-tally {
   margin-bottom: .5rem; }
 
+.poll-tally-owner-display {
+  font-size: 1.2em; }
+
 .poll-card-label > input[type="radio"] {
   margin-right: 1rem; }
 
@@ -8516,6 +8519,10 @@ h1, h2, h3, h4, p, a {
   width: 2rem;
   height: 2rem;
   background: 'burlywood'; }
+
+.result-text {
+  font-size: 1.2em;
+  fill: #001f3f; }
 
 .poll-edit-buttons {
   font-size: 2em; }

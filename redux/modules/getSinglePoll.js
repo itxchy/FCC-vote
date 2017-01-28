@@ -1,7 +1,8 @@
 import axios from 'axios'
 
-// Action
+// Actions
 const SINGLE_POLL_DATA = 'SINGLE_POLL_DATA'
+const CLEAR_SINGLE_POLL = 'CLEAR_SINGLE_POLL'
 
 // Action Creators
 function setSinglePollData (poll) {
@@ -18,9 +19,16 @@ export function getSinglePoll (id) {
   }
 }
 
-// Reducer
-function reduceSinglePollsData (state, action) {
+export function clearSinglePoll () {
+  return { type: CLEAR_SINGLE_POLL }
+}
+
+// Reducers
+function reduceSinglePollData (state, action) {
   return Object.assign({}, state, { singlePoll: action.singlePoll })
+}
+function reduceClearSinglePoll (state, action) {
+  return Object.assign({}, state, { singlePoll: null })
 }
 
 // Root Reducer
@@ -30,7 +38,9 @@ const initialState = {
 export default function singlePoll (state = initialState, action) {
   switch (action.type) {
     case SINGLE_POLL_DATA:
-      return reduceSinglePollsData(state, action)
+      return reduceSinglePollData(state, action)
+    case CLEAR_SINGLE_POLL:
+      return reduceClearSinglePoll(state, action)
     default:
       return state
   }

@@ -86,8 +86,8 @@ const PollCard = React.createClass({
               {options}
             </div>
           </fieldset>
-          <p className='total-votes-tally'>Total votes cast: {this.state.updatedTotalVotes || this.props.totalVotes}</p>
-          <p>Poll Owner: {this.props.owner}</p>
+          <p className='poll-tally-owner-display total-votes-tally'>Total Votes: {this.state.updatedTotalVotes || this.props.totalVotes}</p>
+          <p className='poll-tally-owner-display'>Poll Owner: {this.props.owner}</p>
           <div className='form-group row'>
             <div className='offset-sm-2 col-sm-10'>
               {this.state.noOptionSelected ? noOptionSelectedError : null}

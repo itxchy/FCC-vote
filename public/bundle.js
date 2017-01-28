@@ -66245,6 +66245,7 @@
 	  value: true
 	});
 	exports.getSinglePoll = getSinglePoll;
+	exports.clearSinglePoll = clearSinglePoll;
 	exports.default = singlePoll;
 	
 	var _axios = __webpack_require__(420);
@@ -66253,8 +66254,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// Action
+	// Actions
 	var SINGLE_POLL_DATA = 'SINGLE_POLL_DATA';
+	var CLEAR_SINGLE_POLL = 'CLEAR_SINGLE_POLL';
 	
 	// Action Creators
 	function setSinglePollData(poll) {
@@ -66270,9 +66272,16 @@
 	  };
 	}
 	
-	// Reducer
-	function reduceSinglePollsData(state, action) {
+	function clearSinglePoll() {
+	  return { type: CLEAR_SINGLE_POLL };
+	}
+	
+	// Reducers
+	function reduceSinglePollData(state, action) {
 	  return Object.assign({}, state, { singlePoll: action.singlePoll });
+	}
+	function reduceClearSinglePoll(state, action) {
+	  return Object.assign({}, state, { singlePoll: null });
 	}
 	
 	// Root Reducer
@@ -66285,7 +66294,9 @@
 	
 	  switch (action.type) {
 	    case SINGLE_POLL_DATA:
-	      return reduceSinglePollsData(state, action);
+	      return reduceSinglePollData(state, action);
+	    case CLEAR_SINGLE_POLL:
+	      return reduceClearSinglePoll(state, action);
 	    default:
 	      return state;
 	  }
@@ -67777,7 +67788,8 @@
 	    if (!(0, _isEmpty2.default)(this.props.options)) {
 	      d3Component = _react2.default.createElement(_D3Chart2.default, {
 	        results: this.props.options,
-	        pollId: this.props.id
+	        pollId: this.props.id,
+	        totalVotes: this.props.totalVotes
 	      });
 	    }
 	    return _react2.default.createElement(
@@ -67811,13 +67823,13 @@
 	          { className: 'row' },
 	          _react2.default.createElement(
 	            'p',
-	            { className: 'total-votes-tally' },
+	            { className: 'poll-tally-owner-display total-votes-tally' },
 	            'Total Votes: ',
 	            this.props.totalVotes
 	          ),
 	          _react2.default.createElement(
 	            'p',
-	            null,
+	            { className: 'poll-tally-owner-display' },
 	            'Poll Owner: ',
 	            this.props.owner
 	          )
@@ -68093,6 +68105,7 @@
 	var _React$PropTypes = _react2.default.PropTypes;
 	var string = _React$PropTypes.string;
 	var array = _React$PropTypes.array;
+	var number = _React$PropTypes.number;
 	
 	
 	var D3Chart = _react2.default.createClass({
@@ -68100,11 +68113,27 @@
 	
 	  propTypes: {
 	    results: array,
-	    pollId: string
+	    pollId: string,
+	    totalVotes: number
+	  },
+	  winningOption: function winningOption() {
+	    var winner = null;
+	    this.props.results.reduce(function (prevTotal, option, index) {
+	      if (option.votes.length > prevTotal) {
+	        winner = index;
+	        return option.votes.length;
+	      }
+	      return prevTotal;
+	    }, 0);
+	    return this.props.results[winner];
 	  },
 	  render: function render() {
+	    var _this = this;
+	
+	    var winningOption = this.winningOption();
+	    console.log(winningOption);
 	    var chart = _reactFauxDom2.default.createElement('div');
-	    // console.log('data:', this.props.results)
+	    console.log('data:', this.props.results);
 	    var data = this.props.results;
 	    var width = 300;
 	    var height = 300;
@@ -68118,17 +68147,28 @@
 	      return i * (height / data.length);
 	    }).attr('width', function (d) {
 	      return xScale(d.votes.length);
-	    }).attr('height', height / data.length - 4).attr('fill', 'teal');
+	    }).attr('height', height / data.length - 4).attr('fill', function (d) {
+	      if (winningOption.option === d.option) {
+	        return '#01FF70';
+	      }
+	      return '#3D9970';
+	    });
 	
 	    svg.selectAll('text').data(data).enter().append('text').text(function (d) {
-	      return d.option + ': ' + d.votes.length;
+	      if (winningOption.option === d.option) {
+	        return d.option + ' ' + Math.round(d.votes.length / _this.props.totalVotes * 100) + '% \u2713';
+	      }
+	      return d.option + ' ' + Math.round(d.votes.length / _this.props.totalVotes * 100) + '%';
 	    }).attr('x', 16).attr('y', function (d, i) {
 	      return i * (height / data.length) + 24;
 	    }).attr('width', function (d) {
 	      return d.votes.length * 4;
 	    }).attr('height', function (d) {
 	      return height / data.length - 8;
-	    }).attr('font-family', 'sans-serif').attr('font-size', 18);
+	    }).classed('result-text', true);
+	    // .attr('font-family', 'sans-serif')
+	    // .attr('font-size', 18)
+	    // .attr('color', '#FFDC00')
 	
 	    // console.log('faux element:', chart)
 	    return chart.toReact();
@@ -87640,13 +87680,13 @@
 	        ),
 	        _react2.default.createElement(
 	          'p',
-	          { className: 'total-votes-tally' },
-	          'Total votes cast: ',
+	          { className: 'poll-tally-owner-display total-votes-tally' },
+	          'Total Votes: ',
 	          this.state.updatedTotalVotes || this.props.totalVotes
 	        ),
 	        _react2.default.createElement(
 	          'p',
-	          null,
+	          { className: 'poll-tally-owner-display' },
 	          'Poll Owner: ',
 	          this.props.owner
 	        ),
@@ -91968,6 +92008,8 @@
 	var object = _React$PropTypes.object;
 	var func = _React$PropTypes.func;
 	var array = _React$PropTypes.array;
+	var string = _React$PropTypes.string;
+	var bool = _React$PropTypes.bool;
 	
 	
 	var SinglePoll = _react2.default.createClass({
@@ -91977,8 +92019,11 @@
 	    routeParams: object,
 	    singlePoll: array,
 	    user: object,
+	    clientIp: string,
+	    isAuthenticated: bool,
 	    dispatchGetSinglePoll: func,
-	    dispatchSubmitVote: func
+	    dispatchSubmitVote: func,
+	    dispatchClearSinglePoll: func
 	  },
 	  getPoll: function getPoll() {
 	    this.props.dispatchGetSinglePoll(this.props.routeParams.id);
@@ -91986,25 +92031,26 @@
 	  componentWillMount: function componentWillMount() {
 	    this.getPoll();
 	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.props.dispatchClearSinglePoll();
+	  },
 	  render: function render() {
+	    var singlePoll = _react2.default.createElement(
+	      'div',
+	      { className: 'center-div-horizontally' },
+	      _react2.default.createElement(_DisplayPolls2.default, {
+	        polls: this.props.singlePoll,
+	        clientIp: this.props.clientIp,
+	        user: this.props.user,
+	        isAuthenticated: this.props.isAuthenticated,
+	        dispatchSubmitVote: this.props.dispatchSubmitVote,
+	        getPolls: this.getPoll
+	      })
+	    );
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'center-div-horizontally' },
-	      _react2.default.createElement(
-	        'h1',
-	        { className: 'view-title text-center' },
-	        'SinglePoll!'
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'center-div-horizontally' },
-	        _react2.default.createElement(_DisplayPolls2.default, {
-	          polls: this.props.singlePoll,
-	          user: this.props.user,
-	          dispatchSubmitVote: this.props.dispatchSubmitVote,
-	          getPolls: this.getPoll
-	        })
-	      )
+	      this.props.singlePoll ? singlePoll : null
 	    );
 	  }
 	});
@@ -92012,7 +92058,9 @@
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    singlePoll: state.singlePoll.singlePoll,
-	    user: state.user.user
+	    user: state.user.user,
+	    isAuthenticated: state.user.isAuthenticated,
+	    clientIp: state.user.clientIp
 	  };
 	};
 	
@@ -92023,6 +92071,9 @@
 	    },
 	    dispatchSubmitVote: function dispatchSubmitVote(id, vote) {
 	      dispatch((0, _submitVote.submitVote)(id, vote));
+	    },
+	    dispatchClearSinglePoll: function dispatchClearSinglePoll() {
+	      dispatch((0, _getSinglePoll.clearSinglePoll)());
 	    }
 	  };
 	};
