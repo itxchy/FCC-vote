@@ -4,9 +4,14 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 $fa-font-path: "font-awesome/fonts";
 @import "font-awesome/scss/font-awesome";
 @import "awesome-bootstrap-checkbox/awesome-bootstrap-checkbox";
+@import url('https://fonts.googleapis.com/css?family=Overpass');
+
+h1, h2, h3, h4, p, a {
+  font-family: 'Overpass', sans-serif;
+}
 
 .fine {
-  font-family: noto;
+  font-family: 'Overpass', sans-serif;
 }
 
 .view-title {
@@ -20,6 +25,7 @@ $fa-font-path: "font-awesome/fonts";
 }
 
 @import "createAPoll";
+@import "cards";
 @import "pollCard";
 @import "resultCard";
 @import "D3Chart";

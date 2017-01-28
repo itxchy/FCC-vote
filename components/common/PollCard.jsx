@@ -18,11 +18,15 @@ const PollCard = React.createClass({
   getInitialState () {
     return {
       selectedOption: null,
-      updatedTotalVotes: null
+      updatedTotalVotes: null,
+      noOptionSelected: false
     }
   },
   onOptionChange (event) {
-    this.setState({ selectedOption: event.target.value })
+    this.setState({
+      selectedOption: event.target.value,
+      noOptionSelected: false
+    })
   },
   onVoteSubmit (event) {
     event.preventDefault()
@@ -36,6 +40,7 @@ const PollCard = React.createClass({
       const vote = { selectedOption, voter }
       this.props.dispatchSubmitVote(pollID, vote)
     } else {
+      this.setState({ noOptionSelected: true })
       console.log('no poll option selected!')
     }
   },
@@ -59,6 +64,11 @@ const PollCard = React.createClass({
         </div>
       )
     })
+    const noOptionSelectedError = (
+      <div className='row no-option-selected-span'>
+        <i className='fa fa-exclamation-triangle' aria-hidden='true' /> Select an option before submitting
+      </div>
+    )
     return (
       <div className={classnames('col-sm-4 sm-poll-card-container-width', { 'center-div-horizontally': this.props.singlePoll })}>
         <form className='col-md-10 poll-form' onSubmit={this.onVoteSubmit}>
@@ -76,10 +86,11 @@ const PollCard = React.createClass({
               {options}
             </div>
           </fieldset>
-          <p>Total votes cast: {this.state.updatedTotalVotes || this.props.totalVotes}</p>
+          <p className='total-votes-tally'>Total votes cast: {this.state.updatedTotalVotes || this.props.totalVotes}</p>
           <p>Poll Owner: {this.props.owner}</p>
           <div className='form-group row'>
             <div className='offset-sm-2 col-sm-10'>
+              {this.state.noOptionSelected ? noOptionSelectedError : null}
               <button type='submit' className='btn btn-primary'>Vote</button>
             </div>
           </div>

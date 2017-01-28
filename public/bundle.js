@@ -67522,6 +67522,7 @@
 	var object = _React$PropTypes.object;
 	var array = _React$PropTypes.array;
 	var string = _React$PropTypes.string;
+	var bool = _React$PropTypes.bool;
 	
 	
 	var Home = _react2.default.createClass({
@@ -67532,6 +67533,7 @@
 	    dispatchSubmitVote: func,
 	    dispatchResetUpdatedPollResults: func,
 	    user: object,
+	    isAuthenticated: bool,
 	    clientIp: string,
 	    allPolls: array,
 	    updatedPollResults: object
@@ -67809,7 +67811,7 @@
 	          { className: 'row' },
 	          _react2.default.createElement(
 	            'p',
-	            null,
+	            { className: 'total-votes-tally' },
 	            'Total Votes: ',
 	            this.props.totalVotes
 	          ),
@@ -87550,11 +87552,15 @@
 	  getInitialState: function getInitialState() {
 	    return {
 	      selectedOption: null,
-	      updatedTotalVotes: null
+	      updatedTotalVotes: null,
+	      noOptionSelected: false
 	    };
 	  },
 	  onOptionChange: function onOptionChange(event) {
-	    this.setState({ selectedOption: event.target.value });
+	    this.setState({
+	      selectedOption: event.target.value,
+	      noOptionSelected: false
+	    });
 	  },
 	  onVoteSubmit: function onVoteSubmit(event) {
 	    event.preventDefault();
@@ -87568,6 +87574,7 @@
 	      var vote = { selectedOption: selectedOption, voter: voter };
 	      this.props.dispatchSubmitVote(pollID, vote);
 	    } else {
+	      this.setState({ noOptionSelected: true });
 	      console.log('no poll option selected!');
 	    }
 	  },
@@ -87595,6 +87602,12 @@
 	        )
 	      );
 	    });
+	    var noOptionSelectedError = _react2.default.createElement(
+	      'div',
+	      { className: 'row no-option-selected-span' },
+	      _react2.default.createElement('i', { className: 'fa fa-exclamation-triangle', 'aria-hidden': 'true' }),
+	      ' Select an option before submitting'
+	    );
 	    return _react2.default.createElement(
 	      'div',
 	      { className: (0, _classnames2.default)('col-sm-4 sm-poll-card-container-width', { 'center-div-horizontally': this.props.singlePoll }) },
@@ -87627,7 +87640,7 @@
 	        ),
 	        _react2.default.createElement(
 	          'p',
-	          null,
+	          { className: 'total-votes-tally' },
 	          'Total votes cast: ',
 	          this.state.updatedTotalVotes || this.props.totalVotes
 	        ),
@@ -87643,6 +87656,7 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'offset-sm-2 col-sm-10' },
+	            this.state.noOptionSelected ? noOptionSelectedError : null,
 	            _react2.default.createElement(
 	              'button',
 	              { type: 'submit', className: 'btn btn-primary' },

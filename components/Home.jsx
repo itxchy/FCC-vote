@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import DisplayPolls from './common/DisplayPolls'
 import { getAllPolls } from '../redux/modules/getAllPolls'
 import { submitVote, resetUpdatedPollResults } from '../redux/modules/submitVote'
-const { func, object, array, string } = React.PropTypes
+const { func, object, array, string, bool } = React.PropTypes
 
 const Home = React.createClass({
   propTypes: {
@@ -11,6 +11,7 @@ const Home = React.createClass({
     dispatchSubmitVote: func,
     dispatchResetUpdatedPollResults: func,
     user: object,
+    isAuthenticated: bool,
     clientIp: string,
     allPolls: array,
     updatedPollResults: object
