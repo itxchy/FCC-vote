@@ -6,13 +6,22 @@ const PendingPollOptions = React.createClass({
     poll: object.isRequired,
     dispatchUpdateOption: func.isRequired
   },
+  getInitialState () {
+    return {
+      twoOptionsOrMoreError: false
+    }
+  },
+  onFocus () {
+    this.setState({ twoOptionsOrMoreError: false })
+  },
   editOption (event) {
+    this.setState({ twoOptionsOrMoreError: false })
     let updatedOptions = this.props.poll.newPollOptions
     updatedOptions[event.target.name] = event.target.value
     this.props.dispatchUpdateOption(updatedOptions)
   },
   addAnotherOption () {
-    console.log('addAnotherOption prop:', this.props.poll.newPollOptions)
+    this.setState({ twoOptionsOrMoreError: false })
     let updatedNewOptions = this.props.poll.newPollOptions
     updatedNewOptions.push('')
     this.props.dispatchUpdateOption(updatedNewOptions)
@@ -20,6 +29,7 @@ const PendingPollOptions = React.createClass({
   deleteOption (index) {
     if (this.props.poll.newPollOptions.length === 2) {
       console.log('Two or more options required!')
+      this.setState({ twoOptionsOrMoreError: true })
       return
     }
     let updatedDeleteOptions = this.props.poll.newPollOptions
@@ -36,6 +46,7 @@ const PendingPollOptions = React.createClass({
             name={index}
             placeholder={`Option ${index + 1}`}
             onChange={this.editOption}
+            onFocus={this.onFocus}
             className='form-control option-input'
           />
           <a
@@ -48,11 +59,17 @@ const PendingPollOptions = React.createClass({
         </div>
       )
     })
+    const deleteOptionError = (
+      <div className='row two-or-more-error'>
+        <i className='fa fa-exclamation-triangle' aria-hidden='true' /> At least two options are required
+      </div>
+    )
     return (
       <div className='form-group options-container'>
         {options}
+        {this.state.twoOptionsOrMoreError ? deleteOptionError : null}
         <a>
-          <p className='add-another-option' onClick={this.addAnotherOption}>
+          <p className='add-another-option show-mouse-pointer' onClick={this.addAnotherOption}>
             <i className='fa fa-plus-circle' aria-hidden='true' /> Add another option
           </p>
         </a>

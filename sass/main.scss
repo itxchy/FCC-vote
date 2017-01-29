@@ -24,9 +24,15 @@ h1, h2, h3, h4, p, a, text {
   float: none;
 }
 
+.show-mouse-pointer {
+  cursor: pointer;  
+}
+
 @import "createAPoll";
 @import "cards";
 @import "pollCard";
 @import "resultCard";
 @import "D3Chart";
 @import "ownerControlButtons";
+@import "loadingSpinner";
+@import "pendingPollOptions";

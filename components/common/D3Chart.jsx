@@ -9,20 +9,72 @@ const D3Chart = React.createClass({
     pollId: string,
     totalVotes: number
   },
+  getInitialState () {
+    return {
+      tie: false,
+      tiedOptionObjects: null,
+      winningOption: null
+    }
+  },
   winningOption () {
-    let winner = null
+    let winningOptionIndex = null
+    let possibleTieOptionIndexArray = []
     this.props.results.reduce((prevTotal, option, index) => {
+      // prevTotal is an accumulator initiated as 0 in reduce's second argument
+
+      // if the current option's vote count is more than the accumulator,
+      // we have a clear winner! set winningOptionIndex as the current index
+      // and clear out tieOptionIndexArray since we have a new uncontested winner.
       if (option.votes.length > prevTotal) {
-        winner = index
+        winningOptionIndex = index
+        possibleTieOptionIndexArray = []
         return option.votes.length
       }
+
+      // if current option's vote count equals the accumulator,
+      // we have at least two tied winners (for now). push the current index to the
+      // possibleTieOptionIndexArray
+      if (option.votes.length === prevTotal) {
+        possibleTieOptionIndexArray.push(index)
+      }
+
+      // unless there is a clear winner, pass the current accumulator forward
       return prevTotal
     }, 0)
-    return this.props.results[winner]
+
+    // if there are tied option indexes present, pass the tied option objects to state
+    // as an array, including winningOptionIndex's option
+    if (possibleTieOptionIndexArray.length >= 1) {
+      let tiedOptionObjects = possibleTieOptionIndexArray.map(tiedOptionIndex => {
+        return this.props.results[tiedOptionIndex]
+      })
+      tiedOptionObjects.push(this.props.results[winningOptionIndex])
+      console.log('tie! tiedOptionObjects:', tiedOptionObjects)
+      this.setState({ tie: true, tiedOptionObjects })
+      // return winningOption as false. There is a tie
+      return false
+    }
+    // return the winningOption since there is a winner
+    this.setState({ winningOption: [this.props.results[winningOptionIndex]] })
+    return [this.props.results[winningOptionIndex]]
+  },
+  componentWillMount () {
+    this.winningOption()
   },
   render () {
-    const winningOption = this.winningOption()
-    console.log(winningOption)
+    const winningOption = this.state.winningOption
+    let tiedOptionStrings = null
+    // if there is a tie, create an array of option strings to compare with what D3 recieves
+    console.log('state:', this.state)
+    if (this.state.tie) {
+      tiedOptionStrings = this.state.tiedOptionObjects.map(optionObject => {
+        return optionObject.option
+      })
+    }
+    console.log('winningOption:', winningOption)
+    console.log('winningOption from state:', this.state.winningOption)
+    console.log('tie:', this.state.tie)
+    console.log('tiedOptions:', this.state.tieOptionObjects)
     let chart = ReactFauxDom.createElement('div')
     console.log('data:', this.props.results)
     let data = this.props.results
@@ -46,9 +98,22 @@ const D3Chart = React.createClass({
       .attr('width', d => xScale(d.votes.length))
       .attr('height', height / data.length - 4)
       .attr('fill', d => {
-        if (winningOption.option === d.option) {
+        // if a winning option exists and it matches the current object,
+        // return the winning color
+        if (winningOption && winningOption[0].option === d.option) {
           return '#01FF70'
         }
+        // if there is a tie, check if the current option matches any of the
+        // tied options. If so, return the winning color
+        if (this.state.tie) {
+          let optionsMatch = tiedOptionStrings.filter(optionString => {
+            return optionString === d.option
+          })
+          if (optionsMatch.length > 0) {
+            return '#01FF70'
+          }
+        }
+        // otherwise, return the losing color
         return '#3D9970'
       })
 
@@ -57,10 +122,18 @@ const D3Chart = React.createClass({
       .enter()
       .append('text')
       .text(d => {
-        if (winningOption.option === d.option) {
-          return `${d.option} ${Math.round((d.votes.length / this.props.totalVotes) * 100)}% ✓`
+        if (winningOption && winningOption[0].option === d.option) {
+          return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}% ✓`
         }
-        return `${d.option} ${Math.round((d.votes.length / this.props.totalVotes) * 100)}%`
+        if (this.state.tie) {
+          let optionsMatch = tiedOptionStrings.filter(optionString => {
+            return optionString === d.option
+          })
+          if (optionsMatch.length > 0) {
+            return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}% TIED`
+          }
+        }
+        return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}%`
       })
       .attr('x', 16)
       .attr('y', (d, i) => i * (height / data.length) + 24)

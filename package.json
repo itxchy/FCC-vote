@@ -64,6 +64,7 @@
     "bootstrap": "^3.3.7",
     "classnames": "^2.2.5",
     "d3": "^4.4.0",
+    "d3-jetpack": "^1.0.2",
     "express": "^4.14.0",
     "fast-async": "^6.1.2",
     "graphql-subscriptions": "^0.2.1",

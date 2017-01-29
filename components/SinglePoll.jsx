@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { getSinglePoll, clearSinglePoll } from '../redux/modules/getSinglePoll'
 import { submitVote } from '../redux/modules/submitVote'
 import DisplayPolls from './common/DisplayPolls'
+import LoadingSpinner from './common/LoadingSpinner'
 
 const SinglePoll = React.createClass({
   propTypes: {
@@ -26,6 +27,7 @@ const SinglePoll = React.createClass({
     this.props.dispatchClearSinglePoll()
   },
   render () {
+    const loading = <LoadingSpinner />
     const singlePoll = (
       <div className='center-div-horizontally'>
         <DisplayPolls
@@ -40,7 +42,7 @@ const SinglePoll = React.createClass({
     )
     return (
       <div className='center-div-horizontally'>
-        {this.props.singlePoll ? singlePoll : null}
+        {this.props.singlePoll ? singlePoll : loading}
       </div>
     )
   }

@@ -51,7 +51,7 @@ const SaveOrReset = React.createClass({
           className='btn btn-primary save-reset-buttons'
           onClick={this.saveButtonHandler}
         >
-          Save
+          Submit
         </button>
         <button
           className='btn save-reset-buttons reset-poll-button'

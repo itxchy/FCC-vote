@@ -65,7 +65,7 @@ const PollCard = React.createClass({
       )
     })
     const noOptionSelectedError = (
-      <div className='row no-option-selected-span'>
+      <div className='row none-selected-error'>
         <i className='fa fa-exclamation-triangle' aria-hidden='true' /> Select an option before submitting
       </div>
     )

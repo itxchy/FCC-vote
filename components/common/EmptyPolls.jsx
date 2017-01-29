@@ -1,11 +1,12 @@
 import React from 'react'
+import LoadingSpinner from './LoadingSpinner'
 const { bool } = React.PropTypes
 
 const EmptyPolls = ({polls}) => {
   if (polls === null) {
     return (
       <div className='text-center'>
-        <h3>loading...</h3>
+        <LoadingSpinner />
       </div>
     )
   }

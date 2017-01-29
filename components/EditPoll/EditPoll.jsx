@@ -38,7 +38,7 @@ const EditPoll = React.createClass({
     const newPoll = false
     const fields = (
       <div>
-        <h1 className='view-title text-center'>Edit</h1>
+        <h1 className='view-title text-center'>Editing...</h1>
         <NewPollTitle
           newPollTitle={this.props.newPollTitle}
           titleEditable={this.props.titleEditable}
@@ -60,6 +60,9 @@ const EditPoll = React.createClass({
           newPoll={newPoll}
           pollID={this.props.routeParams.id}
         />
+        <div className='alert alert-warning edit-warning' role='alert'>
+          <strong>Remember</strong>: Submitting an edit to this poll will erase all of its votes.
+        </div>
       </div>
     )
     // if the title isn't an empty string, display fields. This prevents a text flash

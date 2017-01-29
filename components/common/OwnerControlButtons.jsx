@@ -16,7 +16,7 @@ const OwnerControlButtons = React.createClass({
         <Link to={`/edit/${this.props.id}`}><i className='fa fa-cog poll-edit-buttons poll-results-settings-button' aria-hidden='true' /></Link>
         <a>
           <i
-            className='fa fa-trash-o poll-edit-buttons poll-results-delete-button'
+            className='fa fa-trash-o poll-edit-buttons poll-results-delete-button show-mouse-pointer'
             data-toggle='modal'
             data-target={`#deleteModal-${this.props.id}`}
             aria-hidden='true'
@@ -29,7 +29,7 @@ const OwnerControlButtons = React.createClass({
         <Link to={`/edit/${this.props.id}`}><i className='fa fa-cog poll-edit-buttons poll-card-settings-button' aria-hidden='true' /></Link>
         <a>
           <i
-            className='fa fa-trash-o poll-edit-buttons poll-card-delete-button'
+            className='fa fa-trash-o poll-edit-buttons poll-card-delete-button show-mouse-pointer'
             data-toggle='modal'
             data-target={`#deleteModal-${this.props.id}`}
             aria-hidden='true'

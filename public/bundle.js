@@ -67891,7 +67891,7 @@
 	        'a',
 	        null,
 	        _react2.default.createElement('i', {
-	          className: 'fa fa-trash-o poll-edit-buttons poll-results-delete-button',
+	          className: 'fa fa-trash-o poll-edit-buttons poll-results-delete-button show-mouse-pointer',
 	          'data-toggle': 'modal',
 	          'data-target': '#deleteModal-' + this.props.id,
 	          'aria-hidden': 'true'
@@ -67910,7 +67910,7 @@
 	        'a',
 	        null,
 	        _react2.default.createElement('i', {
-	          className: 'fa fa-trash-o poll-edit-buttons poll-card-delete-button',
+	          className: 'fa fa-trash-o poll-edit-buttons poll-card-delete-button show-mouse-pointer',
 	          'data-toggle': 'modal',
 	          'data-target': '#deleteModal-' + this.props.id,
 	          'aria-hidden': 'true'
@@ -68116,22 +68116,76 @@
 	    pollId: string,
 	    totalVotes: number
 	  },
-	  winningOption: function winningOption() {
-	    var winner = null;
-	    this.props.results.reduce(function (prevTotal, option, index) {
-	      if (option.votes.length > prevTotal) {
-	        winner = index;
-	        return option.votes.length;
-	      }
-	      return prevTotal;
-	    }, 0);
-	    return this.props.results[winner];
+	  getInitialState: function getInitialState() {
+	    return {
+	      tie: false,
+	      tiedOptionObjects: null,
+	      winningOption: null
+	    };
 	  },
-	  render: function render() {
+	  winningOption: function winningOption() {
 	    var _this = this;
 	
-	    var winningOption = this.winningOption();
-	    console.log(winningOption);
+	    var winningOptionIndex = null;
+	    var possibleTieOptionIndexArray = [];
+	    this.props.results.reduce(function (prevTotal, option, index) {
+	      // prevTotal is an accumulator initiated as 0 in reduce's second argument
+	
+	      // if the current option's vote count is more than the accumulator,
+	      // we have a clear winner! set winningOptionIndex as the current index
+	      // and clear out tieOptionIndexArray since we have a new uncontested winner.
+	      if (option.votes.length > prevTotal) {
+	        winningOptionIndex = index;
+	        possibleTieOptionIndexArray = [];
+	        return option.votes.length;
+	      }
+	
+	      // if current option's vote count equals the accumulator,
+	      // we have at least two tied winners (for now). push the current index to the
+	      // possibleTieOptionIndexArray
+	      if (option.votes.length === prevTotal) {
+	        possibleTieOptionIndexArray.push(index);
+	      }
+	
+	      // unless there is a clear winner, pass the current accumulator forward
+	      return prevTotal;
+	    }, 0);
+	
+	    // if there are tied option indexes present, pass the tied option objects to state
+	    // as an array, including winningOptionIndex's option
+	    if (possibleTieOptionIndexArray.length >= 1) {
+	      var tiedOptionObjects = possibleTieOptionIndexArray.map(function (tiedOptionIndex) {
+	        return _this.props.results[tiedOptionIndex];
+	      });
+	      tiedOptionObjects.push(this.props.results[winningOptionIndex]);
+	      console.log('tie! tiedOptionObjects:', tiedOptionObjects);
+	      this.setState({ tie: true, tiedOptionObjects: tiedOptionObjects });
+	      // return winningOption as false. There is a tie
+	      return false;
+	    }
+	    // return the winningOption since there is a winner
+	    this.setState({ winningOption: [this.props.results[winningOptionIndex]] });
+	    return [this.props.results[winningOptionIndex]];
+	  },
+	  componentWillMount: function componentWillMount() {
+	    this.winningOption();
+	  },
+	  render: function render() {
+	    var _this2 = this;
+	
+	    var winningOption = this.state.winningOption;
+	    var tiedOptionStrings = null;
+	    // if there is a tie, create an array of option strings to compare with what D3 recieves
+	    console.log('state:', this.state);
+	    if (this.state.tie) {
+	      tiedOptionStrings = this.state.tiedOptionObjects.map(function (optionObject) {
+	        return optionObject.option;
+	      });
+	    }
+	    console.log('winningOption:', winningOption);
+	    console.log('winningOption from state:', this.state.winningOption);
+	    console.log('tie:', this.state.tie);
+	    console.log('tiedOptions:', this.state.tieOptionObjects);
 	    var chart = _reactFauxDom2.default.createElement('div');
 	    console.log('data:', this.props.results);
 	    var data = this.props.results;
@@ -68148,17 +68202,38 @@
 	    }).attr('width', function (d) {
 	      return xScale(d.votes.length);
 	    }).attr('height', height / data.length - 4).attr('fill', function (d) {
-	      if (winningOption.option === d.option) {
+	      // if a winning option exists and it matches the current object,
+	      // return the winning color
+	      if (winningOption && winningOption[0].option === d.option) {
 	        return '#01FF70';
 	      }
+	      // if there is a tie, check if the current option matches any of the
+	      // tied options. If so, return the winning color
+	      if (_this2.state.tie) {
+	        var optionsMatch = tiedOptionStrings.filter(function (optionString) {
+	          return optionString === d.option;
+	        });
+	        if (optionsMatch.length > 0) {
+	          return '#01FF70';
+	        }
+	      }
+	      // otherwise, return the losing color
 	      return '#3D9970';
 	    });
 	
 	    svg.selectAll('text').data(data).enter().append('text').text(function (d) {
-	      if (winningOption.option === d.option) {
-	        return d.option + ' ' + Math.round(d.votes.length / _this.props.totalVotes * 100) + '% \u2713';
+	      if (winningOption && winningOption[0].option === d.option) {
+	        return d.option + ' \u2014 ' + Math.round(d.votes.length / _this2.props.totalVotes * 100) + '% \u2713';
 	      }
-	      return d.option + ' ' + Math.round(d.votes.length / _this.props.totalVotes * 100) + '%';
+	      if (_this2.state.tie) {
+	        var optionsMatch = tiedOptionStrings.filter(function (optionString) {
+	          return optionString === d.option;
+	        });
+	        if (optionsMatch.length > 0) {
+	          return d.option + ' \u2014 ' + Math.round(d.votes.length / _this2.props.totalVotes * 100) + '% TIED';
+	        }
+	      }
+	      return d.option + ' \u2014 ' + Math.round(d.votes.length / _this2.props.totalVotes * 100) + '%';
 	    }).attr('x', 16).attr('y', function (d, i) {
 	      return i * (height / data.length) + 24;
 	    }).attr('width', function (d) {
@@ -87644,7 +87719,7 @@
 	    });
 	    var noOptionSelectedError = _react2.default.createElement(
 	      'div',
-	      { className: 'row no-option-selected-span' },
+	      { className: 'row none-selected-error' },
 	      _react2.default.createElement('i', { className: 'fa fa-exclamation-triangle', 'aria-hidden': 'true' }),
 	      ' Select an option before submitting'
 	    );
@@ -87725,6 +87800,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _LoadingSpinner = __webpack_require__(790);
+	
+	var _LoadingSpinner2 = _interopRequireDefault(_LoadingSpinner);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var bool = _react2.default.PropTypes.bool;
@@ -87737,11 +87816,7 @@
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'text-center' },
-	      _react2.default.createElement(
-	        'h3',
-	        null,
-	        'loading...'
-	      )
+	      _react2.default.createElement(_LoadingSpinner2.default, null)
 	    );
 	  }
 	  if (polls === false) {
@@ -88134,7 +88209,7 @@
 	        'a',
 	        null,
 	        _react2.default.createElement('i', {
-	          className: 'fa fa-pencil-square-o edit-icon',
+	          className: 'fa fa-pencil-square-o edit-icon show-mouse-pointer',
 	          'aria-hidden': 'true',
 	          onClick: this.handleEditClick
 	        })
@@ -88154,7 +88229,7 @@
 	        'a',
 	        null,
 	        _react2.default.createElement('i', {
-	          className: 'fa fa-floppy-o save-icon',
+	          className: 'fa fa-floppy-o save-icon show-mouse-pointer',
 	          'aria-hidden': 'true',
 	          onClick: this.handleSaveClick
 	        })
@@ -88199,13 +88274,22 @@
 	    poll: object.isRequired,
 	    dispatchUpdateOption: func.isRequired
 	  },
+	  getInitialState: function getInitialState() {
+	    return {
+	      twoOptionsOrMoreError: false
+	    };
+	  },
+	  onFocus: function onFocus() {
+	    this.setState({ twoOptionsOrMoreError: false });
+	  },
 	  editOption: function editOption(event) {
+	    this.setState({ twoOptionsOrMoreError: false });
 	    var updatedOptions = this.props.poll.newPollOptions;
 	    updatedOptions[event.target.name] = event.target.value;
 	    this.props.dispatchUpdateOption(updatedOptions);
 	  },
 	  addAnotherOption: function addAnotherOption() {
-	    console.log('addAnotherOption prop:', this.props.poll.newPollOptions);
+	    this.setState({ twoOptionsOrMoreError: false });
 	    var updatedNewOptions = this.props.poll.newPollOptions;
 	    updatedNewOptions.push('');
 	    this.props.dispatchUpdateOption(updatedNewOptions);
@@ -88213,6 +88297,7 @@
 	  deleteOption: function deleteOption(index) {
 	    if (this.props.poll.newPollOptions.length === 2) {
 	      console.log('Two or more options required!');
+	      this.setState({ twoOptionsOrMoreError: true });
 	      return;
 	    }
 	    var updatedDeleteOptions = this.props.poll.newPollOptions;
@@ -88232,6 +88317,7 @@
 	          name: index,
 	          placeholder: 'Option ' + (index + 1),
 	          onChange: _this.editOption,
+	          onFocus: _this.onFocus,
 	          className: 'form-control option-input'
 	        }),
 	        _react2.default.createElement(
@@ -88247,16 +88333,23 @@
 	        )
 	      );
 	    });
+	    var deleteOptionError = _react2.default.createElement(
+	      'div',
+	      { className: 'row two-or-more-error' },
+	      _react2.default.createElement('i', { className: 'fa fa-exclamation-triangle', 'aria-hidden': 'true' }),
+	      ' At least two options are required'
+	    );
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'form-group options-container' },
 	      options,
+	      this.state.twoOptionsOrMoreError ? deleteOptionError : null,
 	      _react2.default.createElement(
 	        'a',
 	        null,
 	        _react2.default.createElement(
 	          'p',
-	          { className: 'add-another-option', onClick: this.addAnotherOption },
+	          { className: 'add-another-option show-mouse-pointer', onClick: this.addAnotherOption },
 	          _react2.default.createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
 	          ' Add another option'
 	        )
@@ -88352,7 +88445,7 @@
 	          className: 'btn btn-primary save-reset-buttons',
 	          onClick: this.saveButtonHandler
 	        },
-	        'Save'
+	        'Submit'
 	      ),
 	      _react2.default.createElement(
 	        'button',
@@ -91237,7 +91330,7 @@
 	      _react2.default.createElement(
 	        'h1',
 	        { className: 'view-title text-center' },
-	        'Edit'
+	        'Editing...'
 	      ),
 	      _react2.default.createElement(_NewPollTitle2.default, {
 	        newPollTitle: this.props.newPollTitle,
@@ -91259,7 +91352,17 @@
 	        poll: this.props.poll,
 	        newPoll: newPoll,
 	        pollID: this.props.routeParams.id
-	      })
+	      }),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'alert alert-warning edit-warning', role: 'alert' },
+	        _react2.default.createElement(
+	          'strong',
+	          null,
+	          'Remember'
+	        ),
+	        ': Submitting an edit to this poll will erase all of its votes.'
+	      )
 	    );
 	    // if the title isn't an empty string, display fields. This prevents a text flash
 	    // after rerender. Hacky fix for now.
@@ -92002,6 +92105,10 @@
 	
 	var _DisplayPolls2 = _interopRequireDefault(_DisplayPolls);
 	
+	var _LoadingSpinner = __webpack_require__(790);
+	
+	var _LoadingSpinner2 = _interopRequireDefault(_LoadingSpinner);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var _React$PropTypes = _react2.default.PropTypes;
@@ -92035,6 +92142,7 @@
 	    this.props.dispatchClearSinglePoll();
 	  },
 	  render: function render() {
+	    var loading = _react2.default.createElement(_LoadingSpinner2.default, null);
 	    var singlePoll = _react2.default.createElement(
 	      'div',
 	      { className: 'center-div-horizontally' },
@@ -92050,7 +92158,7 @@
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'center-div-horizontally' },
-	      this.props.singlePoll ? singlePoll : null
+	      this.props.singlePoll ? singlePoll : loading
 	    );
 	  }
 	});
@@ -104505,6 +104613,32 @@
 	  });
 	}(jQuery);
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(788)))
+
+/***/ },
+/* 790 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var LoadingSpinner = function LoadingSpinner() {
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'center-div-horizontally loading-spinner-container' },
+	    _react2.default.createElement('i', { className: 'fa fa-cog fa-spin fa-3x fa-fw loading-spinner' })
+	  );
+	};
+	
+	exports.default = LoadingSpinner;
 
 /***/ }
 /******/ ]);
