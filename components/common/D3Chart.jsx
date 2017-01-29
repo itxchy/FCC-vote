@@ -1,6 +1,7 @@
 import React from 'react'
 const { string, array, number } = React.PropTypes
 import * as d3 from 'd3'
+import d3plus from 'd3plus'
 import ReactFauxDom from 'react-faux-dom'
 
 const D3Chart = React.createClass({
