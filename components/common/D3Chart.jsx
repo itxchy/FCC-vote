@@ -1,7 +1,6 @@
 import React from 'react'
 const { string, array, number } = React.PropTypes
-import * as d3 from 'd3'
-import d3plus from 'd3plus'
+
 import ReactFauxDom from 'react-faux-dom'
 
 const D3Chart = React.createClass({
@@ -16,6 +15,34 @@ const D3Chart = React.createClass({
       tiedOptionObjects: null,
       winningOption: null
     }
+  },
+  // mbostock's text wrap function: https://github.com/d3/d3/issues/1642
+  wrap (text, width) {
+    console.log('in wrap:', text, width)
+    text.each(function () {
+      let text = d3.select(this)
+      console.log('text.text()', text.text())
+      let words = text.text().split(/\s+/).reverse()
+      let word
+      let line = []
+      let lineNumber = 0
+      let lineHeight = 1.1 // ems
+      let y = text.attr('y')
+      let dy = parseFloat(text.attr('dy'))
+      let tspan = text.text(null).append('tspan').attr('x', 0).attr('y', y).attr('dy', dy + 'em')
+          console.log('d3 selected', text)
+      while (word = words.pop()) {
+        console.log('tspan', tspan.node())
+        line.push(word)
+        tspan.text(line.join(' '))
+        if (tspan.node().getComputedTextLength() > width) {
+          line.pop()
+          tspan.text(line.join(' '))
+          line = [word]
+          tspan = text.append('tspan').attr('x', 0).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word)
+        }
+      }
+    })
   },
   winningOption () {
     let winningOptionIndex = null
@@ -50,7 +77,6 @@ const D3Chart = React.createClass({
         return this.props.results[tiedOptionIndex]
       })
       tiedOptionObjects.push(this.props.results[winningOptionIndex])
-      console.log('tie! tiedOptionObjects:', tiedOptionObjects)
       this.setState({ tie: true, tiedOptionObjects })
       // return winningOption as false. There is a tie
       return false
@@ -63,21 +89,51 @@ const D3Chart = React.createClass({
     this.winningOption()
   },
   render () {
+    var insertLinebreaks = function (d) {
+      // console.log('d', d)
+      // console.log('d3.select(this)', d3.select(this))
+      // var el = d3.select(this)
+      // var words = d.option.split(' ');
+      // el.text('');
+      // for (var i = 0; i < words.length; i++) {
+      //     var tspan = el.append('tspan').text(words[i]);
+      //     if (i > 0)
+      //         tspan.attr('x', 0).attr('dy', '15');
+      // }
+      let width = 200
+      var text = d3.select(this),
+          words = d.option.split(/\s+/).reverse(),
+          word,
+          line = [],
+          lineNumber = 0,
+          lineHeight = 1.1, // ems
+          y = text.attr("y"),
+          dy = parseFloat(text.attr("dy")),
+          tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+      while (word = words.pop()) {
+        console.log('tspan', tspan)
+        console.log('tspan.node()', tspan.node())
+        line.push(word);
+        tspan.text(line.join(" "));
+        if (tspan.node().text.getComputedTextLength() > width) {
+          line.pop();
+          tspan.text(line.join(" "));
+          line = [word];
+          tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+        }
+      }
+    }
+       
+    console.log('d3 object', d3)
     const winningOption = this.state.winningOption
     let tiedOptionStrings = null
     // if there is a tie, create an array of option strings to compare with what D3 recieves
-    console.log('state:', this.state)
     if (this.state.tie) {
       tiedOptionStrings = this.state.tiedOptionObjects.map(optionObject => {
         return optionObject.option
       })
     }
-    console.log('winningOption:', winningOption)
-    console.log('winningOption from state:', this.state.winningOption)
-    console.log('tie:', this.state.tie)
-    console.log('tiedOptions:', this.state.tieOptionObjects)
     let chart = ReactFauxDom.createElement('div')
-    console.log('data:', this.props.results)
     let data = this.props.results
     const width = 300
     const height = 300
@@ -141,11 +197,9 @@ const D3Chart = React.createClass({
       .attr('width', d => d.votes.length * 4)
       .attr('height', d => height / data.length - 8)
       .classed('result-text', true)
-      // .attr('font-family', 'sans-serif')
-      // .attr('font-size', 18)
-      // .attr('color', '#FFDC00')
 
-    // console.log('faux element:', chart)
+    svg.selectAll('text').each(insertLinebreaks)
+
     return chart.toReact()
   }
 })

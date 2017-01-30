@@ -42,6 +42,10 @@ const config = {
         loader: 'json-loader'
       },
       {
+        test: /\.coffee$/, 
+        loader: 'coffee-loader'
+      },
+      {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'url-loader?limit=10000&minetype=application/font-woff&name=fonts/[name].[ext]'
       },
@@ -65,7 +69,10 @@ const config = {
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
-      'window.jQuery': 'jquery'
+      'window.jQuery': 'jquery',
+      'window.d3': 'd3',
+      'window.topojson': 'topojson',
+      'd3': 'd3'
     })
 /*    ,
     new BrowserSyncPlugin({
