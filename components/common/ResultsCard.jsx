@@ -18,7 +18,7 @@ const ResultsCard = React.createClass({
   },
   render () {
     let d3Component = null
-    if (!isEmpty(this.props.options)) {
+    if (typeof window !== 'undefined' && !isEmpty(this.props.options)) {
       d3Component = (
         <D3Chart
           results={this.props.options}

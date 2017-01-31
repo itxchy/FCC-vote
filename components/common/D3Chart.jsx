@@ -16,34 +16,6 @@ const D3Chart = React.createClass({
       winningOption: null
     }
   },
-  // mbostock's text wrap function: https://github.com/d3/d3/issues/1642
-  wrap (text, width) {
-    console.log('in wrap:', text, width)
-    text.each(function () {
-      let text = d3.select(this)
-      console.log('text.text()', text.text())
-      let words = text.text().split(/\s+/).reverse()
-      let word
-      let line = []
-      let lineNumber = 0
-      let lineHeight = 1.1 // ems
-      let y = text.attr('y')
-      let dy = parseFloat(text.attr('dy'))
-      let tspan = text.text(null).append('tspan').attr('x', 0).attr('y', y).attr('dy', dy + 'em')
-          console.log('d3 selected', text)
-      while (word = words.pop()) {
-        console.log('tspan', tspan.node())
-        line.push(word)
-        tspan.text(line.join(' '))
-        if (tspan.node().getComputedTextLength() > width) {
-          line.pop()
-          tspan.text(line.join(' '))
-          line = [word]
-          tspan = text.append('tspan').attr('x', 0).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word)
-        }
-      }
-    })
-  },
   winningOption () {
     let winningOptionIndex = null
     let possibleTieOptionIndexArray = []
@@ -89,42 +61,6 @@ const D3Chart = React.createClass({
     this.winningOption()
   },
   render () {
-    var insertLinebreaks = function (d) {
-      // console.log('d', d)
-      // console.log('d3.select(this)', d3.select(this))
-      // var el = d3.select(this)
-      // var words = d.option.split(' ');
-      // el.text('');
-      // for (var i = 0; i < words.length; i++) {
-      //     var tspan = el.append('tspan').text(words[i]);
-      //     if (i > 0)
-      //         tspan.attr('x', 0).attr('dy', '15');
-      // }
-      let width = 200
-      var text = d3.select(this),
-          words = d.option.split(/\s+/).reverse(),
-          word,
-          line = [],
-          lineNumber = 0,
-          lineHeight = 1.1, // ems
-          y = text.attr("y"),
-          dy = parseFloat(text.attr("dy")),
-          tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
-      while (word = words.pop()) {
-        console.log('tspan', tspan)
-        console.log('tspan.node()', tspan.node())
-        line.push(word);
-        tspan.text(line.join(" "));
-        if (tspan.node().text.getComputedTextLength() > width) {
-          line.pop();
-          tspan.text(line.join(" "));
-          line = [word];
-          tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-        }
-      }
-    }
-       
-    console.log('d3 object', d3)
     const winningOption = this.state.winningOption
     let tiedOptionStrings = null
     // if there is a tie, create an array of option strings to compare with what D3 recieves
@@ -137,6 +73,59 @@ const D3Chart = React.createClass({
     let data = this.props.results
     const width = 300
     const height = 300
+    const reactThis = this
+
+    var insertLinebreaks = function (d) {
+      let optionResults = () => {
+        if (winningOption && winningOption[0].option === d.option) {
+          return `${d.option} — ${Math.round((d.votes.length / reactThis.props.totalVotes) * 100)}% ✓`
+        }
+        if (reactThis.state.tie) {
+          let optionsMatch = tiedOptionStrings.filter(optionString => {
+            return optionString === d.option
+          })
+          if (optionsMatch.length > 0) {
+            return `${d.option} — ${Math.round((d.votes.length / reactThis.props.totalVotes) * 100)}% TIED`
+          }
+        }
+        return `${d.option} — ${Math.round((d.votes.length / reactThis.props.totalVotes) * 100)}%`
+      }
+      console.log('optionResults', optionResults())
+      let width = 32
+      let text = d3.select(this)
+      console.log('text', text)
+      let words = optionResults().split(/\s+/).reverse(),
+          word,
+          line = [],
+          lineNumber = 0,
+          lineHeight = 1.1 // ems
+          // debugger;
+          let y = text.attr("y")
+          let dy = .3 // parseFloat(text.attr("dy")),
+          let x = '.8em'
+          let tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+          const tspanCharLength = d.option.split('').length
+          // console.log('tspan char length', tspanCharLength)
+          // console.log('y', text.attr('y'))
+          console.log('words', words)
+      while (word = words.pop()) {
+        // console.log('tspan', tspan)
+        // console.log('tspan.node()', tspan.node())
+        line.push(word);
+        let lineLength = line.join(' ').split('').length
+        console.log('lineLength', lineLength, word)
+        tspan.text(line.join(" "));
+        if (lineLength > width) {
+          line.pop();
+          tspan.text(line.join(" "));
+          line = [word];
+          tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+        }
+      }
+    }
+       
+    // console.log('d3 object', d3)
+
     let xScale = d3.scaleLinear()
       .domain([0, d3.max(data, d => d.votes.length)])
       .range([1, width])
