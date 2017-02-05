@@ -1,5 +1,6 @@
 import React from 'react'
 const { string, array, number } = React.PropTypes
+import * as d3 from 'd3'
 
 import ReactFauxDom from 'react-faux-dom'
 
@@ -19,38 +20,28 @@ const D3Chart = React.createClass({
   winningOption () {
     let winningOptionIndex = null
     let possibleTieOptionIndexArray = []
-    this.props.results.reduce((prevTotal, option, index) => {
-      // prevTotal is an accumulator initiated as 0 in reduce's second argument
 
-      // if the current option's vote count is more than the accumulator,
-      // we have a clear winner! set winningOptionIndex as the current index
-      // and clear out tieOptionIndexArray since we have a new uncontested winner.
+    // determine winning option, or tie options
+    this.props.results.reduce((prevTotal, option, index) => {
       if (option.votes.length > prevTotal) {
         winningOptionIndex = index
         possibleTieOptionIndexArray = []
         return option.votes.length
       }
-
-      // if current option's vote count equals the accumulator,
-      // we have at least two tied winners (for now). push the current index to the
-      // possibleTieOptionIndexArray
       if (option.votes.length === prevTotal) {
         possibleTieOptionIndexArray.push(index)
       }
-
-      // unless there is a clear winner, pass the current accumulator forward
       return prevTotal
     }, 0)
 
-    // if there are tied option indexes present, pass the tied option objects to state
-    // as an array, including winningOptionIndex's option
+    // in the case of a tie, return tied options
     if (possibleTieOptionIndexArray.length >= 1) {
       let tiedOptionObjects = possibleTieOptionIndexArray.map(tiedOptionIndex => {
         return this.props.results[tiedOptionIndex]
       })
       tiedOptionObjects.push(this.props.results[winningOptionIndex])
       this.setState({ tie: true, tiedOptionObjects })
-      // return winningOption as false. There is a tie
+      // return winningOption as false since there is a tie
       return false
     }
     // return the winningOption since there is a winner
@@ -99,7 +90,6 @@ const D3Chart = React.createClass({
           line = [],
           lineNumber = 0,
           lineHeight = 1.1 // ems
-          // debugger;
           let y = text.attr("y")
           let dy = .3 // parseFloat(text.attr("dy")),
           let x = '.8em'
