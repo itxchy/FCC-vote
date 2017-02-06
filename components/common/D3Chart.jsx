@@ -89,9 +89,9 @@ const D3Chart = React.createClass({
       const wordPop = () => word = words.pop() // eslint-disable-line no-return-assign
       let line = []
       let lineNumber = 0
-      const lineHeight = 1.1 // ems
+      const lineHeight = 1.1
       const y = text.attr('y')
-      const dy = 0.3 // parseFloat(text.attr('dy')),
+      const dy = 0.3
       const x = '.8em'
       let tspan = text.text(null).append('tspan').attr('x', x).attr('y', y).attr('dy', dy + 'em')
       while (wordPop()) {
