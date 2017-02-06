@@ -48,72 +48,65 @@ const D3Chart = React.createClass({
     this.setState({ winningOption: [this.props.results[winningOptionIndex]] })
     return [this.props.results[winningOptionIndex]]
   },
+  createOptionResultsText (winningOption, tiedOptionStrings, d) {
+    if (winningOption && winningOption[0].option === d.option) {
+      return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}% ✓`
+    }
+    if (this.state.tie) {
+      let optionsMatch = tiedOptionStrings.filter(optionString => {
+        return optionString === d.option
+      })
+      if (optionsMatch.length > 0) {
+        return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}% TIED`
+      }
+    }
+    return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}%`
+  },
   componentWillMount () {
     this.winningOption()
   },
   render () {
     const winningOption = this.state.winningOption
-    let tiedOptionStrings = null
     // if there is a tie, create an array of option strings to compare with what D3 recieves
+    let tiedOptionStrings = null
     if (this.state.tie) {
       tiedOptionStrings = this.state.tiedOptionObjects.map(optionObject => {
         return optionObject.option
       })
     }
-    let chart = ReactFauxDom.createElement('div')
-    let data = this.props.results
+    const chart = ReactFauxDom.createElement('div')
+    const data = this.props.results
     const width = 300
     const height = 300
     const reactThis = this
 
-    var insertLinebreaks = function (d) {
-      let optionResults = () => {
-        if (winningOption && winningOption[0].option === d.option) {
-          return `${d.option} — ${Math.round((d.votes.length / reactThis.props.totalVotes) * 100)}% ✓`
-        }
-        if (reactThis.state.tie) {
-          let optionsMatch = tiedOptionStrings.filter(optionString => {
-            return optionString === d.option
-          })
-          if (optionsMatch.length > 0) {
-            return `${d.option} — ${Math.round((d.votes.length / reactThis.props.totalVotes) * 100)}% TIED`
-          }
-        }
-        return `${d.option} — ${Math.round((d.votes.length / reactThis.props.totalVotes) * 100)}%`
-      }
-      console.log('optionResults', optionResults())
-      let width = 32
-      let text = d3.select(this)
-      console.log('text', text)
-      let words = optionResults().split(/\s+/).reverse(),
-          word,
-          line = [],
-          lineNumber = 0,
-          lineHeight = 1.1 // ems
-          let y = text.attr("y")
-          let dy = .3 // parseFloat(text.attr("dy")),
-          let x = '.8em'
-          let tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-          const tspanCharLength = d.option.split('').length
-          // console.log('tspan char length', tspanCharLength)
-          // console.log('y', text.attr('y'))
-          console.log('words', words)
-      while (word = words.pop()) {
-        // console.log('tspan', tspan)
-        // console.log('tspan.node()', tspan.node())
-        line.push(word);
+    const insertLinebreaks = function (d) {
+      let optionResults = reactThis.createOptionResultsText(winningOption, tiedOptionStrings, d)
+      const width = 32
+      const text = d3.select(this)
+      let words = optionResults.split(/\s+/).reverse()
+      let word
+      const wordPop = () => word = words.pop() // eslint-disable-line no-return-assign
+      let line = []
+      let lineNumber = 0
+      const lineHeight = 1.1 // ems
+      const y = text.attr('y')
+      const dy = 0.3 // parseFloat(text.attr('dy')),
+      const x = '.8em'
+      let tspan = text.text(null).append('tspan').attr('x', x).attr('y', y).attr('dy', dy + 'em')
+      while (wordPop()) {
+        line.push(word)
         let lineLength = line.join(' ').split('').length
-        console.log('lineLength', lineLength, word)
-        tspan.text(line.join(" "));
+        tspan.text(line.join(' '))
         if (lineLength > width) {
-          line.pop();
-          tspan.text(line.join(" "));
-          line = [word];
-          tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+          line.pop()
+          tspan.text(line.join(' '))
+          line = [word]
+          tspan = text.append('tspan').attr('x', x).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word)
         }
       }
     }
-       
+
     // console.log('d3 object', d3)
 
     let xScale = d3.scaleLinear()

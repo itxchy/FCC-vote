@@ -68156,6 +68156,20 @@
 	    this.setState({ winningOption: [this.props.results[winningOptionIndex]] });
 	    return [this.props.results[winningOptionIndex]];
 	  },
+	  createOptionResultsText: function createOptionResultsText(winningOption, tiedOptionStrings, d) {
+	    if (winningOption && winningOption[0].option === d.option) {
+	      return d.option + ' \u2014 ' + Math.round(d.votes.length / this.props.totalVotes * 100) + '% \u2713';
+	    }
+	    if (this.state.tie) {
+	      var optionsMatch = tiedOptionStrings.filter(function (optionString) {
+	        return optionString === d.option;
+	      });
+	      if (optionsMatch.length > 0) {
+	        return d.option + ' \u2014 ' + Math.round(d.votes.length / this.props.totalVotes * 100) + '% TIED';
+	      }
+	    }
+	    return d.option + ' \u2014 ' + Math.round(d.votes.length / this.props.totalVotes * 100) + '%';
+	  },
 	  componentWillMount: function componentWillMount() {
 	    this.winningOption();
 	  },
@@ -68163,8 +68177,8 @@
 	    var _this2 = this;
 	
 	    var winningOption = this.state.winningOption;
-	    var tiedOptionStrings = null;
 	    // if there is a tie, create an array of option strings to compare with what D3 recieves
+	    var tiedOptionStrings = null;
 	    if (this.state.tie) {
 	      tiedOptionStrings = this.state.tiedOptionObjects.map(function (optionObject) {
 	        return optionObject.option;
@@ -68177,49 +68191,30 @@
 	    var reactThis = this;
 	
 	    var insertLinebreaks = function insertLinebreaks(d) {
-	      var optionResults = function optionResults() {
-	        if (winningOption && winningOption[0].option === d.option) {
-	          return d.option + ' \u2014 ' + Math.round(d.votes.length / reactThis.props.totalVotes * 100) + '% \u2713';
-	        }
-	        if (reactThis.state.tie) {
-	          var optionsMatch = tiedOptionStrings.filter(function (optionString) {
-	            return optionString === d.option;
-	          });
-	          if (optionsMatch.length > 0) {
-	            return d.option + ' \u2014 ' + Math.round(d.votes.length / reactThis.props.totalVotes * 100) + '% TIED';
-	          }
-	        }
-	        return d.option + ' \u2014 ' + Math.round(d.votes.length / reactThis.props.totalVotes * 100) + '%';
-	      };
-	      console.log('optionResults', optionResults());
+	      var optionResults = reactThis.createOptionResultsText(winningOption, tiedOptionStrings, d);
 	      var width = 32;
 	      var text = d3.select(this);
-	      console.log('text', text);
-	      var words = optionResults().split(/\s+/).reverse(),
-	          word = void 0,
-	          line = [],
-	          lineNumber = 0,
-	          lineHeight = 1.1; // ems
-	      var y = text.attr("y");
-	      var dy = .3; // parseFloat(text.attr("dy")),
+	      var words = optionResults.split(/\s+/).reverse();
+	      var word = void 0;
+	      var wordPop = function wordPop() {
+	        return word = words.pop();
+	      }; // eslint-disable-line no-return-assign
+	      var line = [];
+	      var lineNumber = 0;
+	      var lineHeight = 1.1; // ems
+	      var y = text.attr('y');
+	      var dy = 0.3; // parseFloat(text.attr('dy')),
 	      var x = '.8em';
-	      var tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-	      var tspanCharLength = d.option.split('').length;
-	      // console.log('tspan char length', tspanCharLength)
-	      // console.log('y', text.attr('y'))
-	      console.log('words', words);
-	      while (word = words.pop()) {
-	        // console.log('tspan', tspan)
-	        // console.log('tspan.node()', tspan.node())
+	      var tspan = text.text(null).append('tspan').attr('x', x).attr('y', y).attr('dy', dy + 'em');
+	      while (wordPop()) {
 	        line.push(word);
 	        var lineLength = line.join(' ').split('').length;
-	        console.log('lineLength', lineLength, word);
-	        tspan.text(line.join(" "));
+	        tspan.text(line.join(' '));
 	        if (lineLength > width) {
 	          line.pop();
-	          tspan.text(line.join(" "));
+	          tspan.text(line.join(' '));
 	          line = [word];
-	          tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+	          tspan = text.append('tspan').attr('x', x).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word);
 	        }
 	      }
 	    };
