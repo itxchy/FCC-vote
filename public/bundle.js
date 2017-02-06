@@ -28294,6 +28294,10 @@
 	
 	var _editPoll2 = _interopRequireDefault(_editPoll);
 	
+	var _deletePoll = __webpack_require__(669);
+	
+	var _deletePoll2 = _interopRequireDefault(_deletePoll);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = (0, _redux.combineReducers)({
@@ -28306,7 +28310,8 @@
 	  userSignupRequest: _userSignupRequest2.default,
 	  userPolls: _getUserPolls2.default,
 	  singlePoll: _getSinglePoll2.default,
-	  editPoll: _editPoll2.default
+	  editPoll: _editPoll2.default,
+	  deletedPoll: _deletePoll2.default
 	});
 
 /***/ },
@@ -67526,6 +67531,8 @@
 	
 	var _submitVote = __webpack_require__(643);
 	
+	var _deletePoll = __webpack_require__(669);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var _React$PropTypes = _react2.default.PropTypes;
@@ -67543,6 +67550,8 @@
 	    dispatchGetAllPolls: func,
 	    dispatchSubmitVote: func,
 	    dispatchResetUpdatedPollResults: func,
+	    dispatchResetDeletedPoll: func,
+	    deletedPoll: string,
 	    user: object,
 	    isAuthenticated: bool,
 	    clientIp: string,
@@ -67550,12 +67559,14 @@
 	    updatedPollResults: object
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    // If a new vote was accepted, the relevent poll card should be
-	    // flipped to a results card including the newest vote.
-	    // For now, all polls will be refreshed.
+	    // after a vote is submitted, show the results
 	    if (nextProps.updatedPollResults !== null) {
 	      this.props.dispatchGetAllPolls();
 	      this.props.dispatchResetUpdatedPollResults();
+	    }
+	    if (nextProps.deletedPoll !== null) {
+	      this.props.dispatchGetAllPolls();
+	      this.props.dispatchResetDeletedPoll();
 	    }
 	  },
 	  render: function render() {
@@ -67589,7 +67600,8 @@
 	    isAuthenticated: state.user.isAuthenticated,
 	    clientIp: state.user.clientIp,
 	    allPolls: state.allPolls.allPolls,
-	    updatedPollResults: state.newVote.updatedResults
+	    updatedPollResults: state.newVote.updatedResults,
+	    deletedPoll: state.deletedPoll.deletedPoll
 	  };
 	};
 	
@@ -67603,6 +67615,9 @@
 	    },
 	    dispatchResetUpdatedPollResults: function dispatchResetUpdatedPollResults() {
 	      dispatch((0, _submitVote.resetUpdatedPollResults)());
+	    },
+	    dispatchResetDeletedPoll: function dispatchResetDeletedPoll() {
+	      dispatch((0, _deletePoll.resetDeletedPoll)());
 	    }
 	  };
 	};
@@ -68052,6 +68067,8 @@
 	  value: true
 	});
 	exports.deletePoll = deletePoll;
+	exports.resetDeletedPoll = resetDeletedPoll;
+	exports.default = deletedPoll;
 	
 	var _axios = __webpack_require__(420);
 	
@@ -68061,7 +68078,11 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// Action Creator
+	// Action
+	var POLL_DELETED = 'POLL_DELETED';
+	var RESET_DELETED_POLL = 'RESET_DELETED_POLL';
+	
+	// Action Creators
 	function deletePoll(id) {
 	  console.log('deleting:', id);
 	  return function (dispatch) {
@@ -68069,11 +68090,49 @@
 	      console.log('delete response:', res);
 	      // redirect home
 	      dispatch((0, _flashMessage.addFlashMessage)({ type: 'success', text: 'Poll deleted!' }));
+	      dispatch(pollDeleted(id));
 	    }).catch(function (err) {
 	      console.error('error: delete request to /api/polls/delete failed', err);
 	      dispatch((0, _flashMessage.addFlashMessage)({ type: 'error', text: 'Failed to delete poll. That\'s an error.' }));
 	    });
 	  };
+	}
+	function pollDeleted(id) {
+	  return {
+	    type: POLL_DELETED,
+	    pollId: id
+	  };
+	}
+	function resetDeletedPoll() {
+	  return {
+	    type: RESET_DELETED_POLL
+	  };
+	}
+	
+	// Reducer
+	var reducePollDeleted = function reducePollDeleted(state, action) {
+	  return Object.assign({}, state, { deletedPoll: action.pollId });
+	};
+	var reduceResetDeletedPoll = function reduceResetDeletedPoll(state, action) {
+	  return Object.assign({}, state, { deletedPoll: null });
+	};
+	
+	// Root Reducer Slice
+	var initialState = {
+	  deletedPoll: null
+	};
+	function deletedPoll() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case POLL_DELETED:
+	      return reducePollDeleted(state, action);
+	    case RESET_DELETED_POLL:
+	      return reduceResetDeletedPoll(state, action);
+	    default:
+	      return state;
+	  }
 	}
 
 /***/ },

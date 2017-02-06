@@ -9,6 +9,7 @@ import userSignupRequest from './modules/userSignupRequest'
 import userPolls from './modules/getUserPolls'
 import singlePoll from './modules/getSinglePoll'
 import editPoll from './modules/editPoll'
+import deletedPoll from './modules/deletePoll'
 
 export default combineReducers({
   flashMessages,
@@ -20,5 +21,6 @@ export default combineReducers({
   userSignupRequest,
   userPolls,
   singlePoll,
-  editPoll
+  editPoll,
+  deletedPoll
 })
