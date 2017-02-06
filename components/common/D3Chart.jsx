@@ -80,6 +80,9 @@ const D3Chart = React.createClass({
     const height = 300
     const reactThis = this
 
+    /**
+     * Allows for textwrapping within SVG elements. Width represents the max number of charactors per line
+     */
     const insertLinebreaks = function (d) {
       let optionResults = reactThis.createOptionResultsText(winningOption, tiedOptionStrings, d)
       const width = 32
@@ -106,8 +109,6 @@ const D3Chart = React.createClass({
         }
       }
     }
-
-    // console.log('d3 object', d3)
 
     let xScale = d3.scaleLinear()
       .domain([0, d3.max(data, d => d.votes.length)])

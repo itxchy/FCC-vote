@@ -68190,6 +68190,9 @@
 	    var height = 300;
 	    var reactThis = this;
 	
+	    /**
+	     * Allows for textwrapping within SVG elements. Width represents the max number of charactors per line
+	     */
 	    var insertLinebreaks = function insertLinebreaks(d) {
 	      var optionResults = reactThis.createOptionResultsText(winningOption, tiedOptionStrings, d);
 	      var width = 32;
@@ -68201,9 +68204,9 @@
 	      }; // eslint-disable-line no-return-assign
 	      var line = [];
 	      var lineNumber = 0;
-	      var lineHeight = 1.1; // ems
+	      var lineHeight = 1.1;
 	      var y = text.attr('y');
-	      var dy = 0.3; // parseFloat(text.attr('dy')),
+	      var dy = 0.3;
 	      var x = '.8em';
 	      var tspan = text.text(null).append('tspan').attr('x', x).attr('y', y).attr('dy', dy + 'em');
 	      while (wordPop()) {
@@ -68218,8 +68221,6 @@
 	        }
 	      }
 	    };
-	
-	    // console.log('d3 object', d3)
 	
 	    var xScale = d3.scaleLinear().domain([0, d3.max(data, function (d) {
 	      return d.votes.length;
