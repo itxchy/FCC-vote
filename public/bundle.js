@@ -21457,7 +21457,7 @@
 	
 	var _auth = __webpack_require__(445);
 	
-	var _reactRedux = __webpack_require__(651);
+	var _reactRedux = __webpack_require__(652);
 	
 	var _jsonwebtoken = __webpack_require__(446);
 	
@@ -21467,7 +21467,7 @@
 	
 	var _setAuthorizationToken2 = _interopRequireDefault(_setAuthorizationToken);
 	
-	var _Routes = __webpack_require__(658);
+	var _Routes = __webpack_require__(659);
 	
 	var _Routes2 = _interopRequireDefault(_Routes);
 	
@@ -28294,7 +28294,7 @@
 	
 	var _editPoll2 = _interopRequireDefault(_editPoll);
 	
-	var _deletePoll = __webpack_require__(669);
+	var _deletePoll = __webpack_require__(651);
 	
 	var _deletePoll2 = _interopRequireDefault(_deletePoll);
 	
@@ -33773,11 +33773,11 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.reduceResetNewPoll = exports.reduceOptionUpdate = exports.reduceTitleEditableState = exports.reduceNewPollTitle = exports.RESET_NEW_POLL = exports.UPDATE_OPTION = exports.SET_NEW_TITLE_EDITABLE = exports.SET_NEW_POLL_TITLE = undefined;
 	exports.setNewPollTitle = setNewPollTitle;
 	exports.setTitleEditable = setTitleEditable;
 	exports.updateOption = updateOption;
 	exports.resetNewPoll = resetNewPoll;
+	exports.resetPollSaved = resetPollSaved;
 	exports.submitNewPoll = submitNewPoll;
 	exports.default = newPoll;
 	
@@ -33790,10 +33790,12 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// Actions
-	var SET_NEW_POLL_TITLE = exports.SET_NEW_POLL_TITLE = 'setNewPollTitle';
-	var SET_NEW_TITLE_EDITABLE = exports.SET_NEW_TITLE_EDITABLE = 'setTitleEditable';
-	var UPDATE_OPTION = exports.UPDATE_OPTION = 'updateOption';
-	var RESET_NEW_POLL = exports.RESET_NEW_POLL = 'resetNewPoll';
+	var SET_NEW_POLL_TITLE = 'setNewPollTitle';
+	var SET_NEW_TITLE_EDITABLE = 'setTitleEditable';
+	var UPDATE_OPTION = 'updateOption';
+	var RESET_NEW_POLL = 'resetNewPoll';
+	var POLL_SAVED = 'POLL_SAVED';
+	var RESET_POLL_SAVED = 'RESET_POLL_SAVED';
 	
 	// Action Creators
 	function setNewPollTitle(pollTitle) {
@@ -33808,12 +33810,19 @@
 	function resetNewPoll() {
 	  return { type: RESET_NEW_POLL };
 	}
+	function pollSaved(pollId) {
+	  return { type: POLL_SAVED, pollId: pollId };
+	}
+	function resetPollSaved() {
+	  return { type: RESET_POLL_SAVED };
+	}
 	function submitNewPoll(newPoll) {
 	  return function (dispatch) {
 	    _axios2.default.post('/api/polls', newPoll).then(function (res) {
-	      console.log('newPoll submitted successfully!', res);
+	      console.log('newPoll submitted successfully!', res.data.poll._id);
 	      dispatch(resetNewPoll());
 	      dispatch((0, _flashMessage.addFlashMessage)({ type: 'success', text: 'Poll saved!' }));
+	      dispatch(pollSaved(res.data.poll._id));
 	    }).catch(function (err) {
 	      console.error('newPoll could not be saved', err);
 	      dispatch((0, _flashMessage.addFlashMessage)({ type: 'error', text: 'Something went wrong. Poll coudn\'t be saved.' }));
@@ -33822,36 +33831,44 @@
 	}
 	
 	// Reducers
-	var reduceNewPollTitle = exports.reduceNewPollTitle = function reduceNewPollTitle(state, action) {
+	var reduceNewPollTitle = function reduceNewPollTitle(state, action) {
 	  var newState = {};
 	  Object.assign(newState, state, { newPollTitle: action.value });
 	  return newState;
 	};
-	var reduceTitleEditableState = exports.reduceTitleEditableState = function reduceTitleEditableState(state, action) {
+	var reduceTitleEditableState = function reduceTitleEditableState(state, action) {
 	  var newState = {};
 	  Object.assign(newState, state, { titleEditable: action.value });
 	  return newState;
 	};
-	var reduceOptionUpdate = exports.reduceOptionUpdate = function reduceOptionUpdate(state, action) {
+	var reduceOptionUpdate = function reduceOptionUpdate(state, action) {
 	  var newState = {};
 	  Object.assign(newState, state, { newPollOptions: action.value });
 	  return newState;
 	};
-	var reduceResetNewPoll = exports.reduceResetNewPoll = function reduceResetNewPoll(state, action) {
+	var reduceResetNewPoll = function reduceResetNewPoll(state, action) {
 	  var newState = {};
 	  var blankPollState = {
 	    newPollTitle: '',
 	    titleEditable: true,
-	    newPollOptions: ['', '']
+	    newPollOptions: ['', ''],
+	    pollSaved: null
 	  };
 	  Object.assign(newState, state, blankPollState);
 	  return newState;
+	};
+	var reducePollSaved = function reducePollSaved(state, action) {
+	  return Object.assign({}, state, { pollSaved: action.pollId });
+	};
+	var reduceResetPollSaved = function reduceResetPollSaved(state, action) {
+	  return Object.assign({}, state, { pollSaved: null });
 	};
 	
 	var initialState = {
 	  newPollTitle: '',
 	  titleEditable: true,
-	  newPollOptions: ['', '']
+	  newPollOptions: ['', ''],
+	  pollSaved: null
 	};
 	
 	// Root Reducer Slice
@@ -33868,6 +33885,10 @@
 	      return reduceOptionUpdate(state, action);
 	    case RESET_NEW_POLL:
 	      return reduceResetNewPoll(state, action);
+	    case POLL_SAVED:
+	      return reducePollSaved(state, action);
+	    case RESET_POLL_SAVED:
+	      return reduceResetPollSaved(state, action);
 	    default:
 	      return state;
 	  }
@@ -66191,6 +66212,7 @@
 	  value: true
 	});
 	exports.getUserPolls = getUserPolls;
+	exports.clearUserPolls = clearUserPolls;
 	exports.default = userPolls;
 	
 	var _axios = __webpack_require__(420);
@@ -66201,6 +66223,7 @@
 	
 	// Action
 	var USER_POLLS_DATA = 'USER_POLLS_DATA';
+	var CLEAR_USER_POLLS = 'CLEAR_USER_POLLS';
 	
 	// Action Creators
 	function setUserPollsData(userPolls) {
@@ -66218,10 +66241,16 @@
 	    });
 	  };
 	}
+	function clearUserPolls() {
+	  return { type: CLEAR_USER_POLLS };
+	}
 	
 	// Reducer
 	function reduceUserPollsData(state, action) {
 	  return Object.assign({}, state, { userPolls: action.userPolls });
+	}
+	function reduceClearUserPolls(state, action) {
+	  return Object.assign({}, state, { userPolls: null });
 	}
 	
 	// Root Reducer
@@ -66235,6 +66264,8 @@
 	  switch (action.type) {
 	    case USER_POLLS_DATA:
 	      return reduceUserPollsData(state, action);
+	    case CLEAR_USER_POLLS:
+	      return reduceClearUserPolls(state, action);
 	    default:
 	      return state;
 	  }
@@ -66441,14 +66472,92 @@
 
 	'use strict';
 	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.deletePoll = deletePoll;
+	exports.resetDeletedPoll = resetDeletedPoll;
+	exports.default = deletedPoll;
+	
+	var _axios = __webpack_require__(420);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	var _flashMessage = __webpack_require__(260);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// Action
+	var POLL_DELETED = 'POLL_DELETED';
+	var RESET_DELETED_POLL = 'RESET_DELETED_POLL';
+	
+	// Action Creators
+	function deletePoll(id) {
+	  console.log('deleting:', id);
+	  return function (dispatch) {
+	    _axios2.default.delete('/api/polls/delete/' + id).then(function (res) {
+	      console.log('delete response:', res);
+	      // redirect home
+	      dispatch((0, _flashMessage.addFlashMessage)({ type: 'success', text: 'Poll deleted!' }));
+	      dispatch(pollDeleted(id));
+	    }).catch(function (err) {
+	      console.error('error: delete request to /api/polls/delete failed', err);
+	      dispatch((0, _flashMessage.addFlashMessage)({ type: 'error', text: 'Failed to delete poll. That\'s an error.' }));
+	    });
+	  };
+	}
+	function pollDeleted(id) {
+	  return {
+	    type: POLL_DELETED,
+	    pollId: id
+	  };
+	}
+	function resetDeletedPoll() {
+	  return {
+	    type: RESET_DELETED_POLL
+	  };
+	}
+	
+	// Reducer
+	var reducePollDeleted = function reducePollDeleted(state, action) {
+	  return Object.assign({}, state, { deletedPoll: action.pollId });
+	};
+	var reduceResetDeletedPoll = function reduceResetDeletedPoll(state, action) {
+	  return Object.assign({}, state, { deletedPoll: null });
+	};
+	
+	// Root Reducer Slice
+	var initialState = {
+	  deletedPoll: null
+	};
+	function deletedPoll() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case POLL_DELETED:
+	      return reducePollDeleted(state, action);
+	    case RESET_DELETED_POLL:
+	      return reduceResetDeletedPoll(state, action);
+	    default:
+	      return state;
+	  }
+	}
+
+/***/ },
+/* 652 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
 	exports.__esModule = true;
 	exports.connect = exports.Provider = undefined;
 	
-	var _Provider = __webpack_require__(652);
+	var _Provider = __webpack_require__(653);
 	
 	var _Provider2 = _interopRequireDefault(_Provider);
 	
-	var _connect = __webpack_require__(655);
+	var _connect = __webpack_require__(656);
 	
 	var _connect2 = _interopRequireDefault(_connect);
 	
@@ -66458,7 +66567,7 @@
 	exports.connect = _connect2["default"];
 
 /***/ },
-/* 652 */
+/* 653 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -66468,11 +66577,11 @@
 	
 	var _react = __webpack_require__(1);
 	
-	var _storeShape = __webpack_require__(653);
+	var _storeShape = __webpack_require__(654);
 	
 	var _storeShape2 = _interopRequireDefault(_storeShape);
 	
-	var _warning = __webpack_require__(654);
+	var _warning = __webpack_require__(655);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
@@ -66542,7 +66651,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 653 */
+/* 654 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -66558,7 +66667,7 @@
 	});
 
 /***/ },
-/* 654 */
+/* 655 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -66587,7 +66696,7 @@
 	}
 
 /***/ },
-/* 655 */
+/* 656 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -66599,19 +66708,19 @@
 	
 	var _react = __webpack_require__(1);
 	
-	var _storeShape = __webpack_require__(653);
+	var _storeShape = __webpack_require__(654);
 	
 	var _storeShape2 = _interopRequireDefault(_storeShape);
 	
-	var _shallowEqual = __webpack_require__(656);
+	var _shallowEqual = __webpack_require__(657);
 	
 	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 	
-	var _wrapActionCreators = __webpack_require__(657);
+	var _wrapActionCreators = __webpack_require__(658);
 	
 	var _wrapActionCreators2 = _interopRequireDefault(_wrapActionCreators);
 	
-	var _warning = __webpack_require__(654);
+	var _warning = __webpack_require__(655);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
@@ -66986,7 +67095,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 656 */
+/* 657 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -67017,7 +67126,7 @@
 	}
 
 /***/ },
-/* 657 */
+/* 658 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67034,7 +67143,7 @@
 	}
 
 /***/ },
-/* 658 */
+/* 659 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67050,11 +67159,11 @@
 	
 	var _reactRouter = __webpack_require__(173);
 	
-	var _Layout = __webpack_require__(659);
+	var _Layout = __webpack_require__(660);
 	
 	var _Layout2 = _interopRequireDefault(_Layout);
 	
-	var _Home = __webpack_require__(664);
+	var _Home = __webpack_require__(665);
 	
 	var _Home2 = _interopRequireDefault(_Home);
 	
@@ -67101,7 +67210,7 @@
 	exports.default = Routes;
 
 /***/ },
-/* 659 */
+/* 660 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67114,11 +67223,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _NavBar = __webpack_require__(660);
+	var _NavBar = __webpack_require__(661);
 	
 	var _NavBar2 = _interopRequireDefault(_NavBar);
 	
-	var _FlashMessagesList = __webpack_require__(661);
+	var _FlashMessagesList = __webpack_require__(662);
 	
 	var _FlashMessagesList2 = _interopRequireDefault(_FlashMessagesList);
 	
@@ -67148,7 +67257,7 @@
 	exports.default = Layout;
 
 /***/ },
-/* 660 */
+/* 661 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67161,7 +67270,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(651);
+	var _reactRedux = __webpack_require__(652);
 	
 	var _reactRouter = __webpack_require__(173);
 	
@@ -67322,7 +67431,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(NavBar);
 
 /***/ },
-/* 661 */
+/* 662 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67335,9 +67444,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(651);
+	var _reactRedux = __webpack_require__(652);
 	
-	var _FlashMessage = __webpack_require__(662);
+	var _FlashMessage = __webpack_require__(663);
 	
 	var _FlashMessage2 = _interopRequireDefault(_FlashMessage);
 	
@@ -67373,7 +67482,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(FlashMessagesList);
 
 /***/ },
-/* 662 */
+/* 663 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67386,9 +67495,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(651);
+	var _reactRedux = __webpack_require__(652);
 	
-	var _classnames = __webpack_require__(663);
+	var _classnames = __webpack_require__(664);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
@@ -67454,7 +67563,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(FlashMessage);
 
 /***/ },
-/* 663 */
+/* 664 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -67508,7 +67617,7 @@
 
 
 /***/ },
-/* 664 */
+/* 665 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67521,9 +67630,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(651);
+	var _reactRedux = __webpack_require__(652);
 	
-	var _DisplayPolls = __webpack_require__(665);
+	var _DisplayPolls = __webpack_require__(666);
 	
 	var _DisplayPolls2 = _interopRequireDefault(_DisplayPolls);
 	
@@ -67531,7 +67640,7 @@
 	
 	var _submitVote = __webpack_require__(643);
 	
-	var _deletePoll = __webpack_require__(669);
+	var _deletePoll = __webpack_require__(651);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -67625,7 +67734,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Home);
 
 /***/ },
-/* 665 */
+/* 666 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67638,7 +67747,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _ResultsCard = __webpack_require__(666);
+	var _ResultsCard = __webpack_require__(667);
 	
 	var _ResultsCard2 = _interopRequireDefault(_ResultsCard);
 	
@@ -67725,6 +67834,7 @@
 	    this.props.getPolls();
 	  },
 	  render: function render() {
+	    console.log('DisplayPolls this.props.polls', this.props.polls);
 	    // if the polls haven't loaded yet, show a loading dialog
 	    if (!this.props.polls || (0, _isEmpty2.default)(this.props.polls || this.props.isAuthenticated === null)) {
 	      return _react2.default.createElement(_EmptyPolls2.default, { polls: this.props.polls });
@@ -67745,7 +67855,7 @@
 	exports.default = DisplayPolls;
 
 /***/ },
-/* 666 */
+/* 667 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67760,7 +67870,7 @@
 	
 	var _reactRouter = __webpack_require__(173);
 	
-	var _OwnerControlButtons = __webpack_require__(667);
+	var _OwnerControlButtons = __webpack_require__(668);
 	
 	var _OwnerControlButtons2 = _interopRequireDefault(_OwnerControlButtons);
 	
@@ -67772,7 +67882,7 @@
 	
 	var _isEmpty2 = _interopRequireDefault(_isEmpty);
 	
-	var _classnames = __webpack_require__(663);
+	var _classnames = __webpack_require__(664);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
@@ -67857,7 +67967,7 @@
 	exports.default = ResultsCard;
 
 /***/ },
-/* 667 */
+/* 668 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67872,7 +67982,7 @@
 	
 	var _reactRouter = __webpack_require__(173);
 	
-	var _DeleteModal = __webpack_require__(668);
+	var _DeleteModal = __webpack_require__(669);
 	
 	var _DeleteModal2 = _interopRequireDefault(_DeleteModal);
 	
@@ -67949,7 +68059,7 @@
 	exports.default = OwnerControlButtons;
 
 /***/ },
-/* 668 */
+/* 669 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67962,9 +68072,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(651);
+	var _reactRedux = __webpack_require__(652);
 	
-	var _deletePoll = __webpack_require__(669);
+	var _deletePoll = __webpack_require__(651);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -68056,84 +68166,6 @@
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	  return { user: state.user };
 	}, mapDispatchToProps)(DeleteModal);
-
-/***/ },
-/* 669 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.deletePoll = deletePoll;
-	exports.resetDeletedPoll = resetDeletedPoll;
-	exports.default = deletedPoll;
-	
-	var _axios = __webpack_require__(420);
-	
-	var _axios2 = _interopRequireDefault(_axios);
-	
-	var _flashMessage = __webpack_require__(260);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	// Action
-	var POLL_DELETED = 'POLL_DELETED';
-	var RESET_DELETED_POLL = 'RESET_DELETED_POLL';
-	
-	// Action Creators
-	function deletePoll(id) {
-	  console.log('deleting:', id);
-	  return function (dispatch) {
-	    _axios2.default.delete('/api/polls/delete/' + id).then(function (res) {
-	      console.log('delete response:', res);
-	      // redirect home
-	      dispatch((0, _flashMessage.addFlashMessage)({ type: 'success', text: 'Poll deleted!' }));
-	      dispatch(pollDeleted(id));
-	    }).catch(function (err) {
-	      console.error('error: delete request to /api/polls/delete failed', err);
-	      dispatch((0, _flashMessage.addFlashMessage)({ type: 'error', text: 'Failed to delete poll. That\'s an error.' }));
-	    });
-	  };
-	}
-	function pollDeleted(id) {
-	  return {
-	    type: POLL_DELETED,
-	    pollId: id
-	  };
-	}
-	function resetDeletedPoll() {
-	  return {
-	    type: RESET_DELETED_POLL
-	  };
-	}
-	
-	// Reducer
-	var reducePollDeleted = function reducePollDeleted(state, action) {
-	  return Object.assign({}, state, { deletedPoll: action.pollId });
-	};
-	var reduceResetDeletedPoll = function reduceResetDeletedPoll(state, action) {
-	  return Object.assign({}, state, { deletedPoll: null });
-	};
-	
-	// Root Reducer Slice
-	var initialState = {
-	  deletedPoll: null
-	};
-	function deletedPoll() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
-	  var action = arguments[1];
-	
-	  switch (action.type) {
-	    case POLL_DELETED:
-	      return reducePollDeleted(state, action);
-	    case RESET_DELETED_POLL:
-	      return reduceResetDeletedPoll(state, action);
-	    default:
-	      return state;
-	  }
-	}
 
 /***/ },
 /* 670 */
@@ -87720,11 +87752,11 @@
 	
 	var _reactRouter = __webpack_require__(173);
 	
-	var _classnames = __webpack_require__(663);
+	var _classnames = __webpack_require__(664);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _OwnerControlButtons = __webpack_require__(667);
+	var _OwnerControlButtons = __webpack_require__(668);
 	
 	var _OwnerControlButtons2 = _interopRequireDefault(_OwnerControlButtons);
 	
@@ -88171,7 +88203,7 @@
 	
 	var _SaveOrReset2 = _interopRequireDefault(_SaveOrReset);
 	
-	var _reactRedux = __webpack_require__(651);
+	var _reactRedux = __webpack_require__(652);
 	
 	var _createNewPoll = __webpack_require__(419);
 	
@@ -88198,7 +88230,16 @@
 	    newPollOptions: array,
 	    dispatchSubmitPoll: func,
 	    dispatchResetNewPoll: func,
+	    dispatchResetPollSaved: func,
+	    pollSaved: string,
 	    user: object
+	  },
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    console.log('nextProps in createAPoll', nextProps.pollSaved);
+	    if (nextProps.pollSaved) {
+	      this.context.router.push('/v/' + nextProps.pollSaved);
+	      this.props.dispatchResetPollSaved();
+	    }
 	  },
 	  render: function render() {
 	    var newPoll = true;
@@ -88234,12 +88275,17 @@
 	  }
 	});
 	
+	CreateAPoll.contextTypes = {
+	  router: object.isRequired
+	};
+	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    poll: state.newPoll,
 	    newPollTitle: state.newPoll.newPollTitle,
 	    titleEditable: state.newPoll.titleEditable,
 	    newPollOptions: state.newPoll.newPollOptions,
+	    pollSaved: state.newPoll.pollSaved,
 	    user: state.user
 	  };
 	};
@@ -88260,6 +88306,9 @@
 	    },
 	    dispatchSubmitPoll: function dispatchSubmitPoll(newPoll) {
 	      dispatch((0, _createNewPoll.submitNewPoll)(newPoll));
+	    },
+	    dispatchResetPollSaved: function dispatchResetPollSaved() {
+	      dispatch((0, _createNewPoll.resetPollSaved)());
 	    }
 	  };
 	};
@@ -91399,9 +91448,11 @@
 	
 	var _SaveOrReset2 = _interopRequireDefault(_SaveOrReset);
 	
-	var _reactRedux = __webpack_require__(651);
+	var _reactRedux = __webpack_require__(652);
 	
 	var _editPoll = __webpack_require__(650);
+	
+	var _getSinglePoll = __webpack_require__(649);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -91427,14 +91478,22 @@
 	    dispatchSetNewPollTitle: func,
 	    dispatchSetTitleEditable: func,
 	    dispatchGetPollData: func,
+	    dispatchClearSinglePoll: func,
 	    user: object,
-	    routeParams: object.isRequired
+	    routeParams: object.isRequired,
+	    editedPoll: object
 	  },
 	  componentWillMount: function componentWillMount() {
 	    this.props.dispatchGetPollData(this.props.routeParams.id);
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.props.dispatchResetNewPoll();
+	  },
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (nextProps.editedPoll !== null) {
+	      this.props.dispatchClearSinglePoll();
+	      this.context.router.push('/v/' + this.props.routeParams.id);
+	    }
 	  },
 	  render: function render() {
 	    var newPoll = false;
@@ -91489,13 +91548,18 @@
 	  }
 	});
 	
+	EditPoll.contextTypes = {
+	  router: object.isRequired
+	};
+	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    poll: state.editPoll,
 	    newPollTitle: state.editPoll.newPollTitle,
 	    newPollOptions: state.editPoll.newPollOptions,
 	    titleEditable: state.editPoll.titleEditable,
-	    user: state.user
+	    user: state.user,
+	    editedPoll: state.editPoll.editedPoll
 	  };
 	};
 	
@@ -91518,6 +91582,9 @@
 	    },
 	    dispatchGetPollData: function dispatchGetPollData(id) {
 	      dispatch((0, _editPoll.getPollData)(id));
+	    },
+	    dispatchClearSinglePoll: function dispatchClearSinglePoll() {
+	      dispatch((0, _getSinglePoll.clearSinglePoll)());
 	    }
 	  };
 	};
@@ -91538,7 +91605,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(651);
+	var _reactRedux = __webpack_require__(652);
 	
 	var _signupValidation = __webpack_require__(767);
 	
@@ -91811,7 +91878,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _classnames = __webpack_require__(663);
+	var _classnames = __webpack_require__(664);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
@@ -91919,7 +91986,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(651);
+	var _reactRedux = __webpack_require__(652);
 	
 	var _TextFieldGroup = __webpack_require__(768);
 	
@@ -91989,7 +92056,6 @@
 	    this.setState(_defineProperty({}, event.target.name, event.target.value));
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    console.log('NEXT PROPS:', nextProps);
 	    if (nextProps.user.isAuthenticated) {
 	      this.context.router.push('/');
 	    }
@@ -92110,9 +92176,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(651);
+	var _reactRedux = __webpack_require__(652);
 	
-	var _DisplayPolls = __webpack_require__(665);
+	var _DisplayPolls = __webpack_require__(666);
 	
 	var _DisplayPolls2 = _interopRequireDefault(_DisplayPolls);
 	
@@ -92126,6 +92192,8 @@
 	var func = _React$PropTypes.func;
 	var object = _React$PropTypes.object;
 	var array = _React$PropTypes.array;
+	var bool = _React$PropTypes.bool;
+	var string = _React$PropTypes.string;
 	
 	
 	var MyPollsPage = _react2.default.createClass({
@@ -92135,13 +92203,16 @@
 	    dispatchGetUserPolls: func.isRequired,
 	    dispatchSubmitVote: func.isRequired,
 	    dispatchResetUpdatedPollResults: func.isRequired,
+	    dispatchClearUserPolls: func.isRequired,
+	    clientIp: string,
+	    isAuthenticated: bool,
 	    updatedPollResults: object,
 	    user: object.isRequired,
 	    userPolls: array
 	  },
 	  getUserPolls: function getUserPolls() {
-	    if (this.props.user.user) {
-	      var username = this.props.user.user.username;
+	    if (this.props.user) {
+	      var username = this.props.user.username;
 	      if (username) {
 	        this.props.dispatchGetUserPolls(username);
 	      }
@@ -92150,20 +92221,26 @@
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	    // If a new vote was accepted, the relevent poll card should be
 	    // flipped to a results card including the newest vote.
-	    // For now, all polls will be refreshed.
 	    if (nextProps.updatedPollResults !== null || nextProps.user !== this.props.user) {
-	      this.props.dispatchGetUserPolls();
+	      this.getUserPolls();
 	      this.props.dispatchResetUpdatedPollResults();
 	    }
 	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.props.dispatchClearUserPolls();
+	  },
 	  render: function render() {
+	    console.log('MyPollsPage this.props.user', this.props.user);
+	    console.log('MyPollsPage this.props.userPolls', this.props.userPolls);
 	    var polls = this.props.userPolls ? this.props.userPolls : null;
 	    return _react2.default.createElement(
 	      'div',
 	      null,
 	      _react2.default.createElement(_DisplayPolls2.default, {
 	        polls: polls,
-	        user: this.props.user.user,
+	        clientIp: this.props.clientIp,
+	        user: this.props.user,
+	        isAuthenticated: this.props.isAuthenticated,
 	        dispatchSubmitVote: this.props.dispatchSubmitVote,
 	        getPolls: this.getUserPolls
 	      })
@@ -92173,7 +92250,9 @@
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    user: state.user,
+	    user: state.user.user,
+	    isAuthenticated: state.user.isAuthenticated,
+	    clientIp: state.user.clientIp,
 	    userPolls: state.userPolls.userPolls,
 	    updatedPollResults: state.newVote.updatedResults
 	  };
@@ -92189,6 +92268,9 @@
 	    },
 	    dispatchResetUpdatedPollResults: function dispatchResetUpdatedPollResults() {
 	      dispatch((0, _submitVote.resetUpdatedPollResults)());
+	    },
+	    dispatchClearUserPolls: function dispatchClearUserPolls() {
+	      dispatch((0, _getUserPolls.clearUserPolls)());
 	    }
 	  };
 	};
@@ -92209,13 +92291,15 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(651);
+	var _reactRedux = __webpack_require__(652);
 	
 	var _getSinglePoll = __webpack_require__(649);
 	
+	var _deletePoll = __webpack_require__(651);
+	
 	var _submitVote = __webpack_require__(643);
 	
-	var _DisplayPolls = __webpack_require__(665);
+	var _DisplayPolls = __webpack_require__(666);
 	
 	var _DisplayPolls2 = _interopRequireDefault(_DisplayPolls);
 	
@@ -92244,16 +92328,31 @@
 	    isAuthenticated: bool,
 	    dispatchGetSinglePoll: func,
 	    dispatchSubmitVote: func,
-	    dispatchClearSinglePoll: func
+	    dispatchClearSinglePoll: func,
+	    dispatchResetDeletedPoll: func,
+	    dispatchResetUpdatedPollResults: func,
+	    updatedPollResults: object,
+	    deletedPoll: string
 	  },
 	  getPoll: function getPoll() {
 	    this.props.dispatchGetSinglePoll(this.props.routeParams.id);
 	  },
 	  componentWillMount: function componentWillMount() {
+	    this.props.dispatchClearSinglePoll();
 	    this.getPoll();
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.props.dispatchClearSinglePoll();
+	  },
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (nextProps.updatedPollResults !== null) {
+	      this.getPoll();
+	      this.props.dispatchResetUpdatedPollResults();
+	    }
+	    if (nextProps.deletedPoll !== null) {
+	      this.context.router.push('/');
+	      this.props.dispatchResetDeletedPoll();
+	    }
 	  },
 	  render: function render() {
 	    var loading = _react2.default.createElement(_LoadingSpinner2.default, null);
@@ -92277,12 +92376,18 @@
 	  }
 	});
 	
+	SinglePoll.contextTypes = {
+	  router: object.isRequired
+	};
+	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    singlePoll: state.singlePoll.singlePoll,
 	    user: state.user.user,
 	    isAuthenticated: state.user.isAuthenticated,
-	    clientIp: state.user.clientIp
+	    clientIp: state.user.clientIp,
+	    updatedPollResults: state.newVote.updatedResults,
+	    deletedPoll: state.deletedPoll.deletedPoll
 	  };
 	};
 	
@@ -92296,6 +92401,12 @@
 	    },
 	    dispatchClearSinglePoll: function dispatchClearSinglePoll() {
 	      dispatch((0, _getSinglePoll.clearSinglePoll)());
+	    },
+	    dispatchResetDeletedPoll: function dispatchResetDeletedPoll() {
+	      dispatch((0, _deletePoll.resetDeletedPoll)());
+	    },
+	    dispatchResetUpdatedPollResults: function dispatchResetUpdatedPollResults() {
+	      dispatch((0, _submitVote.resetUpdatedPollResults)());
 	    }
 	  };
 	};

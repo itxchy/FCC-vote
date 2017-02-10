@@ -59,6 +59,7 @@ const DisplayPolls = React.createClass({
     this.props.getPolls()
   },
   render () {
+    console.log('DisplayPolls this.props.polls', this.props.polls)
     // if the polls haven't loaded yet, show a loading dialog
     if (!this.props.polls || isEmpty(this.props.polls || this.props.isAuthenticated === null)) {
       return <EmptyPolls polls={this.props.polls} />

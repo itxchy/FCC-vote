@@ -2,7 +2,8 @@ import React from 'react'
 const { object, func, array, string, bool } = React.PropTypes
 import { connect } from 'react-redux'
 import { getSinglePoll, clearSinglePoll } from '../redux/modules/getSinglePoll'
-import { submitVote } from '../redux/modules/submitVote'
+import { resetDeletedPoll } from '../redux/modules/deletePoll'
+import { submitVote, resetUpdatedPollResults } from '../redux/modules/submitVote'
 import DisplayPolls from './common/DisplayPolls'
 import LoadingSpinner from './common/LoadingSpinner'
 
@@ -15,16 +16,31 @@ const SinglePoll = React.createClass({
     isAuthenticated: bool,
     dispatchGetSinglePoll: func,
     dispatchSubmitVote: func,
-    dispatchClearSinglePoll: func
+    dispatchClearSinglePoll: func,
+    dispatchResetDeletedPoll: func,
+    dispatchResetUpdatedPollResults: func,
+    updatedPollResults: object,
+    deletedPoll: string
   },
   getPoll () {
     this.props.dispatchGetSinglePoll(this.props.routeParams.id)
   },
   componentWillMount () {
+    this.props.dispatchClearSinglePoll()
     this.getPoll()
   },
   componentWillUnmount () {
     this.props.dispatchClearSinglePoll()
+  },
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.updatedPollResults !== null) {
+      this.getPoll()
+      this.props.dispatchResetUpdatedPollResults()
+    }
+    if (nextProps.deletedPoll !== null) {
+      this.context.router.push('/')
+      this.props.dispatchResetDeletedPoll()
+    }
   },
   render () {
     const loading = <LoadingSpinner />
@@ -48,12 +64,18 @@ const SinglePoll = React.createClass({
   }
 })
 
+SinglePoll.contextTypes = {
+  router: object.isRequired
+}
+
 const mapStateToProps = (state) => {
   return {
     singlePoll: state.singlePoll.singlePoll,
     user: state.user.user,
     isAuthenticated: state.user.isAuthenticated,
-    clientIp: state.user.clientIp
+    clientIp: state.user.clientIp,
+    updatedPollResults: state.newVote.updatedResults,
+    deletedPoll: state.deletedPoll.deletedPoll
   }
 }
 
@@ -67,6 +89,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     dispatchClearSinglePoll () {
       dispatch(clearSinglePoll())
+    },
+    dispatchResetDeletedPoll () {
+      dispatch(resetDeletedPoll())
+    },
+    dispatchResetUpdatedPollResults () {
+      dispatch(resetUpdatedPollResults())
     }
   }
 }

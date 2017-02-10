@@ -50,7 +50,6 @@ const LoginForm = React.createClass({
   },
 
   componentWillReceiveProps (nextProps) {
-    console.log('NEXT PROPS:', nextProps)
     if (nextProps.user.isAuthenticated) {
       this.context.router.push('/')
     }

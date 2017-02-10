@@ -11,6 +11,7 @@ import {
   setEditedPoll,
   getPollData
 } from '../../redux/modules/editPoll'
+import { clearSinglePoll } from '../../redux/modules/getSinglePoll'
 const { object, func, bool, string, array } = React.PropTypes
 
 const EditPoll = React.createClass({
@@ -25,14 +26,22 @@ const EditPoll = React.createClass({
     dispatchSetNewPollTitle: func,
     dispatchSetTitleEditable: func,
     dispatchGetPollData: func,
+    dispatchClearSinglePoll: func,
     user: object,
-    routeParams: object.isRequired
+    routeParams: object.isRequired,
+    editedPoll: object
   },
   componentWillMount () {
     this.props.dispatchGetPollData(this.props.routeParams.id)
   },
   componentWillUnmount () {
     this.props.dispatchResetNewPoll()
+  },
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.editedPoll !== null) {
+      this.props.dispatchClearSinglePoll()
+      this.context.router.push(`/v/${this.props.routeParams.id}`)
+    }
   },
   render () {
     const newPoll = false
@@ -76,13 +85,18 @@ const EditPoll = React.createClass({
   }
 })
 
+EditPoll.contextTypes = {
+  router: object.isRequired
+}
+
 const mapStateToProps = (state) => {
   return {
     poll: state.editPoll,
     newPollTitle: state.editPoll.newPollTitle,
     newPollOptions: state.editPoll.newPollOptions,
     titleEditable: state.editPoll.titleEditable,
-    user: state.user
+    user: state.user,
+    editedPoll: state.editPoll.editedPoll
   }
 }
 
@@ -105,6 +119,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     dispatchGetPollData (id) {
       dispatch(getPollData(id))
+    },
+    dispatchClearSinglePoll () {
+      dispatch(clearSinglePoll())
     }
   }
 }

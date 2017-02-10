@@ -8,7 +8,8 @@ import {
   setNewPollTitle,
   setTitleEditable,
   submitNewPoll,
-  resetNewPoll
+  resetNewPoll,
+  resetPollSaved
 } from '../../redux/modules/createNewPoll'
 const { object, func, string, bool, array } = React.PropTypes
 
@@ -23,7 +24,16 @@ const CreateAPoll = React.createClass({
     newPollOptions: array,
     dispatchSubmitPoll: func,
     dispatchResetNewPoll: func,
+    dispatchResetPollSaved: func,
+    pollSaved: string,
     user: object
+  },
+  componentWillReceiveProps (nextProps) {
+    console.log('nextProps in createAPoll', nextProps.pollSaved)
+    if (nextProps.pollSaved) {
+      this.context.router.push(`/v/${nextProps.pollSaved}`)
+      this.props.dispatchResetPollSaved()
+    }
   },
   render () {
     const newPoll = true
@@ -55,12 +65,17 @@ const CreateAPoll = React.createClass({
   }
 })
 
+CreateAPoll.contextTypes = {
+  router: object.isRequired
+}
+
 const mapStateToProps = (state) => {
   return {
     poll: state.newPoll,
     newPollTitle: state.newPoll.newPollTitle,
     titleEditable: state.newPoll.titleEditable,
     newPollOptions: state.newPoll.newPollOptions,
+    pollSaved: state.newPoll.pollSaved,
     user: state.user
   }
 }
@@ -81,6 +96,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     dispatchSubmitPoll (newPoll) {
       dispatch(submitNewPoll(newPoll))
+    },
+    dispatchResetPollSaved () {
+      dispatch(resetPollSaved())
     }
   }
 }
