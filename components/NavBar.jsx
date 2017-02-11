@@ -2,12 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 const { object, func } = React.PropTypes
 import { Link } from 'react-router'
-import { logout } from '../redux/modules/auth'
+import { logout, getClientIp } from '../redux/modules/auth'
 
 const NavBar = React.createClass({
   propTypes: {
     user: object,
-    dispatchLogout: func.isRequired
+    dispatchLogout: func.isRequired,
+    dispatchGetClientIp: func.isRequired
   },
   getInitialState () {
     return {
@@ -17,6 +18,7 @@ const NavBar = React.createClass({
   logout (event) {
     event.preventDefault()
     this.props.dispatchLogout()
+    this.props.dispatchGetClientIp()
   },
   componentDidMount () {
     this.setState({ isMounted: true })
@@ -75,6 +77,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dispatchLogout () {
       dispatch(logout())
+    },
+    dispatchGetClientIp () {
+      dispatch(getClientIp())
     }
   }
 }

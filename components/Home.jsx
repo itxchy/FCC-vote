@@ -4,6 +4,7 @@ import DisplayPolls from './common/DisplayPolls'
 import { getAllPolls } from '../redux/modules/getAllPolls'
 import { submitVote, resetUpdatedPollResults } from '../redux/modules/submitVote'
 import { resetDeletedPoll } from '../redux/modules/deletePoll'
+import { resetLogoutRedirect } from '../redux/modules/auth'
 const { func, object, array, string, bool } = React.PropTypes
 
 const Home = React.createClass({
@@ -12,8 +13,10 @@ const Home = React.createClass({
     dispatchSubmitVote: func,
     dispatchResetUpdatedPollResults: func,
     dispatchResetDeletedPoll: func,
+    dispatchResetLogoutRedirect: func,
     deletedPoll: string,
     user: object,
+    logoutRedirect: bool,
     isAuthenticated: bool,
     clientIp: string,
     allPolls: array,
@@ -28,6 +31,10 @@ const Home = React.createClass({
     if (nextProps.deletedPoll !== null) {
       this.props.dispatchGetAllPolls()
       this.props.dispatchResetDeletedPoll()
+    }
+    if (nextProps.logoutRedirect) {
+      this.props.dispatchGetAllPolls()
+      this.props.dispatchResetLogoutRedirect()
     }
   },
   render () {
@@ -53,6 +60,7 @@ const mapStateToProps = (state) => {
   return {
     user: state.user.user,
     isAuthenticated: state.user.isAuthenticated,
+    logoutRedirect: state.user.logoutRedirect,
     clientIp: state.user.clientIp,
     allPolls: state.allPolls.allPolls,
     updatedPollResults: state.newVote.updatedResults,
@@ -73,6 +81,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     dispatchResetDeletedPoll () {
       dispatch(resetDeletedPoll())
+    },
+    dispatchResetLogoutRedirect () {
+      dispatch(resetLogoutRedirect())
     }
   }
 }

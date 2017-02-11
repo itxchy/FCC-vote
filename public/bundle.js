@@ -35384,11 +35384,12 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.reduceUserLoading = exports.reduceSetCurrentUser = exports.SET_CLIENT_IP = exports.USER_LOADING = exports.SET_CURRENT_USER = undefined;
+	exports.reduceUserLoading = exports.reduceSetCurrentUser = exports.RESET_LOGOUT_REDIRECT = exports.SET_CLIENT_IP = exports.USER_LOADING = exports.SET_CURRENT_USER = undefined;
 	exports.setCurrentUser = setCurrentUser;
 	exports.userLoading = userLoading;
 	exports.login = login;
 	exports.logout = logout;
+	exports.resetLogoutRedirect = resetLogoutRedirect;
 	exports.getClientIp = getClientIp;
 	exports.default = user;
 	
@@ -35416,6 +35417,7 @@
 	var SET_CURRENT_USER = exports.SET_CURRENT_USER = 'setCurrentUser';
 	var USER_LOADING = exports.USER_LOADING = 'USER_LOADING';
 	var SET_CLIENT_IP = exports.SET_CLIENT_IP = 'SET_CLIENT_IP';
+	var RESET_LOGOUT_REDIRECT = exports.RESET_LOGOUT_REDIRECT = 'RESET_LOGOUT_REDIRECT';
 	
 	// Action Creators
 	function setCurrentUser(user) {
@@ -35461,7 +35463,10 @@
 	function logout() {
 	  localStorage.removeItem('jwtToken');
 	  (0, _setAuthorizationToken2.default)(false);
-	  return { type: SET_CURRENT_USER, user: {} };
+	  return { type: SET_CURRENT_USER, user: {}, logoutRedirect: true };
+	}
+	function resetLogoutRedirect() {
+	  return { type: RESET_LOGOUT_REDIRECT, logoutRedirect: false };
 	}
 	function getClientIp() {
 	  return function (dispatch) {
@@ -35477,12 +35482,17 @@
 	var reduceSetCurrentUser = exports.reduceSetCurrentUser = function reduceSetCurrentUser(state, action) {
 	  var newState = {};
 	  var authenticationStatus = false;
+	  var logoutRedirect = action.logoutRedirect;
 	  if (action.user && !action.user.errors && !(0, _isEmpty2.default)(action.user)) {
 	    authenticationStatus = true;
 	  }
+	  if (!action.logoutRedirect) {
+	    logoutRedirect = false;
+	  }
 	  Object.assign(newState, state, {
 	    isAuthenticated: authenticationStatus,
-	    user: action.user
+	    user: action.user,
+	    logoutRedirect: logoutRedirect
 	  });
 	  return newState;
 	};
@@ -35495,12 +35505,16 @@
 	var reduceSetClientIp = function reduceSetClientIp(state, action) {
 	  return Object.assign({}, state, { clientIp: action.clientIp });
 	};
+	var reduceResetLogoutRedirect = function reduceResetLogoutRedirect(state, action) {
+	  return Object.assign({}, state, { logoutRedirect: false });
+	};
 	
 	var initialState = {
 	  isAuthenticated: null,
 	  user: null,
 	  userLoading: false,
-	  clientIp: null
+	  clientIp: null,
+	  logoutRedirect: false
 	};
 	
 	// Root Reducer Slice
@@ -35515,6 +35529,8 @@
 	      return reduceUserLoading(state, action);
 	    case SET_CLIENT_IP:
 	      return reduceSetClientIp(state, action);
+	    case RESET_LOGOUT_REDIRECT:
+	      return reduceResetLogoutRedirect(state, action);
 	    default:
 	      return state;
 	  }
@@ -67299,7 +67315,8 @@
 	
 	  propTypes: {
 	    user: object,
-	    dispatchLogout: func.isRequired
+	    dispatchLogout: func.isRequired,
+	    dispatchGetClientIp: func.isRequired
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
@@ -67309,6 +67326,7 @@
 	  logout: function logout(event) {
 	    event.preventDefault();
 	    this.props.dispatchLogout();
+	    this.props.dispatchGetClientIp();
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.setState({ isMounted: true });
@@ -67435,6 +67453,9 @@
 	  return {
 	    dispatchLogout: function dispatchLogout() {
 	      dispatch((0, _auth.logout)());
+	    },
+	    dispatchGetClientIp: function dispatchGetClientIp() {
+	      dispatch((0, _auth.getClientIp)());
 	    }
 	  };
 	};
@@ -67653,6 +67674,8 @@
 	
 	var _deletePoll = __webpack_require__(651);
 	
+	var _auth = __webpack_require__(445);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var _React$PropTypes = _react2.default.PropTypes;
@@ -67671,8 +67694,10 @@
 	    dispatchSubmitVote: func,
 	    dispatchResetUpdatedPollResults: func,
 	    dispatchResetDeletedPoll: func,
+	    dispatchResetLogoutRedirect: func,
 	    deletedPoll: string,
 	    user: object,
+	    logoutRedirect: bool,
 	    isAuthenticated: bool,
 	    clientIp: string,
 	    allPolls: array,
@@ -67687,6 +67712,10 @@
 	    if (nextProps.deletedPoll !== null) {
 	      this.props.dispatchGetAllPolls();
 	      this.props.dispatchResetDeletedPoll();
+	    }
+	    if (nextProps.logoutRedirect) {
+	      this.props.dispatchGetAllPolls();
+	      this.props.dispatchResetLogoutRedirect();
 	    }
 	  },
 	  render: function render() {
@@ -67718,6 +67747,7 @@
 	  return {
 	    user: state.user.user,
 	    isAuthenticated: state.user.isAuthenticated,
+	    logoutRedirect: state.user.logoutRedirect,
 	    clientIp: state.user.clientIp,
 	    allPolls: state.allPolls.allPolls,
 	    updatedPollResults: state.newVote.updatedResults,
@@ -67738,6 +67768,9 @@
 	    },
 	    dispatchResetDeletedPoll: function dispatchResetDeletedPoll() {
 	      dispatch((0, _deletePoll.resetDeletedPoll)());
+	    },
+	    dispatchResetLogoutRedirect: function dispatchResetLogoutRedirect() {
+	      dispatch((0, _auth.resetLogoutRedirect)());
 	    }
 	  };
 	};

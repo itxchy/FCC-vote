@@ -9,6 +9,7 @@ import isEmpty from 'lodash/isEmpty'
 export const SET_CURRENT_USER = 'setCurrentUser'
 export const USER_LOADING = 'USER_LOADING'
 export const SET_CLIENT_IP = 'SET_CLIENT_IP'
+export const RESET_LOGOUT_REDIRECT = 'RESET_LOGOUT_REDIRECT'
 
 // Action Creators
 export function setCurrentUser (user) {
@@ -54,7 +55,10 @@ export function login (data) {
 export function logout () {
   localStorage.removeItem('jwtToken')
   setAuthorizationToken(false)
-  return { type: SET_CURRENT_USER, user: {} }
+  return { type: SET_CURRENT_USER, user: {}, logoutRedirect: true }
+}
+export function resetLogoutRedirect () {
+  return { type: RESET_LOGOUT_REDIRECT, logoutRedirect: false }
 }
 export function getClientIp () {
   return dispatch => {
@@ -72,12 +76,17 @@ export function getClientIp () {
 export const reduceSetCurrentUser = (state, action) => {
   const newState = {}
   let authenticationStatus = false
+  let logoutRedirect = action.logoutRedirect
   if (action.user && !action.user.errors && !isEmpty(action.user)) {
     authenticationStatus = true
   }
+  if (!action.logoutRedirect) {
+    logoutRedirect = false
+  }
   Object.assign(newState, state, {
     isAuthenticated: authenticationStatus,
-    user: action.user
+    user: action.user,
+    logoutRedirect
   })
   return newState
 }
@@ -90,12 +99,16 @@ export const reduceUserLoading = (state, action) => {
 const reduceSetClientIp = (state, action) => {
   return Object.assign({}, state, { clientIp: action.clientIp })
 }
+const reduceResetLogoutRedirect = (state, action) => {
+  return Object.assign({}, state, { logoutRedirect: false })
+}
 
 const initialState = {
   isAuthenticated: null,
   user: null,
   userLoading: false,
-  clientIp: null
+  clientIp: null,
+  logoutRedirect: false
 }
 
 // Root Reducer Slice
@@ -107,6 +120,8 @@ export default function user (state = initialState, action) {
       return reduceUserLoading(state, action)
     case SET_CLIENT_IP:
       return reduceSetClientIp(state, action)
+    case RESET_LOGOUT_REDIRECT:
+      return reduceResetLogoutRedirect(state, action)
     default:
       return state
   }
