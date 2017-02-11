@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { addFlashMessage } from './flashMessage'
+import { login } from './auth'
 
 // action
 const SIGNUP_LOADING = 'SIGNUP_LOADING'
@@ -11,14 +12,23 @@ export function signupLoading (bool) {
 export function signupRequest (userData) {
   return dispatch => {
     dispatch(signupLoading(true))
+    console.log('userSignupRequest: userData', userData)
     return axios.post('/api/users', userData)
       .then(res => {
-        console.log('signup success!', res)
+        console.log('userSignupRequest signup success!', res)
         dispatch(addFlashMessage({
           type: 'success',
           text: 'Signup successful!'
         }))
         dispatch(signupLoading(false))
+        // automatically login new user
+        const loginCredentials = {
+          identifier: userData.email,
+          password: userData.password
+        }
+        dispatch(login(loginCredentials))
+        // TODO: dispatch signup successful action to login the new user
+        // and redirect him/her to the home page
       })
       .catch(err => {
         console.log('signup error:', err)

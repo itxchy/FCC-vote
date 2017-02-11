@@ -66151,6 +66151,8 @@
 	
 	var _flashMessage = __webpack_require__(260);
 	
+	var _auth = __webpack_require__(445);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// action
@@ -66163,13 +66165,22 @@
 	function signupRequest(userData) {
 	  return function (dispatch) {
 	    dispatch(signupLoading(true));
+	    console.log('userSignupRequest: userData', userData);
 	    return _axios2.default.post('/api/users', userData).then(function (res) {
-	      console.log('signup success!', res);
+	      console.log('userSignupRequest signup success!', res);
 	      dispatch((0, _flashMessage.addFlashMessage)({
 	        type: 'success',
 	        text: 'Signup successful!'
 	      }));
 	      dispatch(signupLoading(false));
+	      // automatically login new user
+	      var loginCredentials = {
+	        identifier: userData.email,
+	        password: userData.password
+	      };
+	      dispatch((0, _auth.login)(loginCredentials));
+	      // TODO: dispatch signup successful action to login the new user
+	      // and redirect him/her to the home page
 	    }).catch(function (err) {
 	      console.log('signup error:', err);
 	      dispatch((0, _flashMessage.addFlashMessage)({
@@ -92047,6 +92058,7 @@
 	    if (this.isValid()) {
 	      this.setState({ errors: {}, isLoading: true });
 	      this.props.dispatchLogin(this.state);
+	      console.log('LoginForm.jsx this.state:', this.state);
 	      // TODO: redirect to the home page on successful login
 	      // may need react-redux-router to trigger redirect in
 	      // thunk action creator after successful login
