@@ -91717,6 +91717,11 @@
 	      // to transfer loading state to redux.
 	    }
 	  },
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (nextProps.user.isAuthenticated) {
+	      this.context.router.push('/');
+	    }
+	  },
 	  render: function render() {
 	    // TODO validate username to ensure it's not an email
 	    var errors = this.props.errors;

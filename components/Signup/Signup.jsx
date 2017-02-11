@@ -84,6 +84,12 @@ const Signup = React.createClass({
     }
   },
 
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.user.isAuthenticated) {
+      this.context.router.push('/')
+    }
+  },
+
   render () {
     // TODO validate username to ensure it's not an email
     const { errors } = this.props
