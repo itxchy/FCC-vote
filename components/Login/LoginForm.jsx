@@ -22,8 +22,7 @@ const LoginForm = React.createClass({
       errors: {
         identifier: null,
         passwords: null
-      },
-      isLoading: false
+      }
     }
   },
 
@@ -40,10 +39,6 @@ const LoginForm = React.createClass({
     if (this.isValid()) {
       this.setState({ errors: {} })
       this.props.dispatchLogin(this.state)
-      console.log('LoginForm.jsx this.state:', this.state)
-      // TODO: redirect to the home page on successful login
-      // may need react-redux-router to trigger redirect in
-      // thunk action creator after successful login
     }
   },
 
@@ -68,7 +63,7 @@ const LoginForm = React.createClass({
     if (this.props.user.errors && this.props.user.errors.form) {
       loginErrors = this.props.user.errors
     }
-    const { errors, identifier, password, isLoading } = this.state
+    const { errors, identifier, password } = this.state
 
     return (
       <form onSubmit={this.onSubmit}>

@@ -66099,6 +66099,10 @@
 	
 	var _axios2 = _interopRequireDefault(_axios);
 	
+	var _validator = __webpack_require__(700);
+	
+	var _validator2 = _interopRequireDefault(_validator);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// Action
@@ -66118,6 +66122,9 @@
 	      var invalid = _checkUserInResponse.invalid;
 	      var errors = _checkUserInResponse.errors;
 	
+	      if (!invalid && field === 'email' && !verifyEmail(identifier)) {
+	        errors.email = 'This email address is invalid.';
+	      }
 	      var newErrors = Object.assign({}, validationErrors, errors);
 	      dispatch(dupeUserCheckResults(newErrors, invalid));
 	    }).catch(function (err) {
@@ -66170,7 +66177,7 @@
 	// Lib **************************************************************
 	
 	function checkUserInResponse(res, field) {
-	  console.log('isUserExists response:', res, 'field:', field);
+	  console.log('checkUserInResponse:', res, 'field:', field);
 	  var invalid = void 0;
 	  var errors = {};
 	  if (res.data.user) {
@@ -66184,6 +66191,14 @@
 	    errors: errors,
 	    invalid: invalid
 	  };
+	}
+	
+	function verifyEmail(email) {
+	  if (_validator2.default.isEmail(email)) {
+	    return true;
+	  } else {
+	    return false;
+	  }
 	}
 
 /***/ },
@@ -91761,8 +91776,6 @@
 	    return isValid;
 	  },
 	  ensureUserExists: function ensureUserExists(event) {
-	    // TODO: make sure clientFormValidation isn't dispatched a second time
-	    // with the name identifier error in redux
 	    var field = event.target.name;
 	    var val = event.target.value;
 	    console.log('ensureUserExists event data:', '\nfield:', field, '\nval', val);
@@ -92126,8 +92139,7 @@
 	      errors: {
 	        identifier: null,
 	        passwords: null
-	      },
-	      isLoading: false
+	      }
 	    };
 	  },
 	  isValid: function isValid() {
@@ -92146,10 +92158,6 @@
 	    if (this.isValid()) {
 	      this.setState({ errors: {} });
 	      this.props.dispatchLogin(this.state);
-	      console.log('LoginForm.jsx this.state:', this.state);
-	      // TODO: redirect to the home page on successful login
-	      // may need react-redux-router to trigger redirect in
-	      // thunk action creator after successful login
 	    }
 	  },
 	  onChange: function onChange(event) {
@@ -92174,7 +92182,6 @@
 	    var errors = _state.errors;
 	    var identifier = _state.identifier;
 	    var password = _state.password;
-	    var isLoading = _state.isLoading;
 	
 	
 	    return _react2.default.createElement(

@@ -41,8 +41,6 @@ const Signup = React.createClass({
   },
 
   ensureUserExists (event) {
-    // TODO: make sure clientFormValidation isn't dispatched a second time
-    // with the name identifier error in redux
     const field = event.target.name
     const val = event.target.value
     console.log('ensureUserExists event data:', '\nfield:', field, '\nval', val)

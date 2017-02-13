@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import Validator from 'validator'
 // Action
 const DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS'
 const SET_FORM_ERRORS = 'SET_FORM_ERRORS'
@@ -14,6 +14,9 @@ export function dupeUserCheck (identifier, field, validationErrors) {
     axios.get(`/api/users/${identifier}`)
       .then(res => {
         let { invalid, errors } = checkUserInResponse(res, field)
+        if (!invalid && field === 'email' && !verifyEmail(identifier)) {
+          errors.email = 'This email address is invalid.'
+        }
         const newErrors = Object.assign({}, validationErrors, errors)
         dispatch(dupeUserCheckResults(newErrors, invalid))
       })
@@ -64,7 +67,7 @@ export default function clientFormValidation (state = initialState, action) {
 // Lib **************************************************************
 
 function checkUserInResponse (res, field) {
-  console.log('isUserExists response:', res, 'field:', field)
+  console.log('checkUserInResponse:', res, 'field:', field)
   let invalid
   let errors = {}
   if (res.data.user) {
@@ -77,5 +80,13 @@ function checkUserInResponse (res, field) {
   return {
     errors,
     invalid
+  }
+}
+
+function verifyEmail (email) {
+  if (Validator.isEmail(email)) {
+    return true
+  } else {
+    return false
   }
 }
