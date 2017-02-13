@@ -15,7 +15,7 @@ export function dupeUserCheck (identifier, field, validationErrors) {
       .then(res => {
         let { invalid, errors } = checkUserInResponse(res, field)
         if (!invalid && field === 'email' && !verifyEmail(identifier)) {
-          errors.email = 'This email address is invalid.'
+          errors.email = 'This email address is invalid'
         }
         const newErrors = Object.assign({}, validationErrors, errors)
         dispatch(dupeUserCheckResults(newErrors, invalid))

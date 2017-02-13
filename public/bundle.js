@@ -66123,7 +66123,7 @@
 	      var errors = _checkUserInResponse.errors;
 	
 	      if (!invalid && field === 'email' && !verifyEmail(identifier)) {
-	        errors.email = 'This email address is invalid.';
+	        errors.email = 'This email address is invalid';
 	      }
 	      var newErrors = Object.assign({}, validationErrors, errors);
 	      dispatch(dupeUserCheckResults(newErrors, invalid));
