@@ -35,7 +35,7 @@ if (process.env.NODE_ENV === 'production') {
     console.log('Connected to Mongoose!')
   })
   .catch(err => {
-    console.err('Mongoose connection failed:', err)
+    console.error('Mongoose connection failed:', err)
   })
 }
 

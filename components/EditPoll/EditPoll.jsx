@@ -28,6 +28,7 @@ const EditPoll = React.createClass({
     dispatchGetPollData: func,
     dispatchClearSinglePoll: func,
     user: object,
+    isAuthenticated: bool,
     routeParams: object.isRequired,
     editedPoll: object
   },
@@ -41,6 +42,9 @@ const EditPoll = React.createClass({
     if (nextProps.editedPoll !== null) {
       this.props.dispatchClearSinglePoll()
       this.context.router.push(`/v/${this.props.routeParams.id}`)
+    }
+    if (nextProps.isAuthenticated === false) {
+      this.context.router.push('/')
     }
   },
   render () {
@@ -96,6 +100,7 @@ const mapStateToProps = (state) => {
     newPollOptions: state.editPoll.newPollOptions,
     titleEditable: state.editPoll.titleEditable,
     user: state.user,
+    isAuthenticated: state.user.isAuthenticated,
     editedPoll: state.editPoll.editedPoll
   }
 }

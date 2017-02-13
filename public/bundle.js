@@ -21480,9 +21480,12 @@
 	  render: function render() {
 	    if (localStorage.jwtToken) {
 	      (0, _setAuthorizationToken2.default)(localStorage.jwtToken);
-	      _Store2.default.dispatch({ type: _auth.SET_CURRENT_USER, user: _jsonwebtoken2.default.decode(localStorage.jwtToken) });
+	      var decodedToken = _jsonwebtoken2.default.decode(localStorage.jwtToken);
+	      // store.dispatch({type: SET_CURRENT_USER, user: jwt.decode(localStorage.jwtToken)})
+	      _Store2.default.dispatch((0, _auth.setCurrentUser)(decodedToken));
 	    } else {
 	      _Store2.default.dispatch((0, _auth.getClientIp)());
+	      _Store2.default.dispatch((0, _auth.setCurrentUser)({}));
 	    }
 	    return _react2.default.createElement(
 	      _reactRedux.Provider,
@@ -35384,7 +35387,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.reduceUserLoading = exports.reduceSetCurrentUser = exports.RESET_LOGOUT_REDIRECT = exports.SET_CLIENT_IP = exports.USER_LOADING = exports.SET_CURRENT_USER = undefined;
+	exports.reduceUserLoading = exports.reduceSetCurrentUser = exports.RESET_LOGOUT_REDIRECT = exports.SET_LOGOUT_REDIRECT = exports.SET_CLIENT_IP = exports.USER_LOADING = exports.SET_CURRENT_USER = undefined;
 	exports.setCurrentUser = setCurrentUser;
 	exports.userLoading = userLoading;
 	exports.login = login;
@@ -35417,10 +35420,15 @@
 	var SET_CURRENT_USER = exports.SET_CURRENT_USER = 'setCurrentUser';
 	var USER_LOADING = exports.USER_LOADING = 'USER_LOADING';
 	var SET_CLIENT_IP = exports.SET_CLIENT_IP = 'SET_CLIENT_IP';
+	var SET_LOGOUT_REDIRECT = exports.SET_LOGOUT_REDIRECT = 'SET_LOGOUT_REDIRECT';
 	var RESET_LOGOUT_REDIRECT = exports.RESET_LOGOUT_REDIRECT = 'RESET_LOGOUT_REDIRECT';
+	var SET_ERRORS = 'SET_ERRORS';
 	
 	// Action Creators
-	function setCurrentUser(user) {
+	function setCurrentUser() {
+	  var user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	
+	  console.log('auth.js: setCurrentUser user:', user);
 	  return {
 	    type: SET_CURRENT_USER,
 	    user: user
@@ -35430,6 +35438,15 @@
 	  return {
 	    type: USER_LOADING,
 	    userLoading: bool
+	  };
+	}
+	function setErrors() {
+	  var errors = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	
+	  return {
+	    type: SET_ERRORS,
+	    errors: errors,
+	    userLoading: false
 	  };
 	}
 	function setClientIp(clientIp) {
@@ -35460,10 +35477,21 @@
 	    });
 	  };
 	}
+	// export function logout () {
+	//   localStorage.removeItem('jwtToken')
+	//   setAuthorizationToken(false)
+	//   return { type: SET_CURRENT_USER, user: {}, logoutRedirect: true }
+	// }
 	function logout() {
-	  localStorage.removeItem('jwtToken');
-	  (0, _setAuthorizationToken2.default)(false);
-	  return { type: SET_CURRENT_USER, user: {}, logoutRedirect: true };
+	  return function (dispatch) {
+	    localStorage.removeItem('jwtToken');
+	    (0, _setAuthorizationToken2.default)(false);
+	    dispatch(setCurrentUser({}));
+	    dispatch(setLogoutRedirect(true));
+	  };
+	}
+	function setLogoutRedirect(bool) {
+	  return { type: SET_LOGOUT_REDIRECT, logoutRedirect: true };
 	}
 	function resetLogoutRedirect() {
 	  return { type: RESET_LOGOUT_REDIRECT, logoutRedirect: false };
@@ -35482,17 +35510,21 @@
 	var reduceSetCurrentUser = exports.reduceSetCurrentUser = function reduceSetCurrentUser(state, action) {
 	  var newState = {};
 	  var authenticationStatus = false;
+	  var user = action.user;
+	  var errors = action.errors;
 	  var logoutRedirect = action.logoutRedirect;
-	  if (action.user && !action.user.errors && !(0, _isEmpty2.default)(action.user)) {
+	  if (user && (0, _isEmpty2.default)(errors) && !(0, _isEmpty2.default)(user)) {
 	    authenticationStatus = true;
 	  }
-	  if (!action.logoutRedirect) {
+	  if (!logoutRedirect) {
 	    logoutRedirect = false;
 	  }
 	  Object.assign(newState, state, {
 	    isAuthenticated: authenticationStatus,
-	    user: action.user,
-	    logoutRedirect: logoutRedirect
+	    user: user,
+	    errors: errors,
+	    logoutRedirect: logoutRedirect,
+	    userLoading: false
 	  });
 	  return newState;
 	};
@@ -35508,10 +35540,14 @@
 	var reduceResetLogoutRedirect = function reduceResetLogoutRedirect(state, action) {
 	  return Object.assign({}, state, { logoutRedirect: false });
 	};
+	var reduceSetErrors = function reduceSetErrors(state, action) {
+	  return Object.assign({}, state, { errors: action.errors, userLoading: action.userLoading });
+	};
 	
 	var initialState = {
 	  isAuthenticated: null,
 	  user: null,
+	  errors: null,
 	  userLoading: false,
 	  clientIp: null,
 	  logoutRedirect: false
@@ -35531,6 +35567,8 @@
 	      return reduceSetClientIp(state, action);
 	    case RESET_LOGOUT_REDIRECT:
 	      return reduceResetLogoutRedirect(state, action);
+	    case SET_ERRORS:
+	      return reduceSetErrors(state, action);
 	    default:
 	      return state;
 	  }
@@ -35538,11 +35576,11 @@
 	
 	// Lib ******************************************************
 	function handleLoginResponse(res, dispatch) {
+	  console.log('auth.js: res.data:', res.data);
 	  // handle unsuccessful login
 	  if (res.data.errors) {
-	    dispatch(userLoading(false));
 	    // res.data will contain { errors: { form: 'Invalid Credentials' } }
-	    return dispatch(setCurrentUser(res.data));
+	    return dispatch(setErrors(res.data.errors));
 	  }
 	  // handle token on successful login
 	  var user = prepareUserFromToken(res);
@@ -67308,13 +67346,14 @@
 	var _React$PropTypes = _react2.default.PropTypes;
 	var object = _React$PropTypes.object;
 	var func = _React$PropTypes.func;
+	var any = _React$PropTypes.any;
 	
 	
 	var NavBar = _react2.default.createClass({
 	  displayName: 'NavBar',
 	
 	  propTypes: {
-	    user: object,
+	    user: any,
 	    dispatchLogout: func.isRequired,
 	    dispatchGetClientIp: func.isRequired
 	  },
@@ -67327,6 +67366,7 @@
 	    event.preventDefault();
 	    this.props.dispatchLogout();
 	    this.props.dispatchGetClientIp();
+	    this.context.router.push('/');
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.setState({ isMounted: true });
@@ -67442,6 +67482,10 @@
 	    );
 	  }
 	});
+	
+	NavBar.contextTypes = {
+	  router: object.isRequired
+	};
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
@@ -91524,6 +91568,7 @@
 	    dispatchGetPollData: func,
 	    dispatchClearSinglePoll: func,
 	    user: object,
+	    isAuthenticated: bool,
 	    routeParams: object.isRequired,
 	    editedPoll: object
 	  },
@@ -91537,6 +91582,9 @@
 	    if (nextProps.editedPoll !== null) {
 	      this.props.dispatchClearSinglePoll();
 	      this.context.router.push('/v/' + this.props.routeParams.id);
+	    }
+	    if (nextProps.isAuthenticated === false) {
+	      this.context.router.push('/');
 	    }
 	  },
 	  render: function render() {
@@ -91603,6 +91651,7 @@
 	    newPollOptions: state.editPoll.newPollOptions,
 	    titleEditable: state.editPoll.titleEditable,
 	    user: state.user,
+	    isAuthenticated: state.user.isAuthenticated,
 	    editedPoll: state.editPoll.editedPoll
 	  };
 	};
@@ -92066,6 +92115,7 @@
 	    user: shape({
 	      isAuthenticated: bool,
 	      user: object,
+	      errors: object,
 	      userLoading: bool
 	    })
 	  },
@@ -92094,7 +92144,7 @@
 	  onSubmit: function onSubmit(event) {
 	    event.preventDefault();
 	    if (this.isValid()) {
-	      this.setState({ errors: {}, isLoading: true });
+	      this.setState({ errors: {} });
 	      this.props.dispatchLogin(this.state);
 	      console.log('LoginForm.jsx this.state:', this.state);
 	      // TODO: redirect to the home page on successful login
@@ -92116,6 +92166,10 @@
 	    }
 	  },
 	  render: function render() {
+	    var loginErrors = { form: null };
+	    if (this.props.user.errors && this.props.user.errors.form) {
+	      loginErrors = this.props.user.errors;
+	    }
 	    var _state = this.state;
 	    var errors = _state.errors;
 	    var identifier = _state.identifier;
@@ -92131,10 +92185,10 @@
 	        null,
 	        'Login'
 	      ),
-	      errors.form && _react2.default.createElement(
+	      loginErrors.form && _react2.default.createElement(
 	        'div',
 	        { className: 'alert alert-danger' },
-	        errors.form
+	        loginErrors.form
 	      ),
 	      _react2.default.createElement(_TextFieldGroup2.default, {
 	        field: 'identifier',
@@ -92156,7 +92210,7 @@
 	        { className: 'form-group' },
 	        _react2.default.createElement(
 	          'button',
-	          { className: 'button btn btn-primary btn-lg', disabled: isLoading },
+	          { className: 'button btn btn-primary btn-lg', disabled: this.props.user.userLoading },
 	          'Login'
 	        )
 	      )
@@ -92275,6 +92329,9 @@
 	      this.getUserPolls();
 	      this.props.dispatchResetUpdatedPollResults();
 	    }
+	    if (nextProps.isAuthenticated === false) {
+	      this.context.router.push('/');
+	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.props.dispatchClearUserPolls();
@@ -92297,6 +92354,10 @@
 	    );
 	  }
 	});
+	
+	MyPollsPage.contextTypes = {
+	  router: object.isRequired
+	};
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {

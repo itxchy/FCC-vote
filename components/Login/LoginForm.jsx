@@ -11,6 +11,7 @@ const LoginForm = React.createClass({
     user: shape({
       isAuthenticated: bool,
       user: object,
+      errors: object,
       userLoading: bool
     })
   },
@@ -37,7 +38,7 @@ const LoginForm = React.createClass({
   onSubmit (event) {
     event.preventDefault()
     if (this.isValid()) {
-      this.setState({ errors: {}, isLoading: true })
+      this.setState({ errors: {} })
       this.props.dispatchLogin(this.state)
       console.log('LoginForm.jsx this.state:', this.state)
       // TODO: redirect to the home page on successful login
@@ -63,13 +64,17 @@ const LoginForm = React.createClass({
   },
 
   render () {
+    let loginErrors = { form: null }
+    if (this.props.user.errors && this.props.user.errors.form) {
+      loginErrors = this.props.user.errors
+    }
     const { errors, identifier, password, isLoading } = this.state
 
     return (
       <form onSubmit={this.onSubmit}>
         <h1>Login</h1>
 
-        { errors.form && <div className='alert alert-danger'>{errors.form}</div> }
+        { loginErrors.form && <div className='alert alert-danger'>{loginErrors.form}</div> }
 
         <TextFieldGroup
           field='identifier'
@@ -89,7 +94,7 @@ const LoginForm = React.createClass({
         />
 
         <div className='form-group'>
-          <button className='button btn btn-primary btn-lg' disabled={isLoading}>Login</button>
+          <button className='button btn btn-primary btn-lg' disabled={this.props.user.userLoading}>Login</button>
         </div>
 
       </form>

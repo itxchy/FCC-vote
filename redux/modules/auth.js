@@ -9,10 +9,13 @@ import isEmpty from 'lodash/isEmpty'
 export const SET_CURRENT_USER = 'setCurrentUser'
 export const USER_LOADING = 'USER_LOADING'
 export const SET_CLIENT_IP = 'SET_CLIENT_IP'
+export const SET_LOGOUT_REDIRECT = 'SET_LOGOUT_REDIRECT'
 export const RESET_LOGOUT_REDIRECT = 'RESET_LOGOUT_REDIRECT'
+const SET_ERRORS = 'SET_ERRORS'
 
 // Action Creators
-export function setCurrentUser (user) {
+export function setCurrentUser (user = {}) {
+  console.log('auth.js: setCurrentUser user:', user)
   return {
     type: SET_CURRENT_USER,
     user
@@ -22,6 +25,13 @@ export function userLoading (bool) {
   return {
     type: USER_LOADING,
     userLoading: bool
+  }
+}
+function setErrors (errors = {}) {
+  return {
+    type: SET_ERRORS,
+    errors,
+    userLoading: false
   }
 }
 function setClientIp (clientIp) {
@@ -52,10 +62,21 @@ export function login (data) {
       })
   }
 }
+// export function logout () {
+//   localStorage.removeItem('jwtToken')
+//   setAuthorizationToken(false)
+//   return { type: SET_CURRENT_USER, user: {}, logoutRedirect: true }
+// }
 export function logout () {
-  localStorage.removeItem('jwtToken')
-  setAuthorizationToken(false)
-  return { type: SET_CURRENT_USER, user: {}, logoutRedirect: true }
+  return dispatch => {
+    localStorage.removeItem('jwtToken')
+    setAuthorizationToken(false)
+    dispatch(setCurrentUser({}))
+    dispatch(setLogoutRedirect(true))
+  }
+}
+function setLogoutRedirect (bool) {
+  return { type: SET_LOGOUT_REDIRECT, logoutRedirect: true }
 }
 export function resetLogoutRedirect () {
   return { type: RESET_LOGOUT_REDIRECT, logoutRedirect: false }
@@ -76,17 +97,21 @@ export function getClientIp () {
 export const reduceSetCurrentUser = (state, action) => {
   const newState = {}
   let authenticationStatus = false
+  let user = action.user
+  let errors = action.errors
   let logoutRedirect = action.logoutRedirect
-  if (action.user && !action.user.errors && !isEmpty(action.user)) {
+  if (user && isEmpty(errors) && !isEmpty(user)) {
     authenticationStatus = true
   }
-  if (!action.logoutRedirect) {
+  if (!logoutRedirect) {
     logoutRedirect = false
   }
   Object.assign(newState, state, {
     isAuthenticated: authenticationStatus,
-    user: action.user,
-    logoutRedirect
+    user: user,
+    errors,
+    logoutRedirect,
+    userLoading: false
   })
   return newState
 }
@@ -102,10 +127,14 @@ const reduceSetClientIp = (state, action) => {
 const reduceResetLogoutRedirect = (state, action) => {
   return Object.assign({}, state, { logoutRedirect: false })
 }
+const reduceSetErrors = (state, action) => {
+  return Object.assign({}, state, { errors: action.errors, userLoading: action.userLoading })
+}
 
 const initialState = {
   isAuthenticated: null,
   user: null,
+  errors: null,
   userLoading: false,
   clientIp: null,
   logoutRedirect: false
@@ -122,6 +151,8 @@ export default function user (state = initialState, action) {
       return reduceSetClientIp(state, action)
     case RESET_LOGOUT_REDIRECT:
       return reduceResetLogoutRedirect(state, action)
+    case SET_ERRORS:
+      return reduceSetErrors(state, action)
     default:
       return state
   }
@@ -129,11 +160,11 @@ export default function user (state = initialState, action) {
 
 // Lib ******************************************************
 function handleLoginResponse (res, dispatch) {
+  console.log('auth.js: res.data:', res.data)
   // handle unsuccessful login
   if (res.data.errors) {
-    dispatch(userLoading(false))
     // res.data will contain { errors: { form: 'Invalid Credentials' } }
-    return dispatch(setCurrentUser(res.data))
+    return dispatch(setErrors(res.data.errors))
   }
   // handle token on successful login
   const user = prepareUserFromToken(res)

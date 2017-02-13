@@ -32,6 +32,9 @@ const MyPollsPage = React.createClass({
       this.getUserPolls()
       this.props.dispatchResetUpdatedPollResults()
     }
+    if (nextProps.isAuthenticated === false) {
+      this.context.router.push('/')
+    }
   },
   componentWillUnmount () {
     this.props.dispatchClearUserPolls()
@@ -54,6 +57,10 @@ const MyPollsPage = React.createClass({
     )
   }
 })
+
+MyPollsPage.contextTypes = {
+  router: object.isRequired
+}
 
 const mapStateToProps = (state) => {
   return {
