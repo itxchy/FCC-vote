@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { addFlashMessage } from './flashMessage'
 
 // Action
 const POLL_EDITED = 'POLL_EDITED'
@@ -34,7 +35,7 @@ export function setEditedPoll (id, pollData) {
       })
       .catch(err => {
         console.error('error: put request to /api/polls/edit failed:', err)
-        // TODO dispatch flash message displaying error
+        dispatch(addFlashMessage({ type: 'error', text: 'Error: failed to submit edited poll' }))
       })
   }
 }

@@ -66439,6 +66439,8 @@
 	
 	var _axios2 = _interopRequireDefault(_axios);
 	
+	var _flashMessage = __webpack_require__(260);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// Action
@@ -66472,7 +66474,7 @@
 	      // dispatch dispatch setPollOptions
 	    }).catch(function (err) {
 	      console.error('error: put request to /api/polls/edit failed:', err);
-	      // TODO dispatch flash message displaying error
+	      dispatch((0, _flashMessage.addFlashMessage)({ type: 'error', text: 'Error: failed to submit edited poll' }));
 	    });
 	  };
 	}
