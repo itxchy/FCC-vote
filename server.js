@@ -1,4 +1,4 @@
-require('babel-register')
+require('babel-register')({ ignore: /node_modules/ })
 const express = require('express')
 const bodyParser = require('body-parser')
 const fs = require('fs')
