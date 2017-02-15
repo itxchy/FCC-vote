@@ -70052,12 +70052,12 @@
 	    _reactRouter.Route,
 	    { path: '/', component: _Layout2.default },
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: '/create', component: _CreateAPoll2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: '/edit/:id', component: _EditPoll2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: '/mypolls', component: _MyPollsPage2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _Signup2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _LoginPage2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: '/v/:id', component: _SinglePoll2.default })
+	    _react2.default.createElement(_reactRouter.Route, { path: 'create', component: _CreateAPoll2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'edit/:id', component: _EditPoll2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'mypolls', component: _MyPollsPage2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _Signup2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _LoginPage2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'v/:id', component: _SinglePoll2.default })
 	  );
 	};
 	

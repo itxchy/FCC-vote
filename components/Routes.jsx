@@ -12,12 +12,12 @@ import SinglePoll from './SinglePoll'
 export const Routes = () => (
   <Route path='/' component={Layout}>
     <IndexRoute component={Home} />
-    <Route path='/create' component={CreateAPoll} />
-    <Route path='/edit/:id' component={EditPoll} />
-    <Route path='/mypolls' component={MyPollsPage} />
-    <Route path='/signup' component={Signup} />
-    <Route path='/login' component={LoginPage} />
-    <Route path='/v/:id' component={SinglePoll} />
+    <Route path='create' component={CreateAPoll} />
+    <Route path='edit/:id' component={EditPoll} />
+    <Route path='mypolls' component={MyPollsPage} />
+    <Route path='signup' component={Signup} />
+    <Route path='login' component={LoginPage} />
+    <Route path='v/:id' component={SinglePoll} />
   </Route>
 )
 
