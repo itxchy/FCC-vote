@@ -71171,7 +71171,6 @@
 	    }
 	    var chart = _reactFauxDom2.default.createElement('div');
 	    var data = this.props.results;
-	    console.log('D3Chart.jsx: this.props.results:', this.props.results);
 	    var width = 300;
 	    var height = 300;
 	    var reactThis = this;
@@ -71221,8 +71220,6 @@
 	    }).attr('height', height / data.length - 4).attr('fill', function (d) {
 	      // if a winning option exists and it matches the current object,
 	      // return the winning color
-	      console.log('****D3Chart.jsx: winningOption', winningOption);
-	      console.log('****D3Chart.jsx: d', d);
 	      if (winningOption && winningOption[0] && winningOption[0].option === d.option) {
 	        return '#01FF70';
 	      }
@@ -71241,7 +71238,6 @@
 	    });
 	
 	    svg.selectAll('text').data(data).enter().append('text').text(function (d) {
-	      console.log('this.props.totalVotes', _this2.props.totalVotes);
 	      // if (this.props.totalVotes === 0) {
 	      //   return `${d.option} — 0%`
 	      // }

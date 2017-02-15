@@ -83,7 +83,6 @@ const D3Chart = React.createClass({
     }
     const chart = ReactFauxDom.createElement('div')
     const data = this.props.results
-    console.log('D3Chart.jsx: this.props.results:', this.props.results)
     const width = 300
     const height = 300
     const reactThis = this
@@ -138,8 +137,6 @@ const D3Chart = React.createClass({
       .attr('fill', d => {
         // if a winning option exists and it matches the current object,
         // return the winning color
-        console.log('****D3Chart.jsx: winningOption', winningOption)
-        console.log('****D3Chart.jsx: d', d)
         if (winningOption && winningOption[0] && winningOption[0].option === d.option) {
           return '#01FF70'
         }
@@ -162,7 +159,6 @@ const D3Chart = React.createClass({
       .enter()
       .append('text')
       .text(d => {
-        console.log('this.props.totalVotes', this.props.totalVotes)
         // if (this.props.totalVotes === 0) {
         //   return `${d.option} — 0%`
         // }
