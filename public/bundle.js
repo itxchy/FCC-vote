@@ -21473,6 +21473,11 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	// import { createHistory, useBasename } from 'history'
+	// const browserHistory = useBasename(createHistory)({
+	//   basename: '/'
+	// })
+	
 	/* global localStorage */
 	
 	var App = _react2.default.createClass({
@@ -70683,7 +70688,6 @@
 	    return this.props.polls.map(function (poll) {
 	      // const currentUser = this.props.user ? this.props.user.username : null
 	      var currentUser = _this.props.isAuthenticated && _this.props.user ? _this.props.user.username : _this.props.clientIp;
-	      console.log('DisplayPolls.jsx: currentUser', currentUser);
 	      var dupeVoter = (0, _pollsLib.dupeVoterCheck)(poll, currentUser);
 	      var title = poll.title;
 	      var options = poll.options;
@@ -70721,7 +70725,6 @@
 	    this.props.getPolls();
 	  },
 	  render: function render() {
-	    console.log('DisplayPolls this.props.polls', this.props.polls);
 	    // if the polls haven't loaded yet, show a loading dialog
 	    if (!this.props.polls || (0, _isEmpty2.default)(this.props.polls || this.props.isAuthenticated === null)) {
 	      return _react2.default.createElement(_EmptyPolls2.default, { polls: this.props.polls });
@@ -91133,7 +91136,6 @@
 	    user: object
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    console.log('nextProps in createAPoll', nextProps.pollSaved);
 	    if (nextProps.pollSaved) {
 	      this.context.router.push('/v/' + nextProps.pollSaved);
 	      this.props.dispatchResetPollSaved();
@@ -91479,7 +91481,6 @@
 	    var isValid = _validateCreateAPollI.isValid;
 	
 	    if (!isValid) {
-	      console.log();
 	      this.setState({ errors: errors });
 	    }
 	    return isValid;
@@ -91505,7 +91506,6 @@
 	      _react2.default.createElement('i', { className: 'fa fa-exclamation-triangle', 'aria-hidden': 'true' }),
 	      ' Blank options are not allowed'
 	    );
-	    console.log('this.state.errors:', this.state.errors);
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'text-center' },

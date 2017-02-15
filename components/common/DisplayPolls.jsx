@@ -24,7 +24,6 @@ const DisplayPolls = React.createClass({
       const currentUser = this.props.isAuthenticated && this.props.user
         ? this.props.user.username
         : this.props.clientIp
-      console.log('DisplayPolls.jsx: currentUser', currentUser)
       const dupeVoter = dupeVoterCheck(poll, currentUser)
       const { title, options, totalVotes, _id, owner } = poll
       // TODO: if a prop called myPolls is true, just show results card
@@ -61,7 +60,6 @@ const DisplayPolls = React.createClass({
     this.props.getPolls()
   },
   render () {
-    console.log('DisplayPolls this.props.polls', this.props.polls)
     // if the polls haven't loaded yet, show a loading dialog
     if (!this.props.polls || isEmpty(this.props.polls || this.props.isAuthenticated === null)) {
       return <EmptyPolls polls={this.props.polls} />

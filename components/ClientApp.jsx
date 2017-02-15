@@ -9,6 +9,11 @@ import jwt from 'jsonwebtoken'
 import setAuthorizationToken from '../auth/setAuthorizationToken'
 import Routes from './Routes'
 
+// import { createHistory, useBasename } from 'history'
+// const browserHistory = useBasename(createHistory)({
+//   basename: '/'
+// })
+
 const App = React.createClass({
   render () {
     if (localStorage.jwtToken) {

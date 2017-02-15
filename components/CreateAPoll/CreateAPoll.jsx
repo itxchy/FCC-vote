@@ -29,7 +29,6 @@ const CreateAPoll = React.createClass({
     user: object
   },
   componentWillReceiveProps (nextProps) {
-    console.log('nextProps in createAPoll', nextProps.pollSaved)
     if (nextProps.pollSaved) {
       this.context.router.push(`/v/${nextProps.pollSaved}`)
       this.props.dispatchResetPollSaved()

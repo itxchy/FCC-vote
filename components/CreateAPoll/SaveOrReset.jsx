@@ -25,7 +25,6 @@ const SaveOrReset = React.createClass({
     }
     const { errors, isValid } = validateCreateAPollInput(inputData)
     if (!isValid) {
-      console.log()
       this.setState({ errors: errors })
     }
     return isValid
@@ -52,7 +51,6 @@ const SaveOrReset = React.createClass({
         <i className='fa fa-exclamation-triangle' aria-hidden='true' /> Blank options are not allowed
       </div>
     )
-    console.log('this.state.errors:', this.state.errors)
     return (
       <div className='text-center'>
         {this.state.errors.newPollOptions ? blankOptionError : null}
