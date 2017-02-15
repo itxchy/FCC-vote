@@ -23,12 +23,15 @@ const D3Chart = React.createClass({
 
     // determine winning option, or tie options
     this.props.results.reduce((prevTotal, option, index) => {
+      if (option.votes.length === 0) {
+        return prevTotal
+      }
       if (option.votes.length > prevTotal) {
         winningOptionIndex = index
         possibleTieOptionIndexArray = []
         return option.votes.length
       }
-      if (option.votes.length === prevTotal) {
+      if (option.votes.length === prevTotal && option.votes.length !== 0) {
         possibleTieOptionIndexArray.push(index)
       }
       return prevTotal
@@ -36,6 +39,7 @@ const D3Chart = React.createClass({
 
     // in the case of a tie, return tied options
     if (possibleTieOptionIndexArray.length >= 1) {
+      // TODO: ensure winningOptionIndex isn't larger than tied vote counts
       let tiedOptionObjects = possibleTieOptionIndexArray.map(tiedOptionIndex => {
         return this.props.results[tiedOptionIndex]
       })
@@ -49,7 +53,10 @@ const D3Chart = React.createClass({
     return [this.props.results[winningOptionIndex]]
   },
   createOptionResultsText (winningOption, tiedOptionStrings, d) {
-    if (winningOption && winningOption[0].option === d.option) {
+    if (this.props.totalVotes === 0) {
+      return `${d.option} — 0%`
+    }
+    if (winningOption && winningOption[0] && winningOption[0].option === d.option) {
       return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}% ✓`
     }
     if (this.state.tie) {
@@ -76,6 +83,7 @@ const D3Chart = React.createClass({
     }
     const chart = ReactFauxDom.createElement('div')
     const data = this.props.results
+    console.log('D3Chart.jsx: this.props.results:', this.props.results)
     const width = 300
     const height = 300
     const reactThis = this
@@ -130,7 +138,9 @@ const D3Chart = React.createClass({
       .attr('fill', d => {
         // if a winning option exists and it matches the current object,
         // return the winning color
-        if (winningOption && winningOption[0].option === d.option) {
+        console.log('****D3Chart.jsx: winningOption', winningOption)
+        console.log('****D3Chart.jsx: d', d)
+        if (winningOption && winningOption[0] && winningOption[0].option === d.option) {
           return '#01FF70'
         }
         // if there is a tie, check if the current option matches any of the
@@ -152,18 +162,23 @@ const D3Chart = React.createClass({
       .enter()
       .append('text')
       .text(d => {
-        if (winningOption && winningOption[0].option === d.option) {
-          return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}% ✓`
-        }
-        if (this.state.tie) {
-          let optionsMatch = tiedOptionStrings.filter(optionString => {
-            return optionString === d.option
-          })
-          if (optionsMatch.length > 0) {
-            return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}% TIED`
-          }
-        }
-        return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}%`
+        console.log('this.props.totalVotes', this.props.totalVotes)
+        // if (this.props.totalVotes === 0) {
+        //   return `${d.option} — 0%`
+        // }
+        // if (winningOption && winningOption[0] && winningOption[0].option === d.option) {
+        //   return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}% ✓`
+        // }
+        // if (this.state.tie) {
+        //   let optionsMatch = tiedOptionStrings.filter(optionString => {
+        //     return optionString === d.option
+        //   })
+        //   if (optionsMatch.length > 0) {
+        //     return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}% TIED`
+        //   }
+        // }
+        // console.log('Shouldnt be 0', this.props.totalVotes)
+        // return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}TT%`
       })
       .attr('x', 16)
       .attr('y', (d, i) => i * (height / data.length) + 24)

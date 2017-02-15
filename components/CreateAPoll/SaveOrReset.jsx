@@ -25,6 +25,7 @@ const SaveOrReset = React.createClass({
     }
     const { errors, isValid } = validateCreateAPollInput(inputData)
     if (!isValid) {
+      console.log()
       this.setState({ errors: errors })
     }
     return isValid

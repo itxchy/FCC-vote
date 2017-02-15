@@ -52,6 +52,7 @@ const MyPollsPage = React.createClass({
           isAuthenticated={this.props.isAuthenticated}
           dispatchSubmitVote={this.props.dispatchSubmitVote}
           getPolls={this.getUserPolls}
+          myPolls
         />
       </div>
     )

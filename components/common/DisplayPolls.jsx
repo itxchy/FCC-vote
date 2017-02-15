@@ -14,7 +14,8 @@ const DisplayPolls = React.createClass({
     clientIp: string,
     isAuthenticated: bool,
     dispatchSubmitVote: func,
-    getPolls: func
+    getPolls: func,
+    myPolls: bool
   },
   populateCards () {
     const singlePoll = this.props.polls.length === 1
@@ -26,7 +27,8 @@ const DisplayPolls = React.createClass({
       console.log('DisplayPolls.jsx: currentUser', currentUser)
       const dupeVoter = dupeVoterCheck(poll, currentUser)
       const { title, options, totalVotes, _id, owner } = poll
-      if (dupeVoter) {
+      // TODO: if a prop called myPolls is true, just show results card
+      if (dupeVoter || this.props.myPolls) {
         return (
           <ResultsCard
             singlePoll={singlePoll}
