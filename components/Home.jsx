@@ -5,6 +5,7 @@ import { getAllPolls } from '../redux/modules/getAllPolls'
 import { submitVote, resetUpdatedPollResults } from '../redux/modules/submitVote'
 import { resetDeletedPoll } from '../redux/modules/deletePoll'
 import { resetLogoutRedirect } from '../redux/modules/auth'
+import { clearAllFlashMessages } from '../redux/modules/flashMessage'
 const { func, object, array, string, bool } = React.PropTypes
 
 const Home = React.createClass({
@@ -14,12 +15,14 @@ const Home = React.createClass({
     dispatchResetUpdatedPollResults: func,
     dispatchResetDeletedPoll: func,
     dispatchResetLogoutRedirect: func,
+    dispatchClearAllFlashMessages: func,
     deletedPoll: string,
     user: object,
     logoutRedirect: bool,
     isAuthenticated: bool,
     clientIp: string,
     allPolls: array,
+    flashMessages: array,
     updatedPollResults: object
   },
   componentWillReceiveProps (nextProps) {
@@ -35,6 +38,11 @@ const Home = React.createClass({
     if (nextProps.logoutRedirect) {
       this.props.dispatchGetAllPolls()
       this.props.dispatchResetLogoutRedirect()
+    }
+  },
+  componentWillUnmount () {
+    if (this.props.flashMessages.length > 0) {
+      this.props.dispatchClearAllFlashMessages()
     }
   },
   render () {
@@ -64,7 +72,8 @@ const mapStateToProps = (state) => {
     clientIp: state.user.clientIp,
     allPolls: state.allPolls.allPolls,
     updatedPollResults: state.newVote.updatedResults,
-    deletedPoll: state.deletedPoll.deletedPoll
+    deletedPoll: state.deletedPoll.deletedPoll,
+    flashMessages: state.flashMessages.flashMessages
   }
 }
 
@@ -84,6 +93,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     dispatchResetLogoutRedirect () {
       dispatch(resetLogoutRedirect())
+    },
+    dispatchClearAllFlashMessages () {
+      dispatch(clearAllFlashMessages())
     }
   }
 }

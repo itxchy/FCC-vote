@@ -46,8 +46,16 @@ const SaveOrReset = React.createClass({
     this.props.dispatchResetNewPoll()
   },
   render () {
+    // TODO: move this error to redux to allow this dialog to be cleared when focusing on the blank option
+    const blankOptionError = (
+      <div className='row two-or-more-error'>
+        <i className='fa fa-exclamation-triangle' aria-hidden='true' /> Blank options are not allowed
+      </div>
+    )
+    console.log('this.state.errors:', this.state.errors)
     return (
       <div className='text-center'>
+        {this.state.errors.newPollOptions ? blankOptionError : null}
         <button
           className='btn btn-primary save-reset-buttons'
           onClick={this.saveButtonHandler}

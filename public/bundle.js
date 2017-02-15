@@ -28329,6 +28329,7 @@
 	exports.reduceDeleteFlashMessage = exports.reduceAddFlashMessage = exports.DELETE_FLASH_MESSAGE = exports.ADD_FLASH_MESSAGE = undefined;
 	exports.addFlashMessage = addFlashMessage;
 	exports.deleteFlashMessage = deleteFlashMessage;
+	exports.clearAllFlashMessages = clearAllFlashMessages;
 	exports.default = flashMessages;
 	
 	var _shortid = __webpack_require__(261);
@@ -28354,6 +28355,7 @@
 	// Actions
 	var ADD_FLASH_MESSAGE = exports.ADD_FLASH_MESSAGE = 'ADD_FLASH_MESSAGE';
 	var DELETE_FLASH_MESSAGE = exports.DELETE_FLASH_MESSAGE = 'DELETE_FLASH_MESSAGE';
+	var CLEAR_ALL_FLASH_MESSAGES = 'CLEAR_ALL_FLASH_MESSAGES';
 	
 	// Action Creators
 	function addFlashMessage(message) {
@@ -28361,6 +28363,9 @@
 	}
 	function deleteFlashMessage(id) {
 	  return { type: DELETE_FLASH_MESSAGE, value: id };
+	}
+	function clearAllFlashMessages() {
+	  return { type: CLEAR_ALL_FLASH_MESSAGES };
 	}
 	
 	// Reducers
@@ -28394,6 +28399,9 @@
 	
 	  return state;
 	};
+	var reduceClearAllFlashMessages = function reduceClearAllFlashMessages(state, action) {
+	  return Object.assign({}, state, { flashMessages: [] });
+	};
 	
 	var initialState = {
 	  flashMessages: []
@@ -28409,6 +28417,8 @@
 	      return reduceAddFlashMessage(state, action);
 	    case DELETE_FLASH_MESSAGE:
 	      return reduceDeleteFlashMessage(state, action);
+	    case CLEAR_ALL_FLASH_MESSAGES:
+	      return reduceClearAllFlashMessages(state, action);
 	    default:
 	      return state;
 	  }
@@ -70494,6 +70504,8 @@
 	
 	var _auth = __webpack_require__(445);
 	
+	var _flashMessage = __webpack_require__(260);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var _React$PropTypes = _react2.default.PropTypes;
@@ -70513,12 +70525,14 @@
 	    dispatchResetUpdatedPollResults: func,
 	    dispatchResetDeletedPoll: func,
 	    dispatchResetLogoutRedirect: func,
+	    dispatchClearAllFlashMessages: func,
 	    deletedPoll: string,
 	    user: object,
 	    logoutRedirect: bool,
 	    isAuthenticated: bool,
 	    clientIp: string,
 	    allPolls: array,
+	    flashMessages: array,
 	    updatedPollResults: object
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
@@ -70534,6 +70548,11 @@
 	    if (nextProps.logoutRedirect) {
 	      this.props.dispatchGetAllPolls();
 	      this.props.dispatchResetLogoutRedirect();
+	    }
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    if (this.props.flashMessages.length > 0) {
+	      this.props.dispatchClearAllFlashMessages();
 	    }
 	  },
 	  render: function render() {
@@ -70569,7 +70588,8 @@
 	    clientIp: state.user.clientIp,
 	    allPolls: state.allPolls.allPolls,
 	    updatedPollResults: state.newVote.updatedResults,
-	    deletedPoll: state.deletedPoll.deletedPoll
+	    deletedPoll: state.deletedPoll.deletedPoll,
+	    flashMessages: state.flashMessages.flashMessages
 	  };
 	};
 	
@@ -70589,6 +70609,9 @@
 	    },
 	    dispatchResetLogoutRedirect: function dispatchResetLogoutRedirect() {
 	      dispatch((0, _auth.resetLogoutRedirect)());
+	    },
+	    dispatchClearAllFlashMessages: function dispatchClearAllFlashMessages() {
+	      dispatch((0, _flashMessage.clearAllFlashMessages)());
 	    }
 	  };
 	};
@@ -91479,9 +91502,18 @@
 	    this.props.dispatchResetNewPoll();
 	  },
 	  render: function render() {
+	    // TODO: move this error to redux to allow this dialog to be cleared when focusing on the blank option
+	    var blankOptionError = _react2.default.createElement(
+	      'div',
+	      { className: 'row two-or-more-error' },
+	      _react2.default.createElement('i', { className: 'fa fa-exclamation-triangle', 'aria-hidden': 'true' }),
+	      ' Blank options are not allowed'
+	    );
+	    console.log('this.state.errors:', this.state.errors);
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'text-center' },
+	      this.state.errors.newPollOptions ? blankOptionError : null,
 	      _react2.default.createElement(
 	        'button',
 	        {
@@ -92438,6 +92470,8 @@
 	
 	var _submitVote = __webpack_require__(643);
 	
+	var _flashMessage = __webpack_require__(260);
+	
 	var _DisplayPolls = __webpack_require__(731);
 	
 	var _DisplayPolls2 = _interopRequireDefault(_DisplayPolls);
@@ -92470,8 +92504,10 @@
 	    dispatchClearSinglePoll: func,
 	    dispatchResetDeletedPoll: func,
 	    dispatchResetUpdatedPollResults: func,
+	    dispatchClearAllFlashMessages: func,
 	    updatedPollResults: object,
-	    deletedPoll: string
+	    deletedPoll: string,
+	    flashMessages: array
 	  },
 	  getPoll: function getPoll() {
 	    this.props.dispatchGetSinglePoll(this.props.routeParams.id);
@@ -92482,6 +92518,9 @@
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.props.dispatchClearSinglePoll();
+	    if (this.props.flashMessages.length > 0) {
+	      this.props.dispatchClearAllFlashMessages();
+	    }
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	    if (nextProps.updatedPollResults !== null) {
@@ -92526,7 +92565,8 @@
 	    isAuthenticated: state.user.isAuthenticated,
 	    clientIp: state.user.clientIp,
 	    updatedPollResults: state.newVote.updatedResults,
-	    deletedPoll: state.deletedPoll.deletedPoll
+	    deletedPoll: state.deletedPoll.deletedPoll,
+	    flashMessages: state.flashMessages.flashMessages
 	  };
 	};
 	
@@ -92546,6 +92586,9 @@
 	    },
 	    dispatchResetUpdatedPollResults: function dispatchResetUpdatedPollResults() {
 	      dispatch((0, _submitVote.resetUpdatedPollResults)());
+	    },
+	    dispatchClearAllFlashMessages: function dispatchClearAllFlashMessages() {
+	      dispatch((0, _flashMessage.clearAllFlashMessages)());
 	    }
 	  };
 	};

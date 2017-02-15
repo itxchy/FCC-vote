@@ -6,6 +6,7 @@ import clone from 'lodash/clone'
 // Actions
 export const ADD_FLASH_MESSAGE = 'ADD_FLASH_MESSAGE'
 export const DELETE_FLASH_MESSAGE = 'DELETE_FLASH_MESSAGE'
+const CLEAR_ALL_FLASH_MESSAGES = 'CLEAR_ALL_FLASH_MESSAGES'
 
 // Action Creators
 export function addFlashMessage (message) {
@@ -13,6 +14,9 @@ export function addFlashMessage (message) {
 }
 export function deleteFlashMessage (id) {
   return { type: DELETE_FLASH_MESSAGE, value: id }
+}
+export function clearAllFlashMessages () {
+  return { type: CLEAR_ALL_FLASH_MESSAGES }
 }
 
 // Reducers
@@ -49,6 +53,9 @@ export const reduceDeleteFlashMessage = (state, action) => {
 
   return state
 }
+const reduceClearAllFlashMessages = (state, action) => {
+  return Object.assign({}, state, { flashMessages: [] })
+}
 
 const initialState = {
   flashMessages: []
@@ -61,6 +68,8 @@ export default function flashMessages (state = initialState, action) {
       return reduceAddFlashMessage(state, action)
     case DELETE_FLASH_MESSAGE:
       return reduceDeleteFlashMessage(state, action)
+    case CLEAR_ALL_FLASH_MESSAGES:
+      return reduceClearAllFlashMessages(state, action)
     default:
       return state
   }

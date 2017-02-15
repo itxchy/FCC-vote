@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { getSinglePoll, clearSinglePoll } from '../redux/modules/getSinglePoll'
 import { resetDeletedPoll } from '../redux/modules/deletePoll'
 import { submitVote, resetUpdatedPollResults } from '../redux/modules/submitVote'
+import { clearAllFlashMessages } from '../redux/modules/flashMessage'
 import DisplayPolls from './common/DisplayPolls'
 import LoadingSpinner from './common/LoadingSpinner'
 
@@ -19,8 +20,10 @@ const SinglePoll = React.createClass({
     dispatchClearSinglePoll: func,
     dispatchResetDeletedPoll: func,
     dispatchResetUpdatedPollResults: func,
+    dispatchClearAllFlashMessages: func,
     updatedPollResults: object,
-    deletedPoll: string
+    deletedPoll: string,
+    flashMessages: array
   },
   getPoll () {
     this.props.dispatchGetSinglePoll(this.props.routeParams.id)
@@ -31,6 +34,9 @@ const SinglePoll = React.createClass({
   },
   componentWillUnmount () {
     this.props.dispatchClearSinglePoll()
+    if (this.props.flashMessages.length > 0) {
+      this.props.dispatchClearAllFlashMessages()
+    }
   },
   componentWillReceiveProps (nextProps) {
     if (nextProps.updatedPollResults !== null) {
@@ -75,7 +81,8 @@ const mapStateToProps = (state) => {
     isAuthenticated: state.user.isAuthenticated,
     clientIp: state.user.clientIp,
     updatedPollResults: state.newVote.updatedResults,
-    deletedPoll: state.deletedPoll.deletedPoll
+    deletedPoll: state.deletedPoll.deletedPoll,
+    flashMessages: state.flashMessages.flashMessages
   }
 }
 
@@ -95,6 +102,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     dispatchResetUpdatedPollResults () {
       dispatch(resetUpdatedPollResults())
+    },
+    dispatchClearAllFlashMessages () {
+      dispatch(clearAllFlashMessages())
     }
   }
 }
