@@ -1,4 +1,5 @@
 # Vote
+[![CircleCI]https://circleci.com/gh/itxchy/FCC-vote.svg?style=shield)](https://circleci.com/gh/itxchy/FCC-vote)
 
 Create and share polls. Vote in polls made by friends and strangers.
 
@@ -8,15 +9,13 @@ A Full Stack project for Free Code Camp.
 
 - React
 - Redux
+- Webpack
+- Express
+- MongoDB
+- ESlint
+- Jest
 - Bootstrap
 - SASS
-- Babel
-- ESlint
-- Webpack
-- NodeJS
-- Express
-- Jest
-- CouchDB
 
 This app is server-side rendered. 
 
