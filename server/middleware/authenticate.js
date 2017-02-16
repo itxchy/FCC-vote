@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const config = require('../../config')
+const config = process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : require('../config').jwtSecret
 const User = require('../../models/User')
 const isEmpty = require('lodash/isEmpty')
 
@@ -12,7 +12,7 @@ function authenticate (req, res, next) {
   }
 
   if (token) {
-    jwt.verify(token, config.jwtSecret, (err, decoded) => {
+    jwt.verify(token, config, (err, decoded) => {
       if (err) {
         res.status(401).json({ error: 'Failed to authenticate' })
       } else {
