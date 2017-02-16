@@ -1,5 +1,5 @@
 # Vote
-[![CircleCI]https://circleci.com/gh/itxchy/FCC-vote.svg?style=shield)](https://circleci.com/gh/itxchy/FCC-vote)
+[![CircleCI](https://circleci.com/gh/itxchy/FCC-vote.svg?style=shield)](https://circleci.com/gh/itxchy/FCC-vote)
 
 Create and share polls. Vote in polls made by friends and strangers.
 
