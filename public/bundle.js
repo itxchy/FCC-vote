@@ -66132,10 +66132,9 @@
 	function dupeUserCheck(identifier, field, validationErrors) {
 	  return function (dispatch) {
 	    _axios2.default.get('/api/users/' + identifier).then(function (res) {
-	      var _checkUserInResponse = checkUserInResponse(res, field);
-	
-	      var invalid = _checkUserInResponse.invalid;
-	      var errors = _checkUserInResponse.errors;
+	      var _checkUserInResponse = checkUserInResponse(res, field),
+	          invalid = _checkUserInResponse.invalid,
+	          errors = _checkUserInResponse.errors;
 	
 	      if (!invalid && field === 'email' && !verifyEmail(identifier)) {
 	        errors.email = 'This email address is invalid';
@@ -70132,10 +70131,10 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var object = _React$PropTypes.object;
-	var func = _React$PropTypes.func;
-	var any = _React$PropTypes.any;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    object = _React$PropTypes.object,
+	    func = _React$PropTypes.func,
+	    any = _React$PropTypes.any;
 	
 	
 	var NavBar = _react2.default.createClass({
@@ -70370,9 +70369,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var object = _React$PropTypes.object;
-	var func = _React$PropTypes.func;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    object = _React$PropTypes.object,
+	    func = _React$PropTypes.func;
 	
 	
 	var FlashMessage = _react2.default.createClass({
@@ -70387,9 +70386,9 @@
 	    this.props.dispatchDeleteFlashMessage(this.props.message.id);
 	  },
 	  render: function render() {
-	    var _props$message = this.props.message;
-	    var messageType = _props$message.messageType;
-	    var messageText = _props$message.messageText;
+	    var _props$message = this.props.message,
+	        messageType = _props$message.messageType,
+	        messageText = _props$message.messageText;
 	
 	    return _react2.default.createElement(
 	      'div',
@@ -70513,12 +70512,12 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var func = _React$PropTypes.func;
-	var object = _React$PropTypes.object;
-	var array = _React$PropTypes.array;
-	var string = _React$PropTypes.string;
-	var bool = _React$PropTypes.bool;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    func = _React$PropTypes.func,
+	    object = _React$PropTypes.object,
+	    array = _React$PropTypes.array,
+	    string = _React$PropTypes.string,
+	    bool = _React$PropTypes.bool;
 	
 	
 	var Home = _react2.default.createClass({
@@ -70661,12 +70660,12 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var func = _React$PropTypes.func;
-	var array = _React$PropTypes.array;
-	var object = _React$PropTypes.object;
-	var bool = _React$PropTypes.bool;
-	var string = _React$PropTypes.string;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    func = _React$PropTypes.func,
+	    array = _React$PropTypes.array,
+	    object = _React$PropTypes.object,
+	    bool = _React$PropTypes.bool,
+	    string = _React$PropTypes.string;
 	
 	
 	var DisplayPolls = _react2.default.createClass({
@@ -70689,11 +70688,11 @@
 	      // const currentUser = this.props.user ? this.props.user.username : null
 	      var currentUser = _this.props.isAuthenticated && _this.props.user ? _this.props.user.username : _this.props.clientIp;
 	      var dupeVoter = (0, _pollsLib.dupeVoterCheck)(poll, currentUser);
-	      var title = poll.title;
-	      var options = poll.options;
-	      var totalVotes = poll.totalVotes;
-	      var _id = poll._id;
-	      var owner = poll.owner;
+	      var title = poll.title,
+	          options = poll.options,
+	          totalVotes = poll.totalVotes,
+	          _id = poll._id,
+	          owner = poll.owner;
 	      // TODO: if a prop called myPolls is true, just show results card
 	
 	      if (dupeVoter || _this.props.myPolls) {
@@ -70778,12 +70777,12 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var string = _React$PropTypes.string;
-	var array = _React$PropTypes.array;
-	var number = _React$PropTypes.number;
-	var object = _React$PropTypes.object;
-	var bool = _React$PropTypes.bool;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    string = _React$PropTypes.string,
+	    array = _React$PropTypes.array,
+	    number = _React$PropTypes.number,
+	    object = _React$PropTypes.object,
+	    bool = _React$PropTypes.bool;
 	
 	
 	var ResultsCard = _react2.default.createClass({
@@ -70878,10 +70877,10 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var string = _React$PropTypes.string;
-	var object = _React$PropTypes.object;
-	var bool = _React$PropTypes.bool;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    string = _React$PropTypes.string,
+	    object = _React$PropTypes.object,
+	    bool = _React$PropTypes.bool;
 	
 	
 	var OwnerControlButtons = _react2.default.createClass({
@@ -70968,9 +70967,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var string = _React$PropTypes.string;
-	var func = _React$PropTypes.func;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    string = _React$PropTypes.string,
+	    func = _React$PropTypes.func;
 	
 	
 	var DeleteModal = _react2.default.createClass({
@@ -71083,10 +71082,10 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var string = _React$PropTypes.string;
-	var array = _React$PropTypes.array;
-	var number = _React$PropTypes.number;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    string = _React$PropTypes.string,
+	    array = _React$PropTypes.array,
+	    number = _React$PropTypes.number;
 	
 	
 	var D3Chart = _react2.default.createClass({
@@ -90663,13 +90662,13 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var string = _React$PropTypes.string;
-	var array = _React$PropTypes.array;
-	var number = _React$PropTypes.number;
-	var object = _React$PropTypes.object;
-	var func = _React$PropTypes.func;
-	var bool = _React$PropTypes.bool;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    string = _React$PropTypes.string,
+	    array = _React$PropTypes.array,
+	    number = _React$PropTypes.number,
+	    object = _React$PropTypes.object,
+	    func = _React$PropTypes.func,
+	    bool = _React$PropTypes.bool;
 	
 	
 	var PollCard = _react2.default.createClass({
@@ -91110,12 +91109,12 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var object = _React$PropTypes.object;
-	var func = _React$PropTypes.func;
-	var string = _React$PropTypes.string;
-	var bool = _React$PropTypes.bool;
-	var array = _React$PropTypes.array;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    object = _React$PropTypes.object,
+	    func = _React$PropTypes.func,
+	    string = _React$PropTypes.string,
+	    bool = _React$PropTypes.bool,
+	    array = _React$PropTypes.array;
 	
 	
 	var CreateAPoll = _react2.default.createClass({
@@ -91231,10 +91230,10 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var string = _React$PropTypes.string;
-	var func = _React$PropTypes.func;
-	var bool = _React$PropTypes.bool;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    string = _React$PropTypes.string,
+	    func = _React$PropTypes.func,
+	    bool = _React$PropTypes.bool;
 	
 	
 	var NewPollTitle = _react2.default.createClass({
@@ -91325,9 +91324,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var object = _React$PropTypes.object;
-	var func = _React$PropTypes.func;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    object = _React$PropTypes.object,
+	    func = _React$PropTypes.func;
 	
 	
 	var PendingPollOptions = _react2.default.createClass({
@@ -91443,12 +91442,12 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var string = _React$PropTypes.string;
-	var func = _React$PropTypes.func;
-	var array = _React$PropTypes.array;
-	var object = _React$PropTypes.object;
-	var bool = _React$PropTypes.bool;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    string = _React$PropTypes.string,
+	    func = _React$PropTypes.func,
+	    array = _React$PropTypes.array,
+	    object = _React$PropTypes.object,
+	    bool = _React$PropTypes.bool;
 	
 	
 	var SaveOrReset = _react2.default.createClass({
@@ -91475,10 +91474,9 @@
 	      newPollOptions: this.props.newPollOptions
 	    };
 	
-	    var _validateCreateAPollI = (0, _createAPollValidation2.default)(inputData);
-	
-	    var errors = _validateCreateAPollI.errors;
-	    var isValid = _validateCreateAPollI.isValid;
+	    var _validateCreateAPollI = (0, _createAPollValidation2.default)(inputData),
+	        errors = _validateCreateAPollI.errors,
+	        isValid = _validateCreateAPollI.isValid;
 	
 	    if (!isValid) {
 	      this.setState({ errors: errors });
@@ -91607,12 +91605,12 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var object = _React$PropTypes.object;
-	var func = _React$PropTypes.func;
-	var bool = _React$PropTypes.bool;
-	var string = _React$PropTypes.string;
-	var array = _React$PropTypes.array;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    object = _React$PropTypes.object,
+	    func = _React$PropTypes.func,
+	    bool = _React$PropTypes.bool,
+	    string = _React$PropTypes.string,
+	    array = _React$PropTypes.array;
 	
 	
 	var EditPoll = _react2.default.createClass({
@@ -91781,10 +91779,10 @@
 	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var func = _React$PropTypes.func;
-	var object = _React$PropTypes.object;
-	var bool = _React$PropTypes.bool;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    func = _React$PropTypes.func,
+	    object = _React$PropTypes.object,
+	    bool = _React$PropTypes.bool;
 	
 	
 	var Signup = _react2.default.createClass({
@@ -91813,10 +91811,9 @@
 	    this.setState(_defineProperty({}, event.target.name, event.target.value));
 	  },
 	  isValid: function isValid() {
-	    var _validateInput = (0, _signupValidation2.default)(this.state);
-	
-	    var errors = _validateInput.errors;
-	    var isValid = _validateInput.isValid;
+	    var _validateInput = (0, _signupValidation2.default)(this.state),
+	        errors = _validateInput.errors,
+	        isValid = _validateInput.isValid;
 	
 	    if (!isValid) {
 	      this.props.dispatchNewFormErrors(this.props.errors, errors);
@@ -92043,19 +92040,19 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var string = _React$PropTypes.string;
-	var func = _React$PropTypes.func;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    string = _React$PropTypes.string,
+	    func = _React$PropTypes.func;
 	
 	
 	var TextFieldGroup = function TextFieldGroup(_ref) {
-	  var field = _ref.field;
-	  var value = _ref.value;
-	  var label = _ref.label;
-	  var error = _ref.error;
-	  var type = _ref.type;
-	  var onChange = _ref.onChange;
-	  var onBlur = _ref.onBlur;
+	  var field = _ref.field,
+	      value = _ref.value,
+	      label = _ref.label,
+	      error = _ref.error,
+	      type = _ref.type,
+	      onChange = _ref.onChange,
+	      onBlur = _ref.onBlur;
 	
 	  return _react2.default.createElement(
 	    'div',
@@ -92161,11 +92158,11 @@
 	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var func = _React$PropTypes.func;
-	var object = _React$PropTypes.object;
-	var bool = _React$PropTypes.bool;
-	var shape = _React$PropTypes.shape;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    func = _React$PropTypes.func,
+	    object = _React$PropTypes.object,
+	    bool = _React$PropTypes.bool,
+	    shape = _React$PropTypes.shape;
 	
 	
 	var LoginForm = _react2.default.createClass({
@@ -92191,10 +92188,9 @@
 	    };
 	  },
 	  isValid: function isValid() {
-	    var _validateInput = (0, _loginValidation2.default)(this.state);
-	
-	    var errors = _validateInput.errors;
-	    var isValid = _validateInput.isValid;
+	    var _validateInput = (0, _loginValidation2.default)(this.state),
+	        errors = _validateInput.errors,
+	        isValid = _validateInput.isValid;
 	
 	    if (!isValid) {
 	      this.setState({ errors: errors });
@@ -92226,10 +92222,10 @@
 	    if (this.props.user.errors && this.props.user.errors.form) {
 	      loginErrors = this.props.user.errors;
 	    }
-	    var _state = this.state;
-	    var errors = _state.errors;
-	    var identifier = _state.identifier;
-	    var password = _state.password;
+	    var _state = this.state,
+	        errors = _state.errors,
+	        identifier = _state.identifier,
+	        password = _state.password;
 	
 	
 	    return _react2.default.createElement(
@@ -92347,12 +92343,12 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var func = _React$PropTypes.func;
-	var object = _React$PropTypes.object;
-	var array = _React$PropTypes.array;
-	var bool = _React$PropTypes.bool;
-	var string = _React$PropTypes.string;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    func = _React$PropTypes.func,
+	    object = _React$PropTypes.object,
+	    array = _React$PropTypes.array,
+	    bool = _React$PropTypes.bool,
+	    string = _React$PropTypes.string;
 	
 	
 	var MyPollsPage = _react2.default.createClass({
@@ -92478,12 +92474,12 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _React$PropTypes = _react2.default.PropTypes;
-	var object = _React$PropTypes.object;
-	var func = _React$PropTypes.func;
-	var array = _React$PropTypes.array;
-	var string = _React$PropTypes.string;
-	var bool = _React$PropTypes.bool;
+	var _React$PropTypes = _react2.default.PropTypes,
+	    object = _React$PropTypes.object,
+	    func = _React$PropTypes.func,
+	    array = _React$PropTypes.array,
+	    string = _React$PropTypes.string,
+	    bool = _React$PropTypes.bool;
 	
 	
 	var SinglePoll = _react2.default.createClass({
