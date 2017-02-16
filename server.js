@@ -27,15 +27,20 @@ const app = express()
  * connect to MongoDB
  */
 if (process.env.NODE_ENV === 'production') {
-  console.log('production environment. No remote mongodb server specified.')
-  // connect to remote database
+  mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+      console.log('Connected to Mongoose! production environment')
+    })
+    .catch(err => {
+      console.error('Mongoose production connection failed', err)
+    })
 } else {
   mongoose.connect('mongodb://localhost:27017/vote')
   .then(() => {
-    console.log('Connected to Mongoose!')
+    console.log('Connected to Mongoose! development environment')
   })
   .catch(err => {
-    console.error('Mongoose connection failed:', err)
+    console.error('Mongoose development connection failed:', err)
   })
 }
 
