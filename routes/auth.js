@@ -2,10 +2,9 @@ const express = require('express')
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const config = require('../config')
 const isEmpty = require('lodash/isEmpty')
-
-let router = express.Router()
+const router = express.Router()
+const config = process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : require('../config').jwtSecret
 
 /**
  * Authenicates a login request.
