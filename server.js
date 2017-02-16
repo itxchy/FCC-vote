@@ -9,7 +9,6 @@ mongoose.Promise = require('bluebird')
 const React = require('react')
 const ReactDOMServer = require('react-dom/server')
 const { match, RouterContext, useRouterHistory, createMemoryHistory } = require('react-router')
-// const createMemoryHistory = require('history').createMemoryHistory
 const { Provider } = require('react-redux')
 const { store } = require('./redux/Store.js')
 const baseTemplate = fs.readFileSync('./index.html')
@@ -64,12 +63,7 @@ app.use('/public', express.static('./public'))
 app.use((req, res) => {
   const basename = '/'
   const location = req.url.replace(basename, '')
-  // react-router package's createMemoryHistory 
   const history = createMemoryHistory({ entries: [location], basename })
-  // history package's createMemoryHistory
-  // const history = useRouterHistory(() => createMemoryHistory(location))({ basename })
-  console.log('location', location)
-  console.log('req.url', req.url)
   match({ routes: Routes(), location, history }, (error, redirectLocation, renderProps) => {
     if (error) {
       res.status(500).send(error.message)
