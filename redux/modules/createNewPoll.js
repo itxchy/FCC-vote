@@ -38,7 +38,7 @@ export function submitNewPoll (newPoll) {
         dispatch(pollSaved(res.data.poll._id))
       })
       .catch(err => {
-        console.error('newPoll could not be saved', err)
+        console.error('ERROR: redux: newPoll could not be saved', err)
         dispatch(addFlashMessage({ type: 'error', text: 'Something went wrong. Poll coudn\'t be saved.' }))
       })
   }
@@ -46,19 +46,17 @@ export function submitNewPoll (newPoll) {
 
 // Reducers
 const reduceNewPollTitle = (state, action) => {
-  const newState = {}
-  Object.assign(newState, state, { newPollTitle: action.value })
-  return newState
+  if (typeof action.value !== 'string') {
+    console.error('ERROR: redux: setNewPollTitle wasn\'t passed a string:', action.value)
+    return Object.assign({}, state)
+  }
+  return Object.assign({}, state, { newPollTitle: action.value })
 }
 const reduceTitleEditableState = (state, action) => {
-  const newState = {}
-  Object.assign(newState, state, { titleEditable: action.value })
-  return newState
+  return Object.assign({}, state, { titleEditable: action.value })
 }
 const reduceOptionUpdate = (state, action) => {
-  const newState = {}
-  Object.assign(newState, state, { newPollOptions: action.value })
-  return newState
+  return Object.assign({}, state, { newPollOptions: action.value })
 }
 const reduceResetNewPoll = (state, action) => {
   const newState = {}
@@ -81,7 +79,7 @@ const reduceResetPollSaved = (state, action) => {
   return Object.assign({}, state, { pollSaved: null })
 }
 
-const initialState = {
+export const DEFAULT_STATE = {
   newPollTitle: '',
   titleEditable: true,
   newPollOptions: [
@@ -92,7 +90,7 @@ const initialState = {
 }
 
 // Root Reducer Slice
-export default function newPoll (state = initialState, action) {
+export default function newPoll (state = DEFAULT_STATE, action) {
   switch (action.type) {
     case SET_NEW_POLL_TITLE:
       return reduceNewPollTitle(state, action)
