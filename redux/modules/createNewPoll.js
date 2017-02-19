@@ -11,29 +11,29 @@ const RESET_POLL_SAVED = 'RESET_POLL_SAVED'
 
 // Action Creators
 /**
- * creates SET_NEW_POLL_TITLE action 
- *
  * @param {string} pollTitle
+ * @return {object} SET_NEW_POLL_TITLE action 
  */
 export function setNewPollTitle (pollTitle) {
   return { type: SET_NEW_POLL_TITLE, value: pollTitle }
 }
 /**
- * creates SET_NEW_TITLE_EDITABLE action
- *
  * @param {boolean} bool
+ * @return {object} SET_NEW_TITLE_EDITABLE action
  */
 export function setTitleEditable (bool) {
   return { type: SET_NEW_TITLE_EDITABLE, value: bool }
 }
 /**
- * creates UPDATE_OPTION action
- *
  * @param {array} updatedOptions - An array of at least 2 strings
+ * @return {object} UPDATE_OPTION action
  */
 export function updateOption (updatedOptions) {
   return { type: UPDATE_OPTION, value: updatedOptions }
 }
+/**
+ * @return {object} RESET_NEW_POLL action
+ */
 export function resetNewPoll () {
   return { type: RESET_NEW_POLL }
 }

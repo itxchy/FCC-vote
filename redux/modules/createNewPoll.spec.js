@@ -38,5 +38,10 @@ describe('redux: newPoll', () => {
       let state = newPollReducerSlice(null, updateOption(['thing 1', 'thing 2']))
       expect(state.newPollOptions).toEqual(expect.arrayContaining(['thing 1', 'thing 2']))
     })
+    it('should return previous state if less than two option strings are given', () => {
+      let state = Object.assign({}, DEFAULT_STATE, { newPollOptions: ['thing 1', 'thing 2']})
+      let newState = newPollReducerSlice(state, updateOption(['thing 3']))
+      expect(newState.newPollOptions).toEqual(expect.arrayContaining(['thing 1', 'thing 2']))
+    })
   })
 })
