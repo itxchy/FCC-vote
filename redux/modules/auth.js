@@ -40,7 +40,7 @@ export function userLoading (bool) {
     userLoading: bool
   }
 }
-function setErrors (errors = {}) {
+export function setErrors (errors = {}) {
   return {
     type: SET_ERRORS,
     errors,
@@ -71,7 +71,7 @@ export function login (data) {
       .catch(err => {
         dispatch(userLoading(false))
         console.error('ERROR: redux: caught error from \'/api/auth\' : ', err)
-        return dispatch(setErrors({ errors: { server: 'Server error, bad response' } }))
+        return dispatch(setErrors({ server: 'Server error, bad response' }))
       })
   }
 }
@@ -167,7 +167,7 @@ function handleLoginResponse (res, dispatch) {
   // handle server error
   dispatch(userLoading(false))
   console.error('no errors or token offered from \'/api/auth\' :', res)
-  return dispatch(setErrors({ errors: { server: 'no errors or token returned' } }))
+  return dispatch(setErrors({ server: 'no errors or token returned' }))
 }
 
 function prepareUserFromToken (res) {
