@@ -79,7 +79,7 @@ export function login (data) {
   return dispatch => {
     dispatch(userLoading(true))
     axios.post('/api/auth', data)
-      .then(res => handleLoginResponse(res, dispatch))
+      .then(res => handleLoginResponse(res, dispatch, prepareUserFromToken))
       .catch(err => {
         dispatch(userLoading(false))
         console.error('ERROR: redux: login request returned a server error:', err)
@@ -174,7 +174,7 @@ export default function user (state = DEFAULT_STATE, action) {
 
 // ************** Lib **************
 
-function handleLoginResponse (res, dispatch) {
+export function handleLoginResponse (res, dispatch, prepareUserFromJwt) {
   console.log('auth.js: res.data:', res.data)
   // handle unsuccessful login
   if (res.data.errors) {
@@ -182,7 +182,7 @@ function handleLoginResponse (res, dispatch) {
     return dispatch(setErrors(res.data.errors))
   }
   // handle token on successful login
-  const user = prepareUserFromToken(res)
+  const user = prepareUserFromJwt(res)
   if (user && user.username) {
     dispatch(setCurrentUser(user))
     return dispatch(userLoading(false))
@@ -193,6 +193,8 @@ function handleLoginResponse (res, dispatch) {
   return dispatch(setErrors({ server: 'no errors or token returned' }))
 }
 
+// This gets passed into handleLoginResponse, though its name is different to 
+// allow it to be mocked in testing.
 function prepareUserFromToken (res) {
   const token = res.data.token ? res.data.token : null
   if (token) {

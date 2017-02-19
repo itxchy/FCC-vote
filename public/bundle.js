@@ -35569,6 +35569,7 @@
 	exports.logout = logout;
 	exports.getClientIp = getClientIp;
 	exports.default = user;
+	exports.handleLoginResponse = handleLoginResponse;
 	
 	var _axios = __webpack_require__(427);
 	
@@ -35663,7 +35664,7 @@
 	  return function (dispatch) {
 	    dispatch(userLoading(true));
 	    _axios2.default.post('/api/auth', data).then(function (res) {
-	      return handleLoginResponse(res, dispatch);
+	      return handleLoginResponse(res, dispatch, prepareUserFromToken);
 	    }).catch(function (err) {
 	      dispatch(userLoading(false));
 	      console.error('ERROR: redux: login request returned a server error:', err);
@@ -35759,7 +35760,7 @@
 	
 	// ************** Lib **************
 	
-	function handleLoginResponse(res, dispatch) {
+	function handleLoginResponse(res, dispatch, prepareUserFromJwt) {
 	  console.log('auth.js: res.data:', res.data);
 	  // handle unsuccessful login
 	  if (res.data.errors) {
@@ -35767,7 +35768,7 @@
 	    return dispatch(setErrors(res.data.errors));
 	  }
 	  // handle token on successful login
-	  var user = prepareUserFromToken(res);
+	  var user = prepareUserFromJwt(res);
 	  if (user && user.username) {
 	    dispatch(setCurrentUser(user));
 	    return dispatch(userLoading(false));
@@ -35778,6 +35779,8 @@
 	  return dispatch(setErrors({ server: 'no errors or token returned' }));
 	}
 	
+	// This gets passed into handleLoginResponse, though its name is different to 
+	// allow it to be mocked in testing.
 	function prepareUserFromToken(res) {
 	  var token = res.data.token ? res.data.token : null;
 	  if (token) {
