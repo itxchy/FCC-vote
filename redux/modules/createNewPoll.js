@@ -91,6 +91,7 @@ const setNewPollTitleReducer = (state, action) => {
 }
 const setTitleEditableReducer = (state, action) => {
   if (typeof action.value !== 'boolean') {
+    console.error('ERROR: redux: setTitleEditable was not passed a boolean:', action.value)
     return Object.assign({}, state, { titleEditable: true })
   }
   return Object.assign({}, state, { titleEditable: action.value })
@@ -118,6 +119,7 @@ const resetNewPollReducer = (state, action) => {
 }
 const pollSavedReducer = (state, action) => {
   if (typeof action.pollId !== 'string') {
+    console.error('ERROR: redux: pollSaved was not passed an id as a string:', action.pollId)
     return Object.assign({}, state, { pollSaved: false })
   }
   return Object.assign({}, state, { pollSaved: action.pollId })
