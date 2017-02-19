@@ -5,7 +5,8 @@ import {
   userLoading,
   setErrors,
   setClientIp,
-  handleLoginResponse
+  handleLoginResponse,
+  prepareUserFromToken
 } from './auth.js'
 import configureStore from 'redux-mock-store'
 const middlewares = []
@@ -78,12 +79,12 @@ describe('redux: user', () => {
       const store = mockStore(initialState)
       handleLoginResponse({data: { errors: 'err0r' }}, store.dispatch, prepareUserFromToken)
       const actions = store.getActions()
-      
+
       expect(actions[0].type).toEqual('SET_ERRORS')
       expect(actions[0].errors).toEqual('err0r')
     })
     it('should dispatch setCurrentUser with user object and userLoading(false) if proper token is received', () => {
-      const prepareUserFromToken = jest.fn().mockReturnValue({ id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'})
+      const prepareUserFromToken = jest.fn(() => ({ id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894' }))
       const initialState = {}
       const store = mockStore(initialState)
       handleLoginResponse({data: { token: true }}, store.dispatch, prepareUserFromToken)

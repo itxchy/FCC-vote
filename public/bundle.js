@@ -35570,6 +35570,7 @@
 	exports.getClientIp = getClientIp;
 	exports.default = user;
 	exports.handleLoginResponse = handleLoginResponse;
+	exports.prepareUserFromToken = prepareUserFromToken;
 	
 	var _axios = __webpack_require__(427);
 	
@@ -35703,7 +35704,7 @@
 	  if (user && user.username) {
 	    authenticationStatus = true;
 	  } else {
-	    console.error('ERROR: redux: invalid user object passed to setCurrentUser', user);
+	    user = null;
 	  }
 	  return Object.assign({}, state, {
 	    isAuthenticated: authenticationStatus,
@@ -35760,15 +35761,20 @@
 	
 	// ************** Lib **************
 	
-	function handleLoginResponse(res, dispatch, prepareUserFromJwt) {
+	function handleLoginResponse(res, dispatch, prepareUser) {
 	  console.log('auth.js: res.data:', res.data);
+	  if (!res.data) {
+	    dispatch(userLoading(false));
+	    console.error('res.data not present from \'/api/auth\' :', res);
+	    return dispatch(setErrors({ server: 'Server Error. Bad response.' }));
+	  }
 	  // handle unsuccessful login
 	  if (res.data.errors) {
 	    // res.data will contain { errors: { form: 'Invalid Credentials' } }
 	    return dispatch(setErrors(res.data.errors));
 	  }
 	  // handle token on successful login
-	  var user = prepareUserFromJwt(res);
+	  var user = prepareUser(res);
 	  if (user && user.username) {
 	    dispatch(setCurrentUser(user));
 	    return dispatch(userLoading(false));
@@ -35779,9 +35785,8 @@
 	  return dispatch(setErrors({ server: 'no errors or token returned' }));
 	}
 	
-	// This gets passed into handleLoginResponse, though its name is different to 
-	// allow it to be mocked in testing.
 	function prepareUserFromToken(res) {
+	  console.log('prepareUserFromToken res:', res);
 	  var token = res.data.token ? res.data.token : null;
 	  if (token) {
 	    localStorage.setItem('jwtToken', token);
