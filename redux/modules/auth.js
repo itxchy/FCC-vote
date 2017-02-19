@@ -114,7 +114,7 @@ export function getClientIp () {
 
 // ******* Reducers *******
 
-export const setCurrentUserReducer = (state, action) => {
+const setCurrentUserReducer = (state, action) => {
   let authenticationStatus = false
   let user = action.user
   if (user && user.username) {
@@ -128,7 +128,7 @@ export const setCurrentUserReducer = (state, action) => {
     userLoading: false
   })
 }
-export const userLoadingReducer = (state, action) => {
+const userLoadingReducer = (state, action) => {
   if (typeof action.userLoading !== 'boolean') {
     console.error('ERROR: redux: userLoading was not passed a boolean:', action.userLoading)
     return Object.assign({}, state, { userLoading: false })
@@ -192,9 +192,10 @@ export function handleLoginResponse (res, dispatch, prepareUser) {
     dispatch(setCurrentUser(user))
     return dispatch(userLoading(false))
   }
-  // handle server error
+  // if the server responds but res.data.errors and res.data.token are not defined, handle it here.
+  // This should never get reached.
   dispatch(userLoading(false))
-  console.error('no errors or token offered from \'/api/auth\' :', res)
+  console.error('ERROR: redux: no errors or token offered from \'/api/auth\' :', res)
   return dispatch(setErrors({ server: 'no errors or token returned' }))
 }
 
@@ -208,6 +209,7 @@ export function prepareUserFromToken (res) {
     const user = jwt.decode(token)
     return user
   } else {
+    console.error('ERROR: redux: prepareUserFromToken did not receive a token', res)
     return null
   }
 }
