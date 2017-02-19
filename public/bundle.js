@@ -35558,6 +35558,9 @@
 	  value: true
 	});
 	exports.DEFAULT_STATE = exports.userLoadingReducer = exports.setCurrentUserReducer = undefined;
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /* global localStorage */
+	
 	exports.setCurrentUser = setCurrentUser;
 	exports.userLoading = userLoading;
 	exports.setErrors = setErrors;
@@ -35583,8 +35586,7 @@
 	
 	// ******* Actions *******
 	
-	var SET_CURRENT_USER = 'SET_CURRENT_USER'; /* global localStorage */
-	
+	var SET_CURRENT_USER = 'SET_CURRENT_USER';
 	var USER_LOADING = 'USER_LOADING';
 	var SET_CLIENT_IP = 'SET_CLIENT_IP';
 	var SET_ERRORS = 'SET_ERRORS';
@@ -35719,6 +35721,9 @@
 	  return Object.assign({}, state, { clientIp: action.clientIp });
 	};
 	var setErrorsReducer = function setErrorsReducer(state, action) {
+	  if (_typeof(action.errors) !== 'object') {
+	    return Object.assign({}, state);
+	  }
 	  if (!action.errors.form && !action.errors.server) {
 	    console.error('ERROR: redux: Unknown error key passed in error object to setErrors:', action.errors);
 	  }

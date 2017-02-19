@@ -139,6 +139,9 @@ const setClientIpReducer = (state, action) => {
   return Object.assign({}, state, { clientIp: action.clientIp })
 }
 const setErrorsReducer = (state, action) => {
+  if (typeof action.errors !== 'object') {
+    return Object.assign({}, state)
+  }
   if (!action.errors.form && !action.errors.server) {
     console.error('ERROR: redux: Unknown error key passed in error object to setErrors:', action.errors)
   }
