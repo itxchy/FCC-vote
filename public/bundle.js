@@ -33957,7 +33957,7 @@
 	  return { type: POLL_SAVED, pollId: pollId };
 	}
 	/**
-	 * Resets this redux module's state to its DEFAULT_STATE
+	 * Sets state.pollSaved as null
 	 */
 	function resetPollSaved() {
 	  return { type: RESET_POLL_SAVED };

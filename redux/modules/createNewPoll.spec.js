@@ -5,7 +5,8 @@ import {
   setTitleEditable, 
   updateOption,
   resetNewPoll,
-  pollSaved
+  pollSaved,
+  resetPollSaved
 } from './createNewPoll'
 
 describe('redux: newPoll', () => {
@@ -67,6 +68,15 @@ describe('redux: newPoll', () => {
     it('should set state.pollSaved as false if a string is not passed to pollSaved', () => {
       let state = newPollReducerSlice(null, pollSaved(undefined))
       expect(state.pollSaved).toBe(false)
+    })
+  })
+
+  describe('resetPollSaved', () => {
+    it('should set state.pollSaved as null', () => {
+      let state = Object.assign({}, DEFAULT_STATE, { pollSaved: 'CRAZYID4242'})
+      expect(state.pollSaved).toBe('CRAZYID4242')
+      let newState = newPollReducerSlice(state, resetPollSaved())
+      expect(newState.pollSaved).toBe(null)
     })
   })
 })

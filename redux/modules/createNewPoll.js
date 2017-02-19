@@ -51,7 +51,7 @@ export function pollSaved (pollId) {
   return { type: POLL_SAVED, pollId }
 }
 /**
- * Resets this redux module's state to its DEFAULT_STATE
+ * Sets state.pollSaved as null
  */
 export function resetPollSaved () {
   return { type: RESET_POLL_SAVED }
