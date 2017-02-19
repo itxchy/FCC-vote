@@ -2,7 +2,9 @@ import userReducerSlice from './auth'
 import {
   DEFAULT_STATE,
   setCurrentUser,
-  userLoading
+  userLoading,
+  setErrors,
+  setClientIp
 } from './auth.js'
 
 describe('redux: user', () => {
@@ -37,6 +39,20 @@ describe('redux: user', () => {
     it('should keep state.userLoading as false if the parameter passed is not a boolean', () => {
       let state = userReducerSlice(null, userLoading('wat'))
       expect(state.userLoading).toBe(false)
+    })
+  })
+
+  describe('setErrors', () => {
+    it('should set state.errors as the object passed to setErrors', () => {
+      let state = userReducerSlice(null, setErrors({ form: 'Invalid Credentials' }))
+      expect(state.errors.form).toBe('Invalid Credentials')
+    })
+  })
+
+  describe('setClientIp', () => {
+    it('should set state.clientIp as the string passed to setClientIp', () => {
+      let state = userReducerSlice(null, setClientIp('100.000.000.000'))
+      expect(state.clientIp).toBe('100.000.000.000')
     })
   })
 })

@@ -40,6 +40,12 @@ export function userLoading (bool) {
     userLoading: bool
   }
 }
+/**
+ * Sets state.errors
+ *
+ * @param {object} errors - should contain a form error or server error
+ * example: { form: 'Invalid Credentials' } or { server: 'Server error. Try agian in a moment.' }
+ */
 export function setErrors (errors = {}) {
   return {
     type: SET_ERRORS,
@@ -47,21 +53,27 @@ export function setErrors (errors = {}) {
     userLoading: false
   }
 }
-function setClientIp (clientIp) {
+/**
+ * Sets state.clientIp
+ *
+ * @param {string} clientIp - The client's IP address as a string received from the server.
+ */
+export function setClientIp (clientIp) {
   return {
     type: SET_CLIENT_IP,
     clientIp
   }
 }
 /**
- * Attempts to authenticate a user on the server, and then
- * dispatches setCurrentUser with either an authenticated
- * user object, or errors object depending on the login result.
+ * Attempts to authenticate a user on the server.
+ *
+ * @param {object} data - An object containing an identifier and password to login with.
+ * example: { identifier: 'TracyJordan', password: 'IAMMYOWNPASSWORD'}
  *
  * The response from /api/auth will be:
- * res.data.errors
+ * res.data.errors - errors object: { errors: { form: 'Invalid Credentials' } }
  * or
- * res.data.token
+ * res.data.token - token object: { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
  */
 export function login (data) {
   return dispatch => {
@@ -70,11 +82,14 @@ export function login (data) {
       .then(res => handleLoginResponse(res, dispatch))
       .catch(err => {
         dispatch(userLoading(false))
-        console.error('ERROR: redux: caught error from \'/api/auth\' : ', err)
-        return dispatch(setErrors({ server: 'Server error, bad response' }))
+        console.error('ERROR: redux: login request returned a server error:', err)
+        return dispatch(setErrors({ server: 'Server error. Try agian in a moment.' }))
       })
   }
 }
+/**
+ * Removes a user's jwt from localstorage and client headers, and clears user state in redux
+ */
 export function logout () {
   return dispatch => {
     localStorage.removeItem('jwtToken')
@@ -82,6 +97,9 @@ export function logout () {
     dispatch(setCurrentUser({}))
   }
 }
+/**
+ * Retrieves the client's IP address from the server
+ */
 export function getClientIp () {
   return dispatch => {
     axios.get('/api/auth/ip')
@@ -89,14 +107,14 @@ export function getClientIp () {
         dispatch(setClientIp(res.data.clientIp))
       })
       .catch(err => {
-        console.error('ERROR: redux: failed to receive client ip address', err)
+        console.error('ERROR: redux: failed to receive current client ip address from the server', err)
       })
   }
 }
 
 // ******* Reducers *******
 
-export const reduceSetCurrentUser = (state, action) => {
+export const setCurrentUserReducer = (state, action) => {
   let authenticationStatus = false
   let user = action.user
   if (user && user.username) {
@@ -110,19 +128,24 @@ export const reduceSetCurrentUser = (state, action) => {
     userLoading: false
   })
 }
-export const reduceUserLoading = (state, action) => {
+export const userLoadingReducer = (state, action) => {
   if (typeof action.userLoading !== 'boolean') {
     console.error('ERROR: redux: userLoading was not passed a boolean:', action.userLoading)
     return Object.assign({}, state, { userLoading: false })
   }
   return Object.assign({}, state, { userLoading: action.userLoading })
 }
-const reduceSetClientIp = (state, action) => {
+const setClientIpReducer = (state, action) => {
   return Object.assign({}, state, { clientIp: action.clientIp })
 }
-const reduceSetErrors = (state, action) => {
-  return Object.assign({}, state, { errors: action.errors, userLoading: action.userLoading })
+const setErrorsReducer = (state, action) => {
+  if (!action.errors.form && !action.errors.server) {
+    console.error('ERROR: redux: Unknown error key passed in error object to setErrors:', action.errors)
+  }
+  return Object.assign({}, state, { errors: action.errors })
 }
+
+// ******* Root Reducer Slice *******
 
 export const DEFAULT_STATE = {
   isAuthenticated: null,
@@ -131,19 +154,16 @@ export const DEFAULT_STATE = {
   userLoading: false,
   clientIp: null
 }
-
-// ******* Root Reducer Slice *******
-
 export default function user (state = DEFAULT_STATE, action) {
   switch (action.type) {
     case SET_CURRENT_USER:
-      return reduceSetCurrentUser(state, action)
+      return setCurrentUserReducer(state, action)
     case USER_LOADING:
-      return reduceUserLoading(state, action)
+      return userLoadingReducer(state, action)
     case SET_CLIENT_IP:
-      return reduceSetClientIp(state, action)
+      return setClientIpReducer(state, action)
     case SET_ERRORS:
-      return reduceSetErrors(state, action)
+      return setErrorsReducer(state, action)
     default:
       return state
   }

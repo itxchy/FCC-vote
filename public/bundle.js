@@ -34029,15 +34029,14 @@
 	  return Object.assign({}, state, { pollSaved: null });
 	};
 	
+	// ******* Root Reducer Slice *******
+	
 	var DEFAULT_STATE = exports.DEFAULT_STATE = {
 	  newPollTitle: '',
 	  titleEditable: true,
 	  newPollOptions: ['', ''],
 	  pollSaved: null
 	};
-	
-	// ******* Root Reducer Slice *******
-	
 	function newPoll() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
 	  var action = arguments[1];
@@ -35558,9 +35557,11 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.DEFAULT_STATE = exports.reduceUserLoading = exports.reduceSetCurrentUser = undefined;
+	exports.DEFAULT_STATE = exports.userLoadingReducer = exports.setCurrentUserReducer = undefined;
 	exports.setCurrentUser = setCurrentUser;
 	exports.userLoading = userLoading;
+	exports.setErrors = setErrors;
+	exports.setClientIp = setClientIp;
 	exports.login = login;
 	exports.logout = logout;
 	exports.getClientIp = getClientIp;
@@ -35619,6 +35620,12 @@
 	    userLoading: bool
 	  };
 	}
+	/**
+	 * Sets state.errors
+	 *
+	 * @param {object} errors - should contain a form error or server error
+	 * example: { form: 'Invalid Credentials' } or { server: 'Server error. Try agian in a moment.' }
+	 */
 	function setErrors() {
 	  var errors = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	
@@ -35628,6 +35635,11 @@
 	    userLoading: false
 	  };
 	}
+	/**
+	 * Sets state.clientIp
+	 *
+	 * @param {string} clientIp - The client's IP address as a string received from the server.
+	 */
 	function setClientIp(clientIp) {
 	  return {
 	    type: SET_CLIENT_IP,
@@ -35635,14 +35647,15 @@
 	  };
 	}
 	/**
-	 * Attempts to authenticate a user on the server, and then
-	 * dispatches setCurrentUser with either an authenticated
-	 * user object, or errors object depending on the login result.
+	 * Attempts to authenticate a user on the server.
+	 *
+	 * @param {object} data - An object containing an identifier and password to login with.
+	 * example: { identifier: 'TracyJordan', password: 'IAMMYOWNPASSWORD'}
 	 *
 	 * The response from /api/auth will be:
-	 * res.data.errors
+	 * res.data.errors - errors object: { errors: { form: 'Invalid Credentials' } }
 	 * or
-	 * res.data.token
+	 * res.data.token - token object: { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
 	 */
 	function login(data) {
 	  return function (dispatch) {
@@ -35651,11 +35664,14 @@
 	      return handleLoginResponse(res, dispatch);
 	    }).catch(function (err) {
 	      dispatch(userLoading(false));
-	      console.error('ERROR: redux: caught error from \'/api/auth\' : ', err);
-	      return dispatch(setErrors({ errors: { server: 'Server error, bad response' } }));
+	      console.error('ERROR: redux: login request returned a server error:', err);
+	      return dispatch(setErrors({ server: 'Server error. Try agian in a moment.' }));
 	    });
 	  };
 	}
+	/**
+	 * Removes a user's jwt from localstorage and client headers, and clears user state in redux
+	 */
 	function logout() {
 	  return function (dispatch) {
 	    localStorage.removeItem('jwtToken');
@@ -35663,19 +35679,22 @@
 	    dispatch(setCurrentUser({}));
 	  };
 	}
+	/**
+	 * Retrieves the client's IP address from the server
+	 */
 	function getClientIp() {
 	  return function (dispatch) {
 	    _axios2.default.get('/api/auth/ip').then(function (res) {
 	      dispatch(setClientIp(res.data.clientIp));
 	    }).catch(function (err) {
-	      console.error('ERROR: redux: failed to receive client ip address', err);
+	      console.error('ERROR: redux: failed to receive current client ip address from the server', err);
 	    });
 	  };
 	}
 	
 	// ******* Reducers *******
 	
-	var reduceSetCurrentUser = exports.reduceSetCurrentUser = function reduceSetCurrentUser(state, action) {
+	var setCurrentUserReducer = exports.setCurrentUserReducer = function setCurrentUserReducer(state, action) {
 	  var authenticationStatus = false;
 	  var user = action.user;
 	  if (user && user.username) {
@@ -35689,19 +35708,24 @@
 	    userLoading: false
 	  });
 	};
-	var reduceUserLoading = exports.reduceUserLoading = function reduceUserLoading(state, action) {
+	var userLoadingReducer = exports.userLoadingReducer = function userLoadingReducer(state, action) {
 	  if (typeof action.userLoading !== 'boolean') {
 	    console.error('ERROR: redux: userLoading was not passed a boolean:', action.userLoading);
 	    return Object.assign({}, state, { userLoading: false });
 	  }
 	  return Object.assign({}, state, { userLoading: action.userLoading });
 	};
-	var reduceSetClientIp = function reduceSetClientIp(state, action) {
+	var setClientIpReducer = function setClientIpReducer(state, action) {
 	  return Object.assign({}, state, { clientIp: action.clientIp });
 	};
-	var reduceSetErrors = function reduceSetErrors(state, action) {
-	  return Object.assign({}, state, { errors: action.errors, userLoading: action.userLoading });
+	var setErrorsReducer = function setErrorsReducer(state, action) {
+	  if (!action.errors.form && !action.errors.server) {
+	    console.error('ERROR: redux: Unknown error key passed in error object to setErrors:', action.errors);
+	  }
+	  return Object.assign({}, state, { errors: action.errors });
 	};
+	
+	// ******* Root Reducer Slice *******
 	
 	var DEFAULT_STATE = exports.DEFAULT_STATE = {
 	  isAuthenticated: null,
@@ -35710,22 +35734,19 @@
 	  userLoading: false,
 	  clientIp: null
 	};
-	
-	// ******* Root Reducer Slice *******
-	
 	function user() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
 	  var action = arguments[1];
 	
 	  switch (action.type) {
 	    case SET_CURRENT_USER:
-	      return reduceSetCurrentUser(state, action);
+	      return setCurrentUserReducer(state, action);
 	    case USER_LOADING:
-	      return reduceUserLoading(state, action);
+	      return userLoadingReducer(state, action);
 	    case SET_CLIENT_IP:
-	      return reduceSetClientIp(state, action);
+	      return setClientIpReducer(state, action);
 	    case SET_ERRORS:
-	      return reduceSetErrors(state, action);
+	      return setErrorsReducer(state, action);
 	    default:
 	      return state;
 	  }
@@ -35749,7 +35770,7 @@
 	  // handle server error
 	  dispatch(userLoading(false));
 	  console.error('no errors or token offered from \'/api/auth\' :', res);
-	  return dispatch(setErrors({ errors: { server: 'no errors or token returned' } }));
+	  return dispatch(setErrors({ server: 'no errors or token returned' }));
 	}
 	
 	function prepareUserFromToken(res) {

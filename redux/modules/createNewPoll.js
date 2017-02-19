@@ -128,6 +128,8 @@ const resetPollSavedReducer = (state, action) => {
   return Object.assign({}, state, { pollSaved: null })
 }
 
+// ******* Root Reducer Slice *******
+
 export const DEFAULT_STATE = {
   newPollTitle: '',
   titleEditable: true,
@@ -137,9 +139,6 @@ export const DEFAULT_STATE = {
   ],
   pollSaved: null
 }
-
-// ******* Root Reducer Slice *******
-
 export default function newPoll (state = DEFAULT_STATE, action) {
   switch (action.type) {
     case SET_NEW_POLL_TITLE:
