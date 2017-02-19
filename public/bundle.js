@@ -35591,7 +35591,8 @@
 	// ******* Action Creators *******
 	
 	/**
-	 * Sets state.user
+	 * Sets state.user, and eventually state.isAuthenticated and state.userLoading
+	 * in its reducer.
 	 *
 	 * @param {object} user - A decoded jwt, or an error object
 	 *
@@ -35602,7 +35603,6 @@
 	function setCurrentUser() {
 	  var user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	
-	  console.log('redux: auth.js: setCurrentUser user:', user);
 	  return {
 	    type: SET_CURRENT_USER,
 	    user: user
@@ -35651,8 +35651,8 @@
 	      return handleLoginResponse(res, dispatch);
 	    }).catch(function (err) {
 	      dispatch(userLoading(false));
-	      console.error('caught error from \'/api/auth\' : ', err);
-	      return dispatch(setErrors({ errors: { server: 'error caught, bad response' } }));
+	      console.error('ERROR: redux: caught error from \'/api/auth\' : ', err);
+	      return dispatch(setErrors({ errors: { server: 'Server error, bad response' } }));
 	    });
 	  };
 	}
@@ -35668,7 +35668,7 @@
 	    _axios2.default.get('/api/auth/ip').then(function (res) {
 	      dispatch(setClientIp(res.data.clientIp));
 	    }).catch(function (err) {
-	      console.error('error retrieving client ip address', err);
+	      console.error('ERROR: redux: failed to receive client ip address', err);
 	    });
 	  };
 	}
@@ -35690,9 +35690,11 @@
 	  });
 	};
 	var reduceUserLoading = exports.reduceUserLoading = function reduceUserLoading(state, action) {
-	  var newState = {};
-	  Object.assign(newState, state, { userLoading: action.userLoading });
-	  return newState;
+	  if (typeof action.userLoading !== 'boolean') {
+	    console.error('ERROR: redux: userLoading was not passed a boolean:', action.userLoading);
+	    return Object.assign({}, state, { userLoading: false });
+	  }
+	  return Object.assign({}, state, { userLoading: action.userLoading });
 	};
 	var reduceSetClientIp = function reduceSetClientIp(state, action) {
 	  return Object.assign({}, state, { clientIp: action.clientIp });

@@ -14,7 +14,8 @@ const SET_ERRORS = 'SET_ERRORS'
 // ******* Action Creators *******
 
 /**
- * Sets state.user
+ * Sets state.user, and eventually state.isAuthenticated and state.userLoading
+ * in its reducer.
  *
  * @param {object} user - A decoded jwt, or an error object
  *
@@ -23,7 +24,6 @@ const SET_ERRORS = 'SET_ERRORS'
  * example: { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
  */
 export function setCurrentUser (user = {}) {
-  console.log('redux: auth.js: setCurrentUser user:', user)
   return {
     type: SET_CURRENT_USER,
     user
@@ -70,8 +70,8 @@ export function login (data) {
       .then(res => handleLoginResponse(res, dispatch))
       .catch(err => {
         dispatch(userLoading(false))
-        console.error('caught error from \'/api/auth\' : ', err)
-        return dispatch(setErrors({ errors: { server: 'error caught, bad response' } }))
+        console.error('ERROR: redux: caught error from \'/api/auth\' : ', err)
+        return dispatch(setErrors({ errors: { server: 'Server error, bad response' } }))
       })
   }
 }
@@ -89,7 +89,7 @@ export function getClientIp () {
         dispatch(setClientIp(res.data.clientIp))
       })
       .catch(err => {
-        console.error('error retrieving client ip address', err)
+        console.error('ERROR: redux: failed to receive client ip address', err)
       })
   }
 }
@@ -111,9 +111,11 @@ export const reduceSetCurrentUser = (state, action) => {
   })
 }
 export const reduceUserLoading = (state, action) => {
-  const newState = {}
-  Object.assign(newState, state, { userLoading: action.userLoading })
-  return newState
+  if (typeof action.userLoading !== 'boolean') {
+    console.error('ERROR: redux: userLoading was not passed a boolean:', action.userLoading)
+    return Object.assign({}, state, { userLoading: false })
+  }
+  return Object.assign({}, state, { userLoading: action.userLoading })
 }
 const reduceSetClientIp = (state, action) => {
   return Object.assign({}, state, { clientIp: action.clientIp })

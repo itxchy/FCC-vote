@@ -1,7 +1,8 @@
 import userReducerSlice from './auth'
 import {
   DEFAULT_STATE,
-  setCurrentUser
+  setCurrentUser,
+  userLoading
 } from './auth.js'
 
 describe('redux: user', () => {
@@ -25,6 +26,17 @@ describe('redux: user', () => {
     it('should set state.isAuthenticated to false if user object is invalid', () => {
       let stateWithInvalidUser = userReducerSlice(null, setCurrentUser({ error: 'bad news' }))
       expect(stateWithInvalidUser.isAuthenticated).toBe(false)
+    })
+  })
+
+  describe('userLoading', () => {
+    it('should set state.userLoading as the boolean passed to userLoading', () => {
+      let state = userReducerSlice(null, userLoading(true))
+      expect(state.userLoading).toBe(true)
+    })
+    it('should keep state.userLoading as false if the parameter passed is not a boolean', () => {
+      let state = userReducerSlice(null, userLoading('wat'))
+      expect(state.userLoading).toBe(false)
     })
   })
 })
