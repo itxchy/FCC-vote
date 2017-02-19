@@ -33981,27 +33981,27 @@
 	}
 	
 	// Reducers
-	var reduceNewPollTitle = function reduceNewPollTitle(state, action) {
+	var setNewPollTitleReducer = function setNewPollTitleReducer(state, action) {
 	  if (typeof action.value !== 'string') {
 	    console.error('ERROR: redux: setNewPollTitle wasn\'t passed a string:', action.value);
 	    return Object.assign({}, state);
 	  }
 	  return Object.assign({}, state, { newPollTitle: action.value });
 	};
-	var reduceTitleEditableState = function reduceTitleEditableState(state, action) {
+	var setTitleEditableReducer = function setTitleEditableReducer(state, action) {
 	  if (typeof action.value !== 'boolean') {
 	    return Object.assign({}, state, { titleEditable: true });
 	  }
 	  return Object.assign({}, state, { titleEditable: action.value });
 	};
-	var reduceOptionUpdate = function reduceOptionUpdate(state, action) {
+	var updateOptionReducer = function updateOptionReducer(state, action) {
 	  if (action.value.length < 2) {
 	    console.error('ERROR: redux: less than two options were passed to updateOption:', action.value);
 	    return Object.assign({}, state);
 	  }
 	  return Object.assign({}, state, { newPollOptions: action.value });
 	};
-	var reduceResetNewPoll = function reduceResetNewPoll(state, action) {
+	var resetNewPollReducer = function resetNewPollReducer(state, action) {
 	  var newState = {};
 	  var blankPollState = {
 	    newPollTitle: '',
@@ -34012,10 +34012,10 @@
 	  Object.assign(newState, state, blankPollState);
 	  return newState;
 	};
-	var reducePollSaved = function reducePollSaved(state, action) {
+	var pollSavedReducer = function pollSavedReducer(state, action) {
 	  return Object.assign({}, state, { pollSaved: action.pollId });
 	};
-	var reduceResetPollSaved = function reduceResetPollSaved(state, action) {
+	var resetPollSavedReducer = function resetPollSavedReducer(state, action) {
 	  return Object.assign({}, state, { pollSaved: null });
 	};
 	
@@ -34033,17 +34033,17 @@
 	
 	  switch (action.type) {
 	    case SET_NEW_POLL_TITLE:
-	      return reduceNewPollTitle(state, action);
+	      return setNewPollTitleReducer(state, action);
 	    case SET_NEW_TITLE_EDITABLE:
-	      return reduceTitleEditableState(state, action);
+	      return setTitleEditableReducer(state, action);
 	    case UPDATE_OPTION:
-	      return reduceOptionUpdate(state, action);
+	      return updateOptionReducer(state, action);
 	    case RESET_NEW_POLL:
-	      return reduceResetNewPoll(state, action);
+	      return resetNewPollReducer(state, action);
 	    case POLL_SAVED:
-	      return reducePollSaved(state, action);
+	      return pollSavedReducer(state, action);
 	    case RESET_POLL_SAVED:
-	      return reduceResetPollSaved(state, action);
+	      return resetPollSavedReducer(state, action);
 	    default:
 	      return state;
 	  }

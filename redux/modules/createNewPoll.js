@@ -78,27 +78,27 @@ export function submitNewPoll (newPoll) {
 }
 
 // Reducers
-const reduceNewPollTitle = (state, action) => {
+const setNewPollTitleReducer = (state, action) => {
   if (typeof action.value !== 'string') {
     console.error('ERROR: redux: setNewPollTitle wasn\'t passed a string:', action.value)
     return Object.assign({}, state)
   }
   return Object.assign({}, state, { newPollTitle: action.value })
 }
-const reduceTitleEditableState = (state, action) => {
+const setTitleEditableReducer = (state, action) => {
   if (typeof action.value !== 'boolean') {
     return Object.assign({}, state, { titleEditable: true })
   }
   return Object.assign({}, state, { titleEditable: action.value })
 }
-const reduceOptionUpdate = (state, action) => {
+const updateOptionReducer = (state, action) => {
   if (action.value.length < 2) {
     console.error('ERROR: redux: less than two options were passed to updateOption:', action.value)
     return Object.assign({}, state)
   }
   return Object.assign({}, state, { newPollOptions: action.value })
 }
-const reduceResetNewPoll = (state, action) => {
+const resetNewPollReducer = (state, action) => {
   const newState = {}
   const blankPollState = {
     newPollTitle: '',
@@ -112,10 +112,10 @@ const reduceResetNewPoll = (state, action) => {
   Object.assign(newState, state, blankPollState)
   return newState
 }
-const reducePollSaved = (state, action) => {
+const pollSavedReducer = (state, action) => {
   return Object.assign({}, state, { pollSaved: action.pollId })
 }
-const reduceResetPollSaved = (state, action) => {
+const resetPollSavedReducer = (state, action) => {
   return Object.assign({}, state, { pollSaved: null })
 }
 
@@ -133,17 +133,17 @@ export const DEFAULT_STATE = {
 export default function newPoll (state = DEFAULT_STATE, action) {
   switch (action.type) {
     case SET_NEW_POLL_TITLE:
-      return reduceNewPollTitle(state, action)
+      return setNewPollTitleReducer(state, action)
     case SET_NEW_TITLE_EDITABLE:
-      return reduceTitleEditableState(state, action)
+      return setTitleEditableReducer(state, action)
     case UPDATE_OPTION:
-      return reduceOptionUpdate(state, action)
+      return updateOptionReducer(state, action)
     case RESET_NEW_POLL:
-      return reduceResetNewPoll(state, action)
+      return resetNewPollReducer(state, action)
     case POLL_SAVED:
-      return reducePollSaved(state, action)
+      return pollSavedReducer(state, action)
     case RESET_POLL_SAVED:
-      return reduceResetPollSaved(state, action)
+      return resetPollSavedReducer(state, action)
     default:
       return state
   }
