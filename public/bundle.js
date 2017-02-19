@@ -35558,7 +35558,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.DEFAULT_STATE = exports.reduceUserLoading = exports.reduceSetCurrentUser = exports.SET_CLIENT_IP = exports.USER_LOADING = exports.SET_CURRENT_USER = undefined;
+	exports.DEFAULT_STATE = exports.reduceUserLoading = exports.reduceSetCurrentUser = undefined;
 	exports.setCurrentUser = setCurrentUser;
 	exports.userLoading = userLoading;
 	exports.login = login;
@@ -35578,21 +35578,14 @@
 	
 	var _setAuthorizationToken2 = _interopRequireDefault(_setAuthorizationToken);
 	
-	var _isEmpty = __webpack_require__(670);
-	
-	var _isEmpty2 = _interopRequireDefault(_isEmpty);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// ******* Actions *******
 	
-	/* global localStorage */
+	var SET_CURRENT_USER = 'SET_CURRENT_USER'; /* global localStorage */
 	
-	var SET_CURRENT_USER = exports.SET_CURRENT_USER = 'setCurrentUser';
-	var USER_LOADING = exports.USER_LOADING = 'USER_LOADING';
-	var SET_CLIENT_IP = exports.SET_CLIENT_IP = 'SET_CLIENT_IP';
-	// export const SET_LOGOUT_REDIRECT = 'SET_LOGOUT_REDIRECT'
-	// export const RESET_LOGOUT_REDIRECT = 'RESET_LOGOUT_REDIRECT'
+	var USER_LOADING = 'USER_LOADING';
+	var SET_CLIENT_IP = 'SET_CLIENT_IP';
 	var SET_ERRORS = 'SET_ERRORS';
 	
 	// ******* Action Creators *******
@@ -35668,7 +35661,6 @@
 	    localStorage.removeItem('jwtToken');
 	    (0, _setAuthorizationToken2.default)(false);
 	    dispatch(setCurrentUser({}));
-	    // dispatch(setLogoutRedirect(true))
 	  };
 	}
 	function getClientIp() {
@@ -35684,22 +35676,21 @@
 	// ******* Reducers *******
 	
 	var reduceSetCurrentUser = exports.reduceSetCurrentUser = function reduceSetCurrentUser(state, action) {
-	  var newState = {};
 	  var authenticationStatus = false;
 	  var user = action.user;
-	  if (user && !(0, _isEmpty2.default)(user)) {
+	  if (user && user.username) {
 	    authenticationStatus = true;
+	  } else {
+	    console.error('ERROR: redux: invalid user object passed to setCurrentUser', user);
 	  }
-	  Object.assign(newState, state, {
+	  return Object.assign({}, state, {
 	    isAuthenticated: authenticationStatus,
 	    user: user,
 	    userLoading: false
 	  });
-	  return newState;
 	};
 	var reduceUserLoading = exports.reduceUserLoading = function reduceUserLoading(state, action) {
 	  var newState = {};
-	  // console.log('reduceUserLoading -> action.userLoading:', action.userLoading)
 	  Object.assign(newState, state, { userLoading: action.userLoading });
 	  return newState;
 	};
@@ -72526,7 +72517,7 @@
 	    array = _React$PropTypes.array,
 	    string = _React$PropTypes.string,
 	    bool = _React$PropTypes.bool;
-	// import { resetLogoutRedirect } from '../redux/modules/auth'
+	
 	
 	var Home = _react2.default.createClass({
 	  displayName: 'Home',
@@ -72536,7 +72527,6 @@
 	    dispatchSubmitVote: func,
 	    dispatchResetUpdatedPollResults: func,
 	    dispatchResetDeletedPoll: func,
-	    // dispatchResetLogoutRedirect: func,
 	    dispatchClearAllFlashMessages: func,
 	    deletedPoll: string,
 	    user: object,
@@ -72559,7 +72549,6 @@
 	    }
 	    if (nextProps.logoutRedirect) {
 	      this.props.dispatchGetAllPolls();
-	      // this.props.dispatchResetLogoutRedirect()
 	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
@@ -72619,10 +72608,6 @@
 	    dispatchResetDeletedPoll: function dispatchResetDeletedPoll() {
 	      dispatch((0, _deletePoll.resetDeletedPoll)());
 	    },
-	
-	    // dispatchResetLogoutRedirect () {
-	    //   dispatch(resetLogoutRedirect())
-	    // },
 	    dispatchClearAllFlashMessages: function dispatchClearAllFlashMessages() {
 	      dispatch((0, _flashMessage.clearAllFlashMessages)());
 	    }

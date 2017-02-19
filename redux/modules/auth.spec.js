@@ -11,10 +11,20 @@ describe('redux: user', () => {
   })
 
   describe('setCurrentUser', () => {
+    const mockUser = { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
+    let stateWithValidUser = userReducerSlice(null, setCurrentUser(mockUser))
     it('should set state.user as the user object passed to setCurrentUser', () => {
-      const mockUser = { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
-      let state = userReducerSlice(null, setCurrentUser(mockUser))
-      expect(state.user).toBe(mockUser)
+      expect(stateWithValidUser.user).toBe(mockUser)
+    })
+    it('should set state.isAuthenticated to true if user object is valid', () => {
+      expect(stateWithValidUser.isAuthenticated).toBe(true)
+    })
+    it('should set state.userLoading to false whether user object is valid or not', () => {
+      expect(stateWithValidUser.userLoading).toBe(false)
+    })
+    it('should set state.isAuthenticated to false if user object is invalid', () => {
+      let stateWithInvalidUser = userReducerSlice(null, setCurrentUser({ error: 'bad news' }))
+      expect(stateWithInvalidUser.isAuthenticated).toBe(false)
     })
   })
 })

@@ -4,7 +4,6 @@ import DisplayPolls from './common/DisplayPolls'
 import { getAllPolls } from '../redux/modules/getAllPolls'
 import { submitVote, resetUpdatedPollResults } from '../redux/modules/submitVote'
 import { resetDeletedPoll } from '../redux/modules/deletePoll'
-// import { resetLogoutRedirect } from '../redux/modules/auth'
 import { clearAllFlashMessages } from '../redux/modules/flashMessage'
 const { func, object, array, string, bool } = React.PropTypes
 
@@ -14,7 +13,6 @@ const Home = React.createClass({
     dispatchSubmitVote: func,
     dispatchResetUpdatedPollResults: func,
     dispatchResetDeletedPoll: func,
-    // dispatchResetLogoutRedirect: func,
     dispatchClearAllFlashMessages: func,
     deletedPoll: string,
     user: object,
@@ -37,7 +35,6 @@ const Home = React.createClass({
     }
     if (nextProps.logoutRedirect) {
       this.props.dispatchGetAllPolls()
-      // this.props.dispatchResetLogoutRedirect()
     }
   },
   componentWillUnmount () {
@@ -91,9 +88,6 @@ const mapDispatchToProps = (dispatch) => {
     dispatchResetDeletedPoll () {
       dispatch(resetDeletedPoll())
     },
-    // dispatchResetLogoutRedirect () {
-    //   dispatch(resetLogoutRedirect())
-    // },
     dispatchClearAllFlashMessages () {
       dispatch(clearAllFlashMessages())
     }

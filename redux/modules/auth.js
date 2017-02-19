@@ -3,7 +3,6 @@
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import setAuthorizationToken from '../../auth/setAuthorizationToken'
-import isEmpty from 'lodash/isEmpty'
 
 // ******* Actions *******
 
@@ -81,7 +80,6 @@ export function logout () {
     localStorage.removeItem('jwtToken')
     setAuthorizationToken(false)
     dispatch(setCurrentUser({}))
-    // dispatch(setLogoutRedirect(true))
   }
 }
 export function getClientIp () {
@@ -99,22 +97,21 @@ export function getClientIp () {
 // ******* Reducers *******
 
 export const reduceSetCurrentUser = (state, action) => {
-  const newState = {}
   let authenticationStatus = false
   let user = action.user
-  if (user && !isEmpty(user)) {
+  if (user && user.username) {
     authenticationStatus = true
+  } else {
+    console.error('ERROR: redux: invalid user object passed to setCurrentUser', user)
   }
-  Object.assign(newState, state, {
+  return Object.assign({}, state, {
     isAuthenticated: authenticationStatus,
     user: user,
     userLoading: false
   })
-  return newState
 }
 export const reduceUserLoading = (state, action) => {
   const newState = {}
-  // console.log('reduceUserLoading -> action.userLoading:', action.userLoading)
   Object.assign(newState, state, { userLoading: action.userLoading })
   return newState
 }
