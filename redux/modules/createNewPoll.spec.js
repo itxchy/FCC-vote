@@ -18,7 +18,6 @@ describe('redux: newPoll', () => {
   describe('setNewPollTitle', () => {
     it('should set state.newPollTitle as a string passed to setNewPollTitle', () => {
       let state = newPollReducerSlice(null, setNewPollTitle('Controversial Title'))
-      // expect state to equal initial state along with newPollTitle as 'Controversial Title'
       expect(state.newPollTitle).toBe('Controversial Title')
     })
     it('should return previous state if setNewPollTitle\'s argument is not a string', () => {

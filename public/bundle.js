@@ -35585,7 +35585,8 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// Actions
+	// ******* Actions *******
+	
 	/* global localStorage */
 	
 	var SET_CURRENT_USER = exports.SET_CURRENT_USER = 'setCurrentUser';
@@ -35595,11 +35596,21 @@
 	var RESET_LOGOUT_REDIRECT = exports.RESET_LOGOUT_REDIRECT = 'RESET_LOGOUT_REDIRECT';
 	var SET_ERRORS = 'SET_ERRORS';
 	
-	// Action Creators
+	// ******* Action Creators *******
+	
+	/**
+	 * Sets state.user
+	 *
+	 * @param {object} user - A decoded jwt, or an error object
+	 *
+	 * The token object being set to user will contain a newly authenitcated
+	 * user's id string and username string, as well as the token's timestamp as iat.
+	 * example: { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
+	 */
 	function setCurrentUser() {
 	  var user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	
-	  console.log('auth.js: setCurrentUser user:', user);
+	  console.log('redux: auth.js: setCurrentUser user:', user);
 	  return {
 	    type: SET_CURRENT_USER,
 	    user: user
@@ -35644,15 +35655,10 @@
 	    }).catch(function (err) {
 	      dispatch(userLoading(false));
 	      console.error('caught error from \'/api/auth\' : ', err);
-	      return dispatch(setCurrentUser({ errors: { server: 'error caught, bad response' } }));
+	      return dispatch(setErrors({ errors: { server: 'error caught, bad response' } }));
 	    });
 	  };
 	}
-	// export function logout () {
-	//   localStorage.removeItem('jwtToken')
-	//   setAuthorizationToken(false)
-	//   return { type: SET_CURRENT_USER, user: {}, logoutRedirect: true }
-	// }
 	function logout() {
 	  return function (dispatch) {
 	    localStorage.removeItem('jwtToken');
@@ -35677,7 +35683,8 @@
 	  };
 	}
 	
-	// Reducers
+	// ******* Reducers *******
+	
 	var reduceSetCurrentUser = exports.reduceSetCurrentUser = function reduceSetCurrentUser(state, action) {
 	  var newState = {};
 	  var authenticationStatus = false;
@@ -35724,7 +35731,8 @@
 	  logoutRedirect: false
 	};
 	
-	// Root Reducer Slice
+	// ******* Root Reducer Slice *******
+	
 	function user() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
 	  var action = arguments[1];
@@ -35745,7 +35753,8 @@
 	  }
 	}
 	
-	// Lib ******************************************************
+	// ************** Lib **************
+	
 	function handleLoginResponse(res, dispatch) {
 	  console.log('auth.js: res.data:', res.data);
 	  // handle unsuccessful login
@@ -35776,15 +35785,6 @@
 	    return null;
 	  }
 	}
-	
-	// const token = res.data.token ? res.data.token : null
-	// if (token) {
-	//   localStorage.setItem('jwtToken', token)
-	//   setAuthorizationToken(token)
-	//   const user = jwt.decode(token)
-	//   dispatch(setCurrentUser(user))
-	//   return dispatch(userLoading(false))
-	// }
 
 /***/ },
 /* 453 */

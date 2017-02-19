@@ -5,7 +5,8 @@ import jwt from 'jsonwebtoken'
 import setAuthorizationToken from '../../auth/setAuthorizationToken'
 import isEmpty from 'lodash/isEmpty'
 
-// Actions
+// ******* Actions *******
+
 export const SET_CURRENT_USER = 'setCurrentUser'
 export const USER_LOADING = 'USER_LOADING'
 export const SET_CLIENT_IP = 'SET_CLIENT_IP'
@@ -13,9 +14,19 @@ export const SET_LOGOUT_REDIRECT = 'SET_LOGOUT_REDIRECT'
 export const RESET_LOGOUT_REDIRECT = 'RESET_LOGOUT_REDIRECT'
 const SET_ERRORS = 'SET_ERRORS'
 
-// Action Creators
+// ******* Action Creators *******
+
+/**
+ * Sets state.user
+ *
+ * @param {object} user - A decoded jwt, or an error object
+ *
+ * The token object being set to user will contain a newly authenitcated
+ * user's id string and username string, as well as the token's timestamp as iat.
+ * example: { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
+ */
 export function setCurrentUser (user = {}) {
-  console.log('auth.js: setCurrentUser user:', user)
+  console.log('redux: auth.js: setCurrentUser user:', user)
   return {
     type: SET_CURRENT_USER,
     user
@@ -58,15 +69,10 @@ export function login (data) {
       .catch(err => {
         dispatch(userLoading(false))
         console.error('caught error from \'/api/auth\' : ', err)
-        return dispatch(setCurrentUser({ errors: { server: 'error caught, bad response' } }))
+        return dispatch(setErrors({ errors: { server: 'error caught, bad response' } }))
       })
   }
 }
-// export function logout () {
-//   localStorage.removeItem('jwtToken')
-//   setAuthorizationToken(false)
-//   return { type: SET_CURRENT_USER, user: {}, logoutRedirect: true }
-// }
 export function logout () {
   return dispatch => {
     localStorage.removeItem('jwtToken')
@@ -93,7 +99,8 @@ export function getClientIp () {
   }
 }
 
-// Reducers
+// ******* Reducers *******
+
 export const reduceSetCurrentUser = (state, action) => {
   const newState = {}
   let authenticationStatus = false
@@ -140,7 +147,8 @@ const initialState = {
   logoutRedirect: false
 }
 
-// Root Reducer Slice
+// ******* Root Reducer Slice *******
+
 export default function user (state = initialState, action) {
   switch (action.type) {
     case SET_CURRENT_USER:
@@ -158,7 +166,8 @@ export default function user (state = initialState, action) {
   }
 }
 
-// Lib ******************************************************
+// ************** Lib **************
+
 function handleLoginResponse (res, dispatch) {
   console.log('auth.js: res.data:', res.data)
   // handle unsuccessful login
@@ -189,12 +198,3 @@ function prepareUserFromToken (res) {
     return null
   }
 }
-
-  // const token = res.data.token ? res.data.token : null
-  // if (token) {
-  //   localStorage.setItem('jwtToken', token)
-  //   setAuthorizationToken(token)
-  //   const user = jwt.decode(token)
-  //   dispatch(setCurrentUser(user))
-  //   return dispatch(userLoading(false))
-  // }
