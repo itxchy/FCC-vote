@@ -59,8 +59,8 @@ const LoginForm = React.createClass({
   },
 
   render () {
-    let loginErrors = { form: null }
-    if (this.props.user.errors && this.props.user.errors.form) {
+    let loginErrors = { form: null, server: null }
+    if (this.props.user.errors) {
       loginErrors = this.props.user.errors
     }
     const { errors, identifier, password } = this.state
@@ -70,6 +70,7 @@ const LoginForm = React.createClass({
         <h1>Login</h1>
 
         { loginErrors.form && <div className='alert alert-danger'>{loginErrors.form}</div> }
+        { loginErrors.server && <div className='alert alert-danger'>{loginErrors.server}</div> }
 
         <TextFieldGroup
           field='identifier'

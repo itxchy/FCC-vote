@@ -10,7 +10,7 @@ import {
 } from './createNewPoll'
 
 describe('redux: newPoll', () => {
-  it('falsy state should return default state', () => {
+  it('if the state parameter passed to the newPoll root reducer slice is falsy, DEFAULT_STATE should be returned', () => {
     let state = newPollReducerSlice(undefined, {})
     expect(state).toEqual(DEFAULT_STATE)
   })

@@ -35558,12 +35558,11 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.reduceUserLoading = exports.reduceSetCurrentUser = exports.RESET_LOGOUT_REDIRECT = exports.SET_LOGOUT_REDIRECT = exports.SET_CLIENT_IP = exports.USER_LOADING = exports.SET_CURRENT_USER = undefined;
+	exports.DEFAULT_STATE = exports.reduceUserLoading = exports.reduceSetCurrentUser = exports.SET_CLIENT_IP = exports.USER_LOADING = exports.SET_CURRENT_USER = undefined;
 	exports.setCurrentUser = setCurrentUser;
 	exports.userLoading = userLoading;
 	exports.login = login;
 	exports.logout = logout;
-	exports.resetLogoutRedirect = resetLogoutRedirect;
 	exports.getClientIp = getClientIp;
 	exports.default = user;
 	
@@ -35592,8 +35591,8 @@
 	var SET_CURRENT_USER = exports.SET_CURRENT_USER = 'setCurrentUser';
 	var USER_LOADING = exports.USER_LOADING = 'USER_LOADING';
 	var SET_CLIENT_IP = exports.SET_CLIENT_IP = 'SET_CLIENT_IP';
-	var SET_LOGOUT_REDIRECT = exports.SET_LOGOUT_REDIRECT = 'SET_LOGOUT_REDIRECT';
-	var RESET_LOGOUT_REDIRECT = exports.RESET_LOGOUT_REDIRECT = 'RESET_LOGOUT_REDIRECT';
+	// export const SET_LOGOUT_REDIRECT = 'SET_LOGOUT_REDIRECT'
+	// export const RESET_LOGOUT_REDIRECT = 'RESET_LOGOUT_REDIRECT'
 	var SET_ERRORS = 'SET_ERRORS';
 	
 	// ******* Action Creators *******
@@ -35616,6 +35615,11 @@
 	    user: user
 	  };
 	}
+	/**
+	 * Sets state.userLoading
+	 *
+	 * @param {boolean} bool
+	 */
 	function userLoading(bool) {
 	  return {
 	    type: USER_LOADING,
@@ -35664,14 +35668,8 @@
 	    localStorage.removeItem('jwtToken');
 	    (0, _setAuthorizationToken2.default)(false);
 	    dispatch(setCurrentUser({}));
-	    dispatch(setLogoutRedirect(true));
+	    // dispatch(setLogoutRedirect(true))
 	  };
-	}
-	function setLogoutRedirect(bool) {
-	  return { type: SET_LOGOUT_REDIRECT, logoutRedirect: true };
-	}
-	function resetLogoutRedirect() {
-	  return { type: RESET_LOGOUT_REDIRECT, logoutRedirect: false };
 	}
 	function getClientIp() {
 	  return function (dispatch) {
@@ -35689,19 +35687,12 @@
 	  var newState = {};
 	  var authenticationStatus = false;
 	  var user = action.user;
-	  var errors = action.errors;
-	  var logoutRedirect = action.logoutRedirect;
-	  if (user && (0, _isEmpty2.default)(errors) && !(0, _isEmpty2.default)(user)) {
+	  if (user && !(0, _isEmpty2.default)(user)) {
 	    authenticationStatus = true;
-	  }
-	  if (!logoutRedirect) {
-	    logoutRedirect = false;
 	  }
 	  Object.assign(newState, state, {
 	    isAuthenticated: authenticationStatus,
 	    user: user,
-	    errors: errors,
-	    logoutRedirect: logoutRedirect,
 	    userLoading: false
 	  });
 	  return newState;
@@ -35715,26 +35706,22 @@
 	var reduceSetClientIp = function reduceSetClientIp(state, action) {
 	  return Object.assign({}, state, { clientIp: action.clientIp });
 	};
-	var reduceResetLogoutRedirect = function reduceResetLogoutRedirect(state, action) {
-	  return Object.assign({}, state, { logoutRedirect: false });
-	};
 	var reduceSetErrors = function reduceSetErrors(state, action) {
 	  return Object.assign({}, state, { errors: action.errors, userLoading: action.userLoading });
 	};
 	
-	var initialState = {
+	var DEFAULT_STATE = exports.DEFAULT_STATE = {
 	  isAuthenticated: null,
 	  user: null,
 	  errors: null,
 	  userLoading: false,
-	  clientIp: null,
-	  logoutRedirect: false
+	  clientIp: null
 	};
 	
 	// ******* Root Reducer Slice *******
 	
 	function user() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
 	  var action = arguments[1];
 	
 	  switch (action.type) {
@@ -35744,8 +35731,6 @@
 	      return reduceUserLoading(state, action);
 	    case SET_CLIENT_IP:
 	      return reduceSetClientIp(state, action);
-	    case RESET_LOGOUT_REDIRECT:
-	      return reduceResetLogoutRedirect(state, action);
 	    case SET_ERRORS:
 	      return reduceSetErrors(state, action);
 	    default:
@@ -35764,14 +35749,14 @@
 	  }
 	  // handle token on successful login
 	  var user = prepareUserFromToken(res);
-	  if (user) {
+	  if (user && user.username) {
 	    dispatch(setCurrentUser(user));
 	    return dispatch(userLoading(false));
 	  }
 	  // handle server error
 	  dispatch(userLoading(false));
 	  console.error('no errors or token offered from \'/api/auth\' :', res);
-	  return dispatch(setCurrentUser({ errors: { server: 'no errors or token returned' } }));
+	  return dispatch(setErrors({ errors: { server: 'no errors or token returned' } }));
 	}
 	
 	function prepareUserFromToken(res) {
@@ -72531,8 +72516,6 @@
 	
 	var _deletePoll = __webpack_require__(745);
 	
-	var _auth = __webpack_require__(452);
-	
 	var _flashMessage = __webpack_require__(266);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -72543,7 +72526,7 @@
 	    array = _React$PropTypes.array,
 	    string = _React$PropTypes.string,
 	    bool = _React$PropTypes.bool;
-	
+	// import { resetLogoutRedirect } from '../redux/modules/auth'
 	
 	var Home = _react2.default.createClass({
 	  displayName: 'Home',
@@ -72553,7 +72536,7 @@
 	    dispatchSubmitVote: func,
 	    dispatchResetUpdatedPollResults: func,
 	    dispatchResetDeletedPoll: func,
-	    dispatchResetLogoutRedirect: func,
+	    // dispatchResetLogoutRedirect: func,
 	    dispatchClearAllFlashMessages: func,
 	    deletedPoll: string,
 	    user: object,
@@ -72576,7 +72559,7 @@
 	    }
 	    if (nextProps.logoutRedirect) {
 	      this.props.dispatchGetAllPolls();
-	      this.props.dispatchResetLogoutRedirect();
+	      // this.props.dispatchResetLogoutRedirect()
 	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
@@ -72636,9 +72619,10 @@
 	    dispatchResetDeletedPoll: function dispatchResetDeletedPoll() {
 	      dispatch((0, _deletePoll.resetDeletedPoll)());
 	    },
-	    dispatchResetLogoutRedirect: function dispatchResetLogoutRedirect() {
-	      dispatch((0, _auth.resetLogoutRedirect)());
-	    },
+	
+	    // dispatchResetLogoutRedirect () {
+	    //   dispatch(resetLogoutRedirect())
+	    // },
 	    dispatchClearAllFlashMessages: function dispatchClearAllFlashMessages() {
 	      dispatch((0, _flashMessage.clearAllFlashMessages)());
 	    }
@@ -94256,8 +94240,8 @@
 	    }
 	  },
 	  render: function render() {
-	    var loginErrors = { form: null };
-	    if (this.props.user.errors && this.props.user.errors.form) {
+	    var loginErrors = { form: null, server: null };
+	    if (this.props.user.errors) {
 	      loginErrors = this.props.user.errors;
 	    }
 	    var _state = this.state,
@@ -94278,6 +94262,11 @@
 	        'div',
 	        { className: 'alert alert-danger' },
 	        loginErrors.form
+	      ),
+	      loginErrors.server && _react2.default.createElement(
+	        'div',
+	        { className: 'alert alert-danger' },
+	        loginErrors.server
 	      ),
 	      _react2.default.createElement(_TextFieldGroup2.default, {
 	        field: 'identifier',

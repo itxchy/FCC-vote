@@ -10,8 +10,8 @@ import isEmpty from 'lodash/isEmpty'
 export const SET_CURRENT_USER = 'setCurrentUser'
 export const USER_LOADING = 'USER_LOADING'
 export const SET_CLIENT_IP = 'SET_CLIENT_IP'
-export const SET_LOGOUT_REDIRECT = 'SET_LOGOUT_REDIRECT'
-export const RESET_LOGOUT_REDIRECT = 'RESET_LOGOUT_REDIRECT'
+// export const SET_LOGOUT_REDIRECT = 'SET_LOGOUT_REDIRECT'
+// export const RESET_LOGOUT_REDIRECT = 'RESET_LOGOUT_REDIRECT'
 const SET_ERRORS = 'SET_ERRORS'
 
 // ******* Action Creators *******
@@ -32,6 +32,11 @@ export function setCurrentUser (user = {}) {
     user
   }
 }
+/**
+ * Sets state.userLoading
+ *
+ * @param {boolean} bool
+ */
 export function userLoading (bool) {
   return {
     type: USER_LOADING,
@@ -78,14 +83,8 @@ export function logout () {
     localStorage.removeItem('jwtToken')
     setAuthorizationToken(false)
     dispatch(setCurrentUser({}))
-    dispatch(setLogoutRedirect(true))
+    // dispatch(setLogoutRedirect(true))
   }
-}
-function setLogoutRedirect (bool) {
-  return { type: SET_LOGOUT_REDIRECT, logoutRedirect: true }
-}
-export function resetLogoutRedirect () {
-  return { type: RESET_LOGOUT_REDIRECT, logoutRedirect: false }
 }
 export function getClientIp () {
   return dispatch => {
@@ -105,19 +104,12 @@ export const reduceSetCurrentUser = (state, action) => {
   const newState = {}
   let authenticationStatus = false
   let user = action.user
-  let errors = action.errors
-  let logoutRedirect = action.logoutRedirect
-  if (user && isEmpty(errors) && !isEmpty(user)) {
+  if (user && !isEmpty(user)) {
     authenticationStatus = true
-  }
-  if (!logoutRedirect) {
-    logoutRedirect = false
   }
   Object.assign(newState, state, {
     isAuthenticated: authenticationStatus,
     user: user,
-    errors,
-    logoutRedirect,
     userLoading: false
   })
   return newState
@@ -131,25 +123,21 @@ export const reduceUserLoading = (state, action) => {
 const reduceSetClientIp = (state, action) => {
   return Object.assign({}, state, { clientIp: action.clientIp })
 }
-const reduceResetLogoutRedirect = (state, action) => {
-  return Object.assign({}, state, { logoutRedirect: false })
-}
 const reduceSetErrors = (state, action) => {
   return Object.assign({}, state, { errors: action.errors, userLoading: action.userLoading })
 }
 
-const initialState = {
+export const DEFAULT_STATE = {
   isAuthenticated: null,
   user: null,
   errors: null,
   userLoading: false,
   clientIp: null,
-  logoutRedirect: false
 }
 
 // ******* Root Reducer Slice *******
 
-export default function user (state = initialState, action) {
+export default function user (state = DEFAULT_STATE, action) {
   switch (action.type) {
     case SET_CURRENT_USER:
       return reduceSetCurrentUser(state, action)
@@ -157,8 +145,6 @@ export default function user (state = initialState, action) {
       return reduceUserLoading(state, action)
     case SET_CLIENT_IP:
       return reduceSetClientIp(state, action)
-    case RESET_LOGOUT_REDIRECT:
-      return reduceResetLogoutRedirect(state, action)
     case SET_ERRORS:
       return reduceSetErrors(state, action)
     default:
@@ -177,14 +163,14 @@ function handleLoginResponse (res, dispatch) {
   }
   // handle token on successful login
   const user = prepareUserFromToken(res)
-  if (user) {
+  if (user && user.username) {
     dispatch(setCurrentUser(user))
     return dispatch(userLoading(false))
   }
   // handle server error
   dispatch(userLoading(false))
   console.error('no errors or token offered from \'/api/auth\' :', res)
-  return dispatch(setCurrentUser({ errors: { server: 'no errors or token returned' } }))
+  return dispatch(setErrors({ errors: { server: 'no errors or token returned' } }))
 }
 
 function prepareUserFromToken (res) {
