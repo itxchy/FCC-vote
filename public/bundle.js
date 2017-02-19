@@ -33916,38 +33916,56 @@
 	
 	// Action Creators
 	/**
+	 * Sets state.newPollTitle
+	 *
 	 * @param {string} pollTitle
-	 * @return {object} SET_NEW_POLL_TITLE action 
 	 */
 	function setNewPollTitle(pollTitle) {
 	  return { type: SET_NEW_POLL_TITLE, value: pollTitle };
 	}
 	/**
+	 * Sets state.titleEditable
+	 *
 	 * @param {boolean} bool
-	 * @return {object} SET_NEW_TITLE_EDITABLE action
 	 */
 	function setTitleEditable(bool) {
 	  return { type: SET_NEW_TITLE_EDITABLE, value: bool };
 	}
 	/**
+	 * Sets state.newPollOptions
+	 *
 	 * @param {array} updatedOptions - An array of at least 2 strings
-	 * @return {object} UPDATE_OPTION action
 	 */
 	function updateOption(updatedOptions) {
 	  return { type: UPDATE_OPTION, value: updatedOptions };
 	}
 	/**
-	 * @return {object} RESET_NEW_POLL action
+	 * Resets state to DEFAULT_STATE
 	 */
 	function resetNewPoll() {
 	  return { type: RESET_NEW_POLL };
 	}
+	/**
+	 * Sets state.pollSaved as a new Poll's ID
+	 *
+	 * @param {string} pollId - A new poll's mongoDB _id
+	 */
 	function pollSaved(pollId) {
 	  return { type: POLL_SAVED, pollId: pollId };
 	}
+	/**
+	 * Resets this redux module's state to its DEFAULT_STATE
+	 */
 	function resetPollSaved() {
 	  return { type: RESET_POLL_SAVED };
 	}
+	/**
+	 * Submits a new poll to the server
+	 *
+	 * @param {object} newPoll - an object containing a new poll's title, at least two
+	 * options, and the owner (user). Sample: { title: 'What number?', options: ['one', 'two'], owner: 'Lloyd'}
+	 *
+	 */
 	function submitNewPoll(newPoll) {
 	  return function (dispatch) {
 	    _axios2.default.post('/api/polls', newPoll).then(function (res) {
@@ -33977,6 +33995,10 @@
 	  return Object.assign({}, state, { titleEditable: action.value });
 	};
 	var reduceOptionUpdate = function reduceOptionUpdate(state, action) {
+	  if (action.value.length < 2) {
+	    console.error('ERROR: redux: less than two options were passed to updateOption:', action.value);
+	    return Object.assign({}, state);
+	  }
 	  return Object.assign({}, state, { newPollOptions: action.value });
 	};
 	var reduceResetNewPoll = function reduceResetNewPoll(state, action) {

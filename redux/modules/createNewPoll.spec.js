@@ -11,6 +11,7 @@ describe('redux: newPoll', () => {
     let state = newPollReducerSlice(undefined, {})
     expect(state).toEqual(DEFAULT_STATE)
   })
+  
   describe('setNewPollTitle', () => {
     it('should set state.newPollTitle as a string passed to setNewPollTitle', () => {
       let state = newPollReducerSlice(null, setNewPollTitle('Controversial Title'))
@@ -23,6 +24,7 @@ describe('redux: newPoll', () => {
       expect(state.newPollTitle).toEqual('Test Title')
     })
   })
+
   describe('setTitleEditable', () => {
     it('should set state.titleEditable as the boolean passed to setTitleEditable', () => {
       let state = newPollReducerSlice(null, setTitleEditable(false))
@@ -33,6 +35,7 @@ describe('redux: newPoll', () => {
       expect(state.titleEditable).toBe(true)
     })
   })
+
   describe('updateOption', () => {
     it('should set state.newPollOptions as the array of option strings passed to it', () => {
       let state = newPollReducerSlice(null, updateOption(['thing 1', 'thing 2']))
