@@ -10,12 +10,27 @@ const POLL_SAVED = 'POLL_SAVED'
 const RESET_POLL_SAVED = 'RESET_POLL_SAVED'
 
 // Action Creators
+/**
+ * creates SET_NEW_POLL_TITLE action 
+ *
+ * @param {string} pollTitle
+ */
 export function setNewPollTitle (pollTitle) {
   return { type: SET_NEW_POLL_TITLE, value: pollTitle }
 }
+/**
+ * creates SET_NEW_TITLE_EDITABLE action
+ *
+ * @param {boolean} bool
+ */
 export function setTitleEditable (bool) {
   return { type: SET_NEW_TITLE_EDITABLE, value: bool }
 }
+/**
+ * creates UPDATE_OPTION action
+ *
+ * @param {array} updatedOptions - An array of at least 2 strings
+ */
 export function updateOption (updatedOptions) {
   return { type: UPDATE_OPTION, value: updatedOptions }
 }
@@ -53,6 +68,9 @@ const reduceNewPollTitle = (state, action) => {
   return Object.assign({}, state, { newPollTitle: action.value })
 }
 const reduceTitleEditableState = (state, action) => {
+  if (typeof action.value !== 'boolean') {
+    return Object.assign({}, state, { titleEditable: true})
+  }
   return Object.assign({}, state, { titleEditable: action.value })
 }
 const reduceOptionUpdate = (state, action) => {

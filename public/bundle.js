@@ -33915,12 +33915,27 @@
 	var RESET_POLL_SAVED = 'RESET_POLL_SAVED';
 	
 	// Action Creators
+	/**
+	 * creates SET_NEW_POLL_TITLE action 
+	 *
+	 * @param {string} pollTitle
+	 */
 	function setNewPollTitle(pollTitle) {
 	  return { type: SET_NEW_POLL_TITLE, value: pollTitle };
 	}
+	/**
+	 * creates SET_NEW_TITLE_EDITABLE action
+	 *
+	 * @param {boolean} bool
+	 */
 	function setTitleEditable(bool) {
 	  return { type: SET_NEW_TITLE_EDITABLE, value: bool };
 	}
+	/**
+	 * creates UPDATE_OPTION action
+	 *
+	 * @param {array} updatedOptions
+	 */
 	function updateOption(updatedOptions) {
 	  return { type: UPDATE_OPTION, value: updatedOptions };
 	}
@@ -33956,6 +33971,9 @@
 	  return Object.assign({}, state, { newPollTitle: action.value });
 	};
 	var reduceTitleEditableState = function reduceTitleEditableState(state, action) {
+	  if (typeof action.value !== 'boolean') {
+	    return Object.assign({}, state, { titleEditable: true });
+	  }
 	  return Object.assign({}, state, { titleEditable: action.value });
 	};
 	var reduceOptionUpdate = function reduceOptionUpdate(state, action) {
