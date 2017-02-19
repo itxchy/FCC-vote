@@ -7,11 +7,9 @@ import isEmpty from 'lodash/isEmpty'
 
 // ******* Actions *******
 
-export const SET_CURRENT_USER = 'setCurrentUser'
-export const USER_LOADING = 'USER_LOADING'
-export const SET_CLIENT_IP = 'SET_CLIENT_IP'
-// export const SET_LOGOUT_REDIRECT = 'SET_LOGOUT_REDIRECT'
-// export const RESET_LOGOUT_REDIRECT = 'RESET_LOGOUT_REDIRECT'
+const SET_CURRENT_USER = 'SET_CURRENT_USER'
+const USER_LOADING = 'USER_LOADING'
+const SET_CLIENT_IP = 'SET_CLIENT_IP'
 const SET_ERRORS = 'SET_ERRORS'
 
 // ******* Action Creators *******
@@ -132,7 +130,7 @@ export const DEFAULT_STATE = {
   user: null,
   errors: null,
   userLoading: false,
-  clientIp: null,
+  clientIp: null
 }
 
 // ******* Root Reducer Slice *******
