@@ -33894,6 +33894,7 @@
 	exports.setTitleEditable = setTitleEditable;
 	exports.updateOption = updateOption;
 	exports.resetNewPoll = resetNewPoll;
+	exports.pollSaved = pollSaved;
 	exports.resetPollSaved = resetPollSaved;
 	exports.submitNewPoll = submitNewPoll;
 	exports.default = newPoll;
@@ -33906,7 +33907,8 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// Actions
+	// ******* Actions *******
+	
 	var SET_NEW_POLL_TITLE = 'setNewPollTitle';
 	var SET_NEW_TITLE_EDITABLE = 'setTitleEditable';
 	var UPDATE_OPTION = 'updateOption';
@@ -33914,7 +33916,8 @@
 	var POLL_SAVED = 'POLL_SAVED';
 	var RESET_POLL_SAVED = 'RESET_POLL_SAVED';
 	
-	// Action Creators
+	// ******* Action Creators *******
+	
 	/**
 	 * Sets state.newPollTitle
 	 *
@@ -33967,6 +33970,7 @@
 	 *
 	 */
 	function submitNewPoll(newPoll) {
+	  // TODO: verify the newPoll object
 	  return function (dispatch) {
 	    _axios2.default.post('/api/polls', newPoll).then(function (res) {
 	      console.log('newPoll submitted successfully!', res.data.poll._id);
@@ -33980,7 +33984,8 @@
 	  };
 	}
 	
-	// Reducers
+	// ******* Reducers *******
+	
 	var setNewPollTitleReducer = function setNewPollTitleReducer(state, action) {
 	  if (typeof action.value !== 'string') {
 	    console.error('ERROR: redux: setNewPollTitle wasn\'t passed a string:', action.value);
@@ -34013,6 +34018,9 @@
 	  return newState;
 	};
 	var pollSavedReducer = function pollSavedReducer(state, action) {
+	  if (typeof action.pollId !== 'string') {
+	    return Object.assign({}, state, { pollSaved: false });
+	  }
 	  return Object.assign({}, state, { pollSaved: action.pollId });
 	};
 	var resetPollSavedReducer = function resetPollSavedReducer(state, action) {
@@ -34026,7 +34034,8 @@
 	  pollSaved: null
 	};
 	
-	// Root Reducer Slice
+	// ******* Root Reducer Slice *******
+	
 	function newPoll() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
 	  var action = arguments[1];

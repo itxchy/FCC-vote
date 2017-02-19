@@ -3,7 +3,9 @@ import {
   DEFAULT_STATE, 
   setNewPollTitle, 
   setTitleEditable, 
-  updateOption 
+  updateOption,
+  resetNewPoll,
+  pollSaved
 } from './createNewPoll'
 
 describe('redux: newPoll', () => {
@@ -11,17 +13,17 @@ describe('redux: newPoll', () => {
     let state = newPollReducerSlice(undefined, {})
     expect(state).toEqual(DEFAULT_STATE)
   })
-  
+
   describe('setNewPollTitle', () => {
     it('should set state.newPollTitle as a string passed to setNewPollTitle', () => {
       let state = newPollReducerSlice(null, setNewPollTitle('Controversial Title'))
       // expect state to equal initial state along with newPollTitle as 'Controversial Title'
-      expect(state.newPollTitle).toEqual('Controversial Title')
+      expect(state.newPollTitle).toBe('Controversial Title')
     })
     it('should return previous state if setNewPollTitle\'s argument is not a string', () => {
       let state = Object.assign({}, DEFAULT_STATE, { newPollTitle: 'Test Title' })
       let newState = newPollReducerSlice(state, setNewPollTitle(null))
-      expect(state.newPollTitle).toEqual('Test Title')
+      expect(state.newPollTitle).toBe('Test Title')
     })
   })
 
@@ -45,6 +47,26 @@ describe('redux: newPoll', () => {
       let state = Object.assign({}, DEFAULT_STATE, { newPollOptions: ['thing 1', 'thing 2']})
       let newState = newPollReducerSlice(state, updateOption(['thing 3']))
       expect(newState.newPollOptions).toEqual(expect.arrayContaining(['thing 1', 'thing 2']))
+    })
+  })
+
+  describe('resetNewPoll', () => {
+    it('should return the createNewPoll module to its default state', () => {
+      let state = Object.assign({}, DEFAULT_STATE, { newPollTitle: 'Things' })
+      expect(state.newPollTitle).toBe('Things')
+      let newState = newPollReducerSlice(state, resetNewPoll())
+      expect(newState).toEqual(DEFAULT_STATE)
+    })
+  })
+
+  describe('pollSaved', () => {
+    it('should set state.pollSaved as a string of a new poll\'s id', () => {
+      let state = newPollReducerSlice(null, pollSaved('asdfASDF'))
+      expect(state.pollSaved).toBe('asdfASDF')
+    })
+    it('should set state.pollSaved as false if a string is not passed to pollSaved', () => {
+      let state = newPollReducerSlice(null, pollSaved(undefined))
+      expect(state.pollSaved).toBe(false)
     })
   })
 })

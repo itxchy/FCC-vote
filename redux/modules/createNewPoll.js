@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { addFlashMessage } from './flashMessage'
 
-// Actions
+// ******* Actions *******
+
 const SET_NEW_POLL_TITLE = 'setNewPollTitle'
 const SET_NEW_TITLE_EDITABLE = 'setTitleEditable'
 const UPDATE_OPTION = 'updateOption'
@@ -9,7 +10,8 @@ const RESET_NEW_POLL = 'resetNewPoll'
 const POLL_SAVED = 'POLL_SAVED'
 const RESET_POLL_SAVED = 'RESET_POLL_SAVED'
 
-// Action Creators
+// ******* Action Creators *******
+
 /**
  * Sets state.newPollTitle
  *
@@ -45,7 +47,7 @@ export function resetNewPoll () {
  *
  * @param {string} pollId - A new poll's mongoDB _id
  */
-function pollSaved (pollId) {
+export function pollSaved (pollId) {
   return { type: POLL_SAVED, pollId }
 }
 /**
@@ -62,6 +64,7 @@ export function resetPollSaved () {
  *
  */
 export function submitNewPoll (newPoll) {
+  // TODO: verify the newPoll object
   return dispatch => {
     axios.post('/api/polls', newPoll)
       .then(res => {
@@ -77,7 +80,8 @@ export function submitNewPoll (newPoll) {
   }
 }
 
-// Reducers
+// ******* Reducers *******
+
 const setNewPollTitleReducer = (state, action) => {
   if (typeof action.value !== 'string') {
     console.error('ERROR: redux: setNewPollTitle wasn\'t passed a string:', action.value)
@@ -113,6 +117,9 @@ const resetNewPollReducer = (state, action) => {
   return newState
 }
 const pollSavedReducer = (state, action) => {
+  if (typeof action.pollId !== 'string') {
+    return Object.assign({}, state, { pollSaved: false })
+  }
   return Object.assign({}, state, { pollSaved: action.pollId })
 }
 const resetPollSavedReducer = (state, action) => {
@@ -129,7 +136,8 @@ export const DEFAULT_STATE = {
   pollSaved: null
 }
 
-// Root Reducer Slice
+// ******* Root Reducer Slice *******
+
 export default function newPoll (state = DEFAULT_STATE, action) {
   switch (action.type) {
     case SET_NEW_POLL_TITLE:
