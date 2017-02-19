@@ -93832,7 +93832,8 @@
 	    dispatchNewFormErrors: func.isRequired,
 	    dispatchSignupLoading: func.isRequired,
 	    errors: object,
-	    signupLoading: bool.isRequired
+	    signupLoading: bool.isRequired,
+	    user: object
 	  },
 	
 	  getInitialState: function getInitialState() {

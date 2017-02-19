@@ -15,7 +15,8 @@ const Signup = React.createClass({
     dispatchNewFormErrors: func.isRequired,
     dispatchSignupLoading: func.isRequired,
     errors: object,
-    signupLoading: bool.isRequired
+    signupLoading: bool.isRequired,
+    user: object
   },
 
   getInitialState () {
