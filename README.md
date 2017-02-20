@@ -1,5 +1,6 @@
 # Vote
-[![CircleCI](https://circleci.com/gh/itxchy/FCC-vote.svg?style=shield)](https://circleci.com/gh/itxchy/FCC-vote) [![Standard - JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+[![CircleCI](https://circleci.com/gh/itxchy/FCC-vote.svg?style=shield)](https://circleci.com/gh/itxchy/FCC-vote)  
+[![Standard - JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
 Vote early and vote often!
 
@@ -8,7 +9,7 @@ Create and share polls. Vote in polls made by friends and strangers for the good
 ### [Live Demo](http://itxchy-vote.herokuapp.com/)
 > Note: This is hosted on Heroku, so give it a moment to wake up
 
-A Full Stack project for [Free Code Camp](https://www.freecodecamp.com/).
+A Full Stack project for [Free Code Camp](https://www.freecodecamp.com/).  
 [User Stories](https://www.freecodecamp.com/challenges/build-a-voting-app)
 
 ## Technologies & Frameworks
