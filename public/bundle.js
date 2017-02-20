@@ -35698,6 +35698,12 @@
 	
 	// ******* Reducers *******
 	
+	/**
+	 * Sets the user object as action.user if defined and valid, of null
+	 * if the user object is empty or invalid. state.isAuthenticated defaults to false,
+	 * but gets set to true if the user object is valid. state.userLoading gets set to false
+	 * regardless.
+	 */
 	var setCurrentUserReducer = function setCurrentUserReducer(state, action) {
 	  var authenticationStatus = false;
 	  var user = action.user;
@@ -35725,6 +35731,10 @@
 	  return Object.assign({}, state, { clientIp: action.clientIp });
 	};
 	
+	/**
+	 * Sets state.errors with a form error or a server error. If any other error is offered,
+	 * something is wrong.
+	 */
 	var setErrorsReducer = function setErrorsReducer(state, action) {
 	  if (_typeof(action.errors) !== 'object') {
 	    return Object.assign({}, state);
@@ -68067,25 +68077,53 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// Action
+	// ******* Actions *******
+	
 	var DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS';
 	var SET_FORM_ERRORS = 'SET_FORM_ERRORS';
 	
-	// Action Creators
+	// ******* Action Creators *******
+	
+	/**
+	 * Sets state.errors and state.invalid
+	 *
+	 * @param {object} errors - Errors object returned from checkUserInResponse combined
+	 *   with existing validation errors
+	 *
+	 * @param {bool} invalid - If errors are present from checkUserInResponse, this
+	 *   should be true. If there are no errors, invalid will be false. The truthyness
+	 *   of invalid determines whether the submit button is disabled or not.
+	 */
 	function dupeUserCheckResults(errors, invalid) {
 	  return { type: DUPE_USER_CHECK_RESULTS, errors: errors, invalid: invalid };
 	}
 	
+	/**
+	 * Checks if an email or username entered at signup match an existing
+	 * user in the database. If a match is found in checkUserInResponse, the
+	 * errors object will be populated with an error message for the field given
+	 * as a parameter. If no match is found, errors will be null. After checking
+	 * for a duplicate user, checkUserInResponse will also verify that email fields
+	 * given to it are valid. If not, the errors object will contain an email
+	 * validation error. If any errors are present, the invalid bool will be true.
+	 *
+	 * @param {string} identifier - The form value from either the username or
+	 *   email field as event.target.value
+	 *
+	 * @param {string} field - The form field name, either username or email as
+	 *   event.target.field
+	 *
+	 * @param {object} validationErrors - The current validation errors from
+	 *   this module's state.errors as Signup.jsx received as props. There's
+	 *   probably a better way to access that object from within this module.
+	 */
 	function dupeUserCheck(identifier, field, validationErrors) {
 	  return function (dispatch) {
 	    _axios2.default.get('/api/users/' + identifier).then(function (res) {
-	      var _checkUserInResponse = checkUserInResponse(res, field),
+	      var _checkUserInResponse = checkUserInResponse(res, field, identifier),
 	          invalid = _checkUserInResponse.invalid,
 	          errors = _checkUserInResponse.errors;
 	
-	      if (!invalid && field === 'email' && !verifyEmail(identifier)) {
-	        errors.email = 'This email address is invalid';
-	      }
 	      var newErrors = Object.assign({}, validationErrors, errors);
 	      dispatch(dupeUserCheckResults(newErrors, invalid));
 	    }).catch(function (err) {
@@ -68098,12 +68136,16 @@
 	  };
 	}
 	
+	/**
+	 * Creates a new error object combining new errors with current errors
+	 */
 	function newFormErrors(currentErrors, newErrors) {
 	  var updatedErrors = Object.assign({}, currentErrors, newErrors);
 	  return { type: SET_FORM_ERRORS, errors: updatedErrors };
 	}
 	
-	// Reducer
+	// ******* Reducers *******
+	
 	function reduceDupeUserCheck(state, action) {
 	  return Object.assign({}, state, {
 	    errors: action.errors,
@@ -68116,13 +68158,18 @@
 	  });
 	}
 	
-	// Root Reducer Slice
-	var initialState = {
-	  errors: {},
+	// ******* Root Reducer Slice *******
+	var DEFAULT_STATE = {
+	  errors: {
+	    username: null,
+	    email: null,
+	    password: null,
+	    passwordConfirmation: null
+	  },
 	  invalid: false
 	};
 	function clientFormValidation() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
 	  var action = arguments[1];
 	
 	  switch (action.type) {
@@ -68135,9 +68182,9 @@
 	  }
 	}
 	
-	// Lib **************************************************************
+	// ************** Lib **************
 	
-	function checkUserInResponse(res, field) {
+	function checkUserInResponse(res, field, identifier) {
 	  console.log('checkUserInResponse:', res, 'field:', field);
 	  var invalid = void 0;
 	  var errors = {};
@@ -68148,18 +68195,14 @@
 	    errors[field] = null;
 	    invalid = false;
 	  }
+	  if (!invalid && field === 'email' && !_validator2.default.isEmail(identifier)) {
+	    errors.email = 'This email address is invalid';
+	    invalid = true;
+	  }
 	  return {
 	    errors: errors,
 	    invalid: invalid
 	  };
-	}
-	
-	function verifyEmail(email) {
-	  if (_validator2.default.isEmail(email)) {
-	    return true;
-	  } else {
-	    return false;
-	  }
 	}
 
 /***/ },
@@ -93896,13 +93939,10 @@
 	    }
 	    return isValid;
 	  },
-	  ensureUserExists: function ensureUserExists(event) {
+	  checkIfUserExists: function checkIfUserExists(event) {
 	    var field = event.target.name;
 	    var val = event.target.value;
-	    console.log('ensureUserExists event data:', '\nfield:', field, '\nval', val);
 	    if (val !== '' && val !== this.props.errors.username) {
-	      console.log('current errors.username:', this.props.errors.username);
-	      console.log('dispatchDupeUserCheck...', val);
 	      this.props.dispatchDupeUserCheck(val, field, this.props.errors);
 	    }
 	    if (val === '') {
@@ -93959,7 +93999,7 @@
 	          _react2.default.createElement(_TextFieldGroup2.default, {
 	            value: this.state.username,
 	            onChange: this.onChange,
-	            onBlur: this.ensureUserExists,
+	            onBlur: this.checkIfUserExists,
 	            type: 'text',
 	            field: 'username',
 	            label: 'Username',
@@ -93968,7 +94008,7 @@
 	          _react2.default.createElement(_TextFieldGroup2.default, {
 	            value: this.state.email,
 	            onChange: this.onChange,
-	            onBlur: this.ensureUserExists,
+	            onBlur: this.checkIfUserExists,
 	            type: 'text',
 	            field: 'email',
 	            label: 'Email',
@@ -93996,7 +94036,7 @@
 	            { className: 'form-group' },
 	            _react2.default.createElement(
 	              'button',
-	              { disabled: this.props.signupLoading || this.state.invalid, className: 'btn btn-primary btn-lg' },
+	              { disabled: this.props.signupLoading || this.state.invalid || this.props.invalid, className: 'btn btn-primary btn-lg' },
 	              'Sign up'
 	            )
 	          )
@@ -94019,7 +94059,7 @@
 	      password: state.clientFormValidation.errors.password,
 	      passwordConfirmation: state.clientFormValidation.errors.passwordConfirmation
 	    },
-	    invalid: state.invalid,
+	    invalid: state.clientFormValidation.invalid,
 	    signupLoading: state.userSignupRequest.signupLoading
 	  };
 	};

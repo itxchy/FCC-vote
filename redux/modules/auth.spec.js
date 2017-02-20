@@ -95,5 +95,16 @@ describe('redux: user', () => {
       expect(actions[1].type).toEqual('USER_LOADING')
       expect(actions[1].userLoading).toEqual(false)
     })
+    it('should dispatch setErrors with a server error if res.data is not defined', () => {
+      const initialState = {}
+      const store = mockStore(initialState)
+      handleLoginResponse({}, store.dispatch, prepareUserFromToken)
+      const actions = store.getActions()
+
+      expect(actions[0].type).toEqual('USER_LOADING')
+      expect(actions[0].userLoading).toEqual(false)
+      expect(actions[1].type).toEqual('SET_ERRORS')
+      expect(actions[1].errors).toEqual({'server': 'Server Error. Bad response.'})
+    })
   })
 })

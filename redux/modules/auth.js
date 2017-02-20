@@ -114,6 +114,12 @@ export function getClientIp () {
 
 // ******* Reducers *******
 
+/**
+ * Sets the user object as action.user if defined and valid, of null
+ * if the user object is empty or invalid. state.isAuthenticated defaults to false,
+ * but gets set to true if the user object is valid. state.userLoading gets set to false
+ * regardless.
+ */
 const setCurrentUserReducer = (state, action) => {
   let authenticationStatus = false
   let user = action.user
@@ -141,6 +147,10 @@ const setClientIpReducer = (state, action) => {
   return Object.assign({}, state, { clientIp: action.clientIp })
 }
 
+/**
+ * Sets state.errors with a form error or a server error. If any other error is offered,
+ * something is wrong.
+ */
 const setErrorsReducer = (state, action) => {
   if (typeof action.errors !== 'object') {
     return Object.assign({}, state)

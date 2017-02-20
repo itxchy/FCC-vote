@@ -41,13 +41,10 @@ const Signup = React.createClass({
     return isValid
   },
 
-  ensureUserExists (event) {
+  checkIfUserExists (event) {
     const field = event.target.name
     const val = event.target.value
-    console.log('ensureUserExists event data:', '\nfield:', field, '\nval', val)
     if (val !== '' && val !== this.props.errors.username) {
-      console.log('current errors.username:', this.props.errors.username)
-      console.log('dispatchDupeUserCheck...', val)
       this.props.dispatchDupeUserCheck(val, field, this.props.errors)
     }
     if (val === '') {
@@ -102,7 +99,7 @@ const Signup = React.createClass({
             <TextFieldGroup
               value={this.state.username}
               onChange={this.onChange}
-              onBlur={this.ensureUserExists}
+              onBlur={this.checkIfUserExists}
               type='text'
               field='username'
               label='Username'
@@ -112,7 +109,7 @@ const Signup = React.createClass({
             <TextFieldGroup
               value={this.state.email}
               onChange={this.onChange}
-              onBlur={this.ensureUserExists}
+              onBlur={this.checkIfUserExists}
               type='text'
               field='email'
               label='Email'
@@ -139,7 +136,7 @@ const Signup = React.createClass({
             />
 
             <div className='form-group'>
-              <button disabled={this.props.signupLoading || this.state.invalid} className='btn btn-primary btn-lg'>
+              <button disabled={this.props.signupLoading || this.state.invalid || this.props.invalid} className='btn btn-primary btn-lg'>
                 Sign up
               </button>
             </div>
@@ -164,7 +161,7 @@ const mapStateToProps = (state) => {
       password: state.clientFormValidation.errors.password,
       passwordConfirmation: state.clientFormValidation.errors.passwordConfirmation
     },
-    invalid: state.invalid,
+    invalid: state.clientFormValidation.invalid,
     signupLoading: state.userSignupRequest.signupLoading
   }
 }
