@@ -1,15 +1,22 @@
 # Vote
-[![CircleCI](https://circleci.com/gh/itxchy/FCC-vote.svg?style=shield)](https://circleci.com/gh/itxchy/FCC-vote)
+[![CircleCI](https://circleci.com/gh/itxchy/FCC-vote.svg?style=shield)](https://circleci.com/gh/itxchy/FCC-vote) [![Standard - JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
-Create and share polls. Vote in polls made by friends and strangers.
+Vote early and vote often!
 
-A Full Stack project for Free Code Camp.
+Create and share polls. Vote in polls made by friends and strangers for the good of data pseudo-science.
+
+### [Live Demo](http://itxchy-vote.herokuapp.com/)
+> Note: This is hosted on Heroku, so give it a moment to wake up
+
+A Full Stack project for [Free Code Camp](https://www.freecodecamp.com/).
+[User Stories](https://www.freecodecamp.com/challenges/build-a-voting-app)
 
 ## Technologies & Frameworks
 
+- StandardJS ES6
 - React
 - Redux
-- Webpack
+- Webpack 1
 - Express
 - MongoDB
 - ESlint
@@ -17,7 +24,7 @@ A Full Stack project for Free Code Camp.
 - Bootstrap
 - SASS
 
-This app is server-side rendered. 
+This is a full-stack, server-side rendered application 
 
 ## NPM Scripts
 
