@@ -82,6 +82,7 @@ function reduceSetFormErrors (state, action) {
 }
 
 // ******* Root Reducer Slice *******
+
 const DEFAULT_STATE = {
   errors: {
     username: null,

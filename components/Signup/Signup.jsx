@@ -16,7 +16,8 @@ const Signup = React.createClass({
     dispatchSignupLoading: func.isRequired,
     errors: object,
     signupLoading: bool.isRequired,
-    user: object
+    user: object,
+    invalid: bool
   },
 
   getInitialState () {

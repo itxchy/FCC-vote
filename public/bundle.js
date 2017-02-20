@@ -68159,6 +68159,7 @@
 	}
 	
 	// ******* Root Reducer Slice *******
+	
 	var DEFAULT_STATE = {
 	  errors: {
 	    username: null,
@@ -93914,7 +93915,8 @@
 	    dispatchSignupLoading: func.isRequired,
 	    errors: object,
 	    signupLoading: bool.isRequired,
-	    user: object
+	    user: object,
+	    invalid: bool
 	  },
 	
 	  getInitialState: function getInitialState() {
