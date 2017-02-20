@@ -35712,6 +35712,7 @@
 	    userLoading: false
 	  });
 	};
+	
 	var userLoadingReducer = function userLoadingReducer(state, action) {
 	  if (typeof action.userLoading !== 'boolean') {
 	    console.error('ERROR: redux: userLoading was not passed a boolean:', action.userLoading);
@@ -35719,9 +35720,11 @@
 	  }
 	  return Object.assign({}, state, { userLoading: action.userLoading });
 	};
+	
 	var setClientIpReducer = function setClientIpReducer(state, action) {
 	  return Object.assign({}, state, { clientIp: action.clientIp });
 	};
+	
 	var setErrorsReducer = function setErrorsReducer(state, action) {
 	  if (_typeof(action.errors) !== 'object') {
 	    return Object.assign({}, state);
@@ -35761,6 +35764,20 @@
 	
 	// ************** Lib **************
 	
+	/**
+	 * After a login attempt to '/api/auth' with the client's credentials,
+	 * the response from the server gets handled here. If the login attempt is
+	 * successful, a token will be in the response as res.data.token. If the user's
+	 * username/email and password not correct, an error object will be in the
+	 * respose as res.data.errors.form. If no token or errors object come with the
+	 * response, something went wrong on the server, and a server error will be passed
+	 * along
+	 *
+	 * @param {object} res - Either res.data.errors or res.data.token should be defined
+	 * @param {function} dispatch - Redux's dispatch function in this function's calling context
+	 * @param {function} prepareUser - Alias for prepareUserFromToken. The name change is to
+	 * fix a name collision in testing.
+	 */
 	function handleLoginResponse(res, dispatch, prepareUser) {
 	  console.log('auth.js: res.data:', res.data);
 	  if (!res.data) {
@@ -35786,6 +35803,20 @@
 	  return dispatch(setErrors({ server: 'no errors or token returned' }));
 	}
 	
+	/**
+	 * Prepares the user object by decoding a valid JSON web token. This also
+	 * sets the token in localStorage and the client's headers through setAuthorizationToken.
+	 * These side effects hindered this function's testability to the point where
+	 * mocking localStorage, jwt, and setAuthorizationToken would require tight coupling with handleLoginResponse and
+	 * up to the login action creator, so I opted out of testing this function to keep the flow clear and simple.
+	 * This function isn't doing much.
+	 *
+	 * @param {object} res - The response object from Express. res.data.token should
+	 * be defined at this point, otherwise its an error.
+	 *
+	 * @returns {object} user - Decoded token such as: { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
+	 * @returns {null} null - If a token isn't found in the response object, something went wrong.
+	 */
 	function prepareUserFromToken(res) {
 	  console.log('prepareUserFromToken res:', res);
 	  var token = res.data.token ? res.data.token : null;
