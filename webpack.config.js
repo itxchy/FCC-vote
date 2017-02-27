@@ -42,10 +42,6 @@ const config = {
         loader: 'json-loader'
       },
       {
-        test: /\.coffee$/, 
-        loader: 'coffee-loader'
-      },
-      {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'url-loader?limit=10000&minetype=application/font-woff&name=fonts/[name].[ext]'
       },

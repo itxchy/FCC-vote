@@ -82,7 +82,7 @@ app.use((req, res) => {
       )
       res.status(200).send(template({ body }))
     } else {
-      res.status(404).send('Not Found')
+      res.status(404).send('404: Page Not Found')
     }
   })
 })

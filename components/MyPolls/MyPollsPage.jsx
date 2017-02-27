@@ -45,6 +45,7 @@ const MyPollsPage = React.createClass({
     const polls = this.props.userPolls ? this.props.userPolls : null
     return (
       <div>
+        <h1 className='view-title text-center'>My Poll Results</h1>
         <DisplayPolls
           polls={polls}
           clientIp={this.props.clientIp}

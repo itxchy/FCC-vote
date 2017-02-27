@@ -3,8 +3,11 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 @import "font-awesome/scss/variables";
 $fa-font-path: "font-awesome/fonts";
 @import "font-awesome/scss/font-awesome";
-@import "awesome-bootstrap-checkbox/awesome-bootstrap-checkbox";
 @import url('https://fonts.googleapis.com/css?family=Overpass');
+
+body {
+  background-color: #EEFFFF;
+}
 
 h1, h2, h3, h4, p, a, text {
   font-family: 'Overpass', sans-serif;
@@ -28,6 +31,7 @@ h1, h2, h3, h4, p, a, text {
   cursor: pointer;  
 }
 
+@import "navBar";
 @import "createAPoll";
 @import "cards";
 @import "pollCard";

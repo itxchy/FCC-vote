@@ -72271,7 +72271,7 @@
 	    );
 	    return _react2.default.createElement(
 	      'nav',
-	      { className: 'navbar navbar-default' },
+	      { className: 'navbar navbar-default vote-nav' },
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'container-fluid' },
@@ -94517,6 +94517,11 @@
 	    return _react2.default.createElement(
 	      'div',
 	      null,
+	      _react2.default.createElement(
+	        'h1',
+	        { className: 'view-title text-center' },
+	        'My Poll Results'
+	      ),
 	      _react2.default.createElement(_DisplayPolls2.default, {
 	        polls: polls,
 	        clientIp: this.props.clientIp,

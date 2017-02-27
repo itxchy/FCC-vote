@@ -48,7 +48,7 @@ const NavBar = React.createClass({
       </div>
     )
     return (
-      <nav className='navbar navbar-default'>
+      <nav className='navbar navbar-default vote-nav'>
         <div className='container-fluid'>
           <div className='navbar-header'>
             <button type='button' className='navbar-toggle collapsed' data-toggle='collapse' data-target='#bs-example-navbar-collapse-1' aria-expanded='false'>
