@@ -11,7 +11,9 @@
     "coverage": "jest --coverage",
     "lint": "eslint 'server.js' webpack.config.js 'server/**' 'routes/**' 'auth/**'; exit 0",
     "build": "webpack",
+    "build-prod": "webpack --config webpack.prod.js",
     "watch": "webpack --watch",
+    "watch-prod": "webpack --config webpack.prod.js --watch",
     "server": "NODE_ENV=server nodemon server.js",
     "mongo": "mongod --port 27017 --dbpath=./data",
     "all": "xfce4-terminal -H -e \"npm run tdd\" & xfce4-terminal -H -e \"npm run server\" & xfce4-terminal -H -e \"npm run watch\" & xfce4-terminal -H -e \"mongod --port 27017 --dbpath=./data\""
@@ -50,7 +52,8 @@
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
-    "webpack": "^2.2.1"
+    "webpack": "^2.2.1",
+    "webpack-merge": "^3.0.0"
   },
   "dependencies": {
     "axios": "^0.15.2",
