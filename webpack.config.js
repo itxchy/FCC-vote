@@ -24,14 +24,14 @@ const config = {
     chunks: false
   },
   module: {
-    preLoaders: [
-      {
-        test: /\.jsx?$/,
-        loader: 'eslint-loader',
-        exclude: /node_modules/
-      }
-    ],
-    loaders: [
+    // preLoaders: [
+    //   {
+    //     test: /\.jsx?$/,
+    //     loader: 'eslint-loader',
+    //     exclude: /node_modules/
+    //   }
+    // ],
+    rules: [
       {
         test: /\.jsx?$/,
         loader: 'babel-loader?sourceMap',
@@ -53,7 +53,8 @@ const config = {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract(
           'style-loader',
-          'css-loader!sass-loader'
+          'css-loader',
+          'sass-loader'
         )
       }
     ]
