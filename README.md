@@ -13,14 +13,15 @@ A Full Stack project for [Free Code Camp](https://www.freecodecamp.com/).
 
 ## Technologies & Frameworks
 
-- StandardJS ES6
+- Standard JS
 - React
 - Redux
-- Webpack 1
+- Jest
+- Enzyme
+- Webpack 2
 - Express
 - MongoDB
 - ESlint
-- Jest
 - Bootstrap
 - SASS
 - Babel
@@ -29,15 +30,17 @@ This is a full-stack, server-side rendered application.
 
 ## Roadmap
 
-The user stories are completed, though I have a lot of unit tests and documentation to finish. In between chipping away at that, the other essential step will be to optimize the production build of this app to shink the main bundle, use the production build of React (or switch to Preact entirely), and look into code-splitting and treeshaking if either won't require a massive refactor. The development build is currently deployed to Heroku, but the production build will replace it within days.
+- Finish unit tests for Redux
+- Test the essentials in React components
+- Optimize the production build with code splitting
 
-This project will later be gutted into a boilerplate so I can hit the ground running for future apps. It will be open sourced when it's ready [to add to the pile](http://andrewhfarmer.com/starter-project/). The final important hurtle will be to replace the brittle custom coded jwt authentication scheme with something built by security professionals, most likely Passport. Coding your own security features for a production app is a very bad idea. 
+This project will later be gutted into a boilerplate so I can hit the ground running for future larger-scale apps. It will be open sourced when it's ready [to add to the pile](http://andrewhfarmer.com/starter-project/), though create-react-app is amazing for small client side apps. The final important hurtle will be to replace the brittle custom coded jwt authentication strategy with Passport. Coding your own security features is a very bad idea.
 
 After all of that, I'm very excited to finally try out [RethinkDB](https://www.rethinkdb.com/faq/) for future projects. They recently [joined the Linux Foundation](https://www.rethinkdb.com/blog/rethinkdb-joins-linux-foundation/) and their documentation, community, and [code](https://www.rethinkdb.com/docs/guide/javascript/) are fantastic. 
 
 This has been the biggest challenge I've had yet and I can't express how much I've learned while building this.
 
-If you have any critiques or feedback, please open an issue or send an email (it's in my profile). I'll buy you a beer.
+If you have any critiques or feedback, please open an issue or send an email.
 
 ## NPM Scripts
 

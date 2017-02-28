@@ -1,5 +1,11 @@
 require('babel-register')({ ignore: /node_modules/ })
+require('module-alias').addAliases({
+  'react'  : 'preact-compat',
+  'react-dom': 'preact-compat'
+});
+
 const express = require('express')
+const expressStaticGzip = require('express-static-gzip')
 const bodyParser = require('body-parser')
 const fs = require('fs')
 const _ = require('lodash')
@@ -54,7 +60,7 @@ app.use('/api/users', users)
 app.use('/api/auth', auth)
 app.use('/api/polls', polls)
 
-app.use('/public', express.static('./public'))
+app.use('/public', expressStaticGzip('./public'))
 
 /**
  * Server-side rendering for React

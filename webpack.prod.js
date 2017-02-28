@@ -1,5 +1,6 @@
 const webpack = require('webpack')
 const webpackMerge = require('webpack-merge')
+const CompressionPlugin = require('compression-webpack-plugin')
 
 const commonConfig = require('./webpack.config.js')
 
@@ -21,6 +22,13 @@ module.exports = function (env) {
           screw_ie8: true
         },
         comments: false
+      }),
+      new CompressionPlugin({
+        asset: "[path].gz[query]",
+        algorithm: "gzip",
+        test: /\.js$|\.html$/,
+        threshold: 10240,
+        minRatio: 0.8
       })
     ]
   })
