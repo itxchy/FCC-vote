@@ -1,4 +1,4 @@
-require('babel-register')({ ignore: /node_modules/, modules: true })
+require('babel-register')({ ignore: /node_modules/ })
 require('module-alias').addAliases({
   'react'  : 'preact-compat',
   'react-dom': 'preact-compat'
