@@ -8,7 +8,8 @@ const config = {
   context: __dirname,
   entry: './components/BrowserEntry.jsx',
   output: {
-    path: path.join(__dirname, '/public'),
+    path: path.join(__dirname, 'public'),
+    publicPath: '/public/'
     filename: 'bundle.js'
   },
   resolve: {
@@ -19,6 +20,8 @@ const config = {
   //   dns: 'empty'
   // },
   stats: {
+    errors: true,
+    warnings: true,
     colors: true,
     reasons: true,
     chunks: false
@@ -62,15 +65,16 @@ const config = {
   },
   debug: true,
   devtool: 'source-map',
+  performance: {
+    hints: "warning",
+    maxEntryPointSize: 400000,
+    maxAssetSize: 300000
+  }
   plugins: [
     new ExtractTextPlugin('/css/style.css'),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
-      'window.jQuery': 'jquery',
-      'window.d3': 'd3',
-      'window.topojson': 'topojson',
-      'd3': 'd3'
     })
 /*    ,
     new BrowserSyncPlugin({
