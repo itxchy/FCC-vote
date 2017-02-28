@@ -14,10 +14,10 @@ const config = {
   resolve: {
     extensions: ['.js', '.jsx', '.json']
   },
-  node: {
-    net: 'empty',
-    dns: 'empty'
-  },
+  // node: {
+  //   net: 'empty',
+  //   dns: 'empty'
+  // },
   stats: {
     colors: true,
     reasons: true,
@@ -25,13 +25,15 @@ const config = {
   },
   module: {
     // preLoaders: [
-    //   {
-    //     test: /\.jsx?$/,
-    //     loader: 'eslint-loader',
-    //     exclude: /node_modules/
-    //   }
+
     // ],
     rules: [
+      {
+        test: /\.jsx?$/,
+        enforce: 'pre',
+        loader: 'eslint-loader',
+        exclude: /node_modules/
+      },
       {
         test: /\.jsx?$/,
         loader: 'babel-loader?sourceMap',
