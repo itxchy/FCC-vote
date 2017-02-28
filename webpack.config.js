@@ -2,7 +2,6 @@ const webpack = require('webpack')
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 // const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
-const validate = require('webpack-validator')
 
 const config = {
   context: __dirname,
@@ -85,4 +84,4 @@ const config = {
   ]
 }
 
-module.exports = validate(config)
+module.exports = config
