@@ -8,23 +8,17 @@ const config = {
   entry: './components/BrowserEntry.jsx',
   output: {
     path: path.join(__dirname, 'public'),
-    publicPath: '/public/'
+    publicPath: '/public/',
     filename: 'bundle.js'
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json']
   },
-  // node: {
-  //   net: 'empty',
-  //   dns: 'empty'
-  // },
-  stats: {
-    errors: true,
-    warnings: true,
-    colors: true,
-    reasons: true,
-    chunks: false
+  node: {
+    net: 'empty',
+    dns: 'empty'
   },
+  stats: "minimal",
   module: {
     // preLoaders: [
 
@@ -56,19 +50,18 @@ const config = {
       {
         test: /\.scss$/,
         use: ExtractTextPlugin.extract({
-          fallback: 'style-loader'
+          fallback: 'style-loader',
           use: ['css-loader','sass-loader']
         })
       }
     ]
   },
-  debug: true,
   devtool: 'source-map',
   performance: {
     hints: "warning",
-    maxEntryPointSize: 400000,
+    maxEntrypointSize: 400000,
     maxAssetSize: 300000
-  }
+  },
   plugins: [
     new ExtractTextPlugin('/css/style.css'),
     new webpack.ProvidePlugin({
