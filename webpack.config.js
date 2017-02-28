@@ -51,11 +51,10 @@ const config = {
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract(
-          'style-loader',
-          'css-loader',
-          'sass-loader'
-        )
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader'
+          use: ['css-loader','sass-loader']
+        })
       }
     ]
   },
