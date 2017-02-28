@@ -10,6 +10,9 @@
     },
     "server": {
       "plugins": ["transform-es2015-modules-commonjs"]
+    },
+    "production": {
+      "plugins": ["transform-es2015-modules-commonjs"]
     }
   }
 }
