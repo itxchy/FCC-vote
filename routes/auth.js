@@ -1,4 +1,5 @@
 const express = require('express')
+const { log } = require('../server.js')
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -39,7 +40,7 @@ router.post('/', (req, res) => {
     }
   })
   .catch(err => {
-    console.log('ERROR: promise rejected', err)
+    log.error('Mongoose: auth request promise rejected', {err}, {req})
     return res.status(500).json({ 'error querying database for user login': err })
   })
 })
@@ -49,7 +50,7 @@ router.post('/', (req, res) => {
  */
 router.get('/ip', (req, res) => {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
-  console.log('auth.js: IP address returned:', ip)
+  log.info('auth.js: IP address returned:', {ip})
   return res.json({ clientIp: ip })
 })
 

@@ -13,6 +13,19 @@ const fs = require('fs')
 const _template = require('lodash/template')
 const mongoose = require('mongoose')
 mongoose.Promise = require('bluebird')
+const bunyan = require('bunyan')
+const log = bunyan.createLogger({
+  name: 'vote',
+  streams: [
+    {
+      level: 'info',
+      stream: process.stdout
+    },
+    {
+      level: 'warn',
+      path: 'log/vote-error.log'
+    }
+  ]})
 
 const React = require('react')
 const ReactDOMServer = require('react-dom/server')
@@ -36,18 +49,18 @@ const app = express()
 if (process.env.NODE_ENV === 'production') {
   mongoose.connect(process.env.MONGO_URI)
     .then(() => {
-      console.log('Connected to Mongoose! production environment')
+      log.info('Mongoose: Connected! production environment')
     })
     .catch(err => {
-      console.error('Mongoose production connection failed', err)
+      log.fatal('Mongoose: production connection failed', { mongoose: true }, { err })
     })
 } else {
   mongoose.connect('mongodb://localhost:27017/vote')
   .then(() => {
-    console.log('Connected to Mongoose! development environment')
+    log.info('Mongoose: Connected! development environment')
   })
   .catch(err => {
-    console.error('Mongoose development connection failed:', err)
+    log.fatal('Mongoose development connection failed:', { mongoose: true }, { err })
   })
 }
 
@@ -74,8 +87,9 @@ app.use('/public', expressStaticGzip('./public'))
  */
 app.use((req, res) => {
   match({ routes: Routes(), location: req.url }, (error, redirectLocation, renderProps) => {
-    if (error) {
-      res.status(500).send(error.message)
+    if (err) {
+      res.status(500).send(err.message)
+      log.error('React Router: match error', { reactRouter: true }, {err})
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search)
     } else if (renderProps) {
@@ -91,5 +105,7 @@ app.use((req, res) => {
   })
 })
 
-console.log(`Listening on port ${port}...`)
+log.info(`Express: Listening on port ${port}...`)
 app.listen(port)
+
+exports.log = log

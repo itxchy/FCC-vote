@@ -2,6 +2,7 @@ const async = require('asyncawait/async')
 const awaitFake = require('asyncawait/await')
 const Poll = require('../../models/Poll')
 const { dupeVoterCheck, tallyVoteTotal } = require('./pollsLib')
+const { log } = require('../../server.js')
 
 /**
  * params: pollID string, voter string
@@ -19,7 +20,7 @@ const checkVoterUniqueness = async(function (pollID, voter) {
     return dupeCheck
   })
   .catch(err => {
-    console.error('ERROR checkVoterUniqueness', err)
+    log.error('pollsDb.js: checkVoterUniqueness', { mongoose: true }, { err })
   })
 })
 
@@ -45,7 +46,7 @@ const updateDocumentWithNewVote = function (selectedOption, pollID, voter) {
       return { updated: true, totalVotes: voteTotal, doc: updatedDoc }
     })
     .catch(err => {
-      console.error('ERROR updateDocumentWithNewVote', err)
+      log.error('pollsDb.js: updateDocumentWithNewVote', { mongoose: true }, { err })
       return { updated: false, error: err }
     })
 }
@@ -60,7 +61,7 @@ const updateDocumentVotesTotal = function (pollID, totalVotes) {
     return { updated: true, doc: updatedDoc }
   })
   .catch(err => {
-    console.error('ERROR updateDocumentVotesTotal', err)
+    log.error('pollsDb.js: updateDocumentVotesTotal', { mongoose: true }, { err })
     return { updated: false, error: err }
   })
 }
@@ -81,6 +82,7 @@ const updatePollDocumentOnEdit = function (pollID, pollData) {
     return { updatedDoc }
   })
   .catch(error => {
+    log.error('pollsDb.js: updatePollDocumentOnEdit', { mongoose: true }, { err })
     return { error }
   })
 }

@@ -5,7 +5,7 @@
   "description": "Create and share polls. Vote in polls made by friends and strangers.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server.js | bunyan",
     "test": "jest",
     "tdd": "NODE_ENV=test jest --watch",
     "coverage": "jest --coverage",
@@ -21,7 +21,7 @@
     "babel:prod": "npm run babel:clear && npm run copy:sass && npm run babel:routes && npm run babel:components && npm run babel:redux && npm run babel:auth",
     "watch": "webpack --watch",
     "watch:prod": "webpack --config webpack.prod.js --watch",
-    "server": "NODE_ENV=server nodemon server.js",
+    "server": "NODE_ENV=server nodemon server.js | bunyan",
     "mongo": "mongod --port 27017 --dbpath=./data",
     "all": "xfce4-terminal -H -e \"npm run tdd\" & xfce4-terminal -H -e \"npm run server\" & xfce4-terminal -H -e \"npm run watch\" & xfce4-terminal -H -e \"mongod --port 27017 --dbpath=./data\""
   },
@@ -75,6 +75,7 @@
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
     "bootstrap": "^3.3.7",
+    "bunyan": "^1.8.8",
     "classnames": "^2.2.5",
     "d3": "^4.4.0",
     "d3-textwrap": "^2.0.0",

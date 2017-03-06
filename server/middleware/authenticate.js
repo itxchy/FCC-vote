@@ -16,13 +16,10 @@ function authenticate (req, res, next) {
       if (err) {
         res.status(401).json({ error: 'Failed to authenticate' })
       } else {
-        console.log('decoded', decoded)
-        console.log('decoded.id', decoded.id)
         User.find({ _id: decoded.id })
         .select('email _id username')
         .exec()
         .then(user => {
-          console.log('user found:', user)
           if (isEmpty(user)) {
             return res.status(404).json({ error: 'No such user' })
           }
