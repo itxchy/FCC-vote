@@ -14,7 +14,7 @@ const MyPollsPage = React.createClass({
     clientIp: string,
     isAuthenticated: bool,
     updatedPollResults: object,
-    user: object.isRequired,
+    user: object,
     userPolls: array
   },
   getUserPolls () {

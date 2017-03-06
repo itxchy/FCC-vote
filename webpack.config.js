@@ -84,8 +84,8 @@ module.exports = function () {
         name: 'vendor',
         filename: 'vendor.js',
         minChunks: Infinity
-      }),
-      new BundleAnalyzerPlugin()
+      }) // ,
+      // new BundleAnalyzerPlugin()
     ]
   }
 }

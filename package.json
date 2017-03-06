@@ -11,7 +11,7 @@
     "coverage": "jest --coverage",
     "lint": "eslint 'server.js' webpack.config.js 'server/**' 'routes/**' 'auth/**'; exit 0",
     "build": "webpack",
-    "build-prod": "npm run babel:prod && webpack --config webpack.prod.js",
+    "build:prod": "npm run babel:prod && webpack --config webpack.prod.js",
     "babel:clear": "del production/*",
     "babel:components": "NODE_ENV=server babel components -d production/components",
     "babel:redux": "NODE_ENV=server babel redux -d production/redux",
@@ -20,7 +20,7 @@
     "babel:routes": "NODE_ENV=server babel routes -d production/routes",
     "babel:prod": "npm run babel:clear && npm run copy:sass && npm run babel:routes && npm run babel:components && npm run babel:redux && npm run babel:auth",
     "watch": "webpack --watch",
-    "watch-prod": "webpack --config webpack.prod.js --watch",
+    "watch:prod": "webpack --config webpack.prod.js --watch",
     "server": "NODE_ENV=server nodemon server.js",
     "mongo": "mongod --port 27017 --dbpath=./data",
     "all": "xfce4-terminal -H -e \"npm run tdd\" & xfce4-terminal -H -e \"npm run server\" & xfce4-terminal -H -e \"npm run watch\" & xfce4-terminal -H -e \"mongod --port 27017 --dbpath=./data\""

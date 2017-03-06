@@ -9,17 +9,11 @@ import jwt from 'jsonwebtoken'
 import setAuthorizationToken from '../auth/setAuthorizationToken'
 import Routes from './Routes'
 
-// import { createHistory, useBasename } from 'history'
-// const browserHistory = useBasename(createHistory)({
-//   basename: '/'
-// })
-
 const App = React.createClass({
   render () {
     if (localStorage.jwtToken) {
       setAuthorizationToken(localStorage.jwtToken)
       const decodedToken = jwt.decode(localStorage.jwtToken)
-      // store.dispatch({type: SET_CURRENT_USER, user: jwt.decode(localStorage.jwtToken)})
       store.dispatch(setCurrentUser(decodedToken))
     } else {
       store.dispatch(getClientIp())
