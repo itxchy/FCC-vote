@@ -1,8 +1,10 @@
-require('babel-register')({ ignore: /node_modules/ })
+if (process.env.NODE_ENV !== 'production') {
+  require('babel-register')({ ignore: /node_modules/ })
+}
 require('module-alias').addAliases({
-  'react'  : 'preact-compat',
+  'react': 'preact-compat',
   'react-dom': 'preact-compat'
-});
+})
 
 const express = require('express')
 const expressStaticGzip = require('express-static-gzip')
@@ -14,14 +16,17 @@ mongoose.Promise = require('bluebird')
 
 const React = require('react')
 const ReactDOMServer = require('react-dom/server')
-const { match, RouterContext, useRouterHistory, createMemoryHistory } = require('react-router')
+const { match, RouterContext, createMemoryHistory } = require('react-router')
 const { Provider } = require('react-redux')
-const { store } = require('./redux/Store.js')
+// const { store } = require('./redux/Store.js')
+const { store } = process.env.NODE_ENV === 'production' ? require('./production/redux/Store.js') : require('./redux/Store.js')
 const baseTemplate = fs.readFileSync('./index.html')
 const template = _.template(baseTemplate)
-const ClientApp = require('./components/ClientApp.jsx')
+// const ClientApp = require('./components/ClientApp.jsx')
+// const ClientApp = require('./production/components/ClientApp.js')
 
-const { Routes } = require('./components/Routes.jsx')
+// const { Routes } = require('./components/Routes.jsx')
+const { Routes } = process.env.NODE_ENV === 'production' ? require('./production/components/Routes.js') : require('./components/Routes.jsx')
 const users = require('./routes/users.js')
 const auth = require('./routes/auth.js')
 const polls = require('./routes/polls.js')

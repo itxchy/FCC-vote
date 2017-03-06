@@ -1,3 +1,5 @@
+const async = require('asyncawait/async')
+const awaitFake = require('asyncawait/await')
 const Poll = require('../../models/Poll')
 const { dupeVoterCheck, tallyVoteTotal } = require('./pollsLib')
 
@@ -9,17 +11,17 @@ const { dupeVoterCheck, tallyVoteTotal } = require('./pollsLib')
  *
  * returns: BOOL
  */
-const checkVoterUniqueness = async function (pollID, voter) {
+const checkVoterUniqueness = async(function (pollID, voter) {
   return Poll.findOne({ _id: pollID })
   .exec()
   .then(poll => {
-    const dupeCheck = dupeVoterCheck(poll, voter)
+    const dupeCheck = awaitFake(dupeVoterCheck(poll, voter))
     return dupeCheck
   })
   .catch(err => {
     console.error('ERROR checkVoterUniqueness', err)
   })
-}
+})
 
 /**
  * params: selectedOption number, pollID string, voter string
@@ -64,8 +66,7 @@ const updateDocumentVotesTotal = function (pollID, totalVotes) {
 }
 
 const updatePollDocumentOnEdit = function (pollID, pollData) {
-  const { title, options, owner } = pollData
-  const totalVotes = 0
+  const { title, options } = pollData
   const formattedOptions = options.map(option => {
     return {
       option,
@@ -74,12 +75,7 @@ const updatePollDocumentOnEdit = function (pollID, pollData) {
   })
   return Poll.findOneAndUpdate(
     { _id: pollID },
-    { $set: { 
-      title, 
-      options: formattedOptions,
-      totalVotes: 0
-      } 
-    }
+    { $set: { title, options: formattedOptions, totalVotes: 0 } }
   )
   .then(updatedDoc => {
     return { updatedDoc }

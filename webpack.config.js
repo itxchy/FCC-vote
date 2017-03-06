@@ -2,7 +2,6 @@ const webpack = require('webpack')
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-// const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 
 module.exports = function () {
   return {
@@ -19,15 +18,15 @@ module.exports = function () {
     resolve: {
       extensions: ['.js', '.jsx', '.json'],
       alias: {
-        "react": "preact-compat",
-        "react-dom": "preact-compat"
+        'react': 'preact-compat',
+        'react-dom': 'preact-compat'
       }
     },
     node: {
       net: 'empty',
       dns: 'empty'
     },
-    stats: "minimal",
+    stats: 'minimal',
     module: {
       rules: [
         {
@@ -64,14 +63,14 @@ module.exports = function () {
           test: /\.scss$/,
           use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
-            use: ['css-loader','sass-loader']
+            use: ['css-loader', 'sass-loader']
           })
         }
       ]
     },
     devtool: 'cheap-module-source-map',
     performance: {
-      hints: "warning",
+      hints: 'warning',
       maxEntrypointSize: 400000,
       maxAssetSize: 300000
     },
@@ -79,20 +78,14 @@ module.exports = function () {
       new ExtractTextPlugin('/css/style.css'),
       new webpack.ProvidePlugin({
         $: 'jquery',
-        jQuery: 'jquery',
+        jQuery: 'jquery'
       }),
       new webpack.optimize.CommonsChunkPlugin({
         name: 'vendor',
         filename: 'vendor.js',
         minChunks: Infinity
-      }) // ,
-     // new BundleAnalyzerPlugin()
-/*    ,
-      new BrowserSyncPlugin({
-        host: 'localhost',
-        port: 3000,
-        server: { baseDir: [''] }
-      })*/
+      }),
+      new BundleAnalyzerPlugin()
     ]
   }
 }

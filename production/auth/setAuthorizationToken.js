@@ -1,0 +1,12 @@
+'use strict';
+
+var axios = require('axios');
+
+function setAuthorizationToken(token) {
+  if (token) {
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+  } else {
+    delete axios.defaults.headers.common['Authorization'];
+  }
+}
+module.exports = setAuthorizationToken;

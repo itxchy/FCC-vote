@@ -16,15 +16,15 @@ const { object, func, string, bool, array } = React.PropTypes
 const CreateAPoll = React.createClass({
   propTypes: {
     poll: object,
-    dispatchUpdateOption: func,
+    dispatchUpdateOption: func.isRequired,
     newPollTitle: string,
     titleEditable: bool,
-    dispatchSetNewPollTitle: func,
-    dispatchSetTitleEditable: func,
+    dispatchSetNewPollTitle: func.isRequired,
+    dispatchSetTitleEditable: func.isRequired,
     newPollOptions: array,
-    dispatchSubmitPoll: func,
-    dispatchResetNewPoll: func,
-    dispatchResetPollSaved: func,
+    dispatchSubmitPoll: func.isRequired,
+    dispatchResetNewPoll: func.isRequired,
+    dispatchResetPollSaved: func.isRequired,
     pollSaved: string,
     user: object
   },

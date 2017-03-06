@@ -20,4 +20,4 @@ function validateCreateAPollInput (data) {
   }
 }
 
-export default validateCreateAPollInput
+module.exports = validateCreateAPollInput

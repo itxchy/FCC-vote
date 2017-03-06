@@ -41,7 +41,6 @@ const PollCard = React.createClass({
       this.props.dispatchSubmitVote(pollID, vote)
     } else {
       this.setState({ noOptionSelected: true })
-      console.log('no poll option selected!')
     }
   },
   render () {
