@@ -12,17 +12,18 @@ const { log } = require('../../server.js')
  *
  * returns: BOOL
  */
-const checkVoterUniqueness = async(function (pollID, voter) {
+const checkVoterUniqueness =  (pollID, voter) => {
   return Poll.findOne({ _id: pollID })
   .exec()
   .then(poll => {
-    const dupeCheck = awaitFake(dupeVoterCheck(poll, voter))
+    const dupeCheck = dupeVoterCheck(poll, voter)
+    log.info('pollsDb.js: dupeVoterCheck result', { dupeCheck })
     return dupeCheck
   })
   .catch(err => {
     log.error('pollsDb.js: checkVoterUniqueness', { mongoose: true }, { err })
   })
-})
+}
 
 /**
  * params: selectedOption number, pollID string, voter string
@@ -41,8 +42,8 @@ const updateDocumentWithNewVote = function (selectedOption, pollID, voter) {
       { new: true, upsert: true }
     )
     .then(updatedDoc => {
-      // res.json({ 'vote cast': updatedDoc })
       let voteTotal = tallyVoteTotal(updatedDoc)
+      log.info('pollsDb.js: updated document with new vote', { updatedDoc }, { voteTotal })
       return { updated: true, totalVotes: voteTotal, doc: updatedDoc }
     })
     .catch(err => {
@@ -79,11 +80,12 @@ const updatePollDocumentOnEdit = function (pollID, pollData) {
     { $set: { title, options: formattedOptions, totalVotes: 0 } }
   )
   .then(updatedDoc => {
+    log.info('pollDb.js: updated poll document for edit', { updatedDoc })
     return { updatedDoc }
   })
-  .catch(error => {
+  .catch(err => {
     log.error('pollsDb.js: updatePollDocumentOnEdit', { mongoose: true }, { err })
-    return { error }
+    return { err }
   })
 }
 

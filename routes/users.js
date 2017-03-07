@@ -2,6 +2,7 @@ const express = require('express')
 const commonValidations = require('./shared/signupValidation.js')
 const bcrypt = require('bcrypt')
 const isEmpty = require('lodash/isEmpty')
+const { log } = require('../server.js')
 
 const User = require('../models/User')
 
@@ -26,8 +27,8 @@ function validateInput (data, otherValidations) {
       }
     })
     .catch(err => {
-      console.error('ERROR: user validation promise rejected', err)
-      return Promise.reject(err)
+      log.error('validateInput.js: user validation promise rejected', { mongoose: true, err })
+      return err
     })
 }
 
@@ -40,14 +41,14 @@ router.get('/:identifier', (req, res) => {
   .select('username email')
   .exec()
   .then(user => {
-    console.log('user found!', user)
+    log.info('user.js: user found', { user })
     if (isEmpty(user)) {
-      return res.json({user: null})
+      return res.json({ user: null })
     }
-    return res.json({user})
+    return res.json({ user })
   })
   .catch(err => {
-    console.log('find user promise rejection')
+    log.error('users.js: find user promise rejected', { mongoose: true, err })
     res.status(400).json({ 'user lookup error': err, error: err })
   })
 })
@@ -61,6 +62,7 @@ router.post('/', (req, res) => {
     .then((results) => {
       console.log('results object should contain isValid and errors', results)
       if (results.isValid) {
+        log.info('users.js: user signup form validation successful', { results })
         const { username, password, email } = req.body
         const passwordDigest = bcrypt.hashSync(password, 10)
         let user = new User()
@@ -70,12 +72,15 @@ router.post('/', (req, res) => {
 
         user.save()
         .then(user => {
+          log.info('user.js: new user signup successful', { user })
           res.json({ success: 'signup successful!', user: user })
         })
         .catch(err => {
+          log.error('user.js: new user signup failed', { mongoose: true, err })
           res.status(500).json({ 'save user error': err })
         })
       } else {
+        log.info('user.js: user input validation error present', { results })
         res.status(400).json({ 'user input validation error': results.errors })
       }
     })

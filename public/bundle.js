@@ -18010,7 +18010,7 @@ var RESET_NEW_POLL = 'RESET_NEW_POLL';
 var POLL_SAVED = 'POLL_SAVED';
 var RESET_POLL_SAVED = 'RESET_POLL_SAVED';
 
-// ******* Action Creators & Reducers*******
+// ******* Action Creators & Reducers *******
 
 /**
  * Sets state.newPollTitle
@@ -18065,8 +18065,7 @@ function resetNewPoll() {
 }
 var resetNewPollReducer = function resetNewPollReducer(state, action) {
   var newState = {};
-  var blankPollState = DEFAULT_STATE;
-  Object.assign(newState, state, blankPollState);
+  Object.assign(newState, state, DEFAULT_STATE);
   return newState;
 };
 /**

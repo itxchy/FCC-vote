@@ -40,7 +40,7 @@ router.post('/', (req, res) => {
     }
   })
   .catch(err => {
-    log.error('Mongoose: auth request promise rejected', {err}, {req})
+    log.error('Mongoose: auth request promise rejected', { err }, { req }, { mongoose: true })
     return res.status(500).json({ 'error querying database for user login': err })
   })
 })
@@ -50,7 +50,7 @@ router.post('/', (req, res) => {
  */
 router.get('/ip', (req, res) => {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
-  log.info('auth.js: IP address returned:', {ip})
+  log.info('auth.js: IP address returned:', { ip })
   return res.json({ clientIp: ip })
 })
 

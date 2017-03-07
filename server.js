@@ -26,6 +26,7 @@ const log = bunyan.createLogger({
       path: 'log/vote-error.log'
     }
   ]})
+exports.log = log
 
 const React = require('react')
 const ReactDOMServer = require('react-dom/server')
@@ -52,7 +53,7 @@ if (process.env.NODE_ENV === 'production') {
       log.info('Mongoose: Connected! production environment')
     })
     .catch(err => {
-      log.fatal('Mongoose: production connection failed', { mongoose: true }, { err })
+      log.fatal('Mongoose: production connection failed', { mongoose: true, err })
     })
 } else {
   mongoose.connect('mongodb://localhost:27017/vote')
@@ -60,7 +61,7 @@ if (process.env.NODE_ENV === 'production') {
     log.info('Mongoose: Connected! development environment')
   })
   .catch(err => {
-    log.fatal('Mongoose development connection failed:', { mongoose: true }, { err })
+    log.fatal('Mongoose development connection failed:', { mongoose: true, err })
   })
 }
 
@@ -86,10 +87,10 @@ app.use('/public', expressStaticGzip('./public'))
  * "misses", the relevent case gets handled.
  */
 app.use((req, res) => {
-  match({ routes: Routes(), location: req.url }, (error, redirectLocation, renderProps) => {
+  match({ routes: Routes(), location: req.url }, (err, redirectLocation, renderProps) => {
     if (err) {
       res.status(500).send(err.message)
-      log.error('React Router: match error', { reactRouter: true }, {err})
+      log.error('React Router: match error', { reactRouter: true, err })
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search)
     } else if (renderProps) {
@@ -107,5 +108,3 @@ app.use((req, res) => {
 
 log.info(`Express: Listening on port ${port}...`)
 app.listen(port)
-
-exports.log = log

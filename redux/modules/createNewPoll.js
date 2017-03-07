@@ -20,7 +20,7 @@ const RESET_NEW_POLL = 'RESET_NEW_POLL'
 const POLL_SAVED = 'POLL_SAVED'
 const RESET_POLL_SAVED = 'RESET_POLL_SAVED'
 
-// ******* Action Creators & Reducers*******
+// ******* Action Creators & Reducers *******
 
 /**
  * Sets state.newPollTitle
@@ -75,8 +75,7 @@ export function resetNewPoll () {
 }
 const resetNewPollReducer = (state, action) => {
   const newState = {}
-  const blankPollState = DEFAULT_STATE
-  Object.assign(newState, state, blankPollState)
+  Object.assign(newState, state, DEFAULT_STATE)
   return newState
 }
 /**

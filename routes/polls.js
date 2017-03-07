@@ -12,6 +12,7 @@ const {
   updateDocumentVotesTotal,
   updatePollDocumentOnEdit } = require('./lib/pollsDb')
 let router = express.Router()
+const { log } = require('../server.js')
 
 function validateNewPoll (res, data, commonValidations) {
   // Ugly hack to rename keys so they can be validated by createAPollValidation
@@ -35,7 +36,10 @@ function validateNewPoll (res, data, commonValidations) {
         isValid: isEmpty(errors)
       }
     })
-    .catch(err => res.status(500).json({ 'duplicate poll check error': err }))
+    .catch(err => {
+      log.error('polls.js: duplicate poll check failed', { mongoose: true, err })
+      res.status(500).json({ 'duplicate poll check error': err })
+    })
 }
 
 function validateUpdatedPoll (res, data, commonValidations) {
@@ -72,9 +76,13 @@ router.post('/', authenticate, (req, res) => {
 
       poll.save()
       .then(poll => {
+        log.info('polls.js: new poll created', { poll })
         res.json({ success: 'new poll created!', poll: poll })
       })
-      .catch(err => res.status(500).json({ 'new poll DB save error': err }))
+      .catch(err => {
+        log.error('polls.js: new poll creation failed', { mongoose: true, err })
+        res.status(500).json({ 'new poll DB save error': err })
+      })
     } else {
       res.status(400).json({ 'poll validation error': result.errors })
     }
