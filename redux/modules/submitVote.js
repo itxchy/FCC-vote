@@ -1,11 +1,17 @@
 import axios from 'axios'
 import has from 'lodash/has'
 
-// Action
+const DEFAULT_STATE = {
+  updatedResults: null
+}
+
+// ******* Action Types *******
+
 const UPDATED_POLL_RESULTS = 'UPDATED_POLL_RESULTS'
 const RESET_UPDATED_POLL_RESULTS = 'RESET_UPDATED_POLL_RESULTS'
 
-// Action Creators
+// ******* Action Creators & Reducers *******
+
 /**
  * @param id = string,
  * @param vote = object {selectedOption, voter}
@@ -21,7 +27,7 @@ export function submitVote (id, vote) {
   return dispatch => {
     axios.put(`/api/polls/${id}`, vote)
       .then(res => {
-        console.log('New, unique vote successful in submitVote!', res)
+        // console.log('New, unique vote successful in submitVote!', res)
         const results = res.data.totalVotes
         dispatch(updatedPollResults(results))
       })
@@ -35,35 +41,42 @@ export function submitVote (id, vote) {
       })
   }
 }
+
+/**
+ * Sets state.updatedResults as a poll object of the newly updated poll
+ *
+ * @param {object} results
+ */
 function updatedPollResults (results) {
+  console.log('results:', results)
   return { type: UPDATED_POLL_RESULTS, results }
 }
+function updatedPollResultsReducer (state, action) {
+  const newState = {}
+  Object.assign(newState, state, { updatedResults: action.results })
+  return newState
+}
+
+/**
+ * Resets state.updatedResults to null
+ */
 export function resetUpdatedPollResults () {
-  return { type: RESET_UPDATED_POLL_RESULTS, results: null }
+  return { type: RESET_UPDATED_POLL_RESULTS }
 }
-
-// Reducers
-function reduceUpdatedPollResults (state, action) {
+function resetUpdatedPollResultsReducer (state, action) {
   const newState = {}
-  Object.assign(newState, state, { updatedResults: action.results })
-  return newState
-}
-function reduceResetUpdatedPollResults (state, action) {
-  const newState = {}
-  Object.assign(newState, state, { updatedResults: action.results })
+  Object.assign(newState, state, DEFAULT_STATE)
   return newState
 }
 
-const initialState = {
-  updatedResults: null
-}
-// Root Reducer Slice
-export default function newVote (state = initialState, action) {
+// ******* Root Reducer Slice *******
+
+export default function newVote (state = DEFAULT_STATE, action) {
   switch (action.type) {
     case UPDATED_POLL_RESULTS:
-      return reduceUpdatedPollResults(state, action)
+      return updatedPollResultsReducer(state, action)
     case RESET_UPDATED_POLL_RESULTS:
-      return reduceResetUpdatedPollResults(state, action)
+      return resetUpdatedPollResultsReducer(state, action)
     default:
       return state
   }
