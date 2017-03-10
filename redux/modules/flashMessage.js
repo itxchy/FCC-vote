@@ -3,6 +3,10 @@ import findIndex from 'lodash/findIndex'
 import loMap from 'lodash/map'
 import clone from 'lodash/clone'
 
+const DEFAULT_STATE = {
+  flashMessages: []
+}
+
 // Actions
 export const ADD_FLASH_MESSAGE = 'ADD_FLASH_MESSAGE'
 export const DELETE_FLASH_MESSAGE = 'DELETE_FLASH_MESSAGE'
@@ -57,12 +61,8 @@ const reduceClearAllFlashMessages = (state, action) => {
   return Object.assign({}, state, { flashMessages: [] })
 }
 
-const initialState = {
-  flashMessages: []
-}
-
 // Root Reducer Slice
-export default function flashMessages (state = initialState, action) {
+export default function flashMessages (state = DEFAULT_STATE, action) {
   switch (action.type) {
     case ADD_FLASH_MESSAGE:
       return reduceAddFlashMessage(state, action)

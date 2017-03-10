@@ -7784,6 +7784,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 
 
+var DEFAULT_STATE = {
+  flashMessages: []
+};
+
 // Actions
 var ADD_FLASH_MESSAGE = 'ADD_FLASH_MESSAGE';
 var DELETE_FLASH_MESSAGE = 'DELETE_FLASH_MESSAGE';
@@ -7835,13 +7839,9 @@ var reduceClearAllFlashMessages = function reduceClearAllFlashMessages(state, ac
   return Object.assign({}, state, { flashMessages: [] });
 };
 
-var initialState = {
-  flashMessages: []
-};
-
 // Root Reducer Slice
 function flashMessages() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
   var action = arguments[1];
 
   switch (action.type) {
@@ -18228,6 +18228,11 @@ function setPollOptionsReducer(state, action) {
   return Object.assign({}, state, { newPollOptions: action.pollOptions });
 }
 
+/**
+ * Sets state.setTitleEditable
+ *
+ * @param {bool} bool
+ */
 function setTitleEditable(bool) {
   return { type: SET_TITLE_EDITABLE, titleEditable: bool };
 }
@@ -18235,6 +18240,9 @@ function setTitleEditableReducer(state, action) {
   return Object.assign({}, state, { titleEditable: action.titleEditable });
 }
 
+/**
+ * Resets the poll to two blank options
+ */
 function resetPoll() {
   return { type: RESET_POLL };
 }
@@ -18242,6 +18250,13 @@ function resetPollReducer(state, action) {
   return Object.assign({}, state, DEFAULT_STATE);
 }
 
+/**
+ * Sets state.editedPoll as the edited poll object.
+ * This allows EditPoll.jsx to redirect to the edited poll's page upon
+ * receiving this object.
+ *
+ * @param {object} editedPoll
+ */
 function pollEdited(editedPoll) {
   return { type: POLL_EDITED, editedPoll: editedPoll };
 }
@@ -18249,6 +18264,11 @@ function pollEditedReducer(state, action) {
   return Object.assign({}, state, { editedPoll: action.editedPoll });
 }
 
+/**
+ * Sets state.activePollData
+ *
+ * @param {object} activePoll - the initial data of the poll being edited
+ */
 function activePollData(activePoll) {
   return { type: ACTIVE_POLL_DATA, activePollData: activePoll };
 }
