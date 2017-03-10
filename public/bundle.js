@@ -17482,6 +17482,7 @@ var PendingPollOptions = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createCl
     this.setState({ twoOptionsOrMoreError: false });
     var updatedNewOptions = this.props.poll.newPollOptions;
     updatedNewOptions.push('');
+    console.log('updatedNewOptions', updatedNewOptions);
     this.props.dispatchUpdateOption(updatedNewOptions);
   },
   deleteOption: function deleteOption(index) {
@@ -18156,7 +18157,17 @@ function newPoll() {
 
 
 
-// Action
+var DEFAULT_STATE = {
+  newPollTitle: '',
+  titleEditable: true,
+  newPollOptions: ['', ''],
+  editedPoll: null,
+  activePollData: null
+};
+
+console.log(DEFAULT_STATE);
+// ******* Action Types *******
+
 var POLL_EDITED = 'POLL_EDITED';
 var ACTIVE_POLL_DATA = 'ACTIVE_POLL_DATA';
 var SET_POLL_TITLE = 'SET_POLL_TITLE';
@@ -18164,7 +18175,8 @@ var SET_POLL_OPTIONS = 'SET_POLL_OPTIONS';
 var SET_TITLE_EDITABLE = 'SET_TITLE_EDITABLE';
 var RESET_POLL = 'RESET_POLL';
 
-// Action Creators
+// ******* Action Creators & Reducers *******
+
 function getPollData(id) {
   return function (dispatch) {
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/polls/id/' + id).then(function (res) {
@@ -18178,6 +18190,7 @@ function getPollData(id) {
     });
   };
 }
+
 function setEditedPoll(id, pollData) {
   return function (dispatch) {
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/polls/edit/' + id, pollData).then(function (res) {
@@ -18186,76 +18199,80 @@ function setEditedPoll(id, pollData) {
       // dispatch reset setNewTitle
       // dispatch dispatch setPollOptions
     }).catch(function (err) {
-      console.error('error: put request to /api/polls/edit failed:', err);
       dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__flashMessage__["b" /* addFlashMessage */])({ type: 'error', text: 'Error: failed to submit edited poll' }));
     });
   };
 }
+
+/**
+ * Sets state.newPollTitle from a change event in the title's text area
+ *
+ * @param {string} pollTitle - A new poll's title
+ */
 function setPollTitle(pollTitle) {
   return { type: SET_POLL_TITLE, pollTitle: pollTitle };
 }
+function setPollTitleReducer(state, action) {
+  return Object.assign({}, state, { newPollTitle: action.pollTitle });
+}
+
+/**
+ * Sets state.newPollOptions from a new poll options object 
+ *
+ * @param {object} pollOptions - A new poll options object
+ */
 function setPollOptions(pollOptions) {
   return { type: SET_POLL_OPTIONS, pollOptions: pollOptions };
 }
+function setPollOptionsReducer(state, action) {
+  return Object.assign({}, state, { newPollOptions: action.pollOptions });
+}
+
 function setTitleEditable(bool) {
   return { type: SET_TITLE_EDITABLE, titleEditable: bool };
 }
+function reduceSetTitleEditable(state, action) {
+  return Object.assign({}, state, { titleEditable: action.titleEditable });
+}
+
 function resetPoll() {
   return { type: RESET_POLL };
 }
+function resetPollReducer(state, action) {
+  return Object.assign({}, state, DEFAULT_STATE);
+}
+
 function pollEdited(editedPoll) {
   return { type: POLL_EDITED, editedPoll: editedPoll };
 }
+function pollEditedReducer(state, action) {
+  return Object.assign({}, state, { editedPoll: action.editedPoll });
+}
+
 function activePollData(activePoll) {
   return { type: ACTIVE_POLL_DATA, activePollData: activePoll };
 }
-
-// Reducers
-function reducePollEdited(state, action) {
-  return Object.assign({}, state, { editedPoll: action.editedPoll });
-}
-function reduceActivePollData(state, action) {
+function activePollDataReducer(state, action) {
   return Object.assign({}, state, { activePollData: action.activePollData });
 }
-function reduceSetPollTitle(state, action) {
-  return Object.assign({}, state, { newPollTitle: action.pollTitle });
-}
-function reduceSetPollOptions(state, action) {
-  return Object.assign({}, state, { newPollOptions: action.pollOptions });
-}
-function reduceResetPoll(state, action) {
-  return Object.assign({}, state, {
-    newPollTitle: '',
-    titleEditable: true,
-    newPollOptions: ['', ''],
-    editedPoll: null,
-    activePollData: null
-  });
-}
 
-// Root Reducer Slice
-var initialState = {
-  newPollTitle: '',
-  titleEditable: true,
-  newPollOptions: ['', ''],
-  editedPoll: null,
-  activePollData: null
-};
+// ******* Root Reducer Slice *******
+
 function editPoll() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
   var action = arguments[1];
 
   switch (action.type) {
     case POLL_EDITED:
-      return reducePollEdited(state, action);
+      return pollEditedReducer(state, action);
     case ACTIVE_POLL_DATA:
-      return reduceActivePollData(state, action);
+      return activePollDataReducer(state, action);
     case SET_POLL_TITLE:
-      return reduceSetPollTitle(state, action);
+      return setPollTitleReducer(state, action);
     case SET_POLL_OPTIONS:
-      return reduceSetPollOptions(state, action);
+      return setPollOptionsReducer(state, action);
     case RESET_POLL:
-      return reduceResetPoll(state, action);
+      return resetPollReducer(state, action);
     default:
       return state;
   }

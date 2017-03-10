@@ -77,7 +77,11 @@ app.use('/api/users', users)
 app.use('/api/auth', auth)
 app.use('/api/polls', polls)
 
-app.use('/public', expressStaticGzip('./public'))
+if (process.env.NODE_ENV === 'production') {
+  app.use('/public', expressStaticGzip('./public'))
+} else {
+  app.use('/public', express.static('./public'))
+}
 
 /**
  * Server-side rendering for React

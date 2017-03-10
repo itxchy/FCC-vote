@@ -24,6 +24,7 @@ const PendingPollOptions = React.createClass({
     this.setState({ twoOptionsOrMoreError: false })
     let updatedNewOptions = this.props.poll.newPollOptions
     updatedNewOptions.push('')
+    console.log('updatedNewOptions', updatedNewOptions)
     this.props.dispatchUpdateOption(updatedNewOptions)
   },
   deleteOption (index) {

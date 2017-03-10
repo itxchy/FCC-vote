@@ -1,7 +1,20 @@
 import axios from 'axios'
 import { addFlashMessage } from './flashMessage'
 
-// Action
+const DEFAULT_STATE = {
+  newPollTitle: '',
+  titleEditable: true,
+  newPollOptions: [
+    '',
+    ''
+  ],
+  editedPoll: null,
+  activePollData: null
+}
+
+console.log(DEFAULT_STATE)
+// ******* Action Types *******
+
 const POLL_EDITED = 'POLL_EDITED'
 const ACTIVE_POLL_DATA = 'ACTIVE_POLL_DATA'
 const SET_POLL_TITLE = 'SET_POLL_TITLE'
@@ -9,7 +22,8 @@ const SET_POLL_OPTIONS = 'SET_POLL_OPTIONS'
 const SET_TITLE_EDITABLE = 'SET_TITLE_EDITABLE'
 const RESET_POLL = 'RESET_POLL'
 
-// Action Creators
+// ******* Action Creators & Reducers *******
+
 export function getPollData (id) {
   return dispatch => {
     axios.get(`/api/polls/id/${id}`)
@@ -24,6 +38,7 @@ export function getPollData (id) {
       })
   }
 }
+
 export function setEditedPoll (id, pollData) {
   return dispatch => {
     axios.put(`/api/polls/edit/${id}`, pollData)
@@ -34,79 +49,77 @@ export function setEditedPoll (id, pollData) {
         // dispatch dispatch setPollOptions
       })
       .catch(err => {
-        console.error('error: put request to /api/polls/edit failed:', err)
         dispatch(addFlashMessage({ type: 'error', text: 'Error: failed to submit edited poll' }))
       })
   }
 }
+
+/**
+ * Sets state.newPollTitle from a change event in the title's text area
+ *
+ * @param {string} pollTitle - A new poll's title
+ */
 export function setPollTitle (pollTitle) {
   return { type: SET_POLL_TITLE, pollTitle }
 }
+function setPollTitleReducer (state, action) {
+  return Object.assign({}, state, { newPollTitle: action.pollTitle })
+}
+
+/**
+ * Sets state.newPollOptions from a new poll options object 
+ *
+ * @param {object} pollOptions - A new poll options object
+ */
 export function setPollOptions (pollOptions) {
   return { type: SET_POLL_OPTIONS, pollOptions }
 }
+function setPollOptionsReducer (state, action) {
+  return Object.assign({}, state, { newPollOptions: action.pollOptions })
+}
+
 export function setTitleEditable (bool) {
   return { type: SET_TITLE_EDITABLE, titleEditable: bool }
 }
+function reduceSetTitleEditable (state, action) {
+  return Object.assign({}, state, { titleEditable: action.titleEditable })
+}
+
 export function resetPoll () {
   return { type: RESET_POLL }
 }
+function resetPollReducer (state, action) {
+  return Object.assign({}, state, DEFAULT_STATE)
+}
+
 function pollEdited (editedPoll) {
   return { type: POLL_EDITED, editedPoll: editedPoll }
 }
+function pollEditedReducer (state, action) {
+  return Object.assign({}, state, { editedPoll: action.editedPoll })
+}
+
 function activePollData (activePoll) {
   return { type: ACTIVE_POLL_DATA, activePollData: activePoll }
 }
-
-// Reducers
-function reducePollEdited (state, action) {
-  return Object.assign({}, state, { editedPoll: action.editedPoll })
-}
-function reduceActivePollData (state, action) {
+function activePollDataReducer (state, action) {
   return Object.assign({}, state, { activePollData: action.activePollData })
 }
-function reduceSetPollTitle (state, action) {
-  return Object.assign({}, state, { newPollTitle: action.pollTitle })
-}
-function reduceSetPollOptions (state, action) {
-  return Object.assign({}, state, { newPollOptions: action.pollOptions })
-}
-function reduceResetPoll (state, action) {
-  return Object.assign({}, state, {
-    newPollTitle: '',
-    titleEditable: true,
-    newPollOptions: [
-      '',
-      ''
-    ],
-    editedPoll: null,
-    activePollData: null
-  })
-}
 
-// Root Reducer Slice
-const initialState = {
-  newPollTitle: '',
-  titleEditable: true,
-  newPollOptions: [
-    '',
-    ''
-  ],
-  editedPoll: null,
-  activePollData: null
-}
-export default function editPoll (state = initialState, action) {
+// ******* Root Reducer Slice *******
+
+export default function editPoll (state = DEFAULT_STATE, action) {
   switch (action.type) {
     case POLL_EDITED:
-      return reducePollEdited(state, action)
+      return pollEditedReducer(state, action)
     case ACTIVE_POLL_DATA:
-      return reduceActivePollData(state, action)
+      return activePollDataReducer(state, action)
     case SET_POLL_TITLE:
-      return reduceSetPollTitle(state, action)
+      return setPollTitleReducer(state, action)
     case SET_POLL_OPTIONS:
-      return reduceSetPollOptions(state, action)
+      return setPollOptionsReducer(state, action)
     case RESET_POLL:
-      return reduceResetPoll(state, action)
+      return resetPollReducer(state, action)
     default:
       return state
   }
