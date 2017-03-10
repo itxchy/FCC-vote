@@ -7,24 +7,26 @@ const DEFAULT_STATE = {
   flashMessages: []
 }
 
-// Actions
-export const ADD_FLASH_MESSAGE = 'ADD_FLASH_MESSAGE'
-export const DELETE_FLASH_MESSAGE = 'DELETE_FLASH_MESSAGE'
+// ******* Action Types *******
+
+const ADD_FLASH_MESSAGE = 'ADD_FLASH_MESSAGE'
+const DELETE_FLASH_MESSAGE = 'DELETE_FLASH_MESSAGE'
 const CLEAR_ALL_FLASH_MESSAGES = 'CLEAR_ALL_FLASH_MESSAGES'
 
-// Action Creators
+// ******* Action Creators & Reducers *******
+
+/**
+ * Adds a new flash message object to the state.flashMessages array.
+ * The message object will contain a 'type' key with a string value, either 'success' or 'error'.
+ * It will also contain a 'text' key with a string value, which is a user-facing message.
+ * example: { type: 'success', text: 'New poll created!' }
+ *
+ * @param {object} message - A flash message object
+ */
 export function addFlashMessage (message) {
   return { type: ADD_FLASH_MESSAGE, value: message }
 }
-export function deleteFlashMessage (id) {
-  return { type: DELETE_FLASH_MESSAGE, value: id }
-}
-export function clearAllFlashMessages () {
-  return { type: CLEAR_ALL_FLASH_MESSAGES }
-}
-
-// Reducers
-export const reduceAddFlashMessage = (state, action) => {
+const addFlashMessageReducer = (state, action) => {
   const newState = {}
 
   Object.assign(newState, state, {
@@ -39,7 +41,17 @@ export const reduceAddFlashMessage = (state, action) => {
   })
   return newState
 }
-export const reduceDeleteFlashMessage = (state, action) => {
+
+/**
+ * Deletes a flash message from state.flashmessage's array based on the
+ * message object's id value.
+ *
+ * @param {string} id - The id of a flash message to delete
+ */
+export function deleteFlashMessage (id) {
+  return { type: DELETE_FLASH_MESSAGE, value: id }
+}
+const deleteFlashMessageReducer = (state, action) => {
   const newState = {}
 
   const index = findIndex(state.flashMessages, {id: action.value})
@@ -57,19 +69,27 @@ export const reduceDeleteFlashMessage = (state, action) => {
 
   return state
 }
-const reduceClearAllFlashMessages = (state, action) => {
-  return Object.assign({}, state, { flashMessages: [] })
+
+/**
+ * Restores state.flashMessages to an empty array
+ */
+export function clearAllFlashMessages () {
+  return { type: CLEAR_ALL_FLASH_MESSAGES }
+}
+const clearAllFlashMessagesReducer = (state, action) => {
+  return Object.assign({}, state, DEFAULT_STATE)
 }
 
-// Root Reducer Slice
+// ******* Root Reducer Slice *******
+
 export default function flashMessages (state = DEFAULT_STATE, action) {
   switch (action.type) {
     case ADD_FLASH_MESSAGE:
-      return reduceAddFlashMessage(state, action)
+      return addFlashMessageReducer(state, action)
     case DELETE_FLASH_MESSAGE:
-      return reduceDeleteFlashMessage(state, action)
+      return deleteFlashMessageReducer(state, action)
     case CLEAR_ALL_FLASH_MESSAGES:
-      return reduceClearAllFlashMessages(state, action)
+      return clearAllFlashMessagesReducer(state, action)
     default:
       return state
   }

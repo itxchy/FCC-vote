@@ -7769,13 +7769,9 @@ module.exports = root;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_clone__ = __webpack_require__(569);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_clone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_clone__);
-/* unused harmony export ADD_FLASH_MESSAGE */
-/* unused harmony export DELETE_FLASH_MESSAGE */
 /* harmony export (immutable) */ __webpack_exports__["b"] = addFlashMessage;
 /* harmony export (immutable) */ __webpack_exports__["c"] = deleteFlashMessage;
 /* harmony export (immutable) */ __webpack_exports__["a"] = clearAllFlashMessages;
-/* unused harmony export reduceAddFlashMessage */
-/* unused harmony export reduceDeleteFlashMessage */
 /* harmony export (immutable) */ __webpack_exports__["d"] = flashMessages;
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -7788,24 +7784,26 @@ var DEFAULT_STATE = {
   flashMessages: []
 };
 
-// Actions
+// ******* Action Types *******
+
 var ADD_FLASH_MESSAGE = 'ADD_FLASH_MESSAGE';
 var DELETE_FLASH_MESSAGE = 'DELETE_FLASH_MESSAGE';
 var CLEAR_ALL_FLASH_MESSAGES = 'CLEAR_ALL_FLASH_MESSAGES';
 
-// Action Creators
+// ******* Action Creators & Reducers *******
+
+/**
+ * Adds a new flash message object to the state.flashMessages array.
+ * The message object will contain a 'type' key with a string value, either 'success' or 'error'.
+ * It will also contain a 'text' key with a string value, which is a user-facing message.
+ * example: { type: 'success', text: 'New poll created!' }
+ *
+ * @param {object} message - A flash message object
+ */
 function addFlashMessage(message) {
   return { type: ADD_FLASH_MESSAGE, value: message };
 }
-function deleteFlashMessage(id) {
-  return { type: DELETE_FLASH_MESSAGE, value: id };
-}
-function clearAllFlashMessages() {
-  return { type: CLEAR_ALL_FLASH_MESSAGES };
-}
-
-// Reducers
-var reduceAddFlashMessage = function reduceAddFlashMessage(state, action) {
+var addFlashMessageReducer = function addFlashMessageReducer(state, action) {
   var newState = {};
 
   Object.assign(newState, state, {
@@ -7817,7 +7815,17 @@ var reduceAddFlashMessage = function reduceAddFlashMessage(state, action) {
   });
   return newState;
 };
-var reduceDeleteFlashMessage = function reduceDeleteFlashMessage(state, action) {
+
+/**
+ * Deletes a flash message from state.flashmessage's array based on the
+ * message object's id value.
+ *
+ * @param {string} id - The id of a flash message to delete
+ */
+function deleteFlashMessage(id) {
+  return { type: DELETE_FLASH_MESSAGE, value: id };
+}
+var deleteFlashMessageReducer = function deleteFlashMessageReducer(state, action) {
   var newState = {};
 
   var index = __WEBPACK_IMPORTED_MODULE_1_lodash_findIndex___default()(state.flashMessages, { id: action.value });
@@ -7835,22 +7843,30 @@ var reduceDeleteFlashMessage = function reduceDeleteFlashMessage(state, action) 
 
   return state;
 };
-var reduceClearAllFlashMessages = function reduceClearAllFlashMessages(state, action) {
-  return Object.assign({}, state, { flashMessages: [] });
+
+/**
+ * Restores state.flashMessages to an empty array
+ */
+function clearAllFlashMessages() {
+  return { type: CLEAR_ALL_FLASH_MESSAGES };
+}
+var clearAllFlashMessagesReducer = function clearAllFlashMessagesReducer(state, action) {
+  return Object.assign({}, state, DEFAULT_STATE);
 };
 
-// Root Reducer Slice
+// ******* Root Reducer Slice *******
+
 function flashMessages() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
   var action = arguments[1];
 
   switch (action.type) {
     case ADD_FLASH_MESSAGE:
-      return reduceAddFlashMessage(state, action);
+      return addFlashMessageReducer(state, action);
     case DELETE_FLASH_MESSAGE:
-      return reduceDeleteFlashMessage(state, action);
+      return deleteFlashMessageReducer(state, action);
     case CLEAR_ALL_FLASH_MESSAGES:
-      return reduceClearAllFlashMessages(state, action);
+      return clearAllFlashMessagesReducer(state, action);
     default:
       return state;
   }
