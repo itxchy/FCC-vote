@@ -13,6 +13,7 @@ const fs = require('fs')
 const _template = require('lodash/template')
 const mongoose = require('mongoose')
 mongoose.Promise = require('bluebird')
+const helmet = require('helmet')
 const bunyan = require('bunyan')
 const log = bunyan.createLogger({
   name: 'vote',
@@ -66,6 +67,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // middleware
+app.use(helmet())
 app.use(bodyParser.json())
 
 /**

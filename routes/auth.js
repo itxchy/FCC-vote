@@ -8,7 +8,7 @@ const router = express.Router()
 const config = process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : require('../config').jwtSecret
 
 /**
- * Authenicates a login request.
+ * Authenticates a login request.
  * If a username or email matches a user, the password
  * offered is compared with the user's salted password.
  * If the passwords match, a JSON web token is created

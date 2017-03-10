@@ -1,12 +1,22 @@
 import axios from 'axios'
 import Validator from 'validator'
 
-// ******* Actions *******
+const DEFAULT_STATE = {
+  errors: {
+    username: null,
+    email: null,
+    password: null,
+    passwordConfirmation: null
+  },
+  invalid: false
+}
+
+// ******* Action Types *******
 
 const DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS'
 const SET_FORM_ERRORS = 'SET_FORM_ERRORS'
 
-// ******* Action Creators *******
+// ******* Action Creators & Reducers *******
 
 /**
  * Sets state.errors and state.invalid
@@ -20,6 +30,12 @@ const SET_FORM_ERRORS = 'SET_FORM_ERRORS'
  */
 function dupeUserCheckResults (errors, invalid) {
   return { type: DUPE_USER_CHECK_RESULTS, errors, invalid }
+}
+function dupeUserCheckReducer (state, action) {
+  return Object.assign({}, state, {
+    errors: action.errors,
+    invalid: action.invalid
+  })
 }
 
 /**
@@ -66,16 +82,7 @@ export function newFormErrors (currentErrors, newErrors) {
   const updatedErrors = Object.assign({}, currentErrors, newErrors)
   return { type: SET_FORM_ERRORS, errors: updatedErrors }
 }
-
-// ******* Reducers *******
-
-function reduceDupeUserCheck (state, action) {
-  return Object.assign({}, state, {
-    errors: action.errors,
-    invalid: action.invalid
-  })
-}
-function reduceSetFormErrors (state, action) {
+function setFormErrorsReducer (state, action) {
   return Object.assign({}, state, {
     errors: action.errors
   })
@@ -83,21 +90,12 @@ function reduceSetFormErrors (state, action) {
 
 // ******* Root Reducer Slice *******
 
-const DEFAULT_STATE = {
-  errors: {
-    username: null,
-    email: null,
-    password: null,
-    passwordConfirmation: null
-  },
-  invalid: false
-}
 export default function clientFormValidation (state = DEFAULT_STATE, action) {
   switch (action.type) {
     case DUPE_USER_CHECK_RESULTS:
-      return reduceDupeUserCheck(state, action)
+      return dupeUserCheckReducer(state, action)
     case SET_FORM_ERRORS:
-      return reduceSetFormErrors(state, action)
+      return setFormErrorsReducer(state, action)
     default:
       return state
   }

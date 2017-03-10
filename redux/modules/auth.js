@@ -4,14 +4,14 @@ import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import setAuthorizationToken from '../../auth/setAuthorizationToken'
 
-// ******* Actions *******
+// ******* Action Types *******
 
 const SET_CURRENT_USER = 'SET_CURRENT_USER'
 const USER_LOADING = 'USER_LOADING'
 const SET_CLIENT_IP = 'SET_CLIENT_IP'
 const SET_ERRORS = 'SET_ERRORS'
 
-// ******* Action Creators *******
+// ******* Action Creators & Reducers *******
 
 /**
  * Sets state.user, and eventually state.isAuthenticated and state.userLoading
@@ -19,7 +19,7 @@ const SET_ERRORS = 'SET_ERRORS'
  *
  * @param {object} user - A decoded jwt, or an error object
  *
- * The token object being set to user will contain a newly authenitcated
+ * The token object being set to user will contain a newly authenticated
  * user's id string and username string, as well as the token's timestamp as iat.
  * example: { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
  */
@@ -29,6 +29,27 @@ export function setCurrentUser (user = {}) {
     user
   }
 }
+/**
+ * Sets the user object as action.user if defined and valid, of null
+ * if the user object is empty or invalid. state.isAuthenticated defaults to false,
+ * but gets set to true if the user object is valid. state.userLoading gets set to false
+ * regardless.
+ */
+const setCurrentUserReducer = (state, action) => {
+  let authenticationStatus = false
+  let user = action.user
+  if (user && user.username) {
+    authenticationStatus = true
+  } else {
+    user = null
+  }
+  return Object.assign({}, state, {
+    isAuthenticated: authenticationStatus,
+    user: user,
+    userLoading: false
+  })
+}
+
 /**
  * Sets state.userLoading
  *
@@ -40,11 +61,19 @@ export function userLoading (bool) {
     userLoading: bool
   }
 }
+const userLoadingReducer = (state, action) => {
+  if (typeof action.userLoading !== 'boolean') {
+    console.error('ERROR: redux: userLoading was not passed a boolean:', action.userLoading)
+    return Object.assign({}, state, { userLoading: false })
+  }
+  return Object.assign({}, state, { userLoading: action.userLoading })
+}
+
 /**
  * Sets state.errors
  *
  * @param {object} errors - should contain a form error or server error
- * example: { form: 'Invalid Credentials' } or { server: 'Server error. Try agian in a moment.' }
+ * example: { form: 'Invalid Credentials' } or { server: 'Server error. Try again in a moment.' }
  */
 export function setErrors (errors = {}) {
   return {
@@ -53,6 +82,16 @@ export function setErrors (errors = {}) {
     userLoading: false
   }
 }
+const setErrorsReducer = (state, action) => {
+  if (typeof action.errors !== 'object') {
+    return Object.assign({}, state)
+  }
+  if (!action.errors.form && !action.errors.server) {
+    console.error('ERROR: redux: Unknown error key passed in error object to setErrors:', action.errors)
+  }
+  return Object.assign({}, state, { errors: action.errors })
+}
+
 /**
  * Sets state.clientIp
  *
@@ -64,6 +103,10 @@ export function setClientIp (clientIp) {
     clientIp
   }
 }
+const setClientIpReducer = (state, action) => {
+  return Object.assign({}, state, { clientIp: action.clientIp })
+}
+
 /**
  * Attempts to authenticate a user on the server.
  *
@@ -112,55 +155,6 @@ export function getClientIp () {
   }
 }
 
-// ******* Reducers *******
-
-/**
- * Sets the user object as action.user if defined and valid, of null
- * if the user object is empty or invalid. state.isAuthenticated defaults to false,
- * but gets set to true if the user object is valid. state.userLoading gets set to false
- * regardless.
- */
-const setCurrentUserReducer = (state, action) => {
-  let authenticationStatus = false
-  let user = action.user
-  if (user && user.username) {
-    authenticationStatus = true
-  } else {
-    user = null
-  }
-  return Object.assign({}, state, {
-    isAuthenticated: authenticationStatus,
-    user: user,
-    userLoading: false
-  })
-}
-
-const userLoadingReducer = (state, action) => {
-  if (typeof action.userLoading !== 'boolean') {
-    console.error('ERROR: redux: userLoading was not passed a boolean:', action.userLoading)
-    return Object.assign({}, state, { userLoading: false })
-  }
-  return Object.assign({}, state, { userLoading: action.userLoading })
-}
-
-const setClientIpReducer = (state, action) => {
-  return Object.assign({}, state, { clientIp: action.clientIp })
-}
-
-/**
- * Sets state.errors with a form error or a server error. If any other error is offered,
- * something is wrong.
- */
-const setErrorsReducer = (state, action) => {
-  if (typeof action.errors !== 'object') {
-    return Object.assign({}, state)
-  }
-  if (!action.errors.form && !action.errors.server) {
-    console.error('ERROR: redux: Unknown error key passed in error object to setErrors:', action.errors)
-  }
-  return Object.assign({}, state, { errors: action.errors })
-}
-
 // ******* Root Reducer Slice *******
 
 export const DEFAULT_STATE = {
@@ -192,7 +186,7 @@ export default function user (state = DEFAULT_STATE, action) {
  * the response from the server gets handled here. If the login attempt is
  * successful, a token will be in the response as res.data.token. If the user's
  * username/email and password not correct, an error object will be in the
- * respose as res.data.errors.form. If no token or errors object come with the
+ * response as res.data.errors.form. If no token or errors object come with the
  * response, something went wrong on the server, and a server error will be passed
  * along
  *

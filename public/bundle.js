@@ -9604,14 +9604,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 
-// ******* Actions *******
+// ******* Action Types *******
 
 var SET_CURRENT_USER = 'SET_CURRENT_USER';
 var USER_LOADING = 'USER_LOADING';
 var SET_CLIENT_IP = 'SET_CLIENT_IP';
 var SET_ERRORS = 'SET_ERRORS';
 
-// ******* Action Creators *******
+// ******* Action Creators & Reducers *******
 
 /**
  * Sets state.user, and eventually state.isAuthenticated and state.userLoading
@@ -9619,7 +9619,7 @@ var SET_ERRORS = 'SET_ERRORS';
  *
  * @param {object} user - A decoded jwt, or an error object
  *
- * The token object being set to user will contain a newly authenitcated
+ * The token object being set to user will contain a newly authenticated
  * user's id string and username string, as well as the token's timestamp as iat.
  * example: { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
  */
@@ -9632,6 +9632,27 @@ function setCurrentUser() {
   };
 }
 /**
+ * Sets the user object as action.user if defined and valid, of null
+ * if the user object is empty or invalid. state.isAuthenticated defaults to false,
+ * but gets set to true if the user object is valid. state.userLoading gets set to false
+ * regardless.
+ */
+var setCurrentUserReducer = function setCurrentUserReducer(state, action) {
+  var authenticationStatus = false;
+  var user = action.user;
+  if (user && user.username) {
+    authenticationStatus = true;
+  } else {
+    user = null;
+  }
+  return Object.assign({}, state, {
+    isAuthenticated: authenticationStatus,
+    user: user,
+    userLoading: false
+  });
+};
+
+/**
  * Sets state.userLoading
  *
  * @param {boolean} bool
@@ -9642,11 +9663,19 @@ function userLoading(bool) {
     userLoading: bool
   };
 }
+var userLoadingReducer = function userLoadingReducer(state, action) {
+  if (typeof action.userLoading !== 'boolean') {
+    console.error('ERROR: redux: userLoading was not passed a boolean:', action.userLoading);
+    return Object.assign({}, state, { userLoading: false });
+  }
+  return Object.assign({}, state, { userLoading: action.userLoading });
+};
+
 /**
  * Sets state.errors
  *
  * @param {object} errors - should contain a form error or server error
- * example: { form: 'Invalid Credentials' } or { server: 'Server error. Try agian in a moment.' }
+ * example: { form: 'Invalid Credentials' } or { server: 'Server error. Try again in a moment.' }
  */
 function setErrors() {
   var errors = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -9657,6 +9686,16 @@ function setErrors() {
     userLoading: false
   };
 }
+var setErrorsReducer = function setErrorsReducer(state, action) {
+  if (_typeof(action.errors) !== 'object') {
+    return Object.assign({}, state);
+  }
+  if (!action.errors.form && !action.errors.server) {
+    console.error('ERROR: redux: Unknown error key passed in error object to setErrors:', action.errors);
+  }
+  return Object.assign({}, state, { errors: action.errors });
+};
+
 /**
  * Sets state.clientIp
  *
@@ -9668,6 +9707,10 @@ function setClientIp(clientIp) {
     clientIp: clientIp
   };
 }
+var setClientIpReducer = function setClientIpReducer(state, action) {
+  return Object.assign({}, state, { clientIp: action.clientIp });
+};
+
 /**
  * Attempts to authenticate a user on the server.
  *
@@ -9714,55 +9757,6 @@ function getClientIp() {
   };
 }
 
-// ******* Reducers *******
-
-/**
- * Sets the user object as action.user if defined and valid, of null
- * if the user object is empty or invalid. state.isAuthenticated defaults to false,
- * but gets set to true if the user object is valid. state.userLoading gets set to false
- * regardless.
- */
-var setCurrentUserReducer = function setCurrentUserReducer(state, action) {
-  var authenticationStatus = false;
-  var user = action.user;
-  if (user && user.username) {
-    authenticationStatus = true;
-  } else {
-    user = null;
-  }
-  return Object.assign({}, state, {
-    isAuthenticated: authenticationStatus,
-    user: user,
-    userLoading: false
-  });
-};
-
-var userLoadingReducer = function userLoadingReducer(state, action) {
-  if (typeof action.userLoading !== 'boolean') {
-    console.error('ERROR: redux: userLoading was not passed a boolean:', action.userLoading);
-    return Object.assign({}, state, { userLoading: false });
-  }
-  return Object.assign({}, state, { userLoading: action.userLoading });
-};
-
-var setClientIpReducer = function setClientIpReducer(state, action) {
-  return Object.assign({}, state, { clientIp: action.clientIp });
-};
-
-/**
- * Sets state.errors with a form error or a server error. If any other error is offered,
- * something is wrong.
- */
-var setErrorsReducer = function setErrorsReducer(state, action) {
-  if (_typeof(action.errors) !== 'object') {
-    return Object.assign({}, state);
-  }
-  if (!action.errors.form && !action.errors.server) {
-    console.error('ERROR: redux: Unknown error key passed in error object to setErrors:', action.errors);
-  }
-  return Object.assign({}, state, { errors: action.errors });
-};
-
 // ******* Root Reducer Slice *******
 
 var DEFAULT_STATE = {
@@ -9797,7 +9791,7 @@ function user() {
  * the response from the server gets handled here. If the login attempt is
  * successful, a token will be in the response as res.data.token. If the user's
  * username/email and password not correct, an error object will be in the
- * respose as res.data.errors.form. If no token or errors object come with the
+ * response as res.data.errors.form. If no token or errors object come with the
  * response, something went wrong on the server, and a server error will be passed
  * along
  *
@@ -10844,17 +10838,18 @@ asn1.encoders = __webpack_require__(363);
 
 
 
-// Action
+// ******* Action Types *******
+
 var POLL_DELETED = 'POLL_DELETED';
 var RESET_DELETED_POLL = 'RESET_DELETED_POLL';
 
-// Action Creators
+// ******* Action Creators & Reducers *******
+
 function deletePoll(id) {
   console.log('deleting:', id);
   return function (dispatch) {
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.delete('/api/polls/delete/' + id).then(function (res) {
       console.log('delete response:', res);
-      // redirect home
       dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__flashMessage__["b" /* addFlashMessage */])({ type: 'success', text: 'Poll deleted!' }));
       dispatch(pollDeleted(id));
     }).catch(function (err) {
@@ -10863,27 +10858,36 @@ function deletePoll(id) {
     });
   };
 }
+
+/**
+ * Sets state.deletedPoll as the just-deleted poll's id
+ *
+ * @param {string} id - poll id of deleted poll
+ */
 function pollDeleted(id) {
   return {
     type: POLL_DELETED,
     pollId: id
   };
 }
+var pollDeletedReducer = function pollDeletedReducer(state, action) {
+  return Object.assign({}, state, { deletedPoll: action.pollId });
+};
+
+/**
+ * Sets state.deletedPoll as null
+ */
 function resetDeletedPoll() {
   return {
     type: RESET_DELETED_POLL
   };
 }
-
-// Reducer
-var reducePollDeleted = function reducePollDeleted(state, action) {
-  return Object.assign({}, state, { deletedPoll: action.pollId });
-};
-var reduceResetDeletedPoll = function reduceResetDeletedPoll(state, action) {
+var resetDeletedPollReducer = function resetDeletedPollReducer(state, action) {
   return Object.assign({}, state, { deletedPoll: null });
 };
 
-// Root Reducer Slice
+// ******* Root Reducer Slice *******
+
 var initialState = {
   deletedPoll: null
 };
@@ -10893,9 +10897,9 @@ function deletedPoll() {
 
   switch (action.type) {
     case POLL_DELETED:
-      return reducePollDeleted(state, action);
+      return pollDeletedReducer(state, action);
     case RESET_DELETED_POLL:
-      return reduceResetDeletedPoll(state, action);
+      return resetDeletedPollReducer(state, action);
     default:
       return state;
   }
@@ -17482,7 +17486,6 @@ var PendingPollOptions = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createCl
   },
   deleteOption: function deleteOption(index) {
     if (this.props.poll.newPollOptions.length === 2) {
-      console.log('Two or more options required!');
       this.setState({ twoOptionsOrMoreError: true });
       return;
     }
@@ -17845,12 +17848,22 @@ var store = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_redux__["createSto
 
 
 
-// ******* Actions *******
+var DEFAULT_STATE = {
+  errors: {
+    username: null,
+    email: null,
+    password: null,
+    passwordConfirmation: null
+  },
+  invalid: false
+};
+
+// ******* Action Types *******
 
 var DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS';
 var SET_FORM_ERRORS = 'SET_FORM_ERRORS';
 
-// ******* Action Creators *******
+// ******* Action Creators & Reducers *******
 
 /**
  * Sets state.errors and state.invalid
@@ -17864,6 +17877,12 @@ var SET_FORM_ERRORS = 'SET_FORM_ERRORS';
  */
 function dupeUserCheckResults(errors, invalid) {
   return { type: DUPE_USER_CHECK_RESULTS, errors: errors, invalid: invalid };
+}
+function dupeUserCheckReducer(state, action) {
+  return Object.assign({}, state, {
+    errors: action.errors,
+    invalid: action.invalid
+  });
 }
 
 /**
@@ -17911,16 +17930,7 @@ function newFormErrors(currentErrors, newErrors) {
   var updatedErrors = Object.assign({}, currentErrors, newErrors);
   return { type: SET_FORM_ERRORS, errors: updatedErrors };
 }
-
-// ******* Reducers *******
-
-function reduceDupeUserCheck(state, action) {
-  return Object.assign({}, state, {
-    errors: action.errors,
-    invalid: action.invalid
-  });
-}
-function reduceSetFormErrors(state, action) {
+function setFormErrorsReducer(state, action) {
   return Object.assign({}, state, {
     errors: action.errors
   });
@@ -17928,24 +17938,15 @@ function reduceSetFormErrors(state, action) {
 
 // ******* Root Reducer Slice *******
 
-var DEFAULT_STATE = {
-  errors: {
-    username: null,
-    email: null,
-    password: null,
-    passwordConfirmation: null
-  },
-  invalid: false
-};
 function clientFormValidation() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
   var action = arguments[1];
 
   switch (action.type) {
     case DUPE_USER_CHECK_RESULTS:
-      return reduceDupeUserCheck(state, action);
+      return dupeUserCheckReducer(state, action);
     case SET_FORM_ERRORS:
-      return reduceSetFormErrors(state, action);
+      return setFormErrorsReducer(state, action);
     default:
       return state;
   }

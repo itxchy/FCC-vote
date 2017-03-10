@@ -1,18 +1,19 @@
 import axios from 'axios'
 import { addFlashMessage } from './flashMessage'
 
-// Action
+// ******* Action Types *******
+
 const POLL_DELETED = 'POLL_DELETED'
 const RESET_DELETED_POLL = 'RESET_DELETED_POLL'
 
-// Action Creators
+// ******* Action Creators & Reducers *******
+
 export function deletePoll (id) {
   console.log('deleting:', id)
   return dispatch => {
     axios.delete(`/api/polls/delete/${id}`)
       .then(res => {
         console.log('delete response:', res)
-        // redirect home
         dispatch(addFlashMessage({ type: 'success', text: 'Poll deleted!' }))
         dispatch(pollDeleted(id))
       })
@@ -22,36 +23,45 @@ export function deletePoll (id) {
       })
   }
 }
+
+/**
+ * Sets state.deletedPoll as the just-deleted poll's id
+ *
+ * @param {string} id - poll id of deleted poll
+ */
 function pollDeleted (id) {
   return {
     type: POLL_DELETED,
     pollId: id
   }
 }
+const pollDeletedReducer = function (state, action) {
+  return Object.assign({}, state, { deletedPoll: action.pollId })
+}
+
+/**
+ * Sets state.deletedPoll as null
+ */
 export function resetDeletedPoll () {
   return {
     type: RESET_DELETED_POLL
   }
 }
-
-// Reducer
-const reducePollDeleted = function (state, action) {
-  return Object.assign({}, state, { deletedPoll: action.pollId })
-}
-const reduceResetDeletedPoll = function (state, action) {
+const resetDeletedPollReducer = function (state, action) {
   return Object.assign({}, state, { deletedPoll: null })
 }
 
-// Root Reducer Slice
+// ******* Root Reducer Slice *******
+
 const initialState = {
   deletedPoll: null
 }
 export default function deletedPoll (state = initialState, action) {
   switch (action.type) {
     case POLL_DELETED:
-      return reducePollDeleted(state, action)
+      return pollDeletedReducer(state, action)
     case RESET_DELETED_POLL:
-      return reduceResetDeletedPoll(state, action)
+      return resetDeletedPollReducer(state, action)
     default:
       return state
   }

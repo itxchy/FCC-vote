@@ -86,6 +86,7 @@
     "fast-async": "^6.1.2",
     "graphql": "^0.9.1",
     "graphql-subscriptions": "^0.2.1",
+    "helmet": "^3.4.1",
     "jquery": "^3.1.1",
     "jsdom": "^9.9.1",
     "json-loader": "^0.5.4",
