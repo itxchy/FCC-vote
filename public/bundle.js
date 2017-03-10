@@ -18165,7 +18165,6 @@ var DEFAULT_STATE = {
   activePollData: null
 };
 
-console.log(DEFAULT_STATE);
 // ******* Action Types *******
 
 var POLL_EDITED = 'POLL_EDITED';
@@ -18199,6 +18198,7 @@ function setEditedPoll(id, pollData) {
       // dispatch reset setNewTitle
       // dispatch dispatch setPollOptions
     }).catch(function (err) {
+      console.error('redux: editPoll.js: setEditedPoll failed', err);
       dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__flashMessage__["b" /* addFlashMessage */])({ type: 'error', text: 'Error: failed to submit edited poll' }));
     });
   };
@@ -18217,9 +18217,9 @@ function setPollTitleReducer(state, action) {
 }
 
 /**
- * Sets state.newPollOptions from a new poll options object 
+ * Sets state.newPollOptions as a new poll options array from adding/editing/deleting options
  *
- * @param {object} pollOptions - A new poll options object
+ * @param {array} pollOptions - A new poll options array
  */
 function setPollOptions(pollOptions) {
   return { type: SET_POLL_OPTIONS, pollOptions: pollOptions };
@@ -18231,7 +18231,7 @@ function setPollOptionsReducer(state, action) {
 function setTitleEditable(bool) {
   return { type: SET_TITLE_EDITABLE, titleEditable: bool };
 }
-function reduceSetTitleEditable(state, action) {
+function setTitleEditableReducer(state, action) {
   return Object.assign({}, state, { titleEditable: action.titleEditable });
 }
 
@@ -18273,6 +18273,8 @@ function editPoll() {
       return setPollOptionsReducer(state, action);
     case RESET_POLL:
       return resetPollReducer(state, action);
+    case SET_TITLE_EDITABLE:
+      return setTitleEditableReducer(state, action);
     default:
       return state;
   }
