@@ -1,13 +1,15 @@
 import axios from 'axios'
 
-// Actions
+const DEFAULT_STATE = {
+  singlePoll: null
+}
+
+// ******* Action Types *******
+
 const SINGLE_POLL_DATA = 'SINGLE_POLL_DATA'
 const CLEAR_SINGLE_POLL = 'CLEAR_SINGLE_POLL'
 
-// Action Creators
-function setSinglePollData (poll) {
-  return { type: SINGLE_POLL_DATA, singlePoll: poll }
-}
+// ******* Action Creators & Reducers *******
 
 export function getSinglePoll (id) {
   return dispatch => {
@@ -19,28 +21,37 @@ export function getSinglePoll (id) {
   }
 }
 
+/**
+ * Sets state.singlePoll with a single poll object in an array
+ *
+ * @param {array} poll - an array with one element, a poll object
+ */
+function setSinglePollData (poll) {
+  console.log('poll', poll)
+  return { type: SINGLE_POLL_DATA, singlePoll: poll }
+}
+function singlePollDataReducer (state, action) {
+  return Object.assign({}, state, { singlePoll: action.singlePoll })
+}
+
+/**
+ * Sets state.singlePoll back to null
+ */
 export function clearSinglePoll () {
   return { type: CLEAR_SINGLE_POLL }
 }
-
-// Reducers
-function reduceSinglePollData (state, action) {
-  return Object.assign({}, state, { singlePoll: action.singlePoll })
-}
-function reduceClearSinglePoll (state, action) {
-  return Object.assign({}, state, { singlePoll: null })
+function clearSinglePollReducer (state, action) {
+  return Object.assign({}, state, DEFAULT_STATE)
 }
 
-// Root Reducer
-const initialState = {
-  singlePoll: null
-}
-export default function singlePoll (state = initialState, action) {
+// ******* Root Reducer Slice *******
+
+export default function singlePoll (state = DEFAULT_STATE, action) {
   switch (action.type) {
     case SINGLE_POLL_DATA:
-      return reduceSinglePollData(state, action)
+      return singlePollDataReducer(state, action)
     case CLEAR_SINGLE_POLL:
-      return reduceClearSinglePoll(state, action)
+      return clearSinglePollReducer(state, action)
     default:
       return state
   }

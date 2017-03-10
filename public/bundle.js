@@ -13292,14 +13292,16 @@ var DisplayPolls = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
 /* harmony export (immutable) */ __webpack_exports__["c"] = singlePoll;
 
 
-// Actions
+var DEFAULT_STATE = {
+  singlePoll: null
+};
+
+// ******* Action Types *******
+
 var SINGLE_POLL_DATA = 'SINGLE_POLL_DATA';
 var CLEAR_SINGLE_POLL = 'CLEAR_SINGLE_POLL';
 
-// Action Creators
-function setSinglePollData(poll) {
-  return { type: SINGLE_POLL_DATA, singlePoll: poll };
-}
+// ******* Action Creators & Reducers *******
 
 function getSinglePoll(id) {
   return function (dispatch) {
@@ -13310,31 +13312,40 @@ function getSinglePoll(id) {
   };
 }
 
+/**
+ * Sets state.singlePoll with a single poll object in an array
+ *
+ * @param {array} poll - an array with one element, a poll object
+ */
+function setSinglePollData(poll) {
+  console.log('poll', poll);
+  return { type: SINGLE_POLL_DATA, singlePoll: poll };
+}
+function singlePollDataReducer(state, action) {
+  return Object.assign({}, state, { singlePoll: action.singlePoll });
+}
+
+/**
+ * Sets state.singlePoll back to null
+ */
 function clearSinglePoll() {
   return { type: CLEAR_SINGLE_POLL };
 }
-
-// Reducers
-function reduceSinglePollData(state, action) {
-  return Object.assign({}, state, { singlePoll: action.singlePoll });
-}
-function reduceClearSinglePoll(state, action) {
-  return Object.assign({}, state, { singlePoll: null });
+function clearSinglePollReducer(state, action) {
+  return Object.assign({}, state, DEFAULT_STATE);
 }
 
-// Root Reducer
-var initialState = {
-  singlePoll: null
-};
+// ******* Root Reducer Slice *******
+
 function singlePoll() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
   var action = arguments[1];
 
   switch (action.type) {
     case SINGLE_POLL_DATA:
-      return reduceSinglePollData(state, action);
+      return singlePollDataReducer(state, action);
     case CLEAR_SINGLE_POLL:
-      return reduceClearSinglePoll(state, action);
+      return clearSinglePollReducer(state, action);
     default:
       return state;
   }
@@ -18045,6 +18056,7 @@ var setNewPollTitleReducer = function setNewPollTitleReducer(state, action) {
   }
   return Object.assign({}, state, { newPollTitle: action.value });
 };
+
 /**
  * Sets state.titleEditable
  *
@@ -18060,6 +18072,7 @@ var setTitleEditableReducer = function setTitleEditableReducer(state, action) {
   }
   return Object.assign({}, state, { titleEditable: action.value });
 };
+
 /**
  * Sets state.newPollOptions
  *
@@ -18075,6 +18088,7 @@ var updateOptionReducer = function updateOptionReducer(state, action) {
   }
   return Object.assign({}, state, { newPollOptions: action.value });
 };
+
 /**
  * Resets state to DEFAULT_STATE
  */
@@ -18086,6 +18100,7 @@ var resetNewPollReducer = function resetNewPollReducer(state, action) {
   Object.assign(newState, state, DEFAULT_STATE);
   return newState;
 };
+
 /**
  * Sets state.pollSaved as a new Poll's ID
  *
@@ -18101,6 +18116,7 @@ var pollSavedReducer = function pollSavedReducer(state, action) {
   }
   return Object.assign({}, state, { pollSaved: action.pollId });
 };
+
 /**
  * Sets state.pollSaved as null
  */
@@ -18110,6 +18126,7 @@ function resetPollSaved() {
 var resetPollSavedReducer = function resetPollSavedReducer(state, action) {
   return Object.assign({}, state, { pollSaved: null });
 };
+
 /**
  * Submits a new poll to the server
  *

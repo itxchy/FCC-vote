@@ -37,6 +37,7 @@ const setNewPollTitleReducer = (state, action) => {
   }
   return Object.assign({}, state, { newPollTitle: action.value })
 }
+
 /**
  * Sets state.titleEditable
  *
@@ -52,6 +53,7 @@ const setTitleEditableReducer = (state, action) => {
   }
   return Object.assign({}, state, { titleEditable: action.value })
 }
+
 /**
  * Sets state.newPollOptions
  *
@@ -67,6 +69,7 @@ const updateOptionReducer = (state, action) => {
   }
   return Object.assign({}, state, { newPollOptions: action.value })
 }
+
 /**
  * Resets state to DEFAULT_STATE
  */
@@ -78,6 +81,7 @@ const resetNewPollReducer = (state, action) => {
   Object.assign(newState, state, DEFAULT_STATE)
   return newState
 }
+
 /**
  * Sets state.pollSaved as a new Poll's ID
  *
@@ -93,6 +97,7 @@ const pollSavedReducer = (state, action) => {
   }
   return Object.assign({}, state, { pollSaved: action.pollId })
 }
+
 /**
  * Sets state.pollSaved as null
  */
@@ -102,6 +107,7 @@ export function resetPollSaved () {
 const resetPollSavedReducer = (state, action) => {
   return Object.assign({}, state, { pollSaved: null })
 }
+
 /**
  * Submits a new poll to the server
  *
