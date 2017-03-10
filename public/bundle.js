@@ -18495,26 +18495,27 @@ function userPolls() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__flashMessage__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__auth__ = __webpack_require__(43);
-/* harmony export (immutable) */ __webpack_exports__["b"] = signupLoading;
 /* harmony export (immutable) */ __webpack_exports__["a"] = signupRequest;
+/* harmony export (immutable) */ __webpack_exports__["b"] = signupLoading;
 /* harmony export (immutable) */ __webpack_exports__["c"] = userSignupRequest;
 
 
 
 
-// action
+var DEFAULT_STATE = {
+  signupLoading: false
+};
+
+// ******* Action Type *******
+
 var SIGNUP_LOADING = 'SIGNUP_LOADING';
 
-// action creator
-function signupLoading(bool) {
-  return { type: SIGNUP_LOADING, signupLoading: bool };
-}
+// ******* Action Creators & Reducer *******
+
 function signupRequest(userData) {
   return function (dispatch) {
     dispatch(signupLoading(true));
-    console.log('userSignupRequest: userData', userData);
     return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/users', userData).then(function (res) {
-      console.log('userSignupRequest signup success!', res);
       dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__flashMessage__["b" /* addFlashMessage */])({
         type: 'success',
         text: 'Signup successful!'
@@ -18526,10 +18527,8 @@ function signupRequest(userData) {
         password: userData.password
       };
       dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__auth__["c" /* login */])(loginCredentials));
-      // TODO: dispatch signup successful action to login the new user
-      // and redirect him/her to the home page
     }).catch(function (err) {
-      console.log('signup error:', err);
+      console.error('redux: userSignupRequest.js: signup error:', err);
       dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__flashMessage__["b" /* addFlashMessage */])({
         type: 'error',
         text: 'Signup failed.'
@@ -18539,22 +18538,29 @@ function signupRequest(userData) {
   };
 }
 
-// reducer
-function reduceSignupLoading(state, action) {
+/**
+ * Sets state.signupLoading to true while signupReqeust is working on the API call for
+ * the signup request. Once the request resolves or rejects, signupLoading gets
+ * set to false.
+ *
+ * @param {bool} bool
+ */
+function signupLoading(bool) {
+  return { type: SIGNUP_LOADING, signupLoading: bool };
+}
+function signupLoadingReducer(state, action) {
   return Object.assign({}, state, { signupLoading: action.signupLoading });
 }
 
-// root reducer slice
-var initialState = {
-  signupLoading: false
-};
+// ******* Root Reducer Slice *******
+
 function userSignupRequest() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
   var action = arguments[1];
 
   switch (action.type) {
     case SIGNUP_LOADING:
-      return reduceSignupLoading(state, action);
+      return signupLoadingReducer(state, action);
     default:
       return state;
   }
