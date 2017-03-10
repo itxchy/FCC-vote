@@ -18323,23 +18323,21 @@ function editPoll() {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* unused harmony export ALL_POLLS_DATA */
-/* unused harmony export pollsData */
 /* harmony export (immutable) */ __webpack_exports__["a"] = getAllPolls;
-/* unused harmony export reduceAllPollsData */
+/* unused harmony export pollsData */
 /* harmony export (immutable) */ __webpack_exports__["b"] = allPolls;
 
 
-// Action
+var DEAULT_STATE = {
+  allPolls: null
+};
+
+// ******* Action Type *******
+
 var ALL_POLLS_DATA = 'ALL_POLLS_DATA';
 
-// Action Creators
-function pollsData(res) {
-  return {
-    type: ALL_POLLS_DATA,
-    allPolls: res
-  };
-}
+// ******* Action Creators & Reducer *******
+
 function getAllPolls() {
   return function (dispatch) {
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/polls').then(function (res) {
@@ -18352,25 +18350,33 @@ function getAllPolls() {
   };
 }
 
-// Reducer
-var reduceAllPollsData = function reduceAllPollsData(state, action) {
+/**
+ * Sets state.allPolls
+ *
+ * @param {array} res - An array of poll objects
+ */
+function pollsData(res) {
+  console.log('pollsData res', res);
+  return {
+    type: ALL_POLLS_DATA,
+    allPolls: res
+  };
+}
+var allPollsDataReducer = function allPollsDataReducer(state, action) {
   var newState = {};
   Object.assign(newState, state, { allPolls: action.allPolls });
   return newState;
 };
 
-var initialState = {
-  allPolls: null
-};
+// ******* Root Reducer Slice *******
 
-// Root Reducer Slice
 function allPolls() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEAULT_STATE;
   var action = arguments[1];
 
   switch (action.type) {
     case ALL_POLLS_DATA:
-      return reduceAllPollsData(state, action);
+      return allPollsDataReducer(state, action);
     default:
       return state;
   }
