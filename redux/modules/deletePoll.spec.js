@@ -1,0 +1,1 @@
+import deletePollReduceSlice from './deletePoll'

@@ -19,26 +19,6 @@ const SET_FORM_ERRORS = 'SET_FORM_ERRORS'
 // ******* Action Creators & Reducers *******
 
 /**
- * Sets state.errors and state.invalid
- *
- * @param {object} errors - Errors object returned from checkUserInResponse combined
- *   with existing validation errors
- *
- * @param {bool} invalid - If errors are present from checkUserInResponse, this
- *   should be true. If there are no errors, invalid will be false. The truthyness
- *   of invalid determines whether the submit button is disabled or not.
- */
-function dupeUserCheckResults (errors, invalid) {
-  return { type: DUPE_USER_CHECK_RESULTS, errors, invalid }
-}
-function dupeUserCheckReducer (state, action) {
-  return Object.assign({}, state, {
-    errors: action.errors,
-    invalid: action.invalid
-  })
-}
-
-/**
  * Checks if an email or username entered at signup match an existing
  * user in the database. If a match is found in checkUserInResponse, the
  * errors object will be populated with an error message for the field given
@@ -73,6 +53,26 @@ export function dupeUserCheck (identifier, field, validationErrors) {
         console.error('dupe user check failed!', err.response.data)
       })
   }
+}
+
+/**
+ * Sets state.errors and state.invalid
+ *
+ * @param {object} errors - Errors object returned from checkUserInResponse combined
+ *   with existing validation errors
+ *
+ * @param {bool} invalid - If errors are present from checkUserInResponse, this
+ *   should be true. If there are no errors, invalid will be false. The truthyness
+ *   of invalid determines whether the submit button is disabled or not.
+ */
+function dupeUserCheckResults (errors, invalid) {
+  return { type: DUPE_USER_CHECK_RESULTS, errors, invalid }
+}
+function dupeUserCheckReducer (state, action) {
+  return Object.assign({}, state, {
+    errors: action.errors,
+    invalid: action.invalid
+  })
 }
 
 /**

@@ -15,7 +15,6 @@ export function getSinglePoll (id) {
   return dispatch => {
     axios.get(`/api/polls/id/${id}`)
       .then(res => {
-        console.log('getSinglePoll results', res.data)
         dispatch(setSinglePollData(res.data))
       })
   }
@@ -27,7 +26,6 @@ export function getSinglePoll (id) {
  * @param {array} poll - an array with one element, a poll object
  */
 function setSinglePollData (poll) {
-  console.log('poll', poll)
   return { type: SINGLE_POLL_DATA, singlePoll: poll }
 }
 function singlePollDataReducer (state, action) {

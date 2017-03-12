@@ -9,11 +9,9 @@ const RESET_DELETED_POLL = 'RESET_DELETED_POLL'
 // ******* Action Creators & Reducers *******
 
 export function deletePoll (id) {
-  console.log('deleting:', id)
   return dispatch => {
     axios.delete(`/api/polls/delete/${id}`)
       .then(res => {
-        console.log('delete response:', res)
         dispatch(addFlashMessage({ type: 'success', text: 'Poll deleted!' }))
         dispatch(pollDeleted(id))
       })
