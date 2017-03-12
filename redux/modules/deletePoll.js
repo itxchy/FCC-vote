@@ -1,6 +1,10 @@
 import axios from 'axios'
 import { addFlashMessage } from './flashMessage'
 
+const DEFAULT_STATE = {
+  deletedPoll: null
+}
+
 // ******* Action Types *******
 
 const POLL_DELETED = 'POLL_DELETED'
@@ -51,10 +55,7 @@ const resetDeletedPollReducer = function (state, action) {
 
 // ******* Root Reducer Slice *******
 
-const initialState = {
-  deletedPoll: null
-}
-export default function deletedPoll (state = initialState, action) {
+export default function deletedPoll (state = DEFAULT_STATE, action) {
   switch (action.type) {
     case POLL_DELETED:
       return pollDeletedReducer(state, action)
