@@ -28,4 +28,29 @@ describe('redux: flashMessage', () => {
       expect(state2.flashMessages[0].id).not.toEqual(state2.flashMessages[1].id)
     })
   })
+
+  describe('deleteFlashMessage', () => {
+    it('should delete a flash message based on its id', () => {
+      const state = flashMessagesReducer({ flashMessages: 
+        [
+          { id: '123', messageType: 'success', messageText: 'keep'},
+          { id: '456', messageType: 'error', messageText: 'be gone'}
+        ]
+      }, deleteFlashMessage('456'))
+      expect(state.flashMessages.length).toEqual(1)
+      expect(state.flashMessages[0].id).toEqual('123')
+    })
+  })
+
+  describe('clearAllFlashMessages', () => {
+    it('should reset state.flashMessages to its default state of null', () => {
+      const state = flashMessagesReducer({ flashMessages: 
+        [
+          { id: '123', messageType: 'success', messageText: 'keep'},
+          { id: '456', messageType: 'error', messageText: 'be gone'}
+        ]
+      }, clearAllFlashMessages())
+      expect(state).toEqual(DEFAULT_STATE)
+    })
+  })
 })
