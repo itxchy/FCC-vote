@@ -18199,12 +18199,15 @@ function newPoll() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__flashMessage__ = __webpack_require__(18);
+/* unused harmony export DEFAULT_STATE */
 /* harmony export (immutable) */ __webpack_exports__["f"] = getPollData;
 /* harmony export (immutable) */ __webpack_exports__["e"] = setEditedPoll;
 /* harmony export (immutable) */ __webpack_exports__["b"] = setPollTitle;
 /* harmony export (immutable) */ __webpack_exports__["a"] = setPollOptions;
 /* harmony export (immutable) */ __webpack_exports__["c"] = setTitleEditable;
 /* harmony export (immutable) */ __webpack_exports__["d"] = resetPoll;
+/* unused harmony export pollEdited */
+/* unused harmony export activePollData */
 /* harmony export (immutable) */ __webpack_exports__["g"] = editPoll;
 
 

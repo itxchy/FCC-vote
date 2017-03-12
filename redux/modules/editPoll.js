@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { addFlashMessage } from './flashMessage'
 
-const DEFAULT_STATE = {
+export const DEFAULT_STATE = {
   newPollTitle: '',
   titleEditable: true,
   newPollOptions: [
@@ -107,7 +107,7 @@ function resetPollReducer (state, action) {
  *
  * @param {object} editedPoll
  */
-function pollEdited (editedPoll) {
+export function pollEdited (editedPoll) {
   return { type: POLL_EDITED, editedPoll: editedPoll }
 }
 function pollEditedReducer (state, action) {
@@ -119,7 +119,7 @@ function pollEditedReducer (state, action) {
  *
  * @param {object} activePoll - the initial data of the poll being edited
  */
-function activePollData (activePoll) {
+export function activePollData (activePoll) {
   return { type: ACTIVE_POLL_DATA, activePollData: activePoll }
 }
 function activePollDataReducer (state, action) {
