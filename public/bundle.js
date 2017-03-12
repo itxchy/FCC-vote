@@ -10848,11 +10848,17 @@ asn1.encoders = __webpack_require__(363);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__flashMessage__ = __webpack_require__(18);
+/* unused harmony export DEFAULT_STATE */
 /* harmony export (immutable) */ __webpack_exports__["b"] = deletePoll;
+/* unused harmony export pollDeleted */
 /* harmony export (immutable) */ __webpack_exports__["a"] = resetDeletedPoll;
 /* harmony export (immutable) */ __webpack_exports__["c"] = deletedPoll;
 
 
+
+var DEFAULT_STATE = {
+  deletedPoll: null
+};
 
 // ******* Action Types *******
 
@@ -10862,10 +10868,8 @@ var RESET_DELETED_POLL = 'RESET_DELETED_POLL';
 // ******* Action Creators & Reducers *******
 
 function deletePoll(id) {
-  console.log('deleting:', id);
   return function (dispatch) {
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.delete('/api/polls/delete/' + id).then(function (res) {
-      console.log('delete response:', res);
       dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__flashMessage__["b" /* addFlashMessage */])({ type: 'success', text: 'Poll deleted!' }));
       dispatch(pollDeleted(id));
     }).catch(function (err) {
@@ -10899,16 +10903,13 @@ function resetDeletedPoll() {
   };
 }
 var resetDeletedPollReducer = function resetDeletedPollReducer(state, action) {
-  return Object.assign({}, state, { deletedPoll: null });
+  return Object.assign({}, state, DEFAULT_STATE);
 };
 
 // ******* Root Reducer Slice *******
 
-var initialState = {
-  deletedPoll: null
-};
 function deletedPoll() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
   var action = arguments[1];
 
   switch (action.type) {
@@ -13319,7 +13320,6 @@ var CLEAR_SINGLE_POLL = 'CLEAR_SINGLE_POLL';
 function getSinglePoll(id) {
   return function (dispatch) {
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/polls/id/' + id).then(function (res) {
-      console.log('getSinglePoll results', res.data);
       dispatch(setSinglePollData(res.data));
     });
   };
@@ -13331,7 +13331,6 @@ function getSinglePoll(id) {
  * @param {array} poll - an array with one element, a poll object
  */
 function setSinglePollData(poll) {
-  console.log('poll', poll);
   return { type: SINGLE_POLL_DATA, singlePoll: poll };
 }
 function singlePollDataReducer(state, action) {
@@ -17907,26 +17906,6 @@ var SET_FORM_ERRORS = 'SET_FORM_ERRORS';
 // ******* Action Creators & Reducers *******
 
 /**
- * Sets state.errors and state.invalid
- *
- * @param {object} errors - Errors object returned from checkUserInResponse combined
- *   with existing validation errors
- *
- * @param {bool} invalid - If errors are present from checkUserInResponse, this
- *   should be true. If there are no errors, invalid will be false. The truthyness
- *   of invalid determines whether the submit button is disabled or not.
- */
-function dupeUserCheckResults(errors, invalid) {
-  return { type: DUPE_USER_CHECK_RESULTS, errors: errors, invalid: invalid };
-}
-function dupeUserCheckReducer(state, action) {
-  return Object.assign({}, state, {
-    errors: action.errors,
-    invalid: action.invalid
-  });
-}
-
-/**
  * Checks if an email or username entered at signup match an existing
  * user in the database. If a match is found in checkUserInResponse, the
  * errors object will be populated with an error message for the field given
@@ -17962,6 +17941,26 @@ function dupeUserCheck(identifier, field, validationErrors) {
       console.error('dupe user check failed!', err.response.data);
     });
   };
+}
+
+/**
+ * Sets state.errors and state.invalid
+ *
+ * @param {object} errors - Errors object returned from checkUserInResponse combined
+ *   with existing validation errors
+ *
+ * @param {bool} invalid - If errors are present from checkUserInResponse, this
+ *   should be true. If there are no errors, invalid will be false. The truthyness
+ *   of invalid determines whether the submit button is disabled or not.
+ */
+function dupeUserCheckResults(errors, invalid) {
+  return { type: DUPE_USER_CHECK_RESULTS, errors: errors, invalid: invalid };
+}
+function dupeUserCheckReducer(state, action) {
+  return Object.assign({}, state, {
+    errors: action.errors,
+    invalid: action.invalid
+  });
 }
 
 /**

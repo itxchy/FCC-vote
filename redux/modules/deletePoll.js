@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { addFlashMessage } from './flashMessage'
 
-const DEFAULT_STATE = {
+export const DEFAULT_STATE = {
   deletedPoll: null
 }
 
@@ -31,7 +31,7 @@ export function deletePoll (id) {
  *
  * @param {string} id - poll id of deleted poll
  */
-function pollDeleted (id) {
+export function pollDeleted (id) {
   return {
     type: POLL_DELETED,
     pollId: id
@@ -50,7 +50,7 @@ export function resetDeletedPoll () {
   }
 }
 const resetDeletedPollReducer = function (state, action) {
-  return Object.assign({}, state, { deletedPoll: null })
+  return Object.assign({}, state, DEFAULT_STATE)
 }
 
 // ******* Root Reducer Slice *******
