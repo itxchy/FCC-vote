@@ -3,7 +3,7 @@ import findIndex from 'lodash/findIndex'
 import loMap from 'lodash/map'
 import clone from 'lodash/clone'
 
-const DEFAULT_STATE = {
+export const DEFAULT_STATE = {
   flashMessages: []
 }
 
