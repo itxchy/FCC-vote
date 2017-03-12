@@ -9601,13 +9601,13 @@ base.Node = __webpack_require__(358);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jsonwebtoken___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jsonwebtoken__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__auth_setAuthorizationToken__ = __webpack_require__(131);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__auth_setAuthorizationToken___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__auth_setAuthorizationToken__);
+/* harmony export (immutable) */ __webpack_exports__["c"] = login;
+/* harmony export (immutable) */ __webpack_exports__["d"] = logout;
+/* harmony export (immutable) */ __webpack_exports__["b"] = getClientIp;
 /* harmony export (immutable) */ __webpack_exports__["a"] = setCurrentUser;
 /* unused harmony export userLoading */
 /* unused harmony export setErrors */
 /* unused harmony export setClientIp */
-/* harmony export (immutable) */ __webpack_exports__["c"] = login;
-/* harmony export (immutable) */ __webpack_exports__["d"] = logout;
-/* harmony export (immutable) */ __webpack_exports__["b"] = getClientIp;
 /* unused harmony export DEFAULT_STATE */
 /* harmony export (immutable) */ __webpack_exports__["e"] = user;
 /* unused harmony export handleLoginResponse */
@@ -9628,6 +9628,52 @@ var SET_CLIENT_IP = 'SET_CLIENT_IP';
 var SET_ERRORS = 'SET_ERRORS';
 
 // ******* Action Creators & Reducers *******
+
+/**
+ * Attempts to authenticate a user on the server.
+ *
+ * @param {object} data - An object containing an identifier and password to login with.
+ * example: { identifier: 'TracyJordan', password: 'IAMMYOWNPASSWORD'}
+ *
+ * The response from /api/auth will be:
+ * res.data.errors - errors object: { errors: { form: 'Invalid Credentials' } }
+ * or
+ * res.data.token - token object: { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
+ */
+function login(data) {
+  return function (dispatch) {
+    dispatch(userLoading(true));
+    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/auth', data).then(function (res) {
+      return handleLoginResponse(res, dispatch, prepareUserFromToken);
+    }).catch(function (err) {
+      dispatch(userLoading(false));
+      console.error('ERROR: redux: login request returned a server error:', err);
+      return dispatch(setErrors({ server: 'Server error. Try agian in a moment.' }));
+    });
+  };
+}
+/**
+ * Removes a user's jwt from localstorage and client headers, and clears user state in redux
+ */
+function logout() {
+  return function (dispatch) {
+    localStorage.removeItem('jwtToken');
+    __WEBPACK_IMPORTED_MODULE_2__auth_setAuthorizationToken___default()(false);
+    dispatch(setCurrentUser({}));
+  };
+}
+/**
+ * Retrieves the client's IP address from the server
+ */
+function getClientIp() {
+  return function (dispatch) {
+    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/auth/ip').then(function (res) {
+      dispatch(setClientIp(res.data.clientIp));
+    }).catch(function (err) {
+      console.error('ERROR: redux: failed to receive current client ip address from the server', err);
+    });
+  };
+}
 
 /**
  * Sets state.user, and eventually state.isAuthenticated and state.userLoading
@@ -9726,52 +9772,6 @@ function setClientIp(clientIp) {
 var setClientIpReducer = function setClientIpReducer(state, action) {
   return Object.assign({}, state, { clientIp: action.clientIp });
 };
-
-/**
- * Attempts to authenticate a user on the server.
- *
- * @param {object} data - An object containing an identifier and password to login with.
- * example: { identifier: 'TracyJordan', password: 'IAMMYOWNPASSWORD'}
- *
- * The response from /api/auth will be:
- * res.data.errors - errors object: { errors: { form: 'Invalid Credentials' } }
- * or
- * res.data.token - token object: { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
- */
-function login(data) {
-  return function (dispatch) {
-    dispatch(userLoading(true));
-    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/auth', data).then(function (res) {
-      return handleLoginResponse(res, dispatch, prepareUserFromToken);
-    }).catch(function (err) {
-      dispatch(userLoading(false));
-      console.error('ERROR: redux: login request returned a server error:', err);
-      return dispatch(setErrors({ server: 'Server error. Try agian in a moment.' }));
-    });
-  };
-}
-/**
- * Removes a user's jwt from localstorage and client headers, and clears user state in redux
- */
-function logout() {
-  return function (dispatch) {
-    localStorage.removeItem('jwtToken');
-    __WEBPACK_IMPORTED_MODULE_2__auth_setAuthorizationToken___default()(false);
-    dispatch(setCurrentUser({}));
-  };
-}
-/**
- * Retrieves the client's IP address from the server
- */
-function getClientIp() {
-  return function (dispatch) {
-    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/auth/ip').then(function (res) {
-      dispatch(setClientIp(res.data.clientIp));
-    }).catch(function (err) {
-      console.error('ERROR: redux: failed to receive current client ip address from the server', err);
-    });
-  };
-}
 
 // ******* Root Reducer Slice *******
 
@@ -10870,8 +10870,13 @@ var RESET_DELETED_POLL = 'RESET_DELETED_POLL';
 function deletePoll(id) {
   return function (dispatch) {
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.delete('/api/polls/delete/' + id).then(function (res) {
-      dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__flashMessage__["b" /* addFlashMessage */])({ type: 'success', text: 'Poll deleted!' }));
-      dispatch(pollDeleted(id));
+      if (res.data.hasOwnProperty('ok') && res.data.ok) {
+        dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__flashMessage__["b" /* addFlashMessage */])({ type: 'success', text: 'Poll deleted!' }));
+        dispatch(pollDeleted(id));
+      } else {
+        console.error('error: delete response from /api/polls/delete not ok', res.data);
+        dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__flashMessage__["b" /* addFlashMessage */])({ type: 'error', text: 'Failed to delete poll. That\'s an error.' }));
+      }
     }).catch(function (err) {
       console.error('error: delete request to /api/polls/delete failed', err);
       dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__flashMessage__["b" /* addFlashMessage */])({ type: 'error', text: 'Failed to delete poll. That\'s an error.' }));
@@ -18494,6 +18499,7 @@ function userPolls() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__flashMessage__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__auth__ = __webpack_require__(43);
+/* unused harmony export DEFAULT_STATE */
 /* harmony export (immutable) */ __webpack_exports__["a"] = signupRequest;
 /* harmony export (immutable) */ __webpack_exports__["b"] = signupLoading;
 /* harmony export (immutable) */ __webpack_exports__["c"] = userSignupRequest;

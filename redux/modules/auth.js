@@ -14,6 +14,54 @@ const SET_ERRORS = 'SET_ERRORS'
 // ******* Action Creators & Reducers *******
 
 /**
+ * Attempts to authenticate a user on the server.
+ *
+ * @param {object} data - An object containing an identifier and password to login with.
+ * example: { identifier: 'TracyJordan', password: 'IAMMYOWNPASSWORD'}
+ *
+ * The response from /api/auth will be:
+ * res.data.errors - errors object: { errors: { form: 'Invalid Credentials' } }
+ * or
+ * res.data.token - token object: { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
+ */
+export function login (data) {
+  return dispatch => {
+    dispatch(userLoading(true))
+    axios.post('/api/auth', data)
+      .then(res => handleLoginResponse(res, dispatch, prepareUserFromToken))
+      .catch(err => {
+        dispatch(userLoading(false))
+        console.error('ERROR: redux: login request returned a server error:', err)
+        return dispatch(setErrors({ server: 'Server error. Try agian in a moment.' }))
+      })
+  }
+}
+/**
+ * Removes a user's jwt from localstorage and client headers, and clears user state in redux
+ */
+export function logout () {
+  return dispatch => {
+    localStorage.removeItem('jwtToken')
+    setAuthorizationToken(false)
+    dispatch(setCurrentUser({}))
+  }
+}
+/**
+ * Retrieves the client's IP address from the server
+ */
+export function getClientIp () {
+  return dispatch => {
+    axios.get('/api/auth/ip')
+      .then(res => {
+        dispatch(setClientIp(res.data.clientIp))
+      })
+      .catch(err => {
+        console.error('ERROR: redux: failed to receive current client ip address from the server', err)
+      })
+  }
+}
+
+/**
  * Sets state.user, and eventually state.isAuthenticated and state.userLoading
  * in its reducer.
  *
@@ -105,54 +153,6 @@ export function setClientIp (clientIp) {
 }
 const setClientIpReducer = (state, action) => {
   return Object.assign({}, state, { clientIp: action.clientIp })
-}
-
-/**
- * Attempts to authenticate a user on the server.
- *
- * @param {object} data - An object containing an identifier and password to login with.
- * example: { identifier: 'TracyJordan', password: 'IAMMYOWNPASSWORD'}
- *
- * The response from /api/auth will be:
- * res.data.errors - errors object: { errors: { form: 'Invalid Credentials' } }
- * or
- * res.data.token - token object: { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
- */
-export function login (data) {
-  return dispatch => {
-    dispatch(userLoading(true))
-    axios.post('/api/auth', data)
-      .then(res => handleLoginResponse(res, dispatch, prepareUserFromToken))
-      .catch(err => {
-        dispatch(userLoading(false))
-        console.error('ERROR: redux: login request returned a server error:', err)
-        return dispatch(setErrors({ server: 'Server error. Try agian in a moment.' }))
-      })
-  }
-}
-/**
- * Removes a user's jwt from localstorage and client headers, and clears user state in redux
- */
-export function logout () {
-  return dispatch => {
-    localStorage.removeItem('jwtToken')
-    setAuthorizationToken(false)
-    dispatch(setCurrentUser({}))
-  }
-}
-/**
- * Retrieves the client's IP address from the server
- */
-export function getClientIp () {
-  return dispatch => {
-    axios.get('/api/auth/ip')
-      .then(res => {
-        dispatch(setClientIp(res.data.clientIp))
-      })
-      .catch(err => {
-        console.error('ERROR: redux: failed to receive current client ip address from the server', err)
-      })
-  }
 }
 
 // ******* Root Reducer Slice *******

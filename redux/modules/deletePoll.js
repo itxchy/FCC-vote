@@ -16,8 +16,13 @@ export function deletePoll (id) {
   return dispatch => {
     axios.delete(`/api/polls/delete/${id}`)
       .then(res => {
-        dispatch(addFlashMessage({ type: 'success', text: 'Poll deleted!' }))
-        dispatch(pollDeleted(id))
+        if (res.data.hasOwnProperty('ok') && res.data.ok) {
+          dispatch(addFlashMessage({ type: 'success', text: 'Poll deleted!' }))
+          dispatch(pollDeleted(id))
+        } else {
+          console.error('error: delete response from /api/polls/delete not ok', res.data )
+           dispatch(addFlashMessage({ type: 'error', text: 'Failed to delete poll. That\'s an error.' }))
+        }
       })
       .catch(err => {
         console.error('error: delete request to /api/polls/delete failed', err)

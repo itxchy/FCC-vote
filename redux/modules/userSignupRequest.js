@@ -2,7 +2,7 @@ import axios from 'axios'
 import { addFlashMessage } from './flashMessage'
 import { login } from './auth'
 
-const DEFAULT_STATE = {
+export const DEFAULT_STATE = {
   signupLoading: false
 }
 
