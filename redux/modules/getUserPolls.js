@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const DEFAULT_STATE = {
+export const DEFAULT_STATE = {
   userPolls: null
 }
 
@@ -30,7 +30,7 @@ export function getUserPolls (username) {
  *
  * @param {array} userPolls
  */
-function setUserPollsData (userPolls) {
+export function setUserPollsData (userPolls) {
   return { type: USER_POLLS_DATA, userPolls }
 }
 function userPollsDataReducer (state, action) {

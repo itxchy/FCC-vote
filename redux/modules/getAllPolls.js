@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const DEAULT_STATE = {
+export const DEFAULT_STATE = {
   allPolls: null
 }
 
@@ -43,7 +43,7 @@ const allPollsDataReducer = (state, action) => {
 
 // ******* Root Reducer Slice *******
 
-export default function allPolls (state = DEAULT_STATE, action) {
+export default function allPolls (state = DEFAULT_STATE, action) {
   switch (action.type) {
     case ALL_POLLS_DATA:
       return allPollsDataReducer(state, action)

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const DEFAULT_STATE = {
+export const DEFAULT_STATE = {
   singlePoll: null
 }
 
@@ -25,7 +25,7 @@ export function getSinglePoll (id) {
  *
  * @param {array} poll - an array with one element, a poll object
  */
-function setSinglePollData (poll) {
+export function setSinglePollData (poll) {
   return { type: SINGLE_POLL_DATA, singlePoll: poll }
 }
 function singlePollDataReducer (state, action) {

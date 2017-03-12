@@ -13305,7 +13305,9 @@ var DisplayPolls = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* unused harmony export DEFAULT_STATE */
 /* harmony export (immutable) */ __webpack_exports__["a"] = getSinglePoll;
+/* unused harmony export setSinglePollData */
 /* harmony export (immutable) */ __webpack_exports__["b"] = clearSinglePoll;
 /* harmony export (immutable) */ __webpack_exports__["c"] = singlePoll;
 
@@ -18356,12 +18358,13 @@ function editPoll() {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* unused harmony export DEFAULT_STATE */
 /* harmony export (immutable) */ __webpack_exports__["a"] = getAllPolls;
 /* unused harmony export pollsData */
 /* harmony export (immutable) */ __webpack_exports__["b"] = allPolls;
 
 
-var DEAULT_STATE = {
+var DEFAULT_STATE = {
   allPolls: null
 };
 
@@ -18404,7 +18407,7 @@ var allPollsDataReducer = function allPollsDataReducer(state, action) {
 // ******* Root Reducer Slice *******
 
 function allPolls() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEAULT_STATE;
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
   var action = arguments[1];
 
   switch (action.type) {
@@ -18422,7 +18425,9 @@ function allPolls() {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* unused harmony export DEFAULT_STATE */
 /* harmony export (immutable) */ __webpack_exports__["a"] = getUserPolls;
+/* unused harmony export setUserPollsData */
 /* harmony export (immutable) */ __webpack_exports__["b"] = clearUserPolls;
 /* harmony export (immutable) */ __webpack_exports__["c"] = userPolls;
 
