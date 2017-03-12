@@ -20,8 +20,8 @@ export function deletePoll (id) {
           dispatch(addFlashMessage({ type: 'success', text: 'Poll deleted!' }))
           dispatch(pollDeleted(id))
         } else {
-          console.error('error: delete response from /api/polls/delete not ok', res.data )
-           dispatch(addFlashMessage({ type: 'error', text: 'Failed to delete poll. That\'s an error.' }))
+          console.error('error: delete response from /api/polls/delete not ok', res.data)
+          dispatch(addFlashMessage({ type: 'error', text: 'Failed to delete poll. That\'s an error.' }))
         }
       })
       .catch(err => {

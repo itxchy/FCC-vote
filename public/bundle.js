@@ -10936,7 +10936,9 @@ function deletedPoll() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_has__ = __webpack_require__(105);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_has___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash_has__);
+/* unused harmony export DEFAULT_STATE */
 /* harmony export (immutable) */ __webpack_exports__["a"] = submitVote;
+/* unused harmony export updatedPollResults */
 /* harmony export (immutable) */ __webpack_exports__["b"] = resetUpdatedPollResults;
 /* harmony export (immutable) */ __webpack_exports__["c"] = newVote;
 
@@ -10987,13 +10989,10 @@ function submitVote(id, vote) {
  * @param {object} results
  */
 function updatedPollResults(results) {
-  console.log('results:', results);
   return { type: UPDATED_POLL_RESULTS, results: results };
 }
 function updatedPollResultsReducer(state, action) {
-  var newState = {};
-  Object.assign(newState, state, { updatedResults: action.results });
-  return newState;
+  return Object.assign({}, state, { updatedResults: action.results });
 }
 
 /**

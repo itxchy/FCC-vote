@@ -1,7 +1,7 @@
 import axios from 'axios'
 import has from 'lodash/has'
 
-const DEFAULT_STATE = {
+export const DEFAULT_STATE = {
   updatedResults: null
 }
 
@@ -47,14 +47,11 @@ export function submitVote (id, vote) {
  *
  * @param {object} results
  */
-function updatedPollResults (results) {
-  console.log('results:', results)
+export function updatedPollResults (results) {
   return { type: UPDATED_POLL_RESULTS, results }
 }
 function updatedPollResultsReducer (state, action) {
-  const newState = {}
-  Object.assign(newState, state, { updatedResults: action.results })
-  return newState
+  return Object.assign({}, state, { updatedResults: action.results })
 }
 
 /**
