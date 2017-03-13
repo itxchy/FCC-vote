@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Validator from 'validator'
 
-const DEFAULT_STATE = {
+export const DEFAULT_STATE = {
   errors: {
     username: null,
     email: null,
@@ -65,7 +65,7 @@ export function dupeUserCheck (identifier, field, validationErrors) {
  *   should be true. If there are no errors, invalid will be false. The truthyness
  *   of invalid determines whether the submit button is disabled or not.
  */
-function dupeUserCheckResults (errors, invalid) {
+export function dupeUserCheckResults (errors, invalid) {
   return { type: DUPE_USER_CHECK_RESULTS, errors, invalid }
 }
 function dupeUserCheckReducer (state, action) {
@@ -103,11 +103,11 @@ export default function clientFormValidation (state = DEFAULT_STATE, action) {
 
 // ************** Lib **************
 
-function checkUserInResponse (res, field, identifier) {
+export function checkUserInResponse (res, field, identifier) {
   console.log('checkUserInResponse:', res, 'field:', field)
   let invalid
   let errors = {}
-  if (res.data.user) {
+  if (res.data && res.data.user) {
     errors[field] = 'A user exists with this ' + field
     invalid = true
   } else {

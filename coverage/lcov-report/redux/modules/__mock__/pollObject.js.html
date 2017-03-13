@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for components/CreateAPoll/NewPollTitle.jsx</title>
+    <title>Code coverage report for redux/modules/__mock__/pollObject.js</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -16,18 +16,18 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../../index.html">All files</a> / <a href="index.html">components/CreateAPoll</a> NewPollTitle.jsx
+      <a href="../../../index.html">All files</a> / <a href="index.html">redux/modules/__mock__</a> pollObject.js
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">20% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/10</span>
+        <span class='fraction'>1/1</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/4</span>
+        <span class='fraction'>0/0</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -35,13 +35,13 @@
         <span class='fraction'>0/0</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">20% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/10</span>
+        <span class='fraction'>1/1</span>
       </div>
     </div>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -99,54 +99,7 @@
 54
 55
 56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+57</td><td class="line-coverage quiet"><span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -164,7 +117,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -175,72 +127,90 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react'
-const { string, func, bool } = React.PropTypes
-&nbsp;
-const NewPollTitle = React.createClass({
-  propTypes: {
-    newPollTitle: string,
-    titleEditable: bool,
-    dispatchSetNewPollTitle: func,
-    dispatchSetTitleEditable: func,
-    editPoll: bool
-  },
-  handleNewPollTitleChange (event) {
-<span class="cstat-no" title="statement not covered" >    this.props.dispatchSetNewPollTitle(event.target.value)</span>
-  },
-  handleSaveClick (event) {
-<span class="cstat-no" title="statement not covered" >    if (this.props.newPollTitle === '') {</span>
-<span class="cstat-no" title="statement not covered" >      this.props.dispatchSetNewPollTitle('New Poll Title')</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const mockPollObject = {
+  "_id": "585710be7d132d5bf9ba14e0",
+  "updatedAt": "2017-03-12T21:46:19.924Z",
+  "createdAt": "2016-12-18T22:42:06.571Z",
+  "owner": "Borg",
+  "totalVotes": 5,
+  "title": "First there is a(n)...",
+  "__v": 0,
+  "options": [
+    {
+      "option": "mark",
+      "_id": "58a24fe8496b7d40125dc5b6",
+      "votes": [
+        {
+          "voter": "Borg",
+          "_id": "58a24feb496b7d40125dc5b7"
+        },
+        {
+          "voter": "damon",
+          "_id": "58a3b2d71c5955499e7de8a9"
+        },
+        {
+          "_id": "58a930756f6af831d8485cd8",
+          "voter": "::ffff:127.0.0.1"
+        },
+        {
+          "_id": "58c5c1abc93bfe374f52d938",
+          "voter": "Clang"
+        }
+      ]
+    },
+    {
+      "option": "hill",
+      "_id": "58a24fe8496b7d40125dc5b5",
+      "votes": [
+        {
+          "voter": "john",
+          "_id": "58a3a62716cf5e36f6e130c0"
+        },
+        {
+          "_id": "58aa27f0b5183c179bc8d5e3",
+          "voter": "flamable"
+        }
+      ]
+    },
+    {
+      "option": "egg",
+      "_id": "58a24fe8496b7d40125dc5b4",
+      "votes": [
+        
+      ]
     }
-<span class="cstat-no" title="statement not covered" >    this.props.dispatchSetTitleEditable(false)</span>
-  },
-  handleEditClick (event) {
-<span class="cstat-no" title="statement not covered" >    this.props.dispatchSetTitleEditable(true)</span>
-  },
-  render () {
-    let savedPollTitle = (
-<span class="cstat-no" title="statement not covered" >      &lt;div className='new-poll-title-container'&gt;</span>
-        &lt;h2 className='text-center saved-title'&gt;{this.props.newPollTitle}&lt;/h2&gt;
-        &lt;a&gt;
-          &lt;i
-            className='fa fa-pencil-square-o edit-icon show-mouse-pointer'
-            aria-hidden='true'
-            onClick={this.handleEditClick}
-          /&gt;
-        &lt;/a&gt;
-      &lt;/div&gt;
-    )
-    let inputPollTitle = (
-<span class="cstat-no" title="statement not covered" >      &lt;div className='new-poll-title-container'&gt;</span>
-        &lt;textarea
-          value={this.props.newPollTitle}
-          onChange={this.handleNewPollTitleChange}
-          type='text'
-          placeholder='New Poll Title'
-          className='text-center form-control new-poll-title-textarea'
-        /&gt;
-        &lt;a&gt;
-          &lt;i
-            className='fa fa-floppy-o save-icon show-mouse-pointer'
-            aria-hidden='true'
-            onClick={this.handleSaveClick}
-          /&gt;
-        &lt;/a&gt;
-      &lt;/div&gt;
-    )
+  ]
+}
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return (</span>
-      &lt;div className='new-poll-title-container'&gt;
-        {this.props.titleEditable
-          ? inputPollTitle
-          : savedPollTitle}
-      &lt;/div&gt;
-    )
-  }
-})
-&nbsp;
-export default NewPollTitle
+export default mockPollObject
 &nbsp;</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
@@ -250,7 +220,7 @@ export default NewPollTitle
   generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Mar 12 2017 18:29:56 GMT-0500 (CDT)
 </div>
 </div>
-<script src="../../prettify.js"></script>
+<script src="../../../prettify.js"></script>
 <script>
 window.onload = function () {
         if (typeof prettyPrint === 'function') {
@@ -258,6 +228,6 @@ window.onload = function () {
         }
 };
 </script>
-<script src="../../sorter.js"></script>
+<script src="../../../sorter.js"></script>
 </body>
 </html>

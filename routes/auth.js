@@ -1,5 +1,5 @@
 const express = require('express')
-const { log } = require('../server.js')
+const { log } = require('../server')
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')

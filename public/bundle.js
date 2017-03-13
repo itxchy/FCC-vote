@@ -17889,9 +17889,12 @@ var store = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_redux__["createSto
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_validator__ = __webpack_require__(80);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_validator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_validator__);
+/* unused harmony export DEFAULT_STATE */
 /* harmony export (immutable) */ __webpack_exports__["a"] = dupeUserCheck;
+/* unused harmony export dupeUserCheckResults */
 /* harmony export (immutable) */ __webpack_exports__["b"] = newFormErrors;
 /* harmony export (immutable) */ __webpack_exports__["c"] = clientFormValidation;
+/* unused harmony export checkUserInResponse */
 
 
 
@@ -18005,7 +18008,7 @@ function checkUserInResponse(res, field, identifier) {
   console.log('checkUserInResponse:', res, 'field:', field);
   var invalid = void 0;
   var errors = {};
-  if (res.data.user) {
+  if (res.data && res.data.user) {
     errors[field] = 'A user exists with this ' + field;
     invalid = true;
   } else {

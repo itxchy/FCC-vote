@@ -182,6 +182,7 @@ router.put('/:id', (req, res) => {
  */
 router.get('/', (req, res) => {
   Poll.find()
+    .sort({ createdAt: -1 })
     .select('_id title options totalVotes owner')
     .exec()
     .then(polls => {
