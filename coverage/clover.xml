@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1489361396650" clover="3.2.0">
-  <project timestamp="1489361396651" name="All files">
-    <metrics statements="655" coveredstatements="442" conditionals="252" coveredconditionals="167" methods="193" coveredmethods="112" elements="1100" coveredelements="721" complexity="0" loc="655" ncloc="655" packages="10" files="24" classes="24">
+<coverage generated="1489366232247" clover="3.2.0">
+  <project timestamp="1489366232247" name="All files">
+    <metrics statements="655" coveredstatements="460" conditionals="254" coveredconditionals="178" methods="193" coveredmethods="117" elements="1102" coveredelements="755" complexity="0" loc="655" ncloc="655" packages="10" files="24" classes="24">
       <package name="auth">
         <metrics statements="5" coveredstatements="2" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <file name="setAuthorizationToken.js" path="/home/itxchy/fcc/vote/auth/setAuthorizationToken.js">
@@ -330,7 +330,7 @@
         </file>
       </package>
       <package name="redux.modules">
-        <metrics statements="336" coveredstatements="216" conditionals="110" coveredconditionals="77" methods="123" coveredmethods="70"/>
+        <metrics statements="336" coveredstatements="234" conditionals="112" coveredconditionals="88" methods="123" coveredmethods="75"/>
         <file name="auth.js" path="/home/itxchy/fcc/vote/redux/modules/auth.js">
           <metrics statements="73" coveredstatements="45" conditionals="32" coveredconditionals="23" methods="21" coveredmethods="10"/>
           <line num="9" count="3" type="stmt"/>
@@ -408,10 +408,10 @@
           <line num="247" count="0" type="stmt"/>
         </file>
         <file name="clientFormValidation.js" path="/home/itxchy/fcc/vote/redux/modules/clientFormValidation.js">
-          <metrics statements="33" coveredstatements="5" conditionals="11" coveredconditionals="2" methods="10" coveredmethods="1"/>
-          <line num="4" count="1" type="stmt"/>
-          <line num="16" count="1" type="stmt"/>
-          <line num="17" count="1" type="stmt"/>
+          <metrics statements="33" coveredstatements="23" conditionals="13" coveredconditionals="13" methods="10" coveredmethods="6"/>
+          <line num="4" count="2" type="stmt"/>
+          <line num="16" count="2" type="stmt"/>
+          <line num="17" count="2" type="stmt"/>
           <line num="41" count="0" type="stmt"/>
           <line num="42" count="0" type="stmt"/>
           <line num="44" count="0" type="stmt"/>
@@ -422,26 +422,26 @@
           <line num="51" count="0" type="stmt"/>
           <line num="52" count="0" type="stmt"/>
           <line num="53" count="0" type="stmt"/>
-          <line num="69" count="0" type="stmt"/>
-          <line num="72" count="0" type="stmt"/>
-          <line num="82" count="0" type="stmt"/>
-          <line num="83" count="0" type="stmt"/>
-          <line num="86" count="0" type="stmt"/>
-          <line num="94" count="3" type="stmt"/>
-          <line num="96" count="0" type="stmt"/>
-          <line num="98" count="0" type="stmt"/>
-          <line num="100" count="3" type="stmt"/>
-          <line num="107" count="0" type="stmt"/>
-          <line num="109" count="0" type="stmt"/>
-          <line num="110" count="0" type="stmt"/>
-          <line num="111" count="0" type="stmt"/>
-          <line num="112" count="0" type="stmt"/>
-          <line num="114" count="0" type="stmt"/>
-          <line num="115" count="0" type="stmt"/>
-          <line num="117" count="0" type="stmt"/>
-          <line num="118" count="0" type="stmt"/>
-          <line num="119" count="0" type="stmt"/>
-          <line num="121" count="0" type="stmt"/>
+          <line num="69" count="2" type="stmt"/>
+          <line num="72" count="2" type="stmt"/>
+          <line num="82" count="2" type="stmt"/>
+          <line num="83" count="2" type="stmt"/>
+          <line num="86" count="2" type="stmt"/>
+          <line num="94" count="8" type="stmt"/>
+          <line num="96" count="2" type="stmt"/>
+          <line num="98" count="2" type="stmt"/>
+          <line num="100" count="4" type="stmt"/>
+          <line num="107" count="5" type="stmt"/>
+          <line num="109" count="5" type="stmt"/>
+          <line num="110" count="5" type="stmt"/>
+          <line num="111" count="2" type="stmt"/>
+          <line num="112" count="2" type="stmt"/>
+          <line num="114" count="3" type="stmt"/>
+          <line num="115" count="3" type="stmt"/>
+          <line num="117" count="5" type="stmt"/>
+          <line num="118" count="1" type="stmt"/>
+          <line num="119" count="1" type="stmt"/>
+          <line num="121" count="5" type="stmt"/>
         </file>
         <file name="createNewPoll.js" path="/home/itxchy/fcc/vote/redux/modules/createNewPoll.js">
           <metrics statements="55" coveredstatements="47" conditionals="16" coveredconditionals="16" methods="17" coveredmethods="13"/>
