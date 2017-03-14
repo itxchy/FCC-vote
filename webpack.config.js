@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = function () {
   return {
@@ -60,10 +60,10 @@ module.exports = function () {
           loader: 'file-loader?name=fonts/[name].[ext]'
         },
         {
-          test: /\.scss$/,
+          test: /\.css$/,
           use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
-            use: ['css-loader', 'sass-loader']
+            use: ['css-loader']
           })
         }
       ]

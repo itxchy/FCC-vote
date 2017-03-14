@@ -84,6 +84,7 @@
     "express": "^4.14.0",
     "express-static-gzip": "^0.2.2",
     "fast-async": "^6.1.2",
+    "font-awesome": "^4.7.0",
     "graphql": "^0.9.1",
     "graphql-subscriptions": "^0.2.1",
     "helmet": "^3.4.1",
