@@ -43,8 +43,15 @@ If you have any critiques or feedback, please open an issue or send an email.
 
 ## NPM Scripts
 
+### Production
+
+### `npm start`
+Creates a minified and transpiled build for production, and starts up the server. The following environment variables are required: `NODE_ENV`, `JWT_SECRET`, and `MONGO_URI`
+
+### Development
+
 ### `npm run watch`
-Spins up `webpack --watch`, which will create an initial webpack bundle file, and re-pack everything on every relevant file change. In addition to compiling the bundle, Webpack also handles the Babel transformations, and linting of the .js(x) files it bundles. This project uses StandardJS style.
+Spins up `webpack --watch`, which will handle Webpack's compilation steps, and rebuild on every relevant file change. In addition to compiling the bundles, Webpack also handles the Babel transformations, and linting for the application code.
 
 ### `npm run server` 
 Starts the Express server with `nodemon`, which will restart the server on file changes. You can view the app in the browser at [http://localhost:4000](http://localhost:4000).
