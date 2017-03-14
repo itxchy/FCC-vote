@@ -94,9 +94,12 @@ function resetNewPoll() {
   return { type: RESET_NEW_POLL };
 }
 var resetNewPollReducer = function resetNewPollReducer(state, action) {
-  var newState = {};
-  Object.assign(newState, state, DEFAULT_STATE);
-  return newState;
+  return Object.assign({}, state, {
+    newPollTitle: '',
+    titleEditable: true,
+    newPollOptions: ['', ''],
+    pollSaved: null
+  });
 };
 
 /**

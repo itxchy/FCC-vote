@@ -77,8 +77,7 @@ export function resetNewPoll () {
   return { type: RESET_NEW_POLL }
 }
 const resetNewPollReducer = (state, action) => {
-  console.log('default state:', DEFAULT_STATE)
-  return Object.assign({}, {
+  return Object.assign({}, state, {
     newPollTitle: '',
     titleEditable: true,
     newPollOptions: [
