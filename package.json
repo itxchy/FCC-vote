@@ -12,7 +12,7 @@
     "lint": "eslint 'server.js' webpack.config.js 'server/**' 'routes/**' 'auth/**'; exit 0",
     "build": "webpack",
     "build:prod": "npm run babel:prod && webpack --config webpack.prod.js",
-    "babel:clear": "del production",
+    "babel:clear": "./node_modules/.bin/del production",
     "babel:components": "NODE_ENV=server babel components -d production/components",
     "babel:redux": "NODE_ENV=server babel redux -d production/redux",
     "babel:auth": " NODE_ENV=server babel auth -d production/auth",
