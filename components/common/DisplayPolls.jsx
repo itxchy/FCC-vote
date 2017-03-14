@@ -69,7 +69,9 @@ const DisplayPolls = React.createClass({
     const populatedCards = this.populateCards()
     return (
       <div className='container'>
-        {populatedCards}
+        <div className='row'>
+          {populatedCards}
+        </div>
       </div>
     )
   }
