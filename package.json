@@ -5,7 +5,7 @@
   "description": "Create and share polls. Vote in polls made by friends and strangers.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js | bunyan",
+    "start": "node server.js | ./node_modules/.bin/bunyan",
     "test": "NODE_ENV=test jest",
     "tdd": "NODE_ENV=test jest --watch",
     "coverage": "NODE_ENV=test jest --coverage",
