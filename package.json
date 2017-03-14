@@ -58,9 +58,7 @@
     "resolve-url-loader": "^1.6.0",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
-    "webpack": "^2.2.1",
-    "webpack-bundle-analyzer": "^2.3.0",
-    "webpack-merge": "^3.0.0"
+    "webpack-bundle-analyzer": "^2.3.0"
   },
   "dependencies": {
     "asyncawait": "^1.0.6",
@@ -101,6 +99,8 @@
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
     "shortid": "^2.2.6",
-    "validator": "^6.1.0"
+    "validator": "^6.1.0",
+    "webpack": "^2.2.1",
+    "webpack-merge": "^3.0.0"
   }
 }
