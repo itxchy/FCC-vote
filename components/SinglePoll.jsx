@@ -5,7 +5,7 @@ import { getSinglePoll, clearSinglePoll } from '../redux/modules/getSinglePoll'
 import { resetDeletedPoll } from '../redux/modules/deletePoll'
 import { submitVote, resetUpdatedPollResults } from '../redux/modules/submitVote'
 import { clearAllFlashMessages } from '../redux/modules/flashMessage'
-import DisplayPolls from './common/DisplayPolls'
+import DisplayPolls from './common/Polls/DisplayPolls'
 import LoadingSpinner from './common/LoadingSpinner'
 
 const SinglePoll = React.createClass({

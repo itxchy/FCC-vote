@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import DisplayPolls from '../common/DisplayPolls'
+import DisplayPolls from '../common/Polls/DisplayPolls'
 const { func, object, array, bool, string } = React.PropTypes
 import { getUserPolls, clearUserPolls } from '../../redux/modules/getUserPolls'
 import { submitVote, resetUpdatedPollResults } from '../../redux/modules/submitVote'

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import DisplayPolls from './common/DisplayPolls'
+import DisplayPolls from './common/Polls/DisplayPolls'
 import { getAllPolls } from '../redux/modules/getAllPolls'
 import { submitVote, resetUpdatedPollResults } from '../redux/modules/submitVote'
 import { resetDeletedPoll } from '../redux/modules/deletePoll'

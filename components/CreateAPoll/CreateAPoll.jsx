@@ -1,7 +1,7 @@
 import React from 'react'
-import NewPollTitle from './NewPollTitle'
-import PendingPollOptions from './PendingPollOptions'
-import SaveOrReset from './SaveOrReset'
+import NewPollTitle from '../common/PollForms/NewPollTitle'
+import PendingPollOptions from '../common/PollForms/PendingPollOptions'
+import SaveOrReset from '../common/PollForms/SaveOrReset'
 import { connect } from 'react-redux'
 import {
   updateOption,

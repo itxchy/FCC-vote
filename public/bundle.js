@@ -13197,113 +13197,7 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 82 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ResultsCard__ = __webpack_require__(399);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__PollCard__ = __webpack_require__(398);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__EmptyPolls__ = __webpack_require__(395);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__routes_lib_pollsLib__ = __webpack_require__(401);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__routes_lib_pollsLib___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__routes_lib_pollsLib__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash_isEmpty__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash_isEmpty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_lodash_isEmpty__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash_has__ = __webpack_require__(105);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash_has___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash_has__);
-
-
-
-
-
-
-
-var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
-    func = _React$PropTypes.func,
-    array = _React$PropTypes.array,
-    object = _React$PropTypes.object,
-    bool = _React$PropTypes.bool,
-    string = _React$PropTypes.string;
-
-
-var DisplayPolls = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
-  displayName: 'DisplayPolls',
-
-  propTypes: {
-    polls: array,
-    user: object,
-    clientIp: string,
-    isAuthenticated: bool,
-    dispatchSubmitVote: func,
-    getPolls: func,
-    myPolls: bool
-  },
-  populateCards: function populateCards() {
-    var _this = this;
-
-    var singlePoll = this.props.polls.length === 1;
-    return this.props.polls.map(function (poll) {
-      var currentUser = _this.props.isAuthenticated && _this.props.user ? _this.props.user.username : _this.props.clientIp;
-      var dupeVoter = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__routes_lib_pollsLib__["dupeVoterCheck"])(poll, currentUser);
-      var title = poll.title,
-          options = poll.options,
-          totalVotes = poll.totalVotes,
-          _id = poll._id,
-          owner = poll.owner;
-
-      if (dupeVoter || _this.props.myPolls) {
-        return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_1__ResultsCard__["a" /* default */], {
-          singlePoll: singlePoll,
-          user: _this.props.user,
-          key: _id,
-          title: title,
-          options: options,
-          totalVotes: totalVotes,
-          id: _id,
-          owner: owner
-        });
-      }
-      return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_2__PollCard__["a" /* default */], {
-        singlePoll: singlePoll,
-        dispatchSubmitVote: _this.props.dispatchSubmitVote,
-        user: _this.props.user,
-        key: _id,
-        title: title,
-        options: options,
-        totalVotes: totalVotes,
-        id: _id,
-        owner: owner
-      });
-    });
-  },
-  componentWillMount: function componentWillMount() {
-    this.props.getPolls();
-  },
-  render: function render() {
-    // if the polls haven't loaded yet, show a loading dialog
-    if (!this.props.polls || __WEBPACK_IMPORTED_MODULE_5_lodash_isEmpty___default()(this.props.polls || this.props.isAuthenticated === null)) {
-      return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_3__EmptyPolls__["a" /* default */], { polls: this.props.polls });
-    }
-    // if no polls are returned, tell the user they have no polls
-    if (__WEBPACK_IMPORTED_MODULE_6_lodash_has___default()(this.props.polls[0], 'polls') && this.props.polls[0].polls === null) {
-      return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_3__EmptyPolls__["a" /* default */], { polls: false });
-    }
-    var populatedCards = this.populateCards();
-    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      { className: 'container' },
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        'div',
-        { className: 'row' },
-        populatedCards
-      )
-    );
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = DisplayPolls;
-
-/***/ }),
+/* 82 */,
 /* 83 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -17411,294 +17305,9 @@ function setAuthorizationToken(token) {
 module.exports = setAuthorizationToken;
 
 /***/ }),
-/* 132 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
-
-var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
-    string = _React$PropTypes.string,
-    func = _React$PropTypes.func,
-    bool = _React$PropTypes.bool;
-
-
-var NewPollTitle = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
-  displayName: 'NewPollTitle',
-
-  propTypes: {
-    newPollTitle: string,
-    titleEditable: bool,
-    dispatchSetNewPollTitle: func,
-    dispatchSetTitleEditable: func,
-    editPoll: bool
-  },
-  handleNewPollTitleChange: function handleNewPollTitleChange(event) {
-    this.props.dispatchSetNewPollTitle(event.target.value);
-  },
-  handleSaveClick: function handleSaveClick(event) {
-    if (this.props.newPollTitle === '') {
-      this.props.dispatchSetNewPollTitle('New Poll Title');
-    }
-    this.props.dispatchSetTitleEditable(false);
-  },
-  handleEditClick: function handleEditClick(event) {
-    this.props.dispatchSetTitleEditable(true);
-  },
-  render: function render() {
-    var savedPollTitle = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      { className: 'new-poll-title-container' },
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        'h2',
-        { className: 'text-center saved-title' },
-        this.props.newPollTitle
-      ),
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        'a',
-        null,
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', {
-          className: 'fa fa-pencil-square-o edit-icon show-mouse-pointer',
-          'aria-hidden': 'true',
-          onClick: this.handleEditClick
-        })
-      )
-    );
-    var inputPollTitle = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      { className: 'new-poll-title-container' },
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('textarea', {
-        value: this.props.newPollTitle,
-        onChange: this.handleNewPollTitleChange,
-        type: 'text',
-        placeholder: 'New Poll Title',
-        className: 'text-center form-control new-poll-title-textarea'
-      }),
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        'a',
-        null,
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', {
-          className: 'fa fa-floppy-o save-icon show-mouse-pointer',
-          'aria-hidden': 'true',
-          onClick: this.handleSaveClick
-        })
-      )
-    );
-
-    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      { className: 'new-poll-title-container' },
-      this.props.titleEditable ? inputPollTitle : savedPollTitle
-    );
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = NewPollTitle;
-
-/***/ }),
-/* 133 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
-
-var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
-    object = _React$PropTypes.object,
-    func = _React$PropTypes.func;
-
-
-var PendingPollOptions = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
-  displayName: 'PendingPollOptions',
-
-  propTypes: {
-    poll: object.isRequired,
-    dispatchUpdateOption: func.isRequired
-  },
-  getInitialState: function getInitialState() {
-    return {
-      twoOptionsOrMoreError: false
-    };
-  },
-  onFocus: function onFocus() {
-    this.setState({ twoOptionsOrMoreError: false });
-  },
-  editOption: function editOption(event) {
-    this.setState({ twoOptionsOrMoreError: false });
-    var updatedOptions = this.props.poll.newPollOptions;
-    updatedOptions[event.target.name] = event.target.value;
-    this.props.dispatchUpdateOption(updatedOptions);
-  },
-  addAnotherOption: function addAnotherOption() {
-    this.setState({ twoOptionsOrMoreError: false });
-    var updatedNewOptions = this.props.poll.newPollOptions;
-    updatedNewOptions.push('');
-    console.log('updatedNewOptions', updatedNewOptions);
-    this.props.dispatchUpdateOption(updatedNewOptions);
-  },
-  deleteOption: function deleteOption(index) {
-    if (this.props.poll.newPollOptions.length === 2) {
-      this.setState({ twoOptionsOrMoreError: true });
-      return;
-    }
-    var updatedDeleteOptions = this.props.poll.newPollOptions;
-    updatedDeleteOptions.splice(index, 1);
-    this.props.dispatchUpdateOption(updatedDeleteOptions);
-  },
-  render: function render() {
-    var _this = this;
-
-    var options = this.props.poll.newPollOptions.map(function (option, index) {
-      return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        'div',
-        { key: index },
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('input', {
-          type: 'text',
-          value: option,
-          name: index,
-          placeholder: 'Option ' + (index + 1),
-          onChange: _this.editOption,
-          onFocus: _this.onFocus,
-          className: 'form-control option-input'
-        }),
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-          'a',
-          {
-            className: 'btn btn-danger delete-button',
-            onClick: function onClick() {
-              return _this.deleteOption(index);
-            },
-            'aria-label': 'Delete'
-          },
-          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', { className: 'fa fa-trash-o', 'aria-hidden': 'true' })
-        )
-      );
-    });
-    var deleteOptionError = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      { className: 'row two-or-more-error' },
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', { className: 'fa fa-exclamation-triangle', 'aria-hidden': 'true' }),
-      ' At least two options are required'
-    );
-    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      { className: 'form-group options-container' },
-      options,
-      this.state.twoOptionsOrMoreError ? deleteOptionError : null,
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        'a',
-        null,
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-          'p',
-          { className: 'add-another-option show-mouse-pointer', onClick: this.addAnotherOption },
-          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
-          ' Add another option'
-        )
-      )
-    );
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = PendingPollOptions;
-
-/***/ }),
-/* 134 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routes_shared_createAPollValidation__ = __webpack_require__(402);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routes_shared_createAPollValidation___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__routes_shared_createAPollValidation__);
-
-var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
-    string = _React$PropTypes.string,
-    func = _React$PropTypes.func,
-    array = _React$PropTypes.array,
-    object = _React$PropTypes.object,
-    bool = _React$PropTypes.bool;
-
-
-
-var SaveOrReset = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
-  displayName: 'SaveOrReset',
-
-  propTypes: {
-    newPollTitle: string,
-    newPollOptions: array,
-    dispatchResetNewPoll: func,
-    dispatchSubmitPoll: func.isRequired,
-    user: object.isRequired,
-    poll: object,
-    newPoll: bool.isRequired,
-    pollID: string
-  },
-  getInitialState: function getInitialState() {
-    return {
-      errors: {}
-    };
-  },
-  isValid: function isValid() {
-    var inputData = {
-      newPollTitle: this.props.newPollTitle,
-      newPollOptions: this.props.newPollOptions
-    };
-
-    var _validateCreateAPollI = __WEBPACK_IMPORTED_MODULE_1__routes_shared_createAPollValidation___default()(inputData),
-        errors = _validateCreateAPollI.errors,
-        isValid = _validateCreateAPollI.isValid;
-
-    if (!isValid) {
-      this.setState({ errors: errors });
-    }
-    return isValid;
-  },
-  saveButtonHandler: function saveButtonHandler() {
-    if (this.isValid()) {
-      var newPoll = {
-        title: this.props.newPollTitle,
-        options: this.props.newPollOptions,
-        owner: this.props.user.user.username
-      };
-      this.props.newPoll ? this.props.dispatchSubmitPoll(newPoll) : this.props.dispatchSubmitPoll(this.props.pollID, newPoll);
-    }
-  },
-  resetButtonHandler: function resetButtonHandler() {
-    this.props.dispatchResetNewPoll();
-  },
-  render: function render() {
-    // TODO: move this error to redux to allow this dialog to be cleared when focusing on the blank option
-    var blankOptionError = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      { className: 'row two-or-more-error' },
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', { className: 'fa fa-exclamation-triangle', 'aria-hidden': 'true' }),
-      ' Blank options are not allowed'
-    );
-    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      { className: 'text-center' },
-      this.state.errors.newPollOptions ? blankOptionError : null,
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        'button',
-        {
-          className: 'btn btn-primary save-reset-buttons',
-          onClick: this.saveButtonHandler
-        },
-        'Submit'
-      ),
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        'button',
-        {
-          className: 'btn save-reset-buttons reset-poll-button',
-          onClick: this.resetButtonHandler
-        },
-        'Reset'
-      )
-    );
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = SaveOrReset;
-
-/***/ }),
+/* 132 */,
+/* 133 */,
+/* 134 */,
 /* 135 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -17717,88 +17326,7 @@ var LoadingSpinner = function LoadingSpinner() {
 /* harmony default export */ __webpack_exports__["a"] = LoadingSpinner;
 
 /***/ }),
-/* 136 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__DeleteModal__ = __webpack_require__(394);
-
-
-
-var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
-    string = _React$PropTypes.string,
-    object = _React$PropTypes.object,
-    bool = _React$PropTypes.bool;
-
-
-var OwnerControlButtons = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
-  displayName: 'OwnerControlButtons',
-
-  propTypes: {
-    id: string,
-    owner: string,
-    user: object,
-    results: bool
-  },
-  render: function render() {
-    var resultsControlButtons = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      null,
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        __WEBPACK_IMPORTED_MODULE_1_react_router__["Link"],
-        { to: '/edit/' + this.props.id },
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', { className: 'fa fa-cog poll-edit-buttons poll-results-settings-button', 'aria-hidden': 'true' })
-      ),
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        'a',
-        null,
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', {
-          className: 'fa fa-trash-o poll-edit-buttons poll-results-delete-button show-mouse-pointer',
-          'data-toggle': 'modal',
-          'data-target': '#deleteModal-' + this.props.id,
-          'aria-hidden': 'true'
-        })
-      )
-    );
-    var pollCardControlButtons = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      null,
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        __WEBPACK_IMPORTED_MODULE_1_react_router__["Link"],
-        { to: '/edit/' + this.props.id },
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', { className: 'fa fa-cog poll-edit-buttons poll-card-settings-button', 'aria-hidden': 'true' })
-      ),
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        'a',
-        null,
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', {
-          className: 'fa fa-trash-o poll-edit-buttons poll-card-delete-button show-mouse-pointer',
-          'data-toggle': 'modal',
-          'data-target': '#deleteModal-' + this.props.id,
-          'aria-hidden': 'true'
-        })
-      )
-    );
-    var controlButtons = this.props.results ? resultsControlButtons : pollCardControlButtons;
-    var pollOwner = null;
-    if (this.props.user) {
-      pollOwner = this.props.owner === this.props.user.username;
-    }
-    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      null,
-      pollOwner ? controlButtons : null,
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_2__DeleteModal__["a" /* default */], { id: this.props.id })
-    );
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = OwnerControlButtons;
-
-/***/ }),
+/* 136 */,
 /* 137 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -31198,9 +30726,9 @@ module.exports = function spread(callback) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__NewPollTitle__ = __webpack_require__(132);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__PendingPollOptions__ = __webpack_require__(133);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SaveOrReset__ = __webpack_require__(134);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_PollForms_NewPollTitle__ = __webpack_require__(740);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_PollForms_PendingPollOptions__ = __webpack_require__(741);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__common_PollForms_SaveOrReset__ = __webpack_require__(742);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_redux__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_redux___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_react_redux__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__redux_modules_createNewPoll__ = __webpack_require__(140);
@@ -31251,17 +30779,17 @@ var CreateAPoll = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
         { className: 'view-title text-center' },
         'Create a New Poll'
       ),
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_1__NewPollTitle__["a" /* default */], {
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_1__common_PollForms_NewPollTitle__["a" /* default */], {
         newPollTitle: this.props.newPollTitle,
         titleEditable: this.props.titleEditable,
         dispatchSetNewPollTitle: this.props.dispatchSetNewPollTitle,
         dispatchSetTitleEditable: this.props.dispatchSetTitleEditable
       }),
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_2__PendingPollOptions__["a" /* default */], {
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_2__common_PollForms_PendingPollOptions__["a" /* default */], {
         poll: this.props.poll,
         dispatchUpdateOption: this.props.dispatchUpdateOption
       }),
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_3__SaveOrReset__["a" /* default */], {
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_3__common_PollForms_SaveOrReset__["a" /* default */], {
         newPollTitle: this.props.newPollTitle,
         newPollOptions: this.props.newPollOptions,
         dispatchResetNewPoll: this.props.dispatchResetNewPoll,
@@ -31321,9 +30849,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__CreateAPoll_NewPollTitle__ = __webpack_require__(132);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__CreateAPoll_PendingPollOptions__ = __webpack_require__(133);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__CreateAPoll_SaveOrReset__ = __webpack_require__(134);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_PollForms_NewPollTitle__ = __webpack_require__(740);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_PollForms_PendingPollOptions__ = __webpack_require__(741);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__common_PollForms_SaveOrReset__ = __webpack_require__(742);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_redux__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_redux___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_react_redux__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__redux_modules_editPoll__ = __webpack_require__(141);
@@ -31388,18 +30916,18 @@ var EditPoll = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
         { className: 'view-title text-center' },
         'Editing...'
       ),
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_1__CreateAPoll_NewPollTitle__["a" /* default */], {
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_1__common_PollForms_NewPollTitle__["a" /* default */], {
         newPollTitle: this.props.newPollTitle,
         titleEditable: this.props.titleEditable,
         dispatchSetNewPollTitle: this.props.dispatchSetNewPollTitle,
         dispatchSetTitleEditable: this.props.dispatchSetTitleEditable,
         editPoll: true
       }),
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_2__CreateAPoll_PendingPollOptions__["a" /* default */], {
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_2__common_PollForms_PendingPollOptions__["a" /* default */], {
         poll: this.props.poll,
         dispatchUpdateOption: this.props.dispatchUpdateOption
       }),
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_3__CreateAPoll_SaveOrReset__["a" /* default */], {
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_3__common_PollForms_SaveOrReset__["a" /* default */], {
         newPollTitle: this.props.newPollTitle,
         newPollOptions: this.props.newPollOptions,
         dispatchResetNewPoll: this.props.dispatchResetNewPoll,
@@ -31483,7 +31011,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_redux__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_DisplayPolls__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_Polls_DisplayPolls__ = __webpack_require__(736);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__redux_modules_getAllPolls__ = __webpack_require__(142);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__redux_modules_submitVote__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__redux_modules_deletePoll__ = __webpack_require__(54);
@@ -31552,7 +31080,7 @@ var Home = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
       __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
         'div',
         { className: 'row' },
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_2__common_DisplayPolls__["a" /* default */], {
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_2__common_Polls_DisplayPolls__["a" /* default */], {
           polls: this.props.allPolls,
           clientIp: this.props.clientIp,
           user: this.props.user,
@@ -31819,7 +31347,7 @@ var LoginPage = function LoginPage() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_redux__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_DisplayPolls__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_Polls_DisplayPolls__ = __webpack_require__(736);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__redux_modules_getUserPolls__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__redux_modules_submitVote__ = __webpack_require__(55);
 
@@ -31883,7 +31411,7 @@ var MyPollsPage = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
         { className: 'view-title text-center' },
         'My Poll Results'
       ),
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_2__common_DisplayPolls__["a" /* default */], {
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_2__common_Polls_DisplayPolls__["a" /* default */], {
         polls: polls,
         clientIp: this.props.clientIp,
         user: this.props.user,
@@ -32376,7 +31904,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__redux_modules_deletePoll__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__redux_modules_submitVote__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__redux_modules_flashMessage__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__common_DisplayPolls__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__common_Polls_DisplayPolls__ = __webpack_require__(736);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__common_LoadingSpinner__ = __webpack_require__(135);
 
 var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
@@ -32441,7 +31969,7 @@ var SinglePoll = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
     var singlePoll = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
       'div',
       { className: 'center-div-horizontally' },
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_6__common_DisplayPolls__["a" /* default */], {
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_6__common_Polls_DisplayPolls__["a" /* default */], {
         polls: this.props.singlePoll,
         clientIp: this.props.clientIp,
         user: this.props.user,
@@ -32500,210 +32028,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 /* harmony default export */ __webpack_exports__["a"] = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_react_redux__["connect"])(mapStateToProps, mapDispatchToProps)(SinglePoll);
 
 /***/ }),
-/* 393 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_d3__ = __webpack_require__(121);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_d3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_d3__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_faux_dom__ = __webpack_require__(599);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_faux_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_faux_dom__);
-
-var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
-    string = _React$PropTypes.string,
-    array = _React$PropTypes.array,
-    number = _React$PropTypes.number;
-
-
-
-
-
-var D3Chart = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
-  displayName: 'D3Chart',
-
-  propTypes: {
-    results: array,
-    pollId: string,
-    totalVotes: number
-  },
-  getInitialState: function getInitialState() {
-    return {
-      tie: false,
-      tiedOptionObjects: null,
-      winningOption: null
-    };
-  },
-  winningOption: function winningOption() {
-    var _this = this;
-
-    var winningOptionIndex = null;
-    var possibleTieOptionIndexArray = [];
-
-    // determine winning option, or tie options
-    this.props.results.reduce(function (prevTotal, option, index) {
-      if (option.votes.length === 0) {
-        return prevTotal;
-      }
-      if (option.votes.length > prevTotal) {
-        winningOptionIndex = index;
-        possibleTieOptionIndexArray = [];
-        return option.votes.length;
-      }
-      if (option.votes.length === prevTotal && option.votes.length !== 0) {
-        possibleTieOptionIndexArray.push(index);
-      }
-      return prevTotal;
-    }, 0);
-
-    // in the case of a tie, return tied options
-    if (possibleTieOptionIndexArray.length >= 1) {
-      // TODO: ensure winningOptionIndex isn't larger than tied vote counts
-      var tiedOptionObjects = possibleTieOptionIndexArray.map(function (tiedOptionIndex) {
-        return _this.props.results[tiedOptionIndex];
-      });
-      tiedOptionObjects.push(this.props.results[winningOptionIndex]);
-      this.setState({ tie: true, tiedOptionObjects: tiedOptionObjects });
-      // return winningOption as false since there is a tie
-      return false;
-    }
-    // return the winningOption since there is a winner
-    this.setState({ winningOption: [this.props.results[winningOptionIndex]] });
-    return [this.props.results[winningOptionIndex]];
-  },
-  createOptionResultsText: function createOptionResultsText(winningOption, tiedOptionStrings, d) {
-    if (this.props.totalVotes === 0) {
-      return d.option + ' \u2014 0%';
-    }
-    if (winningOption && winningOption[0] && winningOption[0].option === d.option) {
-      return d.option + ' \u2014 ' + Math.round(d.votes.length / this.props.totalVotes * 100) + '% \u2713';
-    }
-    if (this.state.tie) {
-      var optionsMatch = tiedOptionStrings.filter(function (optionString) {
-        return optionString === d.option;
-      });
-      if (optionsMatch.length > 0) {
-        return d.option + ' \u2014 ' + Math.round(d.votes.length / this.props.totalVotes * 100) + '% TIED';
-      }
-    }
-    return d.option + ' \u2014 ' + Math.round(d.votes.length / this.props.totalVotes * 100) + '%';
-  },
-  componentWillMount: function componentWillMount() {
-    this.winningOption();
-  },
-  render: function render() {
-    var _this2 = this;
-
-    var winningOption = this.state.winningOption;
-    // if there is a tie, create an array of option strings to compare with what D3 recieves
-    var tiedOptionStrings = null;
-    if (this.state.tie) {
-      tiedOptionStrings = this.state.tiedOptionObjects.map(function (optionObject) {
-        return optionObject.option;
-      });
-    }
-    var chart = __WEBPACK_IMPORTED_MODULE_2_react_faux_dom___default.a.createElement('div');
-    var data = this.props.results;
-    var width = 300;
-    var height = 300;
-    var reactThis = this;
-
-    /**
-     * Allows for textwrapping within SVG elements. Width represents the max number of charactors per line
-     */
-    var insertLinebreaks = function insertLinebreaks(d) {
-      var optionResults = reactThis.createOptionResultsText(winningOption, tiedOptionStrings, d);
-      var width = 32;
-      var text = __WEBPACK_IMPORTED_MODULE_1_d3__["select"](this);
-      var words = optionResults.split(/\s+/).reverse();
-      var word = void 0;
-      var wordPop = function wordPop() {
-        return word = words.pop();
-      }; // eslint-disable-line no-return-assign
-      var line = [];
-      var lineNumber = 0;
-      var lineHeight = 1.1;
-      var y = text.attr('y');
-      var dy = 0.3;
-      var x = '.8em';
-      var tspan = text.text(null).append('tspan').attr('x', x).attr('y', y).attr('dy', dy + 'em');
-      while (wordPop()) {
-        line.push(word);
-        var lineLength = line.join(' ').split('').length;
-        tspan.text(line.join(' '));
-        if (lineLength > width) {
-          line.pop();
-          tspan.text(line.join(' '));
-          line = [word];
-          tspan = text.append('tspan').attr('x', x).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word);
-        }
-      }
-    };
-
-    var xScale = __WEBPACK_IMPORTED_MODULE_1_d3__["scaleLinear"]().domain([0, __WEBPACK_IMPORTED_MODULE_1_d3__["max"](data, function (d) {
-      return d.votes.length;
-    })]).range([1, width]);
-
-    var svg = __WEBPACK_IMPORTED_MODULE_1_d3__["select"](chart).append('svg').attr('width', width).attr('height', height);
-
-    svg.selectAll('rect').data(data).enter().append('rect').attr('x', 10).attr('y', function (d, i) {
-      return i * (height / data.length);
-    }).attr('width', function (d) {
-      return xScale(d.votes.length);
-    }).attr('height', height / data.length - 4).attr('fill', function (d) {
-      // if a winning option exists and it matches the current object,
-      // return the winning color
-      if (winningOption && winningOption[0] && winningOption[0].option === d.option) {
-        return '#01FF70';
-      }
-      // if there is a tie, check if the current option matches any of the
-      // tied options. If so, return the winning color
-      if (_this2.state.tie) {
-        var optionsMatch = tiedOptionStrings.filter(function (optionString) {
-          return optionString === d.option;
-        });
-        if (optionsMatch.length > 0) {
-          return '#01FF70';
-        }
-      }
-      // otherwise, return the losing color
-      return '#3D9970';
-    });
-
-    svg.selectAll('text').data(data).enter().append('text').text(function (d) {
-      // if (this.props.totalVotes === 0) {
-      //   return `${d.option} — 0%`
-      // }
-      // if (winningOption && winningOption[0] && winningOption[0].option === d.option) {
-      //   return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}% ✓`
-      // }
-      // if (this.state.tie) {
-      //   let optionsMatch = tiedOptionStrings.filter(optionString => {
-      //     return optionString === d.option
-      //   })
-      //   if (optionsMatch.length > 0) {
-      //     return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}% TIED`
-      //   }
-      // }
-      // console.log('Shouldnt be 0', this.props.totalVotes)
-      // return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}TT%`
-    }).attr('x', 16).attr('y', function (d, i) {
-      return i * (height / data.length) + 24;
-    }).attr('width', function (d) {
-      return d.votes.length * 4;
-    }).attr('height', function (d) {
-      return height / data.length - 8;
-    }).classed('result-text', true);
-
-    svg.selectAll('text').each(insertLinebreaks);
-
-    return chart.toReact();
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = D3Chart;
-
-/***/ }),
+/* 393 */,
 /* 394 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -32805,71 +32130,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 }, mapDispatchToProps)(DeleteModal);
 
 /***/ }),
-/* 395 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__LoadingSpinner__ = __webpack_require__(135);
-
-
-var bool = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes.bool;
-
-
-var EmptyPolls = function EmptyPolls(_ref) {
-  var polls = _ref.polls;
-
-  if (polls === null) {
-    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      { className: 'text-center' },
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_1__LoadingSpinner__["a" /* default */], null)
-    );
-  }
-  if (polls === false) {
-    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      { className: 'text-center' },
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        'h3',
-        null,
-        'No polls have been submitted yet :('
-      ),
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        'p',
-        null,
-        'Why not create one?'
-      )
-    );
-  }
-  return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-    'div',
-    { className: 'text-center' },
-    __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'h3',
-      null,
-      'Something went wrong!'
-    ),
-    __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'p',
-      null,
-      'Polls should be showing up here, but alas... Life isn\'t perfect :('
-    ),
-    __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'p',
-      null,
-      'Please report this.'
-    )
-  );
-};
-
-EmptyPolls.propTypes = {
-  polls: bool
-};
-
-/* harmony default export */ __webpack_exports__["a"] = EmptyPolls;
-
-/***/ }),
+/* 395 */,
 /* 396 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -32983,262 +32244,8 @@ var mapStateToProps = function mapStateToProps(state) {
 /* harmony default export */ __webpack_exports__["a"] = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_react_redux__["connect"])(mapStateToProps)(FlashMessagesList);
 
 /***/ }),
-/* 398 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_classnames__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_classnames__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__OwnerControlButtons__ = __webpack_require__(136);
-
-
-
-
-var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
-    string = _React$PropTypes.string,
-    array = _React$PropTypes.array,
-    number = _React$PropTypes.number,
-    object = _React$PropTypes.object,
-    func = _React$PropTypes.func,
-    bool = _React$PropTypes.bool;
-
-
-var PollCard = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
-  displayName: 'PollCard',
-
-  propTypes: {
-    title: string,
-    options: array,
-    totalVotes: number,
-    id: string,
-    user: object,
-    dispatchSubmitVote: func.isRequired,
-    singlePoll: bool,
-    owner: string
-  },
-  getInitialState: function getInitialState() {
-    return {
-      selectedOption: null,
-      updatedTotalVotes: null,
-      noOptionSelected: false
-    };
-  },
-  onOptionChange: function onOptionChange(event) {
-    this.setState({
-      selectedOption: event.target.value,
-      noOptionSelected: false
-    });
-  },
-  onVoteSubmit: function onVoteSubmit(event) {
-    event.preventDefault();
-    var pollID = this.props.id;
-    var selectedOption = this.state.selectedOption;
-    var voter = null;
-    if (this.props.user) {
-      voter = this.props.user.username || null;
-    }
-    if (selectedOption !== null) {
-      var vote = { selectedOption: selectedOption, voter: voter };
-      this.props.dispatchSubmitVote(pollID, vote);
-    } else {
-      this.setState({ noOptionSelected: true });
-    }
-  },
-  render: function render() {
-    var _this = this;
-
-    var options = this.props.options.map(function (option, index) {
-      var id = 'gridRadios' + index;
-      var value = '' + index;
-      return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        'div',
-        { key: option.option, className: 'form-check' },
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-          'label',
-          { className: 'form-check-label poll-card-label' },
-          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('input', {
-            className: 'form-check-input radio-option',
-            type: 'radio',
-            onChange: _this.onOptionChange,
-            name: 'gridRadios',
-            id: id,
-            value: value
-          }),
-          option.option
-        )
-      );
-    });
-    var noOptionSelectedError = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      { className: 'row none-selected-error' },
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', { className: 'fa fa-exclamation-triangle', 'aria-hidden': 'true' }),
-      ' Select an option before submitting'
-    );
-    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      { className: __WEBPACK_IMPORTED_MODULE_2_classnames___default()('col-sm-4 sm-poll-card-container-width', { 'center-div-horizontally': this.props.singlePoll }) },
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        'form',
-        { className: 'col-md-10 poll-form', onSubmit: this.onVoteSubmit },
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-          'h2',
-          { className: 'row sm-text-algin-center' },
-          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_router__["Link"],
-            { to: '/v/' + this.props.id },
-            this.props.title
-          )
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_3__OwnerControlButtons__["a" /* default */], {
-          id: this.props.id,
-          owner: this.props.owner,
-          user: this.props.user,
-          results: false
-        }),
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-          'fieldset',
-          { className: 'form-group row' },
-          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-            'div',
-            { className: 'col-md-10' },
-            options
-          )
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-          'p',
-          { className: 'poll-tally-owner-display total-votes-tally' },
-          'Total Votes: ',
-          this.state.updatedTotalVotes || this.props.totalVotes
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-          'p',
-          { className: 'poll-tally-owner-display' },
-          'Poll Owner: ',
-          this.props.owner
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-          'div',
-          { className: 'form-group row' },
-          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-            'div',
-            { className: 'offset-sm-2 col-sm-10' },
-            this.state.noOptionSelected ? noOptionSelectedError : null,
-            __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-              'button',
-              { type: 'submit', className: 'btn btn-primary' },
-              'Vote'
-            )
-          )
-        )
-      )
-    );
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = PollCard;
-
-/***/ }),
-/* 399 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_router__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__OwnerControlButtons__ = __webpack_require__(136);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__D3Chart__ = __webpack_require__(393);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_isEmpty__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_isEmpty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash_isEmpty__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_classnames__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_classnames__);
-
-
-var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
-    string = _React$PropTypes.string,
-    array = _React$PropTypes.array,
-    number = _React$PropTypes.number,
-    object = _React$PropTypes.object,
-    bool = _React$PropTypes.bool;
-
-
-
-
-
-
-var ResultsCard = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
-  displayName: 'ResultsCard',
-
-  propTypes: {
-    title: string,
-    options: array,
-    totalVotes: number,
-    id: string,
-    user: object,
-    singlePoll: bool,
-    owner: string.isRequired
-  },
-  render: function render() {
-    var d3Component = null;
-    if (typeof window !== 'undefined' && !__WEBPACK_IMPORTED_MODULE_4_lodash_isEmpty___default()(this.props.options)) {
-      d3Component = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_3__D3Chart__["a" /* default */], {
-        results: this.props.options,
-        pollId: this.props.id,
-        totalVotes: this.props.totalVotes
-      });
-    }
-    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-      'div',
-      { className: __WEBPACK_IMPORTED_MODULE_5_classnames___default()('col-md-4 sm-result-card-container-width', { 'center-div-horizontally': this.props.singlePoll }) },
-      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-        'div',
-        { className: 'col-md-10' },
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-          'h2',
-          { className: 'row sm-text-algin-center' },
-          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-            __WEBPACK_IMPORTED_MODULE_1_react_router__["Link"],
-            { to: '/v/' + this.props.id },
-            this.props.title
-          )
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_2__OwnerControlButtons__["a" /* default */], {
-          id: this.props.id,
-          owner: this.props.owner,
-          user: this.props.user,
-          results: true
-        }),
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-          'div',
-          { className: 'row sm-text-algin-center' },
-          d3Component || 'loading results...'
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-          'div',
-          { className: 'row' },
-          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-            'p',
-            { className: 'poll-tally-owner-display total-votes-tally' },
-            'Total Votes: ',
-            this.props.totalVotes
-          ),
-          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
-            'p',
-            { className: 'poll-tally-owner-display' },
-            'Poll Owner: ',
-            this.props.owner
-          )
-        )
-      )
-    );
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = ResultsCard;
-
-/***/ }),
+/* 398 */,
+/* 399 */,
 /* 400 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -58614,6 +57621,1023 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 __WEBPACK_IMPORTED_MODULE_1_react_dom__["default"].render(__WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_2__ClientApp__["a" /* default */], null), document.getElementById('app'));
+
+/***/ }),
+/* 719 */,
+/* 720 */,
+/* 721 */,
+/* 722 */,
+/* 723 */,
+/* 724 */,
+/* 725 */,
+/* 726 */,
+/* 727 */,
+/* 728 */,
+/* 729 */,
+/* 730 */,
+/* 731 */,
+/* 732 */,
+/* 733 */,
+/* 734 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_router__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__DeleteModal__ = __webpack_require__(394);
+
+
+
+var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
+    string = _React$PropTypes.string,
+    object = _React$PropTypes.object,
+    bool = _React$PropTypes.bool;
+
+
+var OwnerControlButtons = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
+  displayName: 'OwnerControlButtons',
+
+  propTypes: {
+    id: string,
+    owner: string,
+    user: object,
+    results: bool
+  },
+  render: function render() {
+    var resultsControlButtons = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      null,
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        __WEBPACK_IMPORTED_MODULE_1_react_router__["Link"],
+        { to: '/edit/' + this.props.id },
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', { className: 'fa fa-cog poll-edit-buttons poll-results-settings-button', 'aria-hidden': 'true' })
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        'a',
+        null,
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', {
+          className: 'fa fa-trash-o poll-edit-buttons poll-results-delete-button show-mouse-pointer',
+          'data-toggle': 'modal',
+          'data-target': '#deleteModal-' + this.props.id,
+          'aria-hidden': 'true'
+        })
+      )
+    );
+    var pollCardControlButtons = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      null,
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        __WEBPACK_IMPORTED_MODULE_1_react_router__["Link"],
+        { to: '/edit/' + this.props.id },
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', { className: 'fa fa-cog poll-edit-buttons poll-card-settings-button', 'aria-hidden': 'true' })
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        'a',
+        null,
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', {
+          className: 'fa fa-trash-o poll-edit-buttons poll-card-delete-button show-mouse-pointer',
+          'data-toggle': 'modal',
+          'data-target': '#deleteModal-' + this.props.id,
+          'aria-hidden': 'true'
+        })
+      )
+    );
+    var controlButtons = this.props.results ? resultsControlButtons : pollCardControlButtons;
+    var pollOwner = null;
+    if (this.props.user) {
+      pollOwner = this.props.owner === this.props.user.username;
+    }
+    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      null,
+      pollOwner ? controlButtons : null,
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_2__DeleteModal__["a" /* default */], { id: this.props.id })
+    );
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = OwnerControlButtons;
+
+/***/ }),
+/* 735 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_d3__ = __webpack_require__(121);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_d3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_d3__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_faux_dom__ = __webpack_require__(599);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_faux_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_faux_dom__);
+
+var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
+    string = _React$PropTypes.string,
+    array = _React$PropTypes.array,
+    number = _React$PropTypes.number;
+
+
+
+
+
+var D3Chart = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
+  displayName: 'D3Chart',
+
+  propTypes: {
+    results: array,
+    pollId: string,
+    totalVotes: number
+  },
+  getInitialState: function getInitialState() {
+    return {
+      tie: false,
+      tiedOptionObjects: null,
+      winningOption: null
+    };
+  },
+  winningOption: function winningOption() {
+    var _this = this;
+
+    var winningOptionIndex = null;
+    var possibleTieOptionIndexArray = [];
+
+    // determine winning option, or tie options
+    this.props.results.reduce(function (prevTotal, option, index) {
+      if (option.votes.length === 0) {
+        return prevTotal;
+      }
+      if (option.votes.length > prevTotal) {
+        winningOptionIndex = index;
+        possibleTieOptionIndexArray = [];
+        return option.votes.length;
+      }
+      if (option.votes.length === prevTotal && option.votes.length !== 0) {
+        possibleTieOptionIndexArray.push(index);
+      }
+      return prevTotal;
+    }, 0);
+
+    // in the case of a tie, return tied options
+    if (possibleTieOptionIndexArray.length >= 1) {
+      // TODO: ensure winningOptionIndex isn't larger than tied vote counts
+      var tiedOptionObjects = possibleTieOptionIndexArray.map(function (tiedOptionIndex) {
+        return _this.props.results[tiedOptionIndex];
+      });
+      tiedOptionObjects.push(this.props.results[winningOptionIndex]);
+      this.setState({ tie: true, tiedOptionObjects: tiedOptionObjects });
+      // return winningOption as false since there is a tie
+      return false;
+    }
+    // return the winningOption since there is a winner
+    this.setState({ winningOption: [this.props.results[winningOptionIndex]] });
+    return [this.props.results[winningOptionIndex]];
+  },
+  createOptionResultsText: function createOptionResultsText(winningOption, tiedOptionStrings, d) {
+    if (this.props.totalVotes === 0) {
+      return d.option + ' \u2014 0%';
+    }
+    if (winningOption && winningOption[0] && winningOption[0].option === d.option) {
+      return d.option + ' \u2014 ' + Math.round(d.votes.length / this.props.totalVotes * 100) + '% \u2713';
+    }
+    if (this.state.tie) {
+      var optionsMatch = tiedOptionStrings.filter(function (optionString) {
+        return optionString === d.option;
+      });
+      if (optionsMatch.length > 0) {
+        return d.option + ' \u2014 ' + Math.round(d.votes.length / this.props.totalVotes * 100) + '% TIED';
+      }
+    }
+    return d.option + ' \u2014 ' + Math.round(d.votes.length / this.props.totalVotes * 100) + '%';
+  },
+  componentWillMount: function componentWillMount() {
+    this.winningOption();
+  },
+  render: function render() {
+    var _this2 = this;
+
+    var winningOption = this.state.winningOption;
+    // if there is a tie, create an array of option strings to compare with what D3 recieves
+    var tiedOptionStrings = null;
+    if (this.state.tie) {
+      tiedOptionStrings = this.state.tiedOptionObjects.map(function (optionObject) {
+        return optionObject.option;
+      });
+    }
+    var chart = __WEBPACK_IMPORTED_MODULE_2_react_faux_dom___default.a.createElement('div');
+    var data = this.props.results;
+    var width = 300;
+    var height = 300;
+    var reactThis = this;
+
+    /**
+     * Allows for textwrapping within SVG elements. Width represents the max number of charactors per line
+     */
+    var insertLinebreaks = function insertLinebreaks(d) {
+      var optionResults = reactThis.createOptionResultsText(winningOption, tiedOptionStrings, d);
+      var width = 32;
+      var text = __WEBPACK_IMPORTED_MODULE_1_d3__["select"](this);
+      var words = optionResults.split(/\s+/).reverse();
+      var word = void 0;
+      var wordPop = function wordPop() {
+        return word = words.pop();
+      }; // eslint-disable-line no-return-assign
+      var line = [];
+      var lineNumber = 0;
+      var lineHeight = 1.1;
+      var y = text.attr('y');
+      var dy = 0.3;
+      var x = '.8em';
+      var tspan = text.text(null).append('tspan').attr('x', x).attr('y', y).attr('dy', dy + 'em');
+      while (wordPop()) {
+        line.push(word);
+        var lineLength = line.join(' ').split('').length;
+        tspan.text(line.join(' '));
+        if (lineLength > width) {
+          line.pop();
+          tspan.text(line.join(' '));
+          line = [word];
+          tspan = text.append('tspan').attr('x', x).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word);
+        }
+      }
+    };
+
+    var xScale = __WEBPACK_IMPORTED_MODULE_1_d3__["scaleLinear"]().domain([0, __WEBPACK_IMPORTED_MODULE_1_d3__["max"](data, function (d) {
+      return d.votes.length;
+    })]).range([1, width]);
+
+    var svg = __WEBPACK_IMPORTED_MODULE_1_d3__["select"](chart).append('svg').attr('width', width).attr('height', height);
+
+    svg.selectAll('rect').data(data).enter().append('rect').attr('x', 10).attr('y', function (d, i) {
+      return i * (height / data.length);
+    }).attr('width', function (d) {
+      return xScale(d.votes.length);
+    }).attr('height', height / data.length - 4).attr('fill', function (d) {
+      // if a winning option exists and it matches the current object,
+      // return the winning color
+      if (winningOption && winningOption[0] && winningOption[0].option === d.option) {
+        return '#01FF70';
+      }
+      // if there is a tie, check if the current option matches any of the
+      // tied options. If so, return the winning color
+      if (_this2.state.tie) {
+        var optionsMatch = tiedOptionStrings.filter(function (optionString) {
+          return optionString === d.option;
+        });
+        if (optionsMatch.length > 0) {
+          return '#01FF70';
+        }
+      }
+      // otherwise, return the losing color
+      return '#3D9970';
+    });
+
+    svg.selectAll('text').data(data).enter().append('text').text(function (d) {
+      // if (this.props.totalVotes === 0) {
+      //   return `${d.option} — 0%`
+      // }
+      // if (winningOption && winningOption[0] && winningOption[0].option === d.option) {
+      //   return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}% ✓`
+      // }
+      // if (this.state.tie) {
+      //   let optionsMatch = tiedOptionStrings.filter(optionString => {
+      //     return optionString === d.option
+      //   })
+      //   if (optionsMatch.length > 0) {
+      //     return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}% TIED`
+      //   }
+      // }
+      // console.log('Shouldnt be 0', this.props.totalVotes)
+      // return `${d.option} — ${Math.round((d.votes.length / this.props.totalVotes) * 100)}TT%`
+    }).attr('x', 16).attr('y', function (d, i) {
+      return i * (height / data.length) + 24;
+    }).attr('width', function (d) {
+      return d.votes.length * 4;
+    }).attr('height', function (d) {
+      return height / data.length - 8;
+    }).classed('result-text', true);
+
+    svg.selectAll('text').each(insertLinebreaks);
+
+    return chart.toReact();
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = D3Chart;
+
+/***/ }),
+/* 736 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ResultsCard__ = __webpack_require__(739);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__PollCard__ = __webpack_require__(738);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__EmptyPolls__ = __webpack_require__(737);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__routes_lib_pollsLib__ = __webpack_require__(401);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__routes_lib_pollsLib___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__routes_lib_pollsLib__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash_isEmpty__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash_isEmpty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_lodash_isEmpty__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash_has__ = __webpack_require__(105);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash_has___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash_has__);
+
+
+
+
+
+
+
+var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
+    func = _React$PropTypes.func,
+    array = _React$PropTypes.array,
+    object = _React$PropTypes.object,
+    bool = _React$PropTypes.bool,
+    string = _React$PropTypes.string;
+
+
+var DisplayPolls = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
+  displayName: 'DisplayPolls',
+
+  propTypes: {
+    polls: array,
+    user: object,
+    clientIp: string,
+    isAuthenticated: bool,
+    dispatchSubmitVote: func,
+    getPolls: func,
+    myPolls: bool
+  },
+  populateCards: function populateCards() {
+    var _this = this;
+
+    var singlePoll = this.props.polls.length === 1;
+    return this.props.polls.map(function (poll) {
+      var currentUser = _this.props.isAuthenticated && _this.props.user ? _this.props.user.username : _this.props.clientIp;
+      var dupeVoter = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__routes_lib_pollsLib__["dupeVoterCheck"])(poll, currentUser);
+      var title = poll.title,
+          options = poll.options,
+          totalVotes = poll.totalVotes,
+          _id = poll._id,
+          owner = poll.owner;
+
+      if (dupeVoter || _this.props.myPolls) {
+        return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_1__ResultsCard__["a" /* default */], {
+          singlePoll: singlePoll,
+          user: _this.props.user,
+          key: _id,
+          title: title,
+          options: options,
+          totalVotes: totalVotes,
+          id: _id,
+          owner: owner
+        });
+      }
+      return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_2__PollCard__["a" /* default */], {
+        singlePoll: singlePoll,
+        dispatchSubmitVote: _this.props.dispatchSubmitVote,
+        user: _this.props.user,
+        key: _id,
+        title: title,
+        options: options,
+        totalVotes: totalVotes,
+        id: _id,
+        owner: owner
+      });
+    });
+  },
+  componentWillMount: function componentWillMount() {
+    this.props.getPolls();
+  },
+  render: function render() {
+    // if the polls haven't loaded yet, show a loading dialog
+    if (!this.props.polls || __WEBPACK_IMPORTED_MODULE_5_lodash_isEmpty___default()(this.props.polls || this.props.isAuthenticated === null)) {
+      return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_3__EmptyPolls__["a" /* default */], { polls: this.props.polls });
+    }
+    // if no polls are returned, tell the user they have no polls
+    if (__WEBPACK_IMPORTED_MODULE_6_lodash_has___default()(this.props.polls[0], 'polls') && this.props.polls[0].polls === null) {
+      return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_3__EmptyPolls__["a" /* default */], { polls: false });
+    }
+    var populatedCards = this.populateCards();
+    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      { className: 'container' },
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        'div',
+        { className: 'row' },
+        populatedCards
+      )
+    );
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = DisplayPolls;
+
+/***/ }),
+/* 737 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__LoadingSpinner__ = __webpack_require__(135);
+
+
+var bool = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes.bool;
+
+
+var EmptyPolls = function EmptyPolls(_ref) {
+  var polls = _ref.polls;
+
+  if (polls === null) {
+    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      { className: 'text-center' },
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_1__LoadingSpinner__["a" /* default */], null)
+    );
+  }
+  if (polls === false) {
+    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      { className: 'text-center' },
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        'h3',
+        null,
+        'No polls have been submitted yet :('
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        'p',
+        null,
+        'Why not create one?'
+      )
+    );
+  }
+  return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+    'div',
+    { className: 'text-center' },
+    __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'h3',
+      null,
+      'Something went wrong!'
+    ),
+    __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'p',
+      null,
+      'Polls should be showing up here, but alas... Life isn\'t perfect :('
+    ),
+    __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'p',
+      null,
+      'Please report this.'
+    )
+  );
+};
+
+EmptyPolls.propTypes = {
+  polls: bool
+};
+
+/* harmony default export */ __webpack_exports__["a"] = EmptyPolls;
+
+/***/ }),
+/* 738 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_router__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_classnames__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_classnames__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__OwnerControlButtons__ = __webpack_require__(734);
+
+
+
+
+var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
+    string = _React$PropTypes.string,
+    array = _React$PropTypes.array,
+    number = _React$PropTypes.number,
+    object = _React$PropTypes.object,
+    func = _React$PropTypes.func,
+    bool = _React$PropTypes.bool;
+
+
+var PollCard = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
+  displayName: 'PollCard',
+
+  propTypes: {
+    title: string,
+    options: array,
+    totalVotes: number,
+    id: string,
+    user: object,
+    dispatchSubmitVote: func.isRequired,
+    singlePoll: bool,
+    owner: string
+  },
+  getInitialState: function getInitialState() {
+    return {
+      selectedOption: null,
+      updatedTotalVotes: null,
+      noOptionSelected: false
+    };
+  },
+  onOptionChange: function onOptionChange(event) {
+    this.setState({
+      selectedOption: event.target.value,
+      noOptionSelected: false
+    });
+  },
+  onVoteSubmit: function onVoteSubmit(event) {
+    event.preventDefault();
+    var pollID = this.props.id;
+    var selectedOption = this.state.selectedOption;
+    var voter = null;
+    if (this.props.user) {
+      voter = this.props.user.username || null;
+    }
+    if (selectedOption !== null) {
+      var vote = { selectedOption: selectedOption, voter: voter };
+      this.props.dispatchSubmitVote(pollID, vote);
+    } else {
+      this.setState({ noOptionSelected: true });
+    }
+  },
+  render: function render() {
+    var _this = this;
+
+    var options = this.props.options.map(function (option, index) {
+      var id = 'gridRadios' + index;
+      var value = '' + index;
+      return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        'div',
+        { key: option.option, className: 'form-check' },
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+          'label',
+          { className: 'form-check-label poll-card-label' },
+          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('input', {
+            className: 'form-check-input radio-option',
+            type: 'radio',
+            onChange: _this.onOptionChange,
+            name: 'gridRadios',
+            id: id,
+            value: value
+          }),
+          option.option
+        )
+      );
+    });
+    var noOptionSelectedError = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      { className: 'row none-selected-error' },
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', { className: 'fa fa-exclamation-triangle', 'aria-hidden': 'true' }),
+      ' Select an option before submitting'
+    );
+    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      { className: __WEBPACK_IMPORTED_MODULE_2_classnames___default()('col-sm-4 sm-poll-card-container-width', { 'center-div-horizontally': this.props.singlePoll }) },
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        'form',
+        { className: 'col-md-10 poll-form', onSubmit: this.onVoteSubmit },
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+          'h2',
+          { className: 'row sm-text-algin-center' },
+          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+            __WEBPACK_IMPORTED_MODULE_1_react_router__["Link"],
+            { to: '/v/' + this.props.id },
+            this.props.title
+          )
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_3__OwnerControlButtons__["a" /* default */], {
+          id: this.props.id,
+          owner: this.props.owner,
+          user: this.props.user,
+          results: false
+        }),
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+          'fieldset',
+          { className: 'form-group row' },
+          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+            'div',
+            { className: 'col-md-10' },
+            options
+          )
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+          'p',
+          { className: 'poll-tally-owner-display total-votes-tally' },
+          'Total Votes: ',
+          this.state.updatedTotalVotes || this.props.totalVotes
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+          'p',
+          { className: 'poll-tally-owner-display' },
+          'Poll Owner: ',
+          this.props.owner
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+          'div',
+          { className: 'form-group row' },
+          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+            'div',
+            { className: 'offset-sm-2 col-sm-10' },
+            this.state.noOptionSelected ? noOptionSelectedError : null,
+            __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+              'button',
+              { type: 'submit', className: 'btn btn-primary' },
+              'Vote'
+            )
+          )
+        )
+      )
+    );
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = PollCard;
+
+/***/ }),
+/* 739 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_router__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__OwnerControlButtons__ = __webpack_require__(734);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__D3Chart__ = __webpack_require__(735);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_isEmpty__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_isEmpty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash_isEmpty__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_classnames__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_classnames__);
+
+
+var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
+    string = _React$PropTypes.string,
+    array = _React$PropTypes.array,
+    number = _React$PropTypes.number,
+    object = _React$PropTypes.object,
+    bool = _React$PropTypes.bool;
+
+
+
+
+
+
+var ResultsCard = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
+  displayName: 'ResultsCard',
+
+  propTypes: {
+    title: string,
+    options: array,
+    totalVotes: number,
+    id: string,
+    user: object,
+    singlePoll: bool,
+    owner: string.isRequired
+  },
+  render: function render() {
+    var d3Component = null;
+    if (typeof window !== 'undefined' && !__WEBPACK_IMPORTED_MODULE_4_lodash_isEmpty___default()(this.props.options)) {
+      d3Component = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_3__D3Chart__["a" /* default */], {
+        results: this.props.options,
+        pollId: this.props.id,
+        totalVotes: this.props.totalVotes
+      });
+    }
+    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      { className: __WEBPACK_IMPORTED_MODULE_5_classnames___default()('col-md-4 sm-result-card-container-width', { 'center-div-horizontally': this.props.singlePoll }) },
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        'div',
+        { className: 'col-md-10' },
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+          'h2',
+          { className: 'row sm-text-algin-center' },
+          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+            __WEBPACK_IMPORTED_MODULE_1_react_router__["Link"],
+            { to: '/v/' + this.props.id },
+            this.props.title
+          )
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(__WEBPACK_IMPORTED_MODULE_2__OwnerControlButtons__["a" /* default */], {
+          id: this.props.id,
+          owner: this.props.owner,
+          user: this.props.user,
+          results: true
+        }),
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+          'div',
+          { className: 'row sm-text-algin-center' },
+          d3Component || 'loading results...'
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+          'div',
+          { className: 'row' },
+          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+            'p',
+            { className: 'poll-tally-owner-display total-votes-tally' },
+            'Total Votes: ',
+            this.props.totalVotes
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+            'p',
+            { className: 'poll-tally-owner-display' },
+            'Poll Owner: ',
+            this.props.owner
+          )
+        )
+      )
+    );
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = ResultsCard;
+
+/***/ }),
+/* 740 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
+
+var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
+    string = _React$PropTypes.string,
+    func = _React$PropTypes.func,
+    bool = _React$PropTypes.bool;
+
+
+var NewPollTitle = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
+  displayName: 'NewPollTitle',
+
+  propTypes: {
+    newPollTitle: string,
+    titleEditable: bool,
+    dispatchSetNewPollTitle: func,
+    dispatchSetTitleEditable: func,
+    editPoll: bool
+  },
+  handleNewPollTitleChange: function handleNewPollTitleChange(event) {
+    this.props.dispatchSetNewPollTitle(event.target.value);
+  },
+  handleSaveClick: function handleSaveClick(event) {
+    if (this.props.newPollTitle === '') {
+      this.props.dispatchSetNewPollTitle('New Poll Title');
+    }
+    this.props.dispatchSetTitleEditable(false);
+  },
+  handleEditClick: function handleEditClick(event) {
+    this.props.dispatchSetTitleEditable(true);
+  },
+  render: function render() {
+    var savedPollTitle = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      { className: 'new-poll-title-container' },
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        'h2',
+        { className: 'text-center saved-title' },
+        this.props.newPollTitle
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        'a',
+        null,
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', {
+          className: 'fa fa-pencil-square-o edit-icon show-mouse-pointer',
+          'aria-hidden': 'true',
+          onClick: this.handleEditClick
+        })
+      )
+    );
+    var inputPollTitle = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      { className: 'new-poll-title-container' },
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('textarea', {
+        value: this.props.newPollTitle,
+        onChange: this.handleNewPollTitleChange,
+        type: 'text',
+        placeholder: 'New Poll Title',
+        className: 'text-center form-control new-poll-title-textarea'
+      }),
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        'a',
+        null,
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', {
+          className: 'fa fa-floppy-o save-icon show-mouse-pointer',
+          'aria-hidden': 'true',
+          onClick: this.handleSaveClick
+        })
+      )
+    );
+
+    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      { className: 'new-poll-title-container' },
+      this.props.titleEditable ? inputPollTitle : savedPollTitle
+    );
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = NewPollTitle;
+
+/***/ }),
+/* 741 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
+
+var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
+    object = _React$PropTypes.object,
+    func = _React$PropTypes.func;
+
+
+var PendingPollOptions = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
+  displayName: 'PendingPollOptions',
+
+  propTypes: {
+    poll: object.isRequired,
+    dispatchUpdateOption: func.isRequired
+  },
+  getInitialState: function getInitialState() {
+    return {
+      twoOptionsOrMoreError: false
+    };
+  },
+  onFocus: function onFocus() {
+    this.setState({ twoOptionsOrMoreError: false });
+  },
+  editOption: function editOption(event) {
+    this.setState({ twoOptionsOrMoreError: false });
+    var updatedOptions = this.props.poll.newPollOptions;
+    updatedOptions[event.target.name] = event.target.value;
+    this.props.dispatchUpdateOption(updatedOptions);
+  },
+  addAnotherOption: function addAnotherOption() {
+    this.setState({ twoOptionsOrMoreError: false });
+    var updatedNewOptions = this.props.poll.newPollOptions;
+    updatedNewOptions.push('');
+    console.log('updatedNewOptions', updatedNewOptions);
+    this.props.dispatchUpdateOption(updatedNewOptions);
+  },
+  deleteOption: function deleteOption(index) {
+    if (this.props.poll.newPollOptions.length === 2) {
+      this.setState({ twoOptionsOrMoreError: true });
+      return;
+    }
+    var updatedDeleteOptions = this.props.poll.newPollOptions;
+    updatedDeleteOptions.splice(index, 1);
+    this.props.dispatchUpdateOption(updatedDeleteOptions);
+  },
+  render: function render() {
+    var _this = this;
+
+    var options = this.props.poll.newPollOptions.map(function (option, index) {
+      return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        'div',
+        { key: index },
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('input', {
+          type: 'text',
+          value: option,
+          name: index,
+          placeholder: 'Option ' + (index + 1),
+          onChange: _this.editOption,
+          onFocus: _this.onFocus,
+          className: 'form-control option-input'
+        }),
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+          'a',
+          {
+            className: 'btn btn-danger delete-button',
+            onClick: function onClick() {
+              return _this.deleteOption(index);
+            },
+            'aria-label': 'Delete'
+          },
+          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', { className: 'fa fa-trash-o', 'aria-hidden': 'true' })
+        )
+      );
+    });
+    var deleteOptionError = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      { className: 'row two-or-more-error' },
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', { className: 'fa fa-exclamation-triangle', 'aria-hidden': 'true' }),
+      ' At least two options are required'
+    );
+    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      { className: 'form-group options-container' },
+      options,
+      this.state.twoOptionsOrMoreError ? deleteOptionError : null,
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        'a',
+        null,
+        __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+          'p',
+          { className: 'add-another-option show-mouse-pointer', onClick: this.addAnotherOption },
+          __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', { className: 'fa fa-plus-circle', 'aria-hidden': 'true' }),
+          ' Add another option'
+        )
+      )
+    );
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = PendingPollOptions;
+
+/***/ }),
+/* 742 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routes_shared_createAPollValidation__ = __webpack_require__(402);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routes_shared_createAPollValidation___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__routes_shared_createAPollValidation__);
+
+var _React$PropTypes = __WEBPACK_IMPORTED_MODULE_0_react__["default"].PropTypes,
+    string = _React$PropTypes.string,
+    func = _React$PropTypes.func,
+    array = _React$PropTypes.array,
+    object = _React$PropTypes.object,
+    bool = _React$PropTypes.bool;
+
+
+
+var SaveOrReset = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createClass({
+  displayName: 'SaveOrReset',
+
+  propTypes: {
+    newPollTitle: string,
+    newPollOptions: array,
+    dispatchResetNewPoll: func,
+    dispatchSubmitPoll: func.isRequired,
+    user: object.isRequired,
+    poll: object,
+    newPoll: bool.isRequired,
+    pollID: string
+  },
+  getInitialState: function getInitialState() {
+    return {
+      errors: {}
+    };
+  },
+  isValid: function isValid() {
+    var inputData = {
+      newPollTitle: this.props.newPollTitle,
+      newPollOptions: this.props.newPollOptions
+    };
+
+    var _validateCreateAPollI = __WEBPACK_IMPORTED_MODULE_1__routes_shared_createAPollValidation___default()(inputData),
+        errors = _validateCreateAPollI.errors,
+        isValid = _validateCreateAPollI.isValid;
+
+    if (!isValid) {
+      this.setState({ errors: errors });
+    }
+    return isValid;
+  },
+  saveButtonHandler: function saveButtonHandler() {
+    if (this.isValid()) {
+      var newPoll = {
+        title: this.props.newPollTitle,
+        options: this.props.newPollOptions,
+        owner: this.props.user.user.username
+      };
+      this.props.newPoll ? this.props.dispatchSubmitPoll(newPoll) : this.props.dispatchSubmitPoll(this.props.pollID, newPoll);
+    }
+  },
+  resetButtonHandler: function resetButtonHandler() {
+    this.props.dispatchResetNewPoll();
+  },
+  render: function render() {
+    // TODO: move this error to redux to allow this dialog to be cleared when focusing on the blank option
+    var blankOptionError = __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      { className: 'row two-or-more-error' },
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement('i', { className: 'fa fa-exclamation-triangle', 'aria-hidden': 'true' }),
+      ' Blank options are not allowed'
+    );
+    return __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+      'div',
+      { className: 'text-center' },
+      this.state.errors.newPollOptions ? blankOptionError : null,
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        'button',
+        {
+          className: 'btn btn-primary save-reset-buttons',
+          onClick: this.saveButtonHandler
+        },
+        'Submit'
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react__["default"].createElement(
+        'button',
+        {
+          className: 'btn save-reset-buttons reset-poll-button',
+          onClick: this.resetButtonHandler
+        },
+        'Reset'
+      )
+    );
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = SaveOrReset;
 
 /***/ })
 ],[718]);

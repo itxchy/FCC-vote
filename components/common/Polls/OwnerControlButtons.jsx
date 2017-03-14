@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router'
-import DeleteModal from './DeleteModal'
+import DeleteModal from '../DeleteModal'
 const { string, object, bool } = React.PropTypes
 
 const OwnerControlButtons = React.createClass({
