@@ -5,7 +5,7 @@ Vote early and vote often!
 
 Create and share polls. Vote in polls made by friends and strangers for the good of data pseudoscience.
 
-### [Live Demo](http://itxchy-vote.herokuapp.com/)
+### [Live Demo](https://fcc-vote.matttrifilo.com/)
 
 A Full Stack project for [Free Code Camp](https://www.freecodecamp.com/).  
 [User Stories](https://www.freecodecamp.com/challenges/build-a-voting-app)
