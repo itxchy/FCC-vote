@@ -22,7 +22,6 @@ A Full Stack project for [Free Code Camp](https://www.freecodecamp.com/).
 - MongoDB
 - ESlint
 - Bootstrap
-- SASS
 - Babel
 
 This is a full-stack, server-side rendered application.
