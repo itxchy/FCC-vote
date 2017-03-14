@@ -5,6 +5,7 @@ import EmptyPolls from './EmptyPolls'
 import { dupeVoterCheck } from '../../routes/lib/pollsLib'
 import isEmpty from 'lodash/isEmpty'
 import has from 'lodash/has'
+import { SpringGrid, measureItems, layout } from 'react-stonecutter'
 const { func, array, object, bool, string } = React.PropTypes
 
 const DisplayPolls = React.createClass({
@@ -27,8 +28,25 @@ const DisplayPolls = React.createClass({
       const { title, options, totalVotes, _id, owner } = poll
       if (dupeVoter || this.props.myPolls) {
         return (
-          <ResultsCard
+          <li key={_id} itemHeight={600}>
+            <ResultsCard
+              singlePoll={singlePoll}
+              user={this.props.user}
+              key={_id}
+              title={title}
+              options={options}
+              totalVotes={totalVotes}
+              id={_id}
+              owner={owner}
+            />
+          </li>
+        )
+      }
+      return (
+        <li key={_id} itemHeight={600}>
+          <PollCard
             singlePoll={singlePoll}
+            dispatchSubmitVote={this.props.dispatchSubmitVote}
             user={this.props.user}
             key={_id}
             title={title}
@@ -37,20 +55,7 @@ const DisplayPolls = React.createClass({
             id={_id}
             owner={owner}
           />
-        )
-      }
-      return (
-        <PollCard
-          singlePoll={singlePoll}
-          dispatchSubmitVote={this.props.dispatchSubmitVote}
-          user={this.props.user}
-          key={_id}
-          title={title}
-          options={options}
-          totalVotes={totalVotes}
-          id={_id}
-          owner={owner}
-        />
+        </li>
       )
     })
   },
@@ -66,11 +71,21 @@ const DisplayPolls = React.createClass({
     if (has(this.props.polls[0], 'polls') && this.props.polls[0].polls === null) {
       return <EmptyPolls polls={false} />
     }
-    const populatedCards = this.populateCards()
+    // const populatedCards = this.populateCards()
     return (
-      <div className='container'>
-        {populatedCards}
-      </div>
+      <SpringGrid 
+        component="ul"
+        columns={3}
+        columnWidth={350}
+        gutterWidth={5}
+        gutterHeight={5}
+        itemHeight={400}
+        layout={layout.pinterest}
+        duration={400}
+        easing="ease-out"
+      >
+        {this.populateCards()}
+      </SpringGrid>
     )
   }
 })
