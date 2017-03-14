@@ -1,8 +1,10 @@
-import userSignupRequestReducerSlice from './userSignupRequest'
+/* global describe it expect */
+
 import {
+  default as userSignupRequestReducerSlice,
   DEFAULT_STATE,
   signupLoading
-} from './userSignupRequest'
+} from '../userSignupRequest'
 
 describe('redux: userSignupRequest', () => {
   it('should return default state when no state is passed in', () => {

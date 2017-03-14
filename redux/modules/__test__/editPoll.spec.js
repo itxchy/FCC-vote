@@ -1,6 +1,8 @@
-import editPollReducer from './editPoll'
-import mockPollObject from './__mock__/pollObject'
+/* global describe it expect */
+
+import mockPollObject from '../__mock__/pollObject'
 import {
+  default as editPollReducer,
   DEFAULT_STATE,
   setPollTitle,
   setPollOptions,
@@ -8,7 +10,7 @@ import {
   resetPoll,
   pollEdited,
   activePollData
-} from './editPoll'
+} from '../editPoll'
 
 describe('redux: editPoll', () => {
   it('should return default state when no state is given', () => {

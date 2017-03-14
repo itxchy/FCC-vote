@@ -1,9 +1,11 @@
-import allPollsReducer from './getAllPolls'
-import mockPollObject from './__mock__/pollObject'
+/* global describe it expect */
+
+import mockPollObject from '../__mock__/pollObject'
 import {
+  default as allPollsReducer,
   DEFAULT_STATE,
-  pollsData,
-} from './getAllPolls'
+  pollsData
+} from '../getAllPolls'
 
 describe('redux: getAllPolls', () => {
   it('should return default state if no state is given', () => {

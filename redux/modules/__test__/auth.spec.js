@@ -1,13 +1,14 @@
-import userReducerSlice from './auth'
+/* global jest describe it expect */
+
 import {
+  default as userReducerSlice,
   DEFAULT_STATE,
   setCurrentUser,
   userLoading,
   setErrors,
   setClientIp,
-  handleLoginResponse,
-  prepareUserFromToken
-} from './auth.js'
+  handleLoginResponse
+} from '../auth'
 import configureStore from 'redux-mock-store'
 const middlewares = []
 const mockStore = configureStore(middlewares)
@@ -20,7 +21,7 @@ describe('redux: user', () => {
   })
 
   describe('setCurrentUser', () => {
-    const mockUser = { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
+    const mockUser = { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894' }
     let stateWithValidUser = userReducerSlice(DEFAULT_STATE, setCurrentUser(mockUser))
     it('should set state.user as the user object passed to setCurrentUser', () => {
       expect(stateWithValidUser.user).toBe(mockUser)
@@ -56,13 +57,7 @@ describe('redux: user', () => {
     it('should simply pass the new unchanged state along if setErrors\'s parameter is not an object', () => {
       let state = userReducerSlice(DEFAULT_STATE, setErrors(42))
       expect(state.errors).toBe(null)
-    })    
-    // it('should call console.error if an unknown error key is passed with the error object, but still set the unknown error', () => {
-    //   global.console = { error: jest.fn() }
-    //   let state = userReducerSlice(DEFAULT_STATE, setErrors({ wat: 'is this really an error?' }))
-    //   expect(console.error).toBeCalled()
-    //   expect(state.errors.wat).toBe('is this really an error?')
-    // })
+    })
   })
 
   describe('setClientIp', () => {
@@ -73,7 +68,7 @@ describe('redux: user', () => {
   })
 
   describe('handleLoginResponse', () => {
-    const prepareUserFromToken = jest.fn().mockReturnValue({ id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'})
+    const prepareUserFromToken = jest.fn().mockReturnValue({ id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894' })
     it('should set form errors with setErrors if res.data.errors is present', () => {
       const initialState = {}
       const store = mockStore(initialState)
@@ -91,7 +86,7 @@ describe('redux: user', () => {
       const actions = store.getActions()
 
       expect(actions[0].type).toEqual('SET_CURRENT_USER')
-      expect(actions[0].user).toEqual({ id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'})
+      expect(actions[0].user).toEqual({ id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894' })
       expect(actions[1].type).toEqual('USER_LOADING')
       expect(actions[1].userLoading).toEqual(false)
     })

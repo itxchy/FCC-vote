@@ -1,13 +1,15 @@
-import newPollReducerSlice from './createNewPoll'
-import { 
-  DEFAULT_STATE, 
-  setNewPollTitle, 
-  setTitleEditable, 
+/* global describe it expect */
+
+import {
+  default as newPollReducerSlice,
+  DEFAULT_STATE,
+  setNewPollTitle,
+  setTitleEditable,
   updateOption,
   resetNewPoll,
   pollSaved,
   resetPollSaved
-} from './createNewPoll'
+} from '../createNewPoll'
 
 describe('redux: newPoll', () => {
   it('if the state parameter passed to the newPoll root reducer slice is falsy, DEFAULT_STATE should be returned', () => {
@@ -23,7 +25,7 @@ describe('redux: newPoll', () => {
     it('should return previous state if setNewPollTitle\'s argument is not a string', () => {
       let state = Object.assign({}, DEFAULT_STATE, { newPollTitle: 'Test Title' })
       let newState = newPollReducerSlice(state, setNewPollTitle(null))
-      expect(state.newPollTitle).toBe('Test Title')
+      expect(newState.newPollTitle).toBe('Test Title')
     })
   })
 
@@ -44,7 +46,7 @@ describe('redux: newPoll', () => {
       expect(state.newPollOptions).toEqual(expect.arrayContaining(['thing 1', 'thing 2']))
     })
     it('should return previous state if less than two option strings are given', () => {
-      let state = Object.assign({}, DEFAULT_STATE, { newPollOptions: ['thing 1', 'thing 2']})
+      let state = Object.assign({}, DEFAULT_STATE, { newPollOptions: ['thing 1', 'thing 2'] })
       let newState = newPollReducerSlice(state, updateOption(['thing 3']))
       expect(newState.newPollOptions).toEqual(expect.arrayContaining(['thing 1', 'thing 2']))
     })
@@ -72,7 +74,7 @@ describe('redux: newPoll', () => {
 
   describe('resetPollSaved', () => {
     it('should set state.pollSaved as null', () => {
-      let state = Object.assign({}, DEFAULT_STATE, { pollSaved: 'CRAZYID4242'})
+      let state = Object.assign({}, DEFAULT_STATE, { pollSaved: 'CRAZYID4242' })
       expect(state.pollSaved).toBe('CRAZYID4242')
       let newState = newPollReducerSlice(state, resetPollSaved())
       expect(newState.pollSaved).toBe(null)

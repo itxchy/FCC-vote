@@ -1,10 +1,12 @@
-import newVoteReducer from './submitVote'
-import mockPollObject from './__mock__/pollObject'
+/* global describe it expect */
+
+import mockPollObject from '../__mock__/pollObject'
 import {
+  default as newVoteReducer,
   DEFAULT_STATE,
   updatedPollResults,
   resetUpdatedPollResults
-} from './submitVote'
+} from '../submitVote'
 
 describe('redux: newVote', () => {
   it('should return default state', () => {

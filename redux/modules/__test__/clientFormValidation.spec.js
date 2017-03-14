@@ -1,10 +1,12 @@
-import clientFormValidationReducer from './clientFormValidation'
+/* global describe it expect */
+
 import {
+  default as clientFormValidationReducer,
   DEFAULT_STATE,
   dupeUserCheckResults,
   newFormErrors,
   checkUserInResponse
-} from './clientFormValidation'
+} from '../clientFormValidation'
 
 describe('redux: clientFormValidation', () => {
   it('should return state when no state is given', () => {
@@ -22,7 +24,6 @@ describe('redux: clientFormValidation', () => {
       const state = clientFormValidationReducer(DEFAULT_STATE, dupeUserCheckResults({ username: 'username taken' }, true))
       expect(state.errors.username).toEqual('username taken')
       expect(state.invalid).toEqual(true)
-    
     })
   })
 
@@ -57,8 +58,8 @@ describe('redux: clientFormValidation', () => {
       const identifier = '2Chainz@Truniversity.com'
       const results = checkUserInResponse(res, field, identifier)
       expect(results.errors.email).toEqual('A user exists with this email')
-      expect(results.invalid).toEqual(true)    
-    });
+      expect(results.invalid).toEqual(true)
+    })
     it('should return email error if email is invalid', () => {
       const res = { data: {} }
       const field = 'email'
@@ -73,8 +74,7 @@ describe('redux: clientFormValidation', () => {
       const identifier = '2Chainz@Truniversity.com'
       const results = checkUserInResponse(res, field, identifier)
       expect(results.errors).toEqual({ email: null })
-      expect(results.invalid).toEqual(false)    
-    });
+      expect(results.invalid).toEqual(false)
+    })
   })
 })
-

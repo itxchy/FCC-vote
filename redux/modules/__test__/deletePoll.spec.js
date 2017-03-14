@@ -1,9 +1,11 @@
-import deletePollReducerSlice from './deletePoll'
-import { 
+/* global describe it expect */
+
+import {
+  default as deletePollReducerSlice,
   DEFAULT_STATE,
   pollDeleted,
   resetDeletedPoll
-} from './deletePoll'
+} from '../deletePoll'
 
 describe('redux: deletePoll', () => {
   it('should be initialized with default state if no state object is given', () => {

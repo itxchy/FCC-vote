@@ -1,10 +1,12 @@
-import singlePollReducer from './getSinglePoll'
-import mockPollObject from './__mock__/pollObject'
+/* global describe it expect */
+
+import mockPollObject from '../__mock__/pollObject'
 import {
+  default as singlePollReducer,
   DEFAULT_STATE,
   setSinglePollData,
   clearSinglePoll
-} from './getSinglePoll'
+} from '../getSinglePoll'
 
 describe('redux: getSinglePoll', () => {
   it('should return default state when no state is given', () => {
