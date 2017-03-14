@@ -28,7 +28,6 @@
   "author": "Matt Trifilo",
   "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.23.0",
     "babel-core": "^6.17.0",
     "babel-jest": "^16.0.0",
     "babel-loader": "^6.2.5",
@@ -66,6 +65,7 @@
   "dependencies": {
     "asyncawait": "^1.0.6",
     "axios": "^0.15.2",
+    "babel-cli": "^6.23.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.23.0",
     "babel-register": "^6.23.0",
     "bcrypt": "^0.8.7",
