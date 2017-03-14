@@ -29,9 +29,9 @@ This is a full-stack, server-side rendered application.
 
 ## Roadmap
 
-[X] Finish unit tests for Redux
-[ ] Test the essentials in React components
-[X] Optimize the production build with code splitting
+- [X] Finish unit tests for Redux
+- [ ] Test the essentials in React components
+- [X] Optimize the production build with code splitting
 
 This project will later be gutted into a boilerplate so I can hit the ground running for future larger-scale apps. It will be open sourced when it's ready [to add to the pile](http://andrewhfarmer.com/starter-project/), though create-react-app is amazing for small client side apps. The final important hurtle will be to replace the brittle custom coded jwt authentication strategy with Passport. Coding your own security features is a very bad idea.
 
