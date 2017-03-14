@@ -7,4 +7,3 @@ config.js
 data/*
 public/bundle.js.map
 public/bundle.js
-log/*
