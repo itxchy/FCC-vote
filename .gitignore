@@ -10,3 +10,5 @@ public/bundle.js
 coverage/*
 production/*
 public/*
+log/*
+!log/.gitkeep
