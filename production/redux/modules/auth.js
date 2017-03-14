@@ -7,13 +7,13 @@ exports.DEFAULT_STATE = undefined;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /* global localStorage */
 
+exports.login = login;
+exports.logout = logout;
+exports.getClientIp = getClientIp;
 exports.setCurrentUser = setCurrentUser;
 exports.userLoading = userLoading;
 exports.setErrors = setErrors;
 exports.setClientIp = setClientIp;
-exports.login = login;
-exports.logout = logout;
-exports.getClientIp = getClientIp;
 exports.default = user;
 exports.handleLoginResponse = handleLoginResponse;
 exports.prepareUserFromToken = prepareUserFromToken;
@@ -32,70 +32,15 @@ var _setAuthorizationToken2 = _interopRequireDefault(_setAuthorizationToken);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// ******* Actions *******
+// ******* Action Types *******
 
 var SET_CURRENT_USER = 'SET_CURRENT_USER';
 var USER_LOADING = 'USER_LOADING';
 var SET_CLIENT_IP = 'SET_CLIENT_IP';
 var SET_ERRORS = 'SET_ERRORS';
 
-// ******* Action Creators *******
+// ******* Action Creators & Reducers *******
 
-/**
- * Sets state.user, and eventually state.isAuthenticated and state.userLoading
- * in its reducer.
- *
- * @param {object} user - A decoded jwt, or an error object
- *
- * The token object being set to user will contain a newly authenitcated
- * user's id string and username string, as well as the token's timestamp as iat.
- * example: { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
- */
-function setCurrentUser() {
-  var user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-  return {
-    type: SET_CURRENT_USER,
-    user: user
-  };
-}
-/**
- * Sets state.userLoading
- *
- * @param {boolean} bool
- */
-function userLoading(bool) {
-  return {
-    type: USER_LOADING,
-    userLoading: bool
-  };
-}
-/**
- * Sets state.errors
- *
- * @param {object} errors - should contain a form error or server error
- * example: { form: 'Invalid Credentials' } or { server: 'Server error. Try agian in a moment.' }
- */
-function setErrors() {
-  var errors = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-  return {
-    type: SET_ERRORS,
-    errors: errors,
-    userLoading: false
-  };
-}
-/**
- * Sets state.clientIp
- *
- * @param {string} clientIp - The client's IP address as a string received from the server.
- */
-function setClientIp(clientIp) {
-  return {
-    type: SET_CLIENT_IP,
-    clientIp: clientIp
-  };
-}
 /**
  * Attempts to authenticate a user on the server.
  *
@@ -142,8 +87,24 @@ function getClientIp() {
   };
 }
 
-// ******* Reducers *******
+/**
+ * Sets state.user, and eventually state.isAuthenticated and state.userLoading
+ * in its reducer.
+ *
+ * @param {object} user - A decoded jwt, or an error object
+ *
+ * The token object being set to user will contain a newly authenticated
+ * user's id string and username string, as well as the token's timestamp as iat.
+ * example: { id: '12341234asdfasdf', username: 'PollKilla', iat: '1324567894'}
+ */
+function setCurrentUser() {
+  var user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
+  return {
+    type: SET_CURRENT_USER,
+    user: user
+  };
+}
 /**
  * Sets the user object as action.user if defined and valid, of null
  * if the user object is empty or invalid. state.isAuthenticated defaults to false,
@@ -165,6 +126,17 @@ var setCurrentUserReducer = function setCurrentUserReducer(state, action) {
   });
 };
 
+/**
+ * Sets state.userLoading
+ *
+ * @param {boolean} bool
+ */
+function userLoading(bool) {
+  return {
+    type: USER_LOADING,
+    userLoading: bool
+  };
+}
 var userLoadingReducer = function userLoadingReducer(state, action) {
   if (typeof action.userLoading !== 'boolean') {
     console.error('ERROR: redux: userLoading was not passed a boolean:', action.userLoading);
@@ -173,14 +145,21 @@ var userLoadingReducer = function userLoadingReducer(state, action) {
   return Object.assign({}, state, { userLoading: action.userLoading });
 };
 
-var setClientIpReducer = function setClientIpReducer(state, action) {
-  return Object.assign({}, state, { clientIp: action.clientIp });
-};
-
 /**
- * Sets state.errors with a form error or a server error. If any other error is offered,
- * something is wrong.
+ * Sets state.errors
+ *
+ * @param {object} errors - should contain a form error or server error
+ * example: { form: 'Invalid Credentials' } or { server: 'Server error. Try again in a moment.' }
  */
+function setErrors() {
+  var errors = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  return {
+    type: SET_ERRORS,
+    errors: errors,
+    userLoading: false
+  };
+}
 var setErrorsReducer = function setErrorsReducer(state, action) {
   if (_typeof(action.errors) !== 'object') {
     return Object.assign({}, state);
@@ -189,6 +168,21 @@ var setErrorsReducer = function setErrorsReducer(state, action) {
     console.error('ERROR: redux: Unknown error key passed in error object to setErrors:', action.errors);
   }
   return Object.assign({}, state, { errors: action.errors });
+};
+
+/**
+ * Sets state.clientIp
+ *
+ * @param {string} clientIp - The client's IP address as a string received from the server.
+ */
+function setClientIp(clientIp) {
+  return {
+    type: SET_CLIENT_IP,
+    clientIp: clientIp
+  };
+}
+var setClientIpReducer = function setClientIpReducer(state, action) {
+  return Object.assign({}, state, { clientIp: action.clientIp });
 };
 
 // ******* Root Reducer Slice *******
@@ -225,7 +219,7 @@ function user() {
  * the response from the server gets handled here. If the login attempt is
  * successful, a token will be in the response as res.data.token. If the user's
  * username/email and password not correct, an error object will be in the
- * respose as res.data.errors.form. If no token or errors object come with the
+ * response as res.data.errors.form. If no token or errors object come with the
  * response, something went wrong on the server, and a server error will be passed
  * along
  *

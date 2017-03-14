@@ -39,7 +39,7 @@ var MyPollsPage = _react2.default.createClass({
     clientIp: string,
     isAuthenticated: bool,
     updatedPollResults: object,
-    user: object.isRequired,
+    user: object,
     userPolls: array
   },
   getUserPolls: function getUserPolls() {

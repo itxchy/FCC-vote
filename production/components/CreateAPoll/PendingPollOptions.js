@@ -40,11 +40,11 @@ var PendingPollOptions = _react2.default.createClass({
     this.setState({ twoOptionsOrMoreError: false });
     var updatedNewOptions = this.props.poll.newPollOptions;
     updatedNewOptions.push('');
+    console.log('updatedNewOptions', updatedNewOptions);
     this.props.dispatchUpdateOption(updatedNewOptions);
   },
   deleteOption: function deleteOption(index) {
     if (this.props.poll.newPollOptions.length === 2) {
-      console.log('Two or more options required!');
       this.setState({ twoOptionsOrMoreError: true });
       return;
     }

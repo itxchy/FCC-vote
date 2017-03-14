@@ -5,6 +5,9 @@ var commonValidations = require('./shared/signupValidation.js');
 var bcrypt = require('bcrypt');
 var isEmpty = require('lodash/isEmpty');
 
+var _require = require('../server.js'),
+    log = _require.log;
+
 var User = require('../models/User');
 
 var router = express.Router();
@@ -28,8 +31,8 @@ function validateInput(data, otherValidations) {
       isValid: isEmpty(errors)
     };
   }).catch(function (err) {
-    console.error('ERROR: user validation promise rejected', err);
-    return Promise.reject(err);
+    log.error('validateInput.js: user validation promise rejected', { mongoose: true, err: err });
+    return err;
   });
 }
 
@@ -39,13 +42,13 @@ function validateInput(data, otherValidations) {
  */
 router.get('/:identifier', function (req, res) {
   User.find({ $or: [{ email: req.params.identifier }, { username: req.params.identifier }] }).select('username email').exec().then(function (user) {
-    console.log('user found!', user);
+    log.info('user.js: user found', { user: user });
     if (isEmpty(user)) {
       return res.json({ user: null });
     }
     return res.json({ user: user });
   }).catch(function (err) {
-    console.log('find user promise rejection');
+    log.error('users.js: find user promise rejected', { mongoose: true, err: err });
     res.status(400).json({ 'user lookup error': err, error: err });
   });
 });
@@ -58,6 +61,7 @@ router.post('/', function (req, res) {
   validateInput(req.body, commonValidations).then(function (results) {
     console.log('results object should contain isValid and errors', results);
     if (results.isValid) {
+      log.info('users.js: user signup form validation successful', { results: results });
       var _req$body = req.body,
           username = _req$body.username,
           password = _req$body.password,
@@ -70,11 +74,14 @@ router.post('/', function (req, res) {
       user.passwordDigest = passwordDigest;
 
       user.save().then(function (user) {
+        log.info('user.js: new user signup successful', { user: user });
         res.json({ success: 'signup successful!', user: user });
       }).catch(function (err) {
+        log.error('user.js: new user signup failed', { mongoose: true, err: err });
         res.status(500).json({ 'save user error': err });
       });
     } else {
+      log.info('user.js: user input validation error present', { results: results });
       res.status(400).json({ 'user input validation error': results.errors });
     }
   }).catch(function (err) {

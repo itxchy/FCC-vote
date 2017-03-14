@@ -10,6 +10,9 @@ var _require = require('./pollsLib'),
     dupeVoterCheck = _require.dupeVoterCheck,
     tallyVoteTotal = _require.tallyVoteTotal;
 
+var _require2 = require('../../server.js'),
+    log = _require2.log;
+
 /**
  * params: pollID string, voter string
  *
@@ -20,14 +23,15 @@ var _require = require('./pollsLib'),
  */
 
 
-var checkVoterUniqueness = async(function (pollID, voter) {
+var checkVoterUniqueness = function checkVoterUniqueness(pollID, voter) {
   return Poll.findOne({ _id: pollID }).exec().then(function (poll) {
-    var dupeCheck = awaitFake(dupeVoterCheck(poll, voter));
+    var dupeCheck = dupeVoterCheck(poll, voter);
+    log.info('pollsDb.js: dupeVoterCheck result', { dupeCheck: dupeCheck });
     return dupeCheck;
   }).catch(function (err) {
-    console.error('ERROR checkVoterUniqueness', err);
+    log.error('pollsDb.js: checkVoterUniqueness', { mongoose: true }, { err: err });
   });
-});
+};
 
 /**
  * params: selectedOption number, pollID string, voter string
@@ -41,11 +45,11 @@ var checkVoterUniqueness = async(function (pollID, voter) {
 var updateDocumentWithNewVote = function updateDocumentWithNewVote(selectedOption, pollID, voter) {
   var votesPath = 'options.' + selectedOption + '.votes';
   return Poll.findOneAndUpdate({ _id: pollID }, { $addToSet: _defineProperty({}, votesPath, { 'voter': voter }) }, { new: true, upsert: true }).then(function (updatedDoc) {
-    // res.json({ 'vote cast': updatedDoc })
     var voteTotal = tallyVoteTotal(updatedDoc);
+    log.info('pollsDb.js: updated document with new vote', { updatedDoc: updatedDoc }, { voteTotal: voteTotal });
     return { updated: true, totalVotes: voteTotal, doc: updatedDoc };
   }).catch(function (err) {
-    console.error('ERROR updateDocumentWithNewVote', err);
+    log.error('pollsDb.js: updateDocumentWithNewVote', { mongoose: true }, { err: err });
     return { updated: false, error: err };
   });
 };
@@ -54,7 +58,7 @@ var updateDocumentVotesTotal = function updateDocumentVotesTotal(pollID, totalVo
   return Poll.findOneAndUpdate({ _id: pollID }, { $set: { totalVotes: totalVotes } }, { new: true }).then(function (updatedDoc) {
     return { updated: true, doc: updatedDoc };
   }).catch(function (err) {
-    console.error('ERROR updateDocumentVotesTotal', err);
+    log.error('pollsDb.js: updateDocumentVotesTotal', { mongoose: true }, { err: err });
     return { updated: false, error: err };
   });
 };
@@ -70,9 +74,11 @@ var updatePollDocumentOnEdit = function updatePollDocumentOnEdit(pollID, pollDat
     };
   });
   return Poll.findOneAndUpdate({ _id: pollID }, { $set: { title: title, options: formattedOptions, totalVotes: 0 } }).then(function (updatedDoc) {
+    log.info('pollDb.js: updated poll document for edit', { updatedDoc: updatedDoc });
     return { updatedDoc: updatedDoc };
-  }).catch(function (error) {
-    return { error: error };
+  }).catch(function (err) {
+    log.error('pollsDb.js: updatePollDocumentOnEdit', { mongoose: true }, { err: err });
+    return { err: err };
   });
 };
 

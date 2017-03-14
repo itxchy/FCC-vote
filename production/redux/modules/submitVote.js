@@ -3,7 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.DEFAULT_STATE = undefined;
 exports.submitVote = submitVote;
+exports.updatedPollResults = updatedPollResults;
 exports.resetUpdatedPollResults = resetUpdatedPollResults;
 exports.default = newVote;
 
@@ -17,11 +19,17 @@ var _has2 = _interopRequireDefault(_has);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Action
+var DEFAULT_STATE = exports.DEFAULT_STATE = {
+  updatedResults: null
+};
+
+// ******* Action Types *******
+
 var UPDATED_POLL_RESULTS = 'UPDATED_POLL_RESULTS';
 var RESET_UPDATED_POLL_RESULTS = 'RESET_UPDATED_POLL_RESULTS';
 
-// Action Creators
+// ******* Action Creators & Reducers *******
+
 /**
  * @param id = string,
  * @param vote = object {selectedOption, voter}
@@ -36,7 +44,7 @@ var RESET_UPDATED_POLL_RESULTS = 'RESET_UPDATED_POLL_RESULTS';
 function submitVote(id, vote) {
   return function (dispatch) {
     _axios2.default.put('/api/polls/' + id, vote).then(function (res) {
-      console.log('New, unique vote successful in submitVote!', res);
+      // console.log('New, unique vote successful in submitVote!', res)
       var results = res.data.totalVotes;
       dispatch(updatedPollResults(results));
     }).catch(function (err) {
@@ -49,38 +57,42 @@ function submitVote(id, vote) {
     });
   };
 }
+
+/**
+ * Sets state.updatedResults as a poll object of the newly updated poll
+ *
+ * @param {object} results
+ */
 function updatedPollResults(results) {
   return { type: UPDATED_POLL_RESULTS, results: results };
 }
+function updatedPollResultsReducer(state, action) {
+  return Object.assign({}, state, { updatedResults: action.results });
+}
+
+/**
+ * Resets state.updatedResults to null
+ */
 function resetUpdatedPollResults() {
-  return { type: RESET_UPDATED_POLL_RESULTS, results: null };
+  return { type: RESET_UPDATED_POLL_RESULTS };
 }
-
-// Reducers
-function reduceUpdatedPollResults(state, action) {
+function resetUpdatedPollResultsReducer(state, action) {
   var newState = {};
-  Object.assign(newState, state, { updatedResults: action.results });
-  return newState;
-}
-function reduceResetUpdatedPollResults(state, action) {
-  var newState = {};
-  Object.assign(newState, state, { updatedResults: action.results });
+  Object.assign(newState, state, DEFAULT_STATE);
   return newState;
 }
 
-var initialState = {
-  updatedResults: null
-};
-// Root Reducer Slice
+// ******* Root Reducer Slice *******
+
 function newVote() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
   var action = arguments[1];
 
   switch (action.type) {
     case UPDATED_POLL_RESULTS:
-      return reduceUpdatedPollResults(state, action);
+      return updatedPollResultsReducer(state, action);
     case RESET_UPDATED_POLL_RESULTS:
-      return reduceResetUpdatedPollResults(state, action);
+      return resetUpdatedPollResultsReducer(state, action);
     default:
       return state;
   }

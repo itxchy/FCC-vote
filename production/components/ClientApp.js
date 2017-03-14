@@ -32,11 +32,6 @@ var _Routes2 = _interopRequireDefault(_Routes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import { createHistory, useBasename } from 'history'
-// const browserHistory = useBasename(createHistory)({
-//   basename: '/'
-// })
-
 /* global localStorage */
 
 var App = _react2.default.createClass({
@@ -45,7 +40,6 @@ var App = _react2.default.createClass({
     if (localStorage.jwtToken) {
       (0, _setAuthorizationToken2.default)(localStorage.jwtToken);
       var decodedToken = _jsonwebtoken2.default.decode(localStorage.jwtToken);
-      // store.dispatch({type: SET_CURRENT_USER, user: jwt.decode(localStorage.jwtToken)})
       _Store2.default.dispatch((0, _auth.setCurrentUser)(decodedToken));
     } else {
       _Store2.default.dispatch((0, _auth.getClientIp)());

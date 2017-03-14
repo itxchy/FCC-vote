@@ -37,7 +37,7 @@ var RESET_NEW_POLL = 'RESET_NEW_POLL';
 var POLL_SAVED = 'POLL_SAVED';
 var RESET_POLL_SAVED = 'RESET_POLL_SAVED';
 
-// ******* Action Creators & Reducers*******
+// ******* Action Creators & Reducers *******
 
 /**
  * Sets state.newPollTitle
@@ -54,6 +54,7 @@ var setNewPollTitleReducer = function setNewPollTitleReducer(state, action) {
   }
   return Object.assign({}, state, { newPollTitle: action.value });
 };
+
 /**
  * Sets state.titleEditable
  *
@@ -69,6 +70,7 @@ var setTitleEditableReducer = function setTitleEditableReducer(state, action) {
   }
   return Object.assign({}, state, { titleEditable: action.value });
 };
+
 /**
  * Sets state.newPollOptions
  *
@@ -84,6 +86,7 @@ var updateOptionReducer = function updateOptionReducer(state, action) {
   }
   return Object.assign({}, state, { newPollOptions: action.value });
 };
+
 /**
  * Resets state to DEFAULT_STATE
  */
@@ -92,10 +95,10 @@ function resetNewPoll() {
 }
 var resetNewPollReducer = function resetNewPollReducer(state, action) {
   var newState = {};
-  var blankPollState = DEFAULT_STATE;
-  Object.assign(newState, state, blankPollState);
+  Object.assign(newState, state, DEFAULT_STATE);
   return newState;
 };
+
 /**
  * Sets state.pollSaved as a new Poll's ID
  *
@@ -111,6 +114,7 @@ var pollSavedReducer = function pollSavedReducer(state, action) {
   }
   return Object.assign({}, state, { pollSaved: action.pollId });
 };
+
 /**
  * Sets state.pollSaved as null
  */
@@ -120,6 +124,7 @@ function resetPollSaved() {
 var resetPollSavedReducer = function resetPollSavedReducer(state, action) {
   return Object.assign({}, state, { pollSaved: null });
 };
+
 /**
  * Submits a new poll to the server
  *

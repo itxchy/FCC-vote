@@ -19,6 +19,9 @@ var _require2 = require('./lib/pollsDb'),
 
 var router = express.Router();
 
+var _require3 = require('../server.js'),
+    log = _require3.log;
+
 function validateNewPoll(res, data, commonValidations) {
   // Ugly hack to rename keys so they can be validated by createAPollValidation
   var validatorData = {
@@ -42,7 +45,8 @@ function validateNewPoll(res, data, commonValidations) {
       isValid: isEmpty(errors)
     };
   }).catch(function (err) {
-    return res.status(500).json({ 'duplicate poll check error': err });
+    log.error('polls.js: duplicate poll check failed', { mongoose: true, err: err });
+    res.status(500).json({ 'duplicate poll check error': err });
   });
 }
 
@@ -86,9 +90,11 @@ router.post('/', authenticate, function (req, res) {
       poll.owner = owner;
 
       poll.save().then(function (poll) {
+        log.info('polls.js: new poll created', { poll: poll });
         res.json({ success: 'new poll created!', poll: poll });
       }).catch(function (err) {
-        return res.status(500).json({ 'new poll DB save error': err });
+        log.error('polls.js: new poll creation failed', { mongoose: true, err: err });
+        res.status(500).json({ 'new poll DB save error': err });
       });
     } else {
       res.status(400).json({ 'poll validation error': result.errors });
@@ -189,7 +195,7 @@ router.put('/:id', function (req, res) {
  * Retrieves all polls
  */
 router.get('/', function (req, res) {
-  Poll.find().select('_id title options totalVotes owner').exec().then(function (polls) {
+  Poll.find().sort({ createdAt: -1 }).select('_id title options totalVotes owner').exec().then(function (polls) {
     return res.json(polls);
   }).catch(function (err) {
     return res.status(500).json({ 'error retrieving all polls': err });
@@ -212,7 +218,7 @@ router.get('/:user', function (req, res) {
  */
 router.get('/id/:id', function (req, res) {
   Poll.find({ _id: req.params.id }).select('_id title options totalVotes owner').exec().then(function (poll) {
-    console.log('mongo returned this poll:', poll);
+    console.log('single poll returned:', JSON.stringify(poll));
     return res.json(poll);
   }).catch(function (err) {
     return res.status(500).json({ 'error retrieveing single poll': err });
@@ -224,7 +230,8 @@ router.get('/id/:id', function (req, res) {
  */
 router.delete('/delete/:id', function (req, res) {
   Poll.find({ _id: req.params.id }).remove().exec().then(function (poll) {
-    console.log('This poll has been deleted!:', poll);
+    poll.hasOwnProperty('result');
+    console.log('poll deleted:', JSON.stringify(poll));
     return res.json(poll);
   }).catch(function (err) {
     return res.status(500).json({ 'error deleting poll': err });

@@ -3,9 +3,12 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.DEFAULT_STATE = undefined;
 exports.dupeUserCheck = dupeUserCheck;
+exports.dupeUserCheckResults = dupeUserCheckResults;
 exports.newFormErrors = newFormErrors;
 exports.default = clientFormValidation;
+exports.checkUserInResponse = checkUserInResponse;
 
 var _axios = require('axios');
 
@@ -17,26 +20,22 @@ var _validator2 = _interopRequireDefault(_validator);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// ******* Actions *******
+var DEFAULT_STATE = exports.DEFAULT_STATE = {
+  errors: {
+    username: null,
+    email: null,
+    password: null,
+    passwordConfirmation: null
+  },
+  invalid: false
+};
+
+// ******* Action Types *******
 
 var DUPE_USER_CHECK_RESULTS = 'DUPE_USER_CHECK_RESULTS';
 var SET_FORM_ERRORS = 'SET_FORM_ERRORS';
 
-// ******* Action Creators *******
-
-/**
- * Sets state.errors and state.invalid
- *
- * @param {object} errors - Errors object returned from checkUserInResponse combined
- *   with existing validation errors
- *
- * @param {bool} invalid - If errors are present from checkUserInResponse, this
- *   should be true. If there are no errors, invalid will be false. The truthyness
- *   of invalid determines whether the submit button is disabled or not.
- */
-function dupeUserCheckResults(errors, invalid) {
-  return { type: DUPE_USER_CHECK_RESULTS, errors: errors, invalid: invalid };
-}
+// ******* Action Creators & Reducers *******
 
 /**
  * Checks if an email or username entered at signup match an existing
@@ -77,22 +76,33 @@ function dupeUserCheck(identifier, field, validationErrors) {
 }
 
 /**
+ * Sets state.errors and state.invalid
+ *
+ * @param {object} errors - Errors object returned from checkUserInResponse combined
+ *   with existing validation errors
+ *
+ * @param {bool} invalid - If errors are present from checkUserInResponse, this
+ *   should be true. If there are no errors, invalid will be false. The truthyness
+ *   of invalid determines whether the submit button is disabled or not.
+ */
+function dupeUserCheckResults(errors, invalid) {
+  return { type: DUPE_USER_CHECK_RESULTS, errors: errors, invalid: invalid };
+}
+function dupeUserCheckReducer(state, action) {
+  return Object.assign({}, state, {
+    errors: action.errors,
+    invalid: action.invalid
+  });
+}
+
+/**
  * Creates a new error object combining new errors with current errors
  */
 function newFormErrors(currentErrors, newErrors) {
   var updatedErrors = Object.assign({}, currentErrors, newErrors);
   return { type: SET_FORM_ERRORS, errors: updatedErrors };
 }
-
-// ******* Reducers *******
-
-function reduceDupeUserCheck(state, action) {
-  return Object.assign({}, state, {
-    errors: action.errors,
-    invalid: action.invalid
-  });
-}
-function reduceSetFormErrors(state, action) {
+function setFormErrorsReducer(state, action) {
   return Object.assign({}, state, {
     errors: action.errors
   });
@@ -100,24 +110,15 @@ function reduceSetFormErrors(state, action) {
 
 // ******* Root Reducer Slice *******
 
-var DEFAULT_STATE = {
-  errors: {
-    username: null,
-    email: null,
-    password: null,
-    passwordConfirmation: null
-  },
-  invalid: false
-};
 function clientFormValidation() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATE;
   var action = arguments[1];
 
   switch (action.type) {
     case DUPE_USER_CHECK_RESULTS:
-      return reduceDupeUserCheck(state, action);
+      return dupeUserCheckReducer(state, action);
     case SET_FORM_ERRORS:
-      return reduceSetFormErrors(state, action);
+      return setFormErrorsReducer(state, action);
     default:
       return state;
   }
@@ -129,7 +130,7 @@ function checkUserInResponse(res, field, identifier) {
   console.log('checkUserInResponse:', res, 'field:', field);
   var invalid = void 0;
   var errors = {};
-  if (res.data.user) {
+  if (res.data && res.data.user) {
     errors[field] = 'A user exists with this ' + field;
     invalid = true;
   } else {
