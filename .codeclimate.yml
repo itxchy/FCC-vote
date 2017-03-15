@@ -1,8 +1,0 @@
-eslint:
-  enabled: true
-  config:
-    config: .eslintrc.json
-ratings:
-   paths:
-   - "**.js"
-   - "**.jsx"
