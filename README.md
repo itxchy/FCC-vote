@@ -44,33 +44,33 @@ If you have any critiques or feedback, please open an issue or send an email.
 
 ### Production
 
-### `npm build:prod`
+#### `npm build:prod`
 Transpiles application code to ES5, and puts it in `public/production` for server-side rendering ease, and then builds new optimized and minified webpack bundles from the production configuration.
 
-### `npm start`
+#### `npm start`
 Starts up the server. The following environment variables are required for production: `NODE_ENV=production`, `JWT_SECRET=[pickasecret]`, and `MONGO_URI=[local or hosted MongoDB address with credentials]`.
 
 ### Development
 
-### `npm run watch`
+#### `npm run watch`
 Spins up `webpack --watch`, which will handle Webpack's compilation steps, and rebuild on every relevant file change. In addition to compiling the bundles, Webpack also handles the Babel transformations, and linting for the application code.
 
-### `npm run server` 
+#### `npm run server` 
 Starts the Express server with `nodemon`, which will restart the server on file changes. You can view the app in the browser at [http://localhost:4000](http://localhost:4000).
 
-### `npm run mongo`
+#### `npm run mongo`
 Starts up MongoDB on port 27017 (make sure it's installed on your system)
 
-### `npm run test`
+#### `npm run test`
 Runs Jest's test suite.
 
-### `npm run tdd`
+#### `npm run tdd`
 Runs Jest's test suite and re-runs on every save of relevant files.
 
-### `npm run lint`
+#### `npm run lint`
 Lints files outside of the client side code, which webpack doesn't lint.
 
-### `npm run all`
+#### `npm run all`
 > works ONLY if you're using XUbuntu and/or xfce4-terminal
 
 If you happen to be using XUbunu (high-five!), you can open all of the terminals you need to run the development enronment with a single command. `npm run all` will run `watch`, `server`, `mongo`, `tdd` each in a new terminal window you can cascade across a workspace or monitor. 
