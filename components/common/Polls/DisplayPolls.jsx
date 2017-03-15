@@ -2,7 +2,7 @@ import React from 'react'
 import ResultsCard from './ResultsCard'
 import PollCard from './PollCard'
 import EmptyPolls from './EmptyPolls'
-import { dupeVoterCheck } from '../../../routes/lib/pollsLib'
+import { dupeVoterCheck } from '../../../server/routes/lib/pollsLib'
 import isEmpty from 'lodash/isEmpty'
 import has from 'lodash/has'
 const { func, array, object, bool, string } = React.PropTypes

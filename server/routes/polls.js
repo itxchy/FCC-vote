@@ -3,7 +3,7 @@ const isEmpty = require('lodash/isEmpty')
 const async = require('asyncawait/async')
 const awaitFake = require('asyncawait/await')
 const Poll = require('../models/Poll')
-const authenticate = require('../server/middleware/authenticate')
+const authenticate = require('../middleware/authenticate')
 const commonValidations = require('./shared/createAPollValidation')
 const { getVoterIdentity } = require('./lib/pollsLib')
 const {
@@ -12,7 +12,7 @@ const {
   updateDocumentVotesTotal,
   updatePollDocumentOnEdit } = require('./lib/pollsDb')
 let router = express.Router()
-const { log } = require('../server.js')
+const { log } = require('../../server.js')
 
 function validateNewPoll (res, data, commonValidations) {
   // Ugly hack to rename keys so they can be validated by createAPollValidation

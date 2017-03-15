@@ -2,7 +2,7 @@
 
 var express = require('express');
 
-var _require = require('../server'),
+var _require = require('../../server'),
     log = _require.log;
 
 var User = require('../models/User');
@@ -10,7 +10,7 @@ var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 var isEmpty = require('lodash/isEmpty');
 var router = express.Router();
-var config = process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : require('../config').jwtSecret;
+var config = process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : require('../../config').jwtSecret;
 
 /**
  * Authenticates a login request.

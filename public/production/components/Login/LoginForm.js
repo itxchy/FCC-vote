@@ -14,7 +14,7 @@ var _TextFieldGroup = require('../common/TextFieldGroup');
 
 var _TextFieldGroup2 = _interopRequireDefault(_TextFieldGroup);
 
-var _loginValidation = require('../../routes/shared/loginValidation');
+var _loginValidation = require('../../server/routes/shared/loginValidation');
 
 var _loginValidation2 = _interopRequireDefault(_loginValidation);
 

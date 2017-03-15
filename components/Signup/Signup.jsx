@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import validateInput from '../../routes/shared/signupValidation'
+import validateInput from '../../server/routes/shared/signupValidation'
 import TextFieldGroup from '../common/TextFieldGroup'
 const { func, object, bool } = React.PropTypes
 import { signupRequest, signupLoading } from '../../redux/modules/userSignupRequest'

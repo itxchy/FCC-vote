@@ -5,7 +5,7 @@ var isEmpty = require('lodash/isEmpty');
 var async = require('asyncawait/async');
 var awaitFake = require('asyncawait/await');
 var Poll = require('../models/Poll');
-var authenticate = require('../server/middleware/authenticate');
+var authenticate = require('../middleware/authenticate');
 var commonValidations = require('./shared/createAPollValidation');
 
 var _require = require('./lib/pollsLib'),
@@ -19,7 +19,7 @@ var _require2 = require('./lib/pollsDb'),
 
 var router = express.Router();
 
-var _require3 = require('../server.js'),
+var _require3 = require('../../server.js'),
     log = _require3.log;
 
 function validateNewPoll(res, data, commonValidations) {

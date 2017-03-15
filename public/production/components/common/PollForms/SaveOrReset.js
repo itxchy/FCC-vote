@@ -8,7 +8,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _createAPollValidation = require('../../../routes/shared/createAPollValidation');
+var _createAPollValidation = require('../../../server/routes/shared/createAPollValidation');
 
 var _createAPollValidation2 = _interopRequireDefault(_createAPollValidation);
 

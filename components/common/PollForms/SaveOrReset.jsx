@@ -1,6 +1,6 @@
 import React from 'react'
 const { string, func, array, object, bool } = React.PropTypes
-import validateCreateAPollInput from '../../../routes/shared/createAPollValidation'
+import validateCreateAPollInput from '../../../server/routes/shared/createAPollValidation'
 
 const SaveOrReset = React.createClass({
   propTypes: {

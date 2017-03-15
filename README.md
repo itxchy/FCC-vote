@@ -44,8 +44,11 @@ If you have any critiques or feedback, please open an issue or send an email.
 
 ### Production
 
+### `npm build:prod`
+Transpiles application code to ES5, and puts it in `public/production` for server-side rendering ease, and then builds new optimized and minified webpack bundles from the production configuration.
+
 ### `npm start`
-Creates a minified and transpiled build for production, and starts up the server. The following environment variables are required: `NODE_ENV`, `JWT_SECRET`, and `MONGO_URI`
+Starts up the server. The following environment variables are required for production: `NODE_ENV=production`, `JWT_SECRET=[pickasecret]`, and `MONGO_URI=[local or hosted MongoDB address with credentials]`.
 
 ### Development
 

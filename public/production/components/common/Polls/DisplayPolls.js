@@ -20,7 +20,7 @@ var _EmptyPolls = require('./EmptyPolls');
 
 var _EmptyPolls2 = _interopRequireDefault(_EmptyPolls);
 
-var _pollsLib = require('../../../routes/lib/pollsLib');
+var _pollsLib = require('../../../server/routes/lib/pollsLib');
 
 var _isEmpty = require('lodash/isEmpty');
 

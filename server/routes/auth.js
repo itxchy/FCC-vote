@@ -1,11 +1,11 @@
 const express = require('express')
-const { log } = require('../server')
+const { log } = require('../../server')
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const isEmpty = require('lodash/isEmpty')
 const router = express.Router()
-const config = process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : require('../config').jwtSecret
+const config = process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : require('../../config').jwtSecret
 
 /**
  * Authenticates a login request.

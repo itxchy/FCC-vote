@@ -1,8 +1,6 @@
-const async = require('asyncawait/async')
-const awaitFake = require('asyncawait/await')
 const Poll = require('../../models/Poll')
 const { dupeVoterCheck, tallyVoteTotal } = require('./pollsLib')
-const { log } = require('../../server.js')
+const { log } = require('../../../server.js')
 
 /**
  * params: pollID string, voter string
@@ -12,7 +10,7 @@ const { log } = require('../../server.js')
  *
  * returns: BOOL
  */
-const checkVoterUniqueness =  (pollID, voter) => {
+const checkVoterUniqueness = (pollID, voter) => {
   return Poll.findOne({ _id: pollID })
   .exec()
   .then(poll => {

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const config = process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : require('../../config').jwtSecret
-const User = require('../../models/User')
+const User = require('../models/User')
 const isEmpty = require('lodash/isEmpty')
 
 function authenticate (req, res, next) {

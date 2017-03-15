@@ -10,7 +10,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = require('react-redux');
 
-var _signupValidation = require('../../routes/shared/signupValidation');
+var _signupValidation = require('../../server/routes/shared/signupValidation');
 
 var _signupValidation2 = _interopRequireDefault(_signupValidation);
 

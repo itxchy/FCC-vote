@@ -42,9 +42,9 @@ const template = _template(baseTemplate)
 const { Routes } = process.env.NODE_ENV === 'production'
   ? require('./public/production/components/Routes.js')
   : require('./components/Routes.jsx')
-const users = require('./routes/users.js')
-const auth = require('./routes/auth.js')
-const polls = require('./routes/polls.js')
+const users = require('./server/routes/users.js')
+const auth = require('./server/routes/auth.js')
+const polls = require('./server/routes/polls.js')
 
 const port = process.env.PORT || 4000
 const app = express()

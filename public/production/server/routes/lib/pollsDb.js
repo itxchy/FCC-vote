@@ -2,15 +2,13 @@
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var async = require('asyncawait/async');
-var awaitFake = require('asyncawait/await');
 var Poll = require('../../models/Poll');
 
 var _require = require('./pollsLib'),
     dupeVoterCheck = _require.dupeVoterCheck,
     tallyVoteTotal = _require.tallyVoteTotal;
 
-var _require2 = require('../../server.js'),
+var _require2 = require('../../../server.js'),
     log = _require2.log;
 
 /**

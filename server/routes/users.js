@@ -2,7 +2,7 @@ const express = require('express')
 const commonValidations = require('./shared/signupValidation.js')
 const bcrypt = require('bcrypt')
 const isEmpty = require('lodash/isEmpty')
-const { log } = require('../server.js')
+const { log } = require('../../server.js')
 
 const User = require('../models/User')
 

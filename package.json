@@ -17,7 +17,7 @@
     "babel:redux": "NODE_ENV=server babel redux -d public/production/redux",
     "babel:auth": " NODE_ENV=server babel auth -d public/production/auth",
     "copy:css": "mkdir public/production/css && cp -r css/* public/production/css",
-    "babel:routes": "NODE_ENV=server babel routes -d public/production/routes",
+    "babel:routes": "NODE_ENV=server babel server/routes -d public/production/server/routes",
     "babel:prod": "npm run babel:clear && mkdir public/production && npm run copy:css && npm run babel:routes && npm run babel:components && npm run babel:redux && npm run babel:auth",
     "watch": "webpack --watch",
     "watch:prod": "webpack --config webpack.prod.js --watch",

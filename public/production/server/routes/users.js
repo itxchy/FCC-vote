@@ -5,7 +5,7 @@ var commonValidations = require('./shared/signupValidation.js');
 var bcrypt = require('bcrypt');
 var isEmpty = require('lodash/isEmpty');
 
-var _require = require('../server.js'),
+var _require = require('../../server.js'),
     log = _require.log;
 
 var User = require('../models/User');
