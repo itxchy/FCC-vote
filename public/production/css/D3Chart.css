@@ -1,0 +1,10 @@
+.results-chart {
+  width: 2rem;
+  height: 2rem;
+  background: 'burlywood'
+}
+
+.result-text {
+  font-size: 1.2em;
+  fill: #001f3f;
+}

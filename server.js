@@ -33,11 +33,15 @@ const React = require('react')
 const ReactDOMServer = require('react-dom/server')
 const { match, RouterContext } = require('react-router')
 const { Provider } = require('react-redux')
-const { store } = process.env.NODE_ENV === 'production' ? require('./production/redux/Store.js') : require('./redux/Store.js')
+const { store } = process.env.NODE_ENV === 'production'
+  ? require('./public/production/redux/Store.js')
+  : require('./redux/Store.js')
 const baseTemplate = fs.readFileSync('./index.html')
 const template = _template(baseTemplate)
 
-const { Routes } = process.env.NODE_ENV === 'production' ? require('./production/components/Routes.js') : require('./components/Routes.jsx')
+const { Routes } = process.env.NODE_ENV === 'production'
+  ? require('./public/production/components/Routes.js')
+  : require('./components/Routes.jsx')
 const users = require('./routes/users.js')
 const auth = require('./routes/auth.js')
 const polls = require('./routes/polls.js')

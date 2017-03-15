@@ -1,0 +1,38 @@
+
+@import url('https://fonts.googleapis.com/css?family=Overpass');
+
+body {
+  background-color: #EEFFFF;
+}
+
+h1, h2, h3, h4, p, a, text {
+  font-family: 'Overpass', sans-serif;
+}
+
+.fine {
+  font-family: 'Overpass', sans-serif;
+}
+
+.view-title {
+  color: teal;
+  font-size: 4em;
+}
+
+.center-div-horizontally {
+  margin: 0 auto;
+  float: none;
+}
+
+.show-mouse-pointer {
+  cursor: pointer;  
+}
+
+@import "navBar.css";
+@import "createAPoll.css";
+@import "cards.css";
+@import "pollCard.css";
+@import "resultCard.css";
+@import "D3Chart.css";
+@import "ownerControlButtons.css";
+@import "loadingSpinner.css";
+@import "pendingPollOptions.css";

@@ -8,7 +8,5 @@ data/*
 public/bundle.js.map
 public/bundle.js
 coverage/*
-production/*
-public/*
 log/*
 !log/.gitkeep
