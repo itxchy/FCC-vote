@@ -59,7 +59,7 @@ var ResultsCard = _react2.default.createClass({
     }
     return _react2.default.createElement(
       'div',
-      { className: (0, _classnames2.default)('col-md-4 sm-result-card-container-width', { 'center-div-horizontally': this.props.singlePoll }) },
+      { className: (0, _classnames2.default)('card', { 'center-div-horizontally': this.props.singlePoll }) },
       _react2.default.createElement(
         'div',
         { className: 'col-md-10' },

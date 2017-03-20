@@ -105,12 +105,8 @@ var DisplayPolls = _react2.default.createClass({
     var populatedCards = this.populateCards();
     return _react2.default.createElement(
       'div',
-      { className: 'container' },
-      _react2.default.createElement(
-        'div',
-        { className: 'row' },
-        populatedCards
-      )
+      { className: 'display-polls-flex' },
+      populatedCards
     );
   }
 });

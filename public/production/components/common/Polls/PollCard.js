@@ -102,7 +102,7 @@ var PollCard = _react2.default.createClass({
     );
     return _react2.default.createElement(
       'div',
-      { className: (0, _classnames2.default)('col-sm-4 sm-poll-card-container-width', { 'center-div-horizontally': this.props.singlePoll }) },
+      { className: (0, _classnames2.default)('card', { 'center-div-horizontally': this.props.singlePoll }) },
       _react2.default.createElement(
         'form',
         { className: 'col-md-10 poll-form', onSubmit: this.onVoteSubmit },

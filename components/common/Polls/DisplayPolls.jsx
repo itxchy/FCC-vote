@@ -68,10 +68,8 @@ const DisplayPolls = React.createClass({
     }
     const populatedCards = this.populateCards()
     return (
-      <div className='container'>
-        <div className='row'>
-          {populatedCards}
-        </div>
+      <div className='display-polls-flex'>
+        {populatedCards}
       </div>
     )
   }

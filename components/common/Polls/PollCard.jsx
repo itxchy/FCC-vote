@@ -69,7 +69,7 @@ const PollCard = React.createClass({
       </div>
     )
     return (
-      <div className={classnames('col-sm-4 sm-poll-card-container-width', { 'center-div-horizontally': this.props.singlePoll })}>
+      <div className={classnames('card', { 'center-div-horizontally': this.props.singlePoll })}>
         <form className='col-md-10 poll-form' onSubmit={this.onVoteSubmit}>
           <h2 className='row sm-text-algin-center'>
             <Link to={`/v/${this.props.id}`}>{this.props.title}</Link>

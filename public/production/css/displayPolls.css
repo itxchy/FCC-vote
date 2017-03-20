@@ -1,0 +1,19 @@
+.display-polls-flex {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: flex;
+  width: 80%;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 0 10%;
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .two-column-container-margin {
+
+  }
+}

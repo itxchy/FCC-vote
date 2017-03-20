@@ -59,8 +59,8 @@
     "resolve-url-loader": "^1.6.0",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
-    "webpack-bundle-analyzer": "^2.3.0",
     "webpack": "^2.2.1",
+    "webpack-bundle-analyzer": "^2.3.0",
     "webpack-merge": "^3.0.0"
   },
   "dependencies": {
