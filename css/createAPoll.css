@@ -1,5 +1,4 @@
 
-// NewPollTitle.jsx =============================
 
 .new-poll-title-container {
   margin: 3rem auto;
@@ -36,8 +35,6 @@
   vertical-align: middle;  
 }
 
-// PollOptions.jsx ==============================
-
 .options-container {
   margin: 2rem auto;
   text-align: center;
@@ -62,8 +59,6 @@
   margin-top: 1rem;
   font-size: 1.3em;
 }
-
-// SaveOrReset.jsx ==============================
 
 .save-reset-buttons {
   width: 12rem;
