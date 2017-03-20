@@ -29,7 +29,7 @@ const ResultsCard = React.createClass({
     }
     return (
       <div className={classnames('card', { 'center-div-horizontally': this.props.singlePoll })}>
-        <div className='col-md-10'>
+        <div className=''>
           <h2 className='row sm-text-algin-center'><Link to={`/v/${this.props.id}`}>{this.props.title}</Link></h2>
           <OwnerControlButtons
             id={this.props.id}

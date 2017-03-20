@@ -62,7 +62,7 @@ var ResultsCard = _react2.default.createClass({
       { className: (0, _classnames2.default)('card', { 'center-div-horizontally': this.props.singlePoll }) },
       _react2.default.createElement(
         'div',
-        { className: 'col-md-10' },
+        { className: '' },
         _react2.default.createElement(
           'h2',
           { className: 'row sm-text-algin-center' },
